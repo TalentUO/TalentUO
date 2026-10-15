@@ -1,7 +1,7 @@
 {
  "sintetico": false,
  "aviso": null,
- "generado": "2026-10-16 01:18",
+ "generado": "2026-10-16 01:36",
  "objetivo": "llegadas_ocio",
  "umbrales": {
   "ambar": 1.5,
@@ -27531,7 +27531,7 @@
    "algoritmo": "lightgbm",
    "n_arboles": 158,
    "n_filas": 6290,
-   "segundos_entrenamiento": 0.723,
+   "segundos_entrenamiento": 0.707,
    "inicio": "2022-01-01",
    "fin": "2025-06-30"
   },
@@ -27539,7 +27539,7 @@
    "algoritmo": "lightgbm",
    "n_arboles": 277,
    "n_filas": 44030,
-   "segundos_entrenamiento": 3.116,
+   "segundos_entrenamiento": 3.063,
    "inicio": "2022-01-01",
    "fin": "2025-06-30"
   }

@@ -1,7 +1,7 @@
 {
  "sintetico": false,
  "aviso": null,
- "generado": "2026-10-16 01:18",
+ "generado": "2026-10-16 01:36",
  "objetivo": "llegadas_ocio",
  "umbrales": {
   "ambar": 1.5,
@@ -48,11 +48,11 @@
  ],
  "conjuntos": {
   "futuro_largo": "Largo plazo (solo calendario y eventos), 60 días desde 2026-10-16.",
-  "futuro_corto": "Corto plazo (1-7 días) con la previsión de Open-Meteo emitida el 2026-10-15 (openmeteo_prevision.parquet; puntos: cangas_de_onis, gijon, lagos_enol, llanes, oviedo, ribadesella). El tiempo solo entra a 1-3 días, como en el entrenamiento.",
+  "futuro_corto": "Corto plazo (1-7 días) con la previsión de Open-Meteo emitida el 2026-10-16 (openmeteo_prevision.parquet; puntos: cangas_de_onis, gijon, lagos_enol, llanes, oviedo, ribadesella). El tiempo solo entra a 1-3 días, como en el entrenamiento.",
   "historico": "Predicciones fuera de muestra de la validación (puente de diciembre y agosto de 2024), con el valor observado, para enseñar un caso rojo con su explicación."
  },
  "info_corto_plazo": {
-  "fecha_emision": "2026-10-15",
+  "fecha_emision": "2026-10-16",
   "fuente": "openmeteo_prevision.parquet",
   "puntos_con_prevision": [
    "cangas_de_onis",
@@ -69,13 +69,13 @@
    3
   ],
   "fechas": [
-   "2026-10-16",
    "2026-10-17",
    "2026-10-18",
    "2026-10-19",
    "2026-10-20",
    "2026-10-21",
-   "2026-10-22"
+   "2026-10-22",
+   "2026-10-23"
   ]
  },
  "predicciones": [
@@ -11480,17 +11480,283 @@
    "color_observado": null
   },
   {
-   "fecha": "2026-10-16",
+   "fecha": "2026-10-17",
    "zona_mitma_id": "33012",
    "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
    "horizonte": 1,
-   "prediccion": 7935.0,
-   "normal": 6305.0,
-   "cociente": 1.259,
-   "pct_sobre_normal": 25.9,
+   "prediccion": 8655.0,
+   "normal": 7169.0,
+   "cociente": 1.207,
+   "pct_sobre_normal": 20.7,
    "color": "verde",
-   "p10": 7082.0,
-   "p90": 9847.0,
+   "p10": 7725.0,
+   "p90": 10741.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 15.2,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -4.3,
+     "signo": "-"
+    },
+    {
+     "nombre": "Fin de semana",
+     "efecto_pct": -4.3,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-17",
+   "zona_mitma_id": "33024",
+   "nombre_zona": "Gijón",
+   "horizonte": 1,
+   "prediccion": 52500.0,
+   "normal": 51100.0,
+   "cociente": 1.027,
+   "pct_sobre_normal": 2.7,
+   "color": "verde",
+   "p10": 51252.0,
+   "p90": 60573.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 8.3,
+     "signo": "+"
+    },
+    {
+     "nombre": "Fin de semana",
+     "efecto_pct": -4.0,
+     "signo": "-"
+    },
+    {
+     "nombre": "Acceso regulado a los Lagos",
+     "efecto_pct": 3.7,
+     "signo": "+"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-17",
+   "zona_mitma_id": "33036",
+   "nombre_zona": "Llanes",
+   "horizonte": 1,
+   "prediccion": 10551.0,
+   "normal": 8983.0,
+   "cociente": 1.174,
+   "pct_sobre_normal": 17.4,
+   "color": "verde",
+   "p10": 9364.0,
+   "p90": 13705.0,
+   "incierto": true,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 16.6,
+     "signo": "+"
+    },
+    {
+     "nombre": "Fin de semana",
+     "efecto_pct": -6.4,
+     "signo": "-"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -5.6,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-17",
+   "zona_mitma_id": "33044",
+   "nombre_zona": "Oviedo",
+   "horizonte": 1,
+   "prediccion": 63241.0,
+   "normal": 67819.0,
+   "cociente": 0.932,
+   "pct_sobre_normal": -6.8,
+   "color": "verde",
+   "p10": 62799.0,
+   "p90": 73322.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 6.6,
+     "signo": "+"
+    },
+    {
+     "nombre": "Fin de semana",
+     "efecto_pct": -4.1,
+     "signo": "-"
+    },
+    {
+     "nombre": "Acceso regulado a los Lagos",
+     "efecto_pct": 3.6,
+     "signo": "+"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-17",
+   "zona_mitma_id": "33056",
+   "nombre_zona": "Ribadesella",
+   "horizonte": 1,
+   "prediccion": 6839.0,
+   "normal": 5716.0,
+   "cociente": 1.196,
+   "pct_sobre_normal": 19.6,
+   "color": "verde",
+   "p10": 6208.0,
+   "p90": 8823.0,
+   "incierto": true,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 17.0,
+     "signo": "+"
+    },
+    {
+     "nombre": "Fin de semana",
+     "efecto_pct": -5.6,
+     "signo": "-"
+    },
+    {
+     "nombre": "Época del año",
+     "efecto_pct": -5.6,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-18",
+   "zona_mitma_id": "33012",
+   "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
+   "horizonte": 2,
+   "prediccion": 8105.0,
+   "normal": 6800.0,
+   "cociente": 1.192,
+   "pct_sobre_normal": 19.2,
+   "color": "verde",
+   "p10": 7217.0,
+   "p90": 10081.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 14.5,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -4.3,
+     "signo": "-"
+    },
+    {
+     "nombre": "Fin de semana",
+     "efecto_pct": -4.1,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-18",
+   "zona_mitma_id": "33024",
+   "nombre_zona": "Gijón",
+   "horizonte": 2,
+   "prediccion": 39808.0,
+   "normal": 40349.0,
+   "cociente": 0.987,
+   "pct_sobre_normal": -1.3,
+   "color": "verde",
+   "p10": 38879.0,
+   "p90": 46037.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 7.6,
+     "signo": "+"
+    },
+    {
+     "nombre": "Acceso regulado a los Lagos",
+     "efecto_pct": 3.7,
+     "signo": "+"
+    },
+    {
+     "nombre": "Fin de semana",
+     "efecto_pct": -3.4,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-18",
+   "zona_mitma_id": "33036",
+   "nombre_zona": "Llanes",
+   "horizonte": 2,
+   "prediccion": 7999.0,
+   "normal": 6861.0,
+   "cociente": 1.166,
+   "pct_sobre_normal": 16.6,
+   "color": "verde",
+   "p10": 7118.0,
+   "p90": 10454.0,
    "incierto": true,
    "factores": [
     {
@@ -11499,74 +11765,188 @@
      "signo": "+"
     },
     {
-     "nombre": "Acceso regulado a los Lagos",
-     "efecto_pct": 4.5,
-     "signo": "+"
+     "nombre": "Fin de semana",
+     "efecto_pct": -5.8,
+     "signo": "-"
     },
     {
      "nombre": "Vacaciones escolares",
-     "efecto_pct": -4.2,
+     "efecto_pct": -5.6,
      "signo": "-"
     }
    ],
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
   },
   {
-   "fecha": "2026-10-16",
-   "zona_mitma_id": "33024",
-   "nombre_zona": "Gijón",
-   "horizonte": 1,
-   "prediccion": 61380.0,
-   "normal": 60190.0,
-   "cociente": 1.02,
-   "pct_sobre_normal": 2.0,
+   "fecha": "2026-10-18",
+   "zona_mitma_id": "33044",
+   "nombre_zona": "Oviedo",
+   "horizonte": 2,
+   "prediccion": 46373.0,
+   "normal": 50064.0,
+   "cociente": 0.926,
+   "pct_sobre_normal": -7.4,
    "color": "verde",
-   "p10": 59921.0,
-   "p90": 70818.0,
+   "p10": 46004.0,
+   "p90": 53813.0,
    "incierto": false,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 8.1,
+     "efecto_pct": 5.3,
      "signo": "+"
     },
     {
      "nombre": "Acceso regulado a los Lagos",
-     "efecto_pct": 2.4,
+     "efecto_pct": 3.6,
      "signo": "+"
     },
     {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -2.2,
+     "nombre": "Fin de semana",
+     "efecto_pct": -3.3,
      "signo": "-"
     }
    ],
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
   },
   {
-   "fecha": "2026-10-16",
+   "fecha": "2026-10-18",
+   "zona_mitma_id": "33056",
+   "nombre_zona": "Ribadesella",
+   "horizonte": 2,
+   "prediccion": 5188.0,
+   "normal": 4372.0,
+   "cociente": 1.187,
+   "pct_sobre_normal": 18.7,
+   "color": "verde",
+   "p10": 4698.0,
+   "p90": 6686.0,
+   "incierto": true,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 15.7,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -5.6,
+     "signo": "-"
+    },
+    {
+     "nombre": "Época del año",
+     "efecto_pct": -5.4,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-19",
+   "zona_mitma_id": "33012",
+   "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
+   "horizonte": 3,
+   "prediccion": 5908.0,
+   "normal": 4948.0,
+   "cociente": 1.194,
+   "pct_sobre_normal": 19.4,
+   "color": "verde",
+   "p10": 5265.0,
+   "p90": 7386.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 15.9,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -4.1,
+     "signo": "-"
+    },
+    {
+     "nombre": "Época del año",
+     "efecto_pct": -2.5,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-19",
+   "zona_mitma_id": "33024",
+   "nombre_zona": "Gijón",
+   "horizonte": 3,
+   "prediccion": 51014.0,
+   "normal": 50519.0,
+   "cociente": 1.01,
+   "pct_sobre_normal": 1.0,
+   "color": "verde",
+   "p10": 49799.0,
+   "p90": 58848.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 9.4,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -2.5,
+     "signo": "-"
+    },
+    {
+     "nombre": "Acceso regulado a los Lagos",
+     "efecto_pct": -1.9,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-19",
    "zona_mitma_id": "33036",
    "nombre_zona": "Llanes",
-   "horizonte": 1,
-   "prediccion": 10166.0,
-   "normal": 7865.0,
-   "cociente": 1.293,
-   "pct_sobre_normal": 29.3,
+   "horizonte": 3,
+   "prediccion": 5971.0,
+   "normal": 4831.0,
+   "cociente": 1.236,
+   "pct_sobre_normal": 23.6,
    "color": "verde",
-   "p10": 9023.0,
-   "p90": 13206.0,
+   "p10": 5302.0,
+   "p90": 7753.0,
    "incierto": true,
    "factores": [
     {
@@ -11576,49 +11956,49 @@
     },
     {
      "nombre": "Época del año",
-     "efecto_pct": -6.0,
+     "efecto_pct": -6.5,
      "signo": "-"
     },
     {
      "nombre": "Vacaciones escolares",
-     "efecto_pct": -5.5,
+     "efecto_pct": -5.6,
      "signo": "-"
     }
    ],
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
   },
   {
-   "fecha": "2026-10-16",
+   "fecha": "2026-10-19",
    "zona_mitma_id": "33044",
    "nombre_zona": "Oviedo",
-   "horizonte": 1,
-   "prediccion": 82878.0,
-   "normal": 87142.0,
-   "cociente": 0.951,
-   "pct_sobre_normal": -4.9,
+   "horizonte": 3,
+   "prediccion": 75152.0,
+   "normal": 79133.0,
+   "cociente": 0.95,
+   "pct_sobre_normal": -5.0,
    "color": "verde",
-   "p10": 82298.0,
-   "p90": 96089.0,
+   "p10": 74584.0,
+   "p90": 87384.0,
    "incierto": false,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 5.6,
-     "signo": "+"
-    },
-    {
-     "nombre": "Acceso regulado a los Lagos",
-     "efecto_pct": 2.3,
+     "efecto_pct": 7.1,
      "signo": "+"
     },
     {
      "nombre": "Vacaciones escolares",
+     "efecto_pct": -2.1,
+     "signo": "-"
+    },
+    {
+     "nombre": "Acceso regulado a los Lagos",
      "efecto_pct": -1.8,
      "signo": "-"
     }
@@ -11626,577 +12006,7 @@
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-16",
-   "zona_mitma_id": "33056",
-   "nombre_zona": "Ribadesella",
-   "horizonte": 1,
-   "prediccion": 5958.0,
-   "normal": 4746.0,
-   "cociente": 1.256,
-   "pct_sobre_normal": 25.6,
-   "color": "verde",
-   "p10": 5409.0,
-   "p90": 7687.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 16.8,
-     "signo": "+"
-    },
-    {
-     "nombre": "Época del año",
-     "efecto_pct": -7.3,
-     "signo": "-"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -5.5,
-     "signo": "-"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-17",
-   "zona_mitma_id": "33012",
-   "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
-   "horizonte": 2,
-   "prediccion": 8736.0,
-   "normal": 7169.0,
-   "cociente": 1.219,
-   "pct_sobre_normal": 21.9,
-   "color": "verde",
-   "p10": 7780.0,
-   "p90": 10867.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 16.1,
-     "signo": "+"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -4.3,
-     "signo": "-"
-    },
-    {
-     "nombre": "Acceso regulado a los Lagos",
-     "efecto_pct": 4.3,
-     "signo": "+"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-17",
-   "zona_mitma_id": "33024",
-   "nombre_zona": "Gijón",
-   "horizonte": 2,
-   "prediccion": 53066.0,
-   "normal": 51100.0,
-   "cociente": 1.038,
-   "pct_sobre_normal": 3.8,
-   "color": "verde",
-   "p10": 51828.0,
-   "p90": 61370.0,
-   "incierto": false,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 8.8,
-     "signo": "+"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": -3.3,
-     "signo": "-"
-    },
-    {
-     "nombre": "Partido",
-     "efecto_pct": 3.0,
-     "signo": "+"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-17",
-   "zona_mitma_id": "33036",
-   "nombre_zona": "Llanes",
-   "horizonte": 2,
-   "prediccion": 10713.0,
-   "normal": 8983.0,
-   "cociente": 1.193,
-   "pct_sobre_normal": 19.3,
-   "color": "verde",
-   "p10": 9534.0,
-   "p90": 14001.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 18.2,
-     "signo": "+"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": -6.0,
-     "signo": "-"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -5.6,
-     "signo": "-"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-17",
-   "zona_mitma_id": "33044",
-   "nombre_zona": "Oviedo",
-   "horizonte": 2,
-   "prediccion": 62865.0,
-   "normal": 67819.0,
-   "cociente": 0.927,
-   "pct_sobre_normal": -7.3,
-   "color": "verde",
-   "p10": 62365.0,
-   "p90": 72952.0,
-   "incierto": false,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 6.3,
-     "signo": "+"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": -3.4,
-     "signo": "-"
-    },
-    {
-     "nombre": "Acceso regulado a los Lagos",
-     "efecto_pct": 2.3,
-     "signo": "+"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-17",
-   "zona_mitma_id": "33056",
-   "nombre_zona": "Ribadesella",
-   "horizonte": 2,
-   "prediccion": 6675.0,
-   "normal": 5716.0,
-   "cociente": 1.168,
-   "pct_sobre_normal": 16.8,
-   "color": "verde",
-   "p10": 6044.0,
-   "p90": 8603.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 16.7,
-     "signo": "+"
-    },
-    {
-     "nombre": "Época del año",
-     "efecto_pct": -7.0,
-     "signo": "-"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": -5.6,
-     "signo": "-"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-18",
-   "zona_mitma_id": "33012",
-   "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
-   "horizonte": 3,
-   "prediccion": 8216.0,
-   "normal": 6800.0,
-   "cociente": 1.208,
-   "pct_sobre_normal": 20.8,
-   "color": "verde",
-   "p10": 7322.0,
-   "p90": 10271.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 15.8,
-     "signo": "+"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -4.3,
-     "signo": "-"
-    },
-    {
-     "nombre": "Acceso regulado a los Lagos",
-     "efecto_pct": 4.3,
-     "signo": "+"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-18",
-   "zona_mitma_id": "33024",
-   "nombre_zona": "Gijón",
-   "horizonte": 3,
-   "prediccion": 39813.0,
-   "normal": 40349.0,
-   "cociente": 0.987,
-   "pct_sobre_normal": -1.3,
-   "color": "verde",
-   "p10": 38865.0,
-   "p90": 45927.0,
-   "incierto": false,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 8.0,
-     "signo": "+"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": -3.0,
-     "signo": "-"
-    },
-    {
-     "nombre": "Acceso regulado a los Lagos",
-     "efecto_pct": 2.5,
-     "signo": "+"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-18",
-   "zona_mitma_id": "33036",
-   "nombre_zona": "Llanes",
-   "horizonte": 3,
-   "prediccion": 8157.0,
-   "normal": 6861.0,
-   "cociente": 1.189,
-   "pct_sobre_normal": 18.9,
-   "color": "verde",
-   "p10": 7243.0,
-   "p90": 10592.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 17.3,
-     "signo": "+"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": -5.7,
-     "signo": "-"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -5.6,
-     "signo": "-"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-18",
-   "zona_mitma_id": "33044",
-   "nombre_zona": "Oviedo",
-   "horizonte": 3,
-   "prediccion": 46204.0,
-   "normal": 50064.0,
-   "cociente": 0.923,
-   "pct_sobre_normal": -7.7,
-   "color": "verde",
-   "p10": 45855.0,
-   "p90": 53725.0,
-   "incierto": false,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 5.5,
-     "signo": "+"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": -2.9,
-     "signo": "-"
-    },
-    {
-     "nombre": "Acceso regulado a los Lagos",
-     "efecto_pct": 2.4,
-     "signo": "+"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-18",
-   "zona_mitma_id": "33056",
-   "nombre_zona": "Ribadesella",
-   "horizonte": 3,
-   "prediccion": 5055.0,
-   "normal": 4372.0,
-   "cociente": 1.156,
-   "pct_sobre_normal": 15.6,
-   "color": "verde",
-   "p10": 4583.0,
-   "p90": 6569.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 15.5,
-     "signo": "+"
-    },
-    {
-     "nombre": "Época del año",
-     "efecto_pct": -7.0,
-     "signo": "-"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -5.6,
-     "signo": "-"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-19",
-   "zona_mitma_id": "33012",
-   "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
-   "horizonte": 4,
-   "prediccion": 5960.0,
-   "normal": 4948.0,
-   "cociente": 1.205,
-   "pct_sobre_normal": 20.5,
-   "color": "verde",
-   "p10": 5325.0,
-   "p90": 7571.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 16.5,
-     "signo": "+"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -4.1,
-     "signo": "-"
-    },
-    {
-     "nombre": "Época del año",
-     "efecto_pct": -3.2,
-     "signo": "-"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-19",
-   "zona_mitma_id": "33024",
-   "nombre_zona": "Gijón",
-   "horizonte": 4,
-   "prediccion": 52381.0,
-   "normal": 50519.0,
-   "cociente": 1.037,
-   "pct_sobre_normal": 3.7,
-   "color": "verde",
-   "p10": 51137.0,
-   "p90": 61677.0,
-   "incierto": false,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 10.2,
-     "signo": "+"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -2.1,
-     "signo": "-"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": 1.4,
-     "signo": "+"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-19",
-   "zona_mitma_id": "33036",
-   "nombre_zona": "Llanes",
-   "horizonte": 4,
-   "prediccion": 6064.0,
-   "normal": 4831.0,
-   "cociente": 1.255,
-   "pct_sobre_normal": 25.5,
-   "color": "verde",
-   "p10": 5383.0,
-   "p90": 7972.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 19.7,
-     "signo": "+"
-    },
-    {
-     "nombre": "Época del año",
-     "efecto_pct": -7.2,
-     "signo": "-"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -5.6,
-     "signo": "-"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-19",
-   "zona_mitma_id": "33044",
-   "nombre_zona": "Oviedo",
-   "horizonte": 4,
-   "prediccion": 76594.0,
-   "normal": 79133.0,
-   "cociente": 0.968,
-   "pct_sobre_normal": -3.2,
-   "color": "verde",
-   "p10": 76978.0,
-   "p90": 89664.0,
-   "incierto": false,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 7.5,
-     "signo": "+"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -1.7,
-     "signo": "-"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": 1.4,
-     "signo": "+"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
@@ -12205,36 +12015,36 @@
    "fecha": "2026-10-19",
    "zona_mitma_id": "33056",
    "nombre_zona": "Ribadesella",
-   "horizonte": 4,
-   "prediccion": 4348.0,
+   "horizonte": 3,
+   "prediccion": 4347.0,
    "normal": 3553.0,
    "cociente": 1.224,
    "pct_sobre_normal": 22.4,
    "color": "verde",
-   "p10": 3966.0,
-   "p90": 5778.0,
+   "p10": 3942.0,
+   "p90": 5650.0,
    "incierto": true,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 18.9,
+     "efecto_pct": 18.6,
      "signo": "+"
     },
     {
      "nombre": "Época del año",
-     "efecto_pct": -8.5,
+     "efecto_pct": -7.0,
      "signo": "-"
     },
     {
      "nombre": "Vacaciones escolares",
-     "efecto_pct": -5.6,
+     "efecto_pct": -5.5,
      "signo": "-"
     }
    ],
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
@@ -12243,19 +12053,19 @@
    "fecha": "2026-10-20",
    "zona_mitma_id": "33012",
    "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
-   "horizonte": 5,
-   "prediccion": 6393.0,
+   "horizonte": 4,
+   "prediccion": 6439.0,
    "normal": 5295.0,
-   "cociente": 1.207,
-   "pct_sobre_normal": 20.7,
+   "cociente": 1.216,
+   "pct_sobre_normal": 21.6,
    "color": "verde",
-   "p10": 5712.0,
-   "p90": 8086.0,
+   "p10": 5754.0,
+   "p90": 8180.0,
    "incierto": true,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 16.6,
+     "efecto_pct": 16.0,
      "signo": "+"
     },
     {
@@ -12265,14 +12075,14 @@
     },
     {
      "nombre": "Época del año",
-     "efecto_pct": -3.1,
+     "efecto_pct": -2.6,
      "signo": "-"
     }
    ],
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
@@ -12281,36 +12091,36 @@
    "fecha": "2026-10-20",
    "zona_mitma_id": "33024",
    "nombre_zona": "Gijón",
-   "horizonte": 5,
-   "prediccion": 52917.0,
+   "horizonte": 4,
+   "prediccion": 52279.0,
    "normal": 51036.0,
-   "cociente": 1.037,
-   "pct_sobre_normal": 3.7,
+   "cociente": 1.024,
+   "pct_sobre_normal": 2.4,
    "color": "verde",
-   "p10": 51652.0,
-   "p90": 62423.0,
+   "p10": 51038.0,
+   "p90": 61557.0,
    "incierto": false,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 10.2,
+     "efecto_pct": 9.4,
      "signo": "+"
     },
     {
      "nombre": "Vacaciones escolares",
-     "efecto_pct": -2.1,
+     "efecto_pct": -2.5,
      "signo": "-"
     },
     {
-     "nombre": "Fin de semana",
-     "efecto_pct": 1.4,
-     "signo": "+"
+     "nombre": "Acceso regulado a los Lagos",
+     "efecto_pct": -1.9,
+     "signo": "-"
     }
    ],
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
@@ -12319,24 +12129,24 @@
    "fecha": "2026-10-20",
    "zona_mitma_id": "33036",
    "nombre_zona": "Llanes",
-   "horizonte": 5,
-   "prediccion": 6465.0,
+   "horizonte": 4,
+   "prediccion": 6454.0,
    "normal": 5150.0,
-   "cociente": 1.255,
-   "pct_sobre_normal": 25.5,
+   "cociente": 1.253,
+   "pct_sobre_normal": 25.3,
    "color": "verde",
-   "p10": 5738.0,
-   "p90": 8499.0,
+   "p10": 5729.0,
+   "p90": 8484.0,
    "incierto": true,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 19.7,
+     "efecto_pct": 18.1,
      "signo": "+"
     },
     {
      "nombre": "Época del año",
-     "efecto_pct": -7.2,
+     "efecto_pct": -6.7,
      "signo": "-"
     },
     {
@@ -12348,7 +12158,7 @@
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
@@ -12357,133 +12167,19 @@
    "fecha": "2026-10-20",
    "zona_mitma_id": "33044",
    "nombre_zona": "Oviedo",
-   "horizonte": 5,
-   "prediccion": 78392.0,
+   "horizonte": 4,
+   "prediccion": 77739.0,
    "normal": 80990.0,
-   "cociente": 0.968,
-   "pct_sobre_normal": -3.2,
+   "cociente": 0.96,
+   "pct_sobre_normal": -4.0,
    "color": "verde",
-   "p10": 78613.0,
-   "p90": 91542.0,
+   "p10": 78129.0,
+   "p90": 91005.0,
    "incierto": false,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 7.5,
-     "signo": "+"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -1.7,
-     "signo": "-"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": 1.4,
-     "signo": "+"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-20",
-   "zona_mitma_id": "33056",
-   "nombre_zona": "Ribadesella",
-   "horizonte": 5,
-   "prediccion": 4442.0,
-   "normal": 3613.0,
-   "cociente": 1.229,
-   "pct_sobre_normal": 22.9,
-   "color": "verde",
-   "p10": 4036.0,
-   "p90": 5898.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 19.1,
-     "signo": "+"
-    },
-    {
-     "nombre": "Época del año",
-     "efecto_pct": -8.5,
-     "signo": "-"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -5.6,
-     "signo": "-"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-21",
-   "zona_mitma_id": "33012",
-   "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
-   "horizonte": 6,
-   "prediccion": 6466.0,
-   "normal": 5327.0,
-   "cociente": 1.214,
-   "pct_sobre_normal": 21.4,
-   "color": "verde",
-   "p10": 5779.0,
-   "p90": 8176.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 16.6,
-     "signo": "+"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -4.1,
-     "signo": "-"
-    },
-    {
-     "nombre": "Época del año",
-     "efecto_pct": -3.2,
-     "signo": "-"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-21",
-   "zona_mitma_id": "33024",
-   "nombre_zona": "Gijón",
-   "horizonte": 6,
-   "prediccion": 54480.0,
-   "normal": 52478.0,
-   "cociente": 1.038,
-   "pct_sobre_normal": 3.8,
-   "color": "verde",
-   "p10": 53154.0,
-   "p90": 64304.0,
-   "incierto": false,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 10.2,
+     "efecto_pct": 7.0,
      "signo": "+"
     },
     {
@@ -12492,117 +12188,41 @@
      "signo": "-"
     },
     {
-     "nombre": "Fin de semana",
-     "efecto_pct": 2.1,
-     "signo": "+"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-21",
-   "zona_mitma_id": "33036",
-   "nombre_zona": "Llanes",
-   "horizonte": 6,
-   "prediccion": 6386.0,
-   "normal": 4978.0,
-   "cociente": 1.283,
-   "pct_sobre_normal": 28.3,
-   "color": "verde",
-   "p10": 5654.0,
-   "p90": 8393.0,
-   "incierto": true,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 19.8,
-     "signo": "+"
-    },
-    {
-     "nombre": "Época del año",
-     "efecto_pct": -7.2,
-     "signo": "-"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -5.5,
+     "nombre": "Acceso regulado a los Lagos",
+     "efecto_pct": -1.8,
      "signo": "-"
     }
    ],
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
   },
   {
-   "fecha": "2026-10-21",
-   "zona_mitma_id": "33044",
-   "nombre_zona": "Oviedo",
-   "horizonte": 6,
-   "prediccion": 79534.0,
-   "normal": 82068.0,
-   "cociente": 0.969,
-   "pct_sobre_normal": -3.1,
-   "color": "verde",
-   "p10": 79741.0,
-   "p90": 92994.0,
-   "incierto": false,
-   "factores": [
-    {
-     "nombre": "Interés en internet",
-     "efecto_pct": 7.5,
-     "signo": "+"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": 2.1,
-     "signo": "+"
-    },
-    {
-     "nombre": "Vacaciones escolares",
-     "efecto_pct": -1.7,
-     "signo": "-"
-    }
-   ],
-   "sintetico": false,
-   "modelo": "corto",
-   "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
-   "observado": null,
-   "cociente_observado": null,
-   "color_observado": null
-  },
-  {
-   "fecha": "2026-10-21",
+   "fecha": "2026-10-20",
    "zona_mitma_id": "33056",
    "nombre_zona": "Ribadesella",
-   "horizonte": 6,
-   "prediccion": 4762.0,
-   "normal": 3793.0,
-   "cociente": 1.255,
-   "pct_sobre_normal": 25.5,
+   "horizonte": 4,
+   "prediccion": 4502.0,
+   "normal": 3613.0,
+   "cociente": 1.246,
+   "pct_sobre_normal": 24.6,
    "color": "verde",
-   "p10": 4352.0,
-   "p90": 6333.0,
+   "p10": 4107.0,
+   "p90": 5984.0,
    "incierto": true,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 19.1,
+     "efecto_pct": 18.6,
      "signo": "+"
     },
     {
      "nombre": "Época del año",
-     "efecto_pct": -8.5,
+     "efecto_pct": -7.1,
      "signo": "-"
     },
     {
@@ -12614,28 +12234,28 @@
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
   },
   {
-   "fecha": "2026-10-22",
+   "fecha": "2026-10-21",
    "zona_mitma_id": "33012",
    "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
-   "horizonte": 7,
-   "prediccion": 6495.0,
-   "normal": 5333.0,
-   "cociente": 1.218,
-   "pct_sobre_normal": 21.8,
+   "horizonte": 5,
+   "prediccion": 6513.0,
+   "normal": 5327.0,
+   "cociente": 1.223,
+   "pct_sobre_normal": 22.3,
    "color": "verde",
-   "p10": 5763.0,
-   "p90": 8252.0,
+   "p10": 5819.0,
+   "p90": 8237.0,
    "incierto": true,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 16.8,
+     "efecto_pct": 16.0,
      "signo": "+"
     },
     {
@@ -12645,78 +12265,78 @@
     },
     {
      "nombre": "Época del año",
-     "efecto_pct": -3.2,
+     "efecto_pct": -2.6,
      "signo": "-"
     }
    ],
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
   },
   {
-   "fecha": "2026-10-22",
+   "fecha": "2026-10-21",
    "zona_mitma_id": "33024",
    "nombre_zona": "Gijón",
-   "horizonte": 7,
-   "prediccion": 55845.0,
-   "normal": 53929.0,
-   "cociente": 1.036,
-   "pct_sobre_normal": 3.6,
+   "horizonte": 5,
+   "prediccion": 53840.0,
+   "normal": 52478.0,
+   "cociente": 1.026,
+   "pct_sobre_normal": 2.6,
    "color": "verde",
-   "p10": 54570.0,
-   "p90": 65921.0,
+   "p10": 52553.0,
+   "p90": 63512.0,
    "incierto": false,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 10.2,
+     "efecto_pct": 9.4,
      "signo": "+"
     },
     {
      "nombre": "Vacaciones escolares",
-     "efecto_pct": -2.0,
+     "efecto_pct": -2.5,
      "signo": "-"
     },
     {
      "nombre": "Fin de semana",
-     "efecto_pct": 1.4,
+     "efecto_pct": 2.3,
      "signo": "+"
     }
    ],
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
   },
   {
-   "fecha": "2026-10-22",
+   "fecha": "2026-10-21",
    "zona_mitma_id": "33036",
    "nombre_zona": "Llanes",
-   "horizonte": 7,
-   "prediccion": 6929.0,
-   "normal": 5580.0,
-   "cociente": 1.242,
-   "pct_sobre_normal": 24.2,
+   "horizonte": 5,
+   "prediccion": 6375.0,
+   "normal": 4978.0,
+   "cociente": 1.281,
+   "pct_sobre_normal": 28.1,
    "color": "verde",
-   "p10": 6115.0,
-   "p90": 9109.0,
+   "p10": 5659.0,
+   "p90": 8381.0,
    "incierto": true,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 19.9,
+     "efecto_pct": 18.2,
      "signo": "+"
     },
     {
      "nombre": "Época del año",
-     "efecto_pct": -7.2,
+     "efecto_pct": -6.7,
      "signo": "-"
     },
     {
@@ -12728,71 +12348,185 @@
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
   },
   {
-   "fecha": "2026-10-22",
+   "fecha": "2026-10-21",
    "zona_mitma_id": "33044",
    "nombre_zona": "Oviedo",
-   "horizonte": 7,
-   "prediccion": 80180.0,
-   "normal": 82845.0,
-   "cociente": 0.968,
-   "pct_sobre_normal": -3.2,
+   "horizonte": 5,
+   "prediccion": 78897.0,
+   "normal": 82068.0,
+   "cociente": 0.961,
+   "pct_sobre_normal": -3.9,
    "color": "verde",
-   "p10": 80110.0,
-   "p90": 93753.0,
+   "p10": 79119.0,
+   "p90": 92131.0,
    "incierto": false,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 7.6,
+     "efecto_pct": 7.0,
+     "signo": "+"
+    },
+    {
+     "nombre": "Fin de semana",
+     "efecto_pct": 2.3,
      "signo": "+"
     },
     {
      "nombre": "Vacaciones escolares",
-     "efecto_pct": -1.7,
+     "efecto_pct": -2.1,
      "signo": "-"
-    },
-    {
-     "nombre": "Fin de semana",
-     "efecto_pct": 1.4,
-     "signo": "+"
     }
    ],
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-21",
+   "zona_mitma_id": "33056",
+   "nombre_zona": "Ribadesella",
+   "horizonte": 5,
+   "prediccion": 4832.0,
+   "normal": 3793.0,
+   "cociente": 1.274,
+   "pct_sobre_normal": 27.4,
+   "color": "verde",
+   "p10": 4391.0,
+   "p90": 6415.0,
+   "incierto": true,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 18.7,
+     "signo": "+"
+    },
+    {
+     "nombre": "Época del año",
+     "efecto_pct": -7.1,
+     "signo": "-"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -5.4,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null
   },
   {
    "fecha": "2026-10-22",
-   "zona_mitma_id": "33056",
-   "nombre_zona": "Ribadesella",
-   "horizonte": 7,
-   "prediccion": 4987.0,
-   "normal": 4115.0,
-   "cociente": 1.212,
-   "pct_sobre_normal": 21.2,
+   "zona_mitma_id": "33012",
+   "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
+   "horizonte": 6,
+   "prediccion": 6506.0,
+   "normal": 5333.0,
+   "cociente": 1.22,
+   "pct_sobre_normal": 22.0,
    "color": "verde",
-   "p10": 4552.0,
-   "p90": 6598.0,
+   "p10": 5815.0,
+   "p90": 8226.0,
    "incierto": true,
    "factores": [
     {
      "nombre": "Interés en internet",
-     "efecto_pct": 19.1,
+     "efecto_pct": 15.9,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -4.0,
+     "signo": "-"
+    },
+    {
+     "nombre": "Época del año",
+     "efecto_pct": -2.7,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-22",
+   "zona_mitma_id": "33024",
+   "nombre_zona": "Gijón",
+   "horizonte": 6,
+   "prediccion": 54978.0,
+   "normal": 53929.0,
+   "cociente": 1.019,
+   "pct_sobre_normal": 1.9,
+   "color": "verde",
+   "p10": 53640.0,
+   "p90": 64891.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 9.2,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -2.4,
+     "signo": "-"
+    },
+    {
+     "nombre": "Acceso regulado a los Lagos",
+     "efecto_pct": -1.8,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-22",
+   "zona_mitma_id": "33036",
+   "nombre_zona": "Llanes",
+   "horizonte": 6,
+   "prediccion": 6894.0,
+   "normal": 5580.0,
+   "cociente": 1.235,
+   "pct_sobre_normal": 23.5,
+   "color": "verde",
+   "p10": 6104.0,
+   "p90": 9060.0,
+   "incierto": true,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 18.0,
      "signo": "+"
     },
     {
      "nombre": "Época del año",
-     "efecto_pct": -8.6,
+     "efecto_pct": -6.7,
      "signo": "-"
     },
     {
@@ -12804,7 +12538,273 @@
    "sintetico": false,
    "modelo": "corto",
    "conjunto": "futuro_corto",
-   "fecha_emision": "2026-10-15",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-22",
+   "zona_mitma_id": "33044",
+   "nombre_zona": "Oviedo",
+   "horizonte": 6,
+   "prediccion": 79233.0,
+   "normal": 82845.0,
+   "cociente": 0.956,
+   "pct_sobre_normal": -4.4,
+   "color": "verde",
+   "p10": 79439.0,
+   "p90": 92641.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 6.9,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -2.0,
+     "signo": "-"
+    },
+    {
+     "nombre": "Acceso regulado a los Lagos",
+     "efecto_pct": -1.8,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-22",
+   "zona_mitma_id": "33056",
+   "nombre_zona": "Ribadesella",
+   "horizonte": 6,
+   "prediccion": 5056.0,
+   "normal": 4115.0,
+   "cociente": 1.229,
+   "pct_sobre_normal": 22.9,
+   "color": "verde",
+   "p10": 4622.0,
+   "p90": 6724.0,
+   "incierto": true,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 18.5,
+     "signo": "+"
+    },
+    {
+     "nombre": "Época del año",
+     "efecto_pct": -7.1,
+     "signo": "-"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -5.3,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-23",
+   "zona_mitma_id": "33012",
+   "nombre_zona": "Cangas de Onís (incluye Covadonga y Lagos)",
+   "horizonte": 7,
+   "prediccion": 7651.0,
+   "normal": 6305.0,
+   "cociente": 1.213,
+   "pct_sobre_normal": 21.3,
+   "color": "verde",
+   "p10": 6788.0,
+   "p90": 9721.0,
+   "incierto": true,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 16.6,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -3.6,
+     "signo": "-"
+    },
+    {
+     "nombre": "Época del año",
+     "efecto_pct": -2.5,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-23",
+   "zona_mitma_id": "33024",
+   "nombre_zona": "Gijón",
+   "horizonte": 7,
+   "prediccion": 61135.0,
+   "normal": 60190.0,
+   "cociente": 1.016,
+   "pct_sobre_normal": 1.6,
+   "color": "verde",
+   "p10": 59739.0,
+   "p90": 72165.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 9.4,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -2.3,
+     "signo": "-"
+    },
+    {
+     "nombre": "Acceso regulado a los Lagos",
+     "efecto_pct": -1.8,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-23",
+   "zona_mitma_id": "33036",
+   "nombre_zona": "Llanes",
+   "horizonte": 7,
+   "prediccion": 9668.0,
+   "normal": 7865.0,
+   "cociente": 1.229,
+   "pct_sobre_normal": 22.9,
+   "color": "verde",
+   "p10": 8533.0,
+   "p90": 12710.0,
+   "incierto": true,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 18.7,
+     "signo": "+"
+    },
+    {
+     "nombre": "Época del año",
+     "efecto_pct": -6.6,
+     "signo": "-"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -4.6,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-23",
+   "zona_mitma_id": "33044",
+   "nombre_zona": "Oviedo",
+   "horizonte": 7,
+   "prediccion": 83037.0,
+   "normal": 87142.0,
+   "cociente": 0.953,
+   "pct_sobre_normal": -4.7,
+   "color": "verde",
+   "p10": 82964.0,
+   "p90": 97093.0,
+   "incierto": false,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 7.0,
+     "signo": "+"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -1.9,
+     "signo": "-"
+    },
+    {
+     "nombre": "Acceso regulado a los Lagos",
+     "efecto_pct": -1.7,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
+   "observado": null,
+   "cociente_observado": null,
+   "color_observado": null
+  },
+  {
+   "fecha": "2026-10-23",
+   "zona_mitma_id": "33056",
+   "nombre_zona": "Ribadesella",
+   "horizonte": 7,
+   "prediccion": 5809.0,
+   "normal": 4746.0,
+   "cociente": 1.224,
+   "pct_sobre_normal": 22.4,
+   "color": "verde",
+   "p10": 5302.0,
+   "p90": 7685.0,
+   "incierto": true,
+   "factores": [
+    {
+     "nombre": "Interés en internet",
+     "efecto_pct": 19.0,
+     "signo": "+"
+    },
+    {
+     "nombre": "Época del año",
+     "efecto_pct": -7.0,
+     "signo": "-"
+    },
+    {
+     "nombre": "Vacaciones escolares",
+     "efecto_pct": -4.6,
+     "signo": "-"
+    }
+   ],
+   "sintetico": false,
+   "modelo": "corto",
+   "conjunto": "futuro_corto",
+   "fecha_emision": "2026-10-16",
    "observado": null,
    "cociente_observado": null,
    "color_observado": null

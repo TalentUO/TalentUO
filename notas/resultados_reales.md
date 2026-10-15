@@ -243,3 +243,66 @@ Fuente: `salidas/regulacion.json → por_zona` (33012). Intervalo = días con p1
 - Los datos respaldan que hace falta regular: hay un núcleo de unos 40-50 días al año con más del doble de visitantes de lo normal, y se repite cada verano.
 - El calendario actual llega a esos días, pero es mucho más amplio: regula también días normales o casi normales.
 - Un sistema de alerta como este podría servir para concentrar las medidas más duras en los días rojos y revisar el resto del calendario. No hemos medido la capacidad física de los Lagos, así que no podemos decir cuál es el umbral correcto.
+
+## 8. Validación externa con el INE (paso 5): NO REALIZADA
+
+No hay datos de turistas mensuales del INE medidos con teléfonos móviles en el repositorio.
+- `data/raw/ine_moviles_*` está en `.gitignore`, y no existe en ninguna rama remota ni en local (buscado el 2026-10-16). Solo está el script `scripts/descarga_ine_moviles.py`.
+- No se ha descargado nada.
+
+Sí hay series mensuales del INE por punto turístico hasta 2026M08 (`notas/registro_descargas.md`):
+- hoteles (`ine_eoh_2078.csv`): Cangas de Onís, Gijón, Llanes y Oviedo;
+- apartamentos (`ine_eoap_2082.csv`) y campings (`ine_camping_2084.csv`): solo Llanes.
+
+Miden viajeros alojados en un tipo de establecimiento, no turistas, y no incluyen Ribadesella. Usarlas en lugar de las de móviles queda pendiente de decisión del equipo.
+
+## 9. Salidas para la web (paso 6)
+
+Ejecución del 2026-10-16:
+
+```bash
+python -X utf8 src/modelo/descargar_prevision.py              # Open-Meteo, emisión 2026-10-16
+python -X utf8 src/modelo/ejecutar.py --objetivo real --algoritmo ambos
+```
+
+Previsión descargada:
+- 63 filas = 9 puntos × 7 días (2026-10-16 → 2026-10-22), en `data/clean/openmeteo_prevision.parquet`;
+- respuestas en bruto en `data/prevision/2026-10-16/`;
+- columnas y tipos idénticos a `openmeteo_prevision_ejemplo.parquet` (lo comprueba el script);
+- ningún punto sin previsión.
+
+Las métricas regeneradas son idénticas a las de la ejecución anterior: la ejecución es determinista y solo cambia la previsión.
+
+| Conjunto (`predicciones.json`) | Modelo | Registros | Fechas |
+|---|---|---|---|
+| `futuro_largo` | largo | 300 (5 zonas × 60 días) | 2026-10-17 → 2026-12-15 |
+| `futuro_corto` | corto | 35 (5 zonas × 7 días) | 2026-10-17 → 2026-10-23 (emisión 2026-10-16; tiempo a 1-3 días) |
+| `historico` | largo h8 y corto h1 | 180 + 180 | 2024-08-01 → 08-31 y 2024-12-05 → 12-09 |
+
+Comprobaciones:
+- `validar_salidas.validar(salidas/)` da 0 errores.
+- Los 9 JSON del modelo llevan `sintetico: false` en la raíz, y los 695 registros de `predicciones.json`, también.
+- **Siguen en `salidas/` dos ficheros con `sintetico: true`** que esta ejecución no regenera: `sintetico_efectos_reales.json` y `sintetico_recuperacion_factores.json`. No forman parte del contrato de la web ni los copia `scripts/actualizar_datos_web.py`. No se han borrado; queda pendiente de decisión del equipo.
+
+### Casos de la demo
+
+- **Primera quincena de agosto de 2024, Picos.**
+  - Los 15 días son rojos observados (de 2,12 a 3,90 veces lo normal).
+  - El largo plazo (h = 8) los pinta rojos los 15, y el corto plazo (h = 1), 14 de 15.
+  - El modelo se queda corto en los días más altos: el 15 de agosto predice 3,00 veces lo normal y se observa 3,90.
+  - Factores del caso de ejemplo (2023-08-17, `explicacion_factores.json`): «Época del año» +40 %, «Vacaciones escolares» +37 %, «Acceso regulado a los Lagos» +17 % y «Fin de semana» +2,5 %.
+- **Puente de diciembre de 2024: no es un caso rojo con datos reales.**
+  - No hubo ningún día rojo observado en ninguna zona. Lo más alto es ámbar: Llanes, 1,69 y 1,66 veces lo normal los días 5 y 6; Picos, 1,55 el día 6.
+  - El modelo lo pinta todo de verde salvo Llanes el 6 a largo plazo (ámbar, 1,51).
+  - En el puente de 2023 sí hubo rojos (Llanes, 2,24 y 2,02 veces lo normal los días 6 y 7) y el modelo predijo de 1,25 a 1,36 (verde).
+  - **Los puentes de diciembre son un fallo claro del modelo.** No se han cambiado los periodos de la demo, porque es una decisión del equipo.
+
+### Actualizar la web (sin ejecutar: no se ha tocado la rama `web`)
+
+`origin/web` (`6fba3b5`) tiene `scripts/actualizar_datos_web.py`. Comprueba el contrato y copia los 5 JSON a `Afluencia Asturias/datos/modelo/`, junto con el mapeo y el calendario. En `origin/web`, `config/mapeo_zonas.csv` todavía tiene `zona_mitma_id` vacío, así que con los identificadores reales el script se pararía si no se trae también el mapeo. Orden, en una copia con la rama `web`:
+
+```bash
+git checkout web && git pull
+git checkout origin/resultados-reales -- salidas/predicciones.json salidas/alternativas.json salidas/regulacion.json salidas/perfil.json salidas/metricas.json config/mapeo_zonas.csv
+python -X utf8 scripts/actualizar_datos_web.py
+```

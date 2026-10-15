@@ -12,7 +12,7 @@
   "diferencia_criterio_xgb_menos_lgb": -0.0145,
   "diferencia_wape_medio_xgb_menos_lgb": -0.0011
  },
- "segundos": 124.0,
+ "segundos": 140.7,
  "wape": {
   "corto/modelo": 0.0884,
   "corto/B0": 0.1315,
@@ -101,7 +101,7 @@
   "previsto_fuera_de_muestra/absoluto": 1.0
  },
  "info_corto_plazo": {
-  "fecha_emision": "2026-10-15",
+  "fecha_emision": "2026-10-16",
   "fuente": "openmeteo_prevision.parquet",
   "puntos_con_prevision": [
    "cangas_de_onis",
@@ -118,13 +118,13 @@
    3
   ],
   "fechas": [
-   "2026-10-16",
    "2026-10-17",
    "2026-10-18",
    "2026-10-19",
    "2026-10-20",
    "2026-10-21",
-   "2026-10-22"
+   "2026-10-22",
+   "2026-10-23"
   ]
  }
 }
