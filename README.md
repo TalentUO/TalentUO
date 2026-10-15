@@ -11,7 +11,13 @@ Repositorio compartido (privado) para datos y notas del proyecto.
 ## Instalación
 
 ```bash
+python -m venv .venv
+.venv\Scriptsctivate        # Windows (PowerShell/cmd)
+# source .venv/bin/activate    # macOS/Linux
 pip install -r requirements.txt
 ```
+
+`requirements-lock.txt` contiene las versiones exactas probadas (Python 3.11):
+`pip install -r requirements-lock.txt`.
 
 Dependencias principales: pandas, requests, openpyxl, pyaxis, pySpainMobility.
