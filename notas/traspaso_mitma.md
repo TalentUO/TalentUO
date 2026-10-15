@@ -11,24 +11,24 @@ Redactado el 2026-10-15 por la Persona A. Todo lo que no se ha podido comprobar 
 
 Cuatro más cuatro ficheros, **solo con filas de Asturias** (46 zonas de `data/raw/zonas_mitma_asturias.csv`), del **2022-01-01 al 2025-06-30**:
 
-| Fichero final | Filtro | Estado a 2026-10-15 23:10 |
+| Fichero final | Filtro | Estado a 2026-10-15 23:25 |
 |---|---|---|
 | `data/raw/mitma_pernoctaciones_{2022,2023,2024,2025}.csv` | `zona_pernoctacion` ∈ zonas | **Completos y verificados** en el PC de origen (pesan 87, 95, 112 y 48 MB: **no caben en git**) |
-| `data/raw/mitma_viajes_{2022,2023,2024,2025}.csv` | `destino` ∈ zonas | **Incompleto**: 2024 hecho; 2025 hasta el 2025-03-02; 2023 sin empezar; 2022 solo 4 días |
+| `data/raw/mitma_viajes_{2022,2023,2024,2025}.csv` | `destino` ∈ zonas | **2024 y 2025 completos y verificados** (8,9 GB y 4,9 GB; no caben en git); **2023 sin empezar; 2022 solo 4 días** |
 
 Desde el **2025-07-01 cambia la metodología del MITMA: no descargar nada posterior al 2025-06-30** (el script lo impide con un `assert`). Los datos solo cubren **residentes en España**.
 
-### Qué falta exactamente (a 2026-10-15 23:10)
+### Qué falta exactamente (a 2026-10-15 23:25)
 
 | Bloque | Días totales | Hechos | Pendientes | Observación |
 |---|---|---|---|---|
 | Pernoctaciones 2022-01-01..2025-06-30 | 1 277 | 1 264 (+13 días que el MITMA no publica) | 0 | Completo |
 | Viajes 2024 | 366 | 362 (+4 sin datos del MITMA) | 0 | Completo |
-| Viajes 2025-01-01..2025-06-30 | 181 | 61 (hasta 2025-03-02) | **120** | Prioridad 1 |
-| Viajes 2023 | 365 | 0 | **358** (7 días sin datos del MITMA) | Prioridad 2 (opcional, ver §7) |
-| Viajes 2022 | 365 | 4 | **361** | Prioridad 3 (opcional, ver §7) |
+| Viajes 2025-01-01..2025-06-30 | 181 | 179 (+2 sin datos: apagón 04-28 y 04-29) | 0 | Completo |
+| Viajes 2023 | 365 | 0 | **358** (7 días sin datos del MITMA, comprobado en pernoctaciones) | Pendiente (decisión del equipo, ver §7) |
+| Viajes 2022 | 365 | 4 | **361** | Pendiente (decisión del equipo, ver §7) |
 
-> Los ficheros diarios ya descargados de viajes (9,9 GB) **no están en git**. Quien continúe **empieza con el estado vacío** y descargará también lo ya hecho si quiere el periodo completo (ver §4 para la alternativa de pasarse los datos por fuera de git).
+> Los CSV de viajes de 2024 y 2025 (13,8 GB) **no están en git**. Quien continúe **empieza con el estado vacío** y descargará también lo ya hecho si quiere el periodo completo (ver §4 para la alternativa de pasarse los datos por fuera de git).
 
 ---
 
@@ -143,7 +143,14 @@ Fase 1 no incluye limpieza. "Procesar" aquí = **ensamblar y comprobar**.
 
 (2 964 041 = 2 945 927 + 18 114: las 18 114 filas son las de la prueba del 2022-01-02 y 03, que se ensamblaron antes.)
 
-**Viajes — parcial.** Las filas esperadas por día están en `notas/mitma_referencia_filas_por_dia.csv`. Días de viajes descargados: 427 (362 de 2024, 61 de 2025 y 4 de 2022), con 118 818 118 filas de Asturias en total (incluidos los 2 días de la prueba). Ausentes confirmados con 404 en 2024: 2024-04-18, 2024-11-09, 2024-11-10 y 2024-11-26.
+**Viajes 2024 y 2025 — verificado** con `verificar_mitma.py` el 2026-10-15 ~23:25 (el resto: sin descargar):
+
+| Año | Filas | Días distintos | Fechas ausentes | Destino fuera de Asturias |
+|---|---|---|---|---|
+| 2024 | 100 500 025 | 362 (2024-01-01 – 2024-12-31) | 2024-04-18; 2024-11-09, 10, 26 | 0 |
+| 2025 (hasta 06-30) | 55 291 351 | 179 (2025-01-01 – 2025-06-30) | 2025-04-28, 29 | 0 |
+
+Las filas esperadas por día de todo lo descargado están en `notas/mitma_referencia_filas_por_dia.csv`. Viajes 2022: solo 4 días (2022-01-01, 02, 03 y 06). Ausentes confirmados con 404 en 2024: 2024-04-18, 2024-11-09, 2024-11-10 y 2024-11-26.
 
 ### Días sin datos: lo que se sabe y lo que no
 - **404 reales** (descargados a 2026-10-15): pernoctaciones y viajes → 2023-10-26, 27, 30, 31, 2023-11-01, 02, 03 (solo comprobado en pernoctaciones; en viajes 2023 está sin descargar), 2024-04-18, 2024-11-09, 2024-11-10, 2024-11-26, 2025-04-28, 2025-04-29 (esta última, comprobada en pernoctaciones; viajes 2025-04 sin descargar aún).
@@ -162,7 +169,7 @@ Fase 1 no incluye limpieza. "Procesar" aquí = **ensamblar y comprobar**.
 ---
 
 ## 7. Decisiones pendientes (no tomadas; no las adivines)
-1. **¿Se descargan viajes de 2022 y 2023?** El periodo del reto es 2022-2025, pero una instrucción del equipo era parar tras 2024-01..2025-06 y consultar. Ese comando de parada está en §4.
+1. **¿Se descargan viajes de 2022 y 2023?** El periodo del reto es 2022-2025, pero una instrucción del equipo era parar tras 2024-01..2025-06 y consultar: **se paró ahí y no se ha continuado**. Estimación (no garantizada): ~718 días, ~86 GB de tráfico, ~25 min con el portal rindiendo bien. Comando: `--tipos viajes --inicio 2022-01-01 --fin 2023-12-31`.
 2. **Ficheros por mes** (`data/raw/mitma_viajes/AAAA-MM.csv`, `data/raw/mitma_pernoctaciones/AAAA-MM.csv`): solicitado en un encargo posterior, **no implementado**; el script produce un CSV por año (lo que pide la guía `notas/persona_A_demanda_movilidad`).
 3. **`notas/registro_mitma.md`** (una línea por mes y tipo) y **`src/descarga_mitma.*`**: solicitados en ese encargo; **no creados**. Se usan `scripts/descarga_mitma.py` y `notas/registro_descargas.md`.
 4. **Fichero origen-destino de «día normal»** (`.../estadisticos/viajes/2024/municipal_estadisticos_diasemana_ods.csv`, 1,08 GB): no descargado.

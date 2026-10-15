@@ -257,3 +257,17 @@ URL: `https://www.ine.es/experimental/turismo_moviles/exp_tmov_interno_mun_<año
 - Referencia por día de lo descargado: `notas/mitma_referencia_filas_por_dia.csv` (1 708 días-tipo, de los que 17 son `NO_DISPONIBLE`). Comparación: `scripts/comparar_con_referencia.py`. Probado solo contra el estado del propio PC de origen (0 diferencias); no se probó con una descarga independiente (**NO VERIFICADO** que detecte diferencias reales).
 - Días sin datos (404 confirmados): pernoctaciones 13 días (los de la tabla); viajes 4 días de 2024 (04-18, 11-09, 11-10, 11-26). Discrepancias con la lista de la página del MITMA y 2024-10-29..31 (DANA): ver `notas/traspaso_mitma.md` §5.
 - Sigue sin registrar mes a mes (`notas/registro_mitma.md`) y sin ficheros por mes: ver decisiones pendientes en `notas/traspaso_mitma.md` §7.
+
+### 2026-10-15 23:25 · Paso 2: viajes 2024 y 2025 completados y verificados (Persona A)
+
+Descargados los 120 días de viajes que faltaban (2025-03-03 a 2025-06-30) con `descarga_mitma.py --workers 4 --tipos viajes --inicio 2024-01-01 --fin 2025-06-30`: 8,3 min, 0 errores. Dos avisos esperados: 2025-04-28 y 2025-04-29 devolvieron 404 (apagón); quedan **ausentes, no 0**. Ensamblados y comprobados con `scripts/verificar_mitma.py`:
+
+| Fichero (no versionado) | Tamaño | Filas | Días distintos | Primera – última | Fechas ausentes | Destino fuera de Asturias |
+|---|---|---|---|---|---|---|
+| `mitma_viajes_2024.csv` | 8,9 GB | 100 500 025 | 362 | 2024-01-01 – 2024-12-31 | 2024-04-18; 2024-11-09, 10, 26 | 0 |
+| `mitma_viajes_2025.csv` | 4,9 GB | 55 291 351 | 179 | 2025-01-01 – 2025-06-30 | 2025-04-28, 29 | 0 |
+
+- Las fechas ausentes son 404 del portal y faltan también en el RSS oficial. Los días **2024-04-04, 2024-04-19 y 2024-11-11**, que la página del MITMA cita como sin datos, **sí están publicados y se descargaron** (discrepancia sin explicar: NO VERIFICADO la causa).
+- 2024-10-29..31 (DANA) descargados con normalidad: **marcar como anómalos en la limpieza**.
+- Con esto, el bloque prioritario (viajes 2024-01..2025-06 y pernoctaciones 2022-2025) está **completo**. Viajes de 2023 (0 días) y 2022 (4 días) siguen pendientes por decisión del equipo. Referencia por día actualizada en `notas/mitma_referencia_filas_por_dia.csv`.
+- El comparador (`scripts/comparar_con_referencia.py`) da 0 diferencias contra el propio estado; no se ha probado con una descarga independiente.
