@@ -100,6 +100,11 @@ Valida `salidas/` con `src/modelo/validar_salidas.py`, copia los cinco JSON a `A
 ### Estado
 - **web-gestion lista** — commit `edcf286` (incluye `origin/web` hasta `71ed483`).
 
+## Usabilidad en móvil (persona 1, para la persona 2)
+
+- Mapa: en pantallas táctiles un dedo desplaza la página y dos dedos mueven el mapa; con ratón, Ctrl + rueda acerca. Al tocar una zona en una sola columna, la página baja a su panel; al cerrarlo, vuelve al mapa.
+- **Gestión a 390 px**: la tabla ancha (`table.tabla`, ~1.080 px) se desliza dentro de su contenedor, pero en el móvil cuesta leerla. Propuesta: menos columnas en móvil, o una tarjeta por zona. Es de `pestanas/gestion/`, no la he tocado.
+
 ## Integración
 
 - `web-gestion` (`fc6ebb5`) integrada en `web` por avance rápido, sin conflictos. Probado: demo de Inicio → Gestión → Sobre los datos, 20/20 pruebas de `pestanas/gestion/pruebas.html`, sin errores propios en la consola.

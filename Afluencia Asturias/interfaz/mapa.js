@@ -120,9 +120,37 @@ window.MapaAsturias = (function () {
     }).filter(Boolean);
 
     /* ---------- Mapa: solo Asturias, sobre fondo liso (sin mapa base ni nombres de pueblos) ---------- */
+    // Gestos: el mapa no se queda con el scroll de la página.
+    //  - Pantalla táctil: un dedo desplaza la página; dos dedos mueven y acercan el mapa.
+    //  - Ratón: la rueda desplaza la página; Ctrl (o Cmd) + rueda acerca el mapa.
+    const tactil = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
     const map = L.map(contenedor, {
       zoomSnap: 0.25, zoomDelta: 0.5, wheelPxPerZoomLevel: 90, maxZoom: 13, zoomControl: false, maxBoundsViscosity: 1,
+      scrollWheelZoom: false, dragging: !tactil,
     });
+    const gesto = L.DomUtil.create('div', 'mapa-gesto', contenedor);
+    gesto.setAttribute('aria-hidden', 'true');
+    let tGesto = null;
+    function avisarGesto(texto) {
+      gesto.textContent = texto;
+      gesto.classList.add('visible');
+      clearTimeout(tGesto);
+      tGesto = setTimeout(() => gesto.classList.remove('visible'), 1400);
+    }
+    contenedor.addEventListener('wheel', e => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const paso = e.deltaY < 0 ? map.options.zoomDelta : -map.options.zoomDelta;
+        map.setZoomAround(map.mouseEventToContainerPoint(e), map.getZoom() + paso);
+      } else {
+        avisarGesto(/Mac/.test(navigator.platform) ? 'Usa Cmd + rueda para acercar el mapa' : 'Usa Ctrl + rueda para acercar el mapa');
+      }
+    }, { passive: false });
+    if (tactil) {
+      let unDedo = false;
+      contenedor.addEventListener('touchstart', e => { unDedo = e.touches.length === 1; }, { passive: true });
+      contenedor.addEventListener('touchmove', e => { if (unDedo && e.touches.length === 1) avisarGesto('Usa dos dedos para mover el mapa'); }, { passive: true });
+    }
     map.attributionControl.setPrefix(false);
     map.attributionControl.addAttribution('Límites: <a href="https://www.ign.es">© IGN</a> (CC BY 4.0)');
     // La vista inicial va antes que las capas: Leaflet no crea los polígonos hasta que el mapa tiene vista

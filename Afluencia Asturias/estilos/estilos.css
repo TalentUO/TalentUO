@@ -305,6 +305,14 @@ button.cal-dia:hover { background: var(--superficie-2); }
 .mapa .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; font-size: 1.35rem; background: var(--superficie); color: var(--tinta); border-bottom-color: var(--linea); }
 .mapa .leaflet-bar a:hover { background: var(--superficie-2); }
 .mapa .leaflet-bar a.leaflet-disabled { background: var(--superficie); color: var(--tinta-2); opacity: .5; }
+/* Aviso breve sobre cómo mover o acercar el mapa (sin bloquear el scroll de la página) */
+.mapa-gesto {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1000; pointer-events: none;
+  max-width: 80%; padding: .55rem .9rem; border-radius: 10px; text-align: center; font-weight: 700; font-size: .9rem;
+  background: var(--superficie); color: var(--tinta); border: 1px solid var(--linea-fuerte); box-shadow: var(--sombra);
+  opacity: 0; transition: opacity .2s ease;
+}
+.mapa-gesto.visible { opacity: 1; }
 .mapa-ctrl { display: flex; flex-direction: column; align-items: flex-start; gap: .4rem; max-width: 15rem; }
 .mapa-modo {
   background: var(--superficie); color: var(--tinta); border: 1px solid var(--linea-fuerte); border-radius: 8px;
@@ -740,6 +748,11 @@ dialog::backdrop { background: rgba(10, 18, 24, .55); }
   .ev { grid-template-columns: auto minmax(0, 1fr); }
   .ev .btn-mini { grid-column: 2; justify-self: start; }
   .mapa { aspect-ratio: auto; height: 16rem; min-height: 0; }
+  /* Accesos rápidos de fecha en una sola fila deslizable, para no empujar el mapa hacia abajo */
+  .accesos { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -.25rem; padding: .1rem .25rem .2rem; }
+  .accesos::-webkit-scrollbar { display: none; }
+  .accesos .chip-btn { flex: 0 0 auto; white-space: nowrap; }
+  .dias-sub { display: none; }
   /* En móvil el aviso de modo solo se anuncia (no tapa el mapa) */
   .mapa-modo { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; padding: 0; border: 0; }
   .mapa-todo { padding: .2rem .6rem; font-size: .75rem; }
@@ -747,7 +760,8 @@ dialog::backdrop { background: rgba(10, 18, 24, .55); }
   .filtros { flex-direction: column; align-items: stretch; }
   .buscador { max-width: none; flex-basis: auto; }
   .seg-opciones { display: flex; }
-  .seg-opciones > * { flex: 1 1 auto; }
+  .seg-opciones { flex-wrap: nowrap; }
+  .seg-opciones > * { flex: 1 1 0; min-width: 0; }
   .seg-opciones label span, .seg-btn { justify-content: center; width: 100%; padding-inline: .6rem; }
   .rg { grid-template-columns: minmax(0, 1fr) auto; }
   .rg-barra { grid-column: 1 / -1; grid-row: 2; }
