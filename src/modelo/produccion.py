@@ -71,27 +71,36 @@ def futuro_largo(D: Datos, finales: dict, cuantiles: pd.DataFrame, desde, hasta)
 
 
 def futuro_corto_con_prevision(D: Datos, finales: dict, cuantiles: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
-    """Corto plazo con la previsión en vivo de ejemplo (data/clean/openmeteo_prevision_ejemplo.parquet).
+    """Corto plazo con la previsión en vivo de Open-Meteo.
 
-    La previsión es del punto `covadonga` y se emitió el día de su primera
-    fila (a). Para la fecha d = a + h se coloca como `_prev{h}` del punto de
-    valle de la zona principal (covadonga está en el concejo de Cangas de Onís:
-    se usa como aproximación del valle; la montaña queda sin previsión). El
-    resto de zonas no tiene previsión en el ejemplo: su tiempo es NaN y el
-    modelo predice solo con calendario e interés.
+    Fuente: data/clean/openmeteo_prevision.parquet (todas las zonas de
+    config/zonas_meteo.csv, descargada con descargar_prevision.py). Si no
+    existe, se usa openmeteo_prevision_ejemplo.parquet (solo `covadonga`, que
+    se aplica como aproximación del valle de la zona principal).
+    La previsión se emitió el día de su primera fila (a). Para la fecha
+    d = a + h (h <= 3) se coloca como `_prev{h}` de cada punto meteorológico,
+    igual que la previsión archivada con la que se entrenó: valle
+    (`zona_meteo`) y montaña (`zona_meteo_montana`). Para h = 4-7 el tiempo es
+    NaN, como en el entrenamiento (modo estricto).
     Interés: en producción la Wikipedia del día a aún no está publicada, así
     que se usa la ventana que termina en a - 1 (más conservador).
     """
     from util import CLEAN
-    prev = pd.read_parquet(CLEAN / "openmeteo_prevision_ejemplo.parquet")
+    fuente = CLEAN / "openmeteo_prevision.parquet"
+    completa = fuente.exists()
+    prev = pd.read_parquet(fuente if completa else CLEAN / "openmeteo_prevision_ejemplo.parquet")
     prev["fecha"] = pd.to_datetime(prev["fecha"]).dt.normalize()
     a = prev["fecha"].min()
-    zp = D.zona_principal
-    info = {"fecha_emision": a, "punto_prevision": str(prev["zona_meteo"].iloc[0]),
-            "zona_aplicada": zp, "horizontes_con_tiempo": []}
-    if zp is None:
-        return pd.DataFrame(), {**info, "error": "sin zona principal"}
-    valle = D.mapeo.set_index("zona_mitma_id").loc[zp, "zona_meteo"]
+    if not completa:
+        # el ejemplo solo trae covadonga: se usa como valle de la zona principal
+        zp = D.zona_principal
+        valle = D.mapeo.set_index("zona_mitma_id").loc[zp, "zona_meteo"] if zp else None
+        prev = prev.assign(zona_meteo=valle) if valle else prev.iloc[0:0]
+    puntos = set(D.mapeo["zona_meteo"].dropna()) | set(D.mapeo["zona_meteo_montana"].dropna())
+    prev = prev[prev["zona_meteo"].isin(puntos)]
+    info = {"fecha_emision": a, "fuente": fuente.name if completa else "openmeteo_prevision_ejemplo.parquet",
+            "puntos_con_prevision": sorted(prev["zona_meteo"].unique()),
+            "puntos_sin_prevision": sorted(puntos - set(prev["zona_meteo"])), "horizontes_con_tiempo": []}
     om = D.tablas["openmeteo_diario"]
     horizontes = cfg()["horizontes_corto"]
     max_lead = int(cfg()["tiempo"]["max_lead_archivado"])
@@ -99,13 +108,16 @@ def futuro_corto_con_prevision(D: Datos, finales: dict, cuantiles: pd.DataFrame)
     for _, p in prev.iterrows():
         h = int((p["fecha"] - a).days)
         if 1 <= h <= max_lead:
-            fila = {"fecha": p["fecha"], "zona_meteo": valle}
+            fila = {"fecha": p["fecha"], "zona_meteo": p["zona_meteo"]}
             for v in F.VARS_TIEMPO.values():
                 fila[f"{v}_prev{h}"] = p[v]
             filas.append(fila)
-            info["horizontes_con_tiempo"].append(h)
-    extra = pd.DataFrame(filas)
-    om2 = pd.concat([om[~((om["zona_meteo"] == valle) & om["fecha"].isin(extra["fecha"]))], extra], ignore_index=True)
+            if h not in info["horizontes_con_tiempo"]:
+                info["horizontes_con_tiempo"].append(h)
+    extra = pd.DataFrame(filas, columns=["fecha", "zona_meteo"])
+    clave = om.set_index(["fecha", "zona_meteo"]).index
+    nuevas = pd.MultiIndex.from_frame(extra[["fecha", "zona_meteo"]])
+    om2 = pd.concat([om[~clave.isin(nuevas)], extra], ignore_index=True)
     tablas = dict(D.tablas, openmeteo_diario=om2)
     fechas = pd.DatetimeIndex([a + pd.Timedelta(days=h) for h in horizontes])
     partes = []

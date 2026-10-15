@@ -22,7 +22,8 @@ from util import a_log_cociente, cfg, colores, desde_log_cociente
 
 EXPERIMENTOS = {
     "base": dict(desde=None, modo="estricto", verificados=False, modelos=("largo", "corto")),
-    "con_2022": dict(desde="2022-01-01", modo="estricto", verificados=False, modelos=("largo", "corto")),
+    # sensibilidad: entrenar solo desde el corte del reanálisis (2022-11-09), como antes de 2026-10-15
+    "desde_corte": dict(desde="corte", modo="estricto", verificados=False, modelos=("largo", "corto")),
     "solo_eventos_verificados": dict(desde=None, modo="estricto", verificados=True, modelos=("largo", "corto")),
     "tiempo_aproximado": dict(desde=None, modo="aproximado", verificados=False, modelos=("corto",)),
 }
@@ -49,7 +50,7 @@ def tablas_experimento(D: Datos, exp: dict) -> dict[str, pd.DataFrame]:
             t = F.tabla_largo(base[base["fecha"].isin(fechas)], D.zonas)
         else:
             t = F.tabla_corto(base, D.mapeo, D.tablas, fechas, modo_tiempo=exp["modo"],
-                              desde_reanalisis=exp["desde"] is not None)
+                              desde_reanalisis=False)  # el tiempo del reanálisis no se usa nunca
         t = (t.merge(obj, on=["fecha", "zona_mitma_id"], how="left", validate="many_to_one")
              .merge(b1, on=["fecha", "zona_mitma_id"], how="left", validate="many_to_one"))
         t = dia_normal.anadir_normal(t, D.normal_ref, "normal_ref")

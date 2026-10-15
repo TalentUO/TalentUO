@@ -35,6 +35,8 @@ Una fila por `fecha` × `zona_mitma_id` del mapeo, del 2022-01-01 al 2025-06-30,
 | `llegadas_ocio` | float | Las mismas, con actividad de destino `frequent_activity` o `infrequent_activity` (sin trabajo, estudio ni casa). **Variable que predice el modelo por defecto.** |
 | `llegadas_desde_asturias` | float | Llegadas de **ocio** con provincia de residencia 33. |
 | `llegadas_resto_espana` | float | Llegadas de **ocio** con provincia de residencia distinta de 33 (código de dos cifras). Los no residentes en España no aparecen en el MITMA. |
+| `llegadas_total_desde_asturias` | float | El mismo reparto, sobre **todas** las llegadas (`llegadas_total`): provincia de residencia 33. |
+| `llegadas_total_resto_espana` | float | Todas las llegadas con provincia de residencia distinta de 33 (código de dos cifras). |
 | `pernoctaciones_no_residentes` | float | Personas que pernoctan en la zona y residen fuera de ella (`zona_residencia` ≠ `zona_pernoctacion`). |
 | `calidad` | texto | `completa`, `sin_dato_mitma` o `anomalia_mitma`. |
 
@@ -43,13 +45,13 @@ Reglas de calidad (`config/mitma_calidad.yaml`):
 - `anomalia_mitma`: 29-31-oct-2024. Se conservan los valores, pero el modelo no los usa para entrenar ni evaluar.
 - En un día con fichero, una zona sin filas tiene 0 llegadas: es un dato real, no un ausente.
 
-**Decisión que hay que confirmar.** El reparto Asturias / resto de España se calcula sobre las llegadas de **ocio** y no sobre el total. El perfil del visitante de la web habla de visitantes, no de trabajadores. Si preferís el total, es un cambio de una línea en `agregar_viajes`.
+**Decisión del equipo (2026-10-15).** El reparto Asturias / resto de España del perfil del visitante se calcula sobre las llegadas de **ocio**. Además se guarda sobre `llegadas_total` en columnas aparte (`llegadas_total_*`), que la web recibe como `pct_total_*` en `perfil.json`.
 
 ## Prueba
 
 `pytest src/modelo/tests/test_construir_objetivo.py` construye la tabla con ficheros pequeños inventados en los dos formatos y comprueba que:
 - los dos formatos dan exactamente el mismo resultado;
 - los viajes internos y los de trabajo quedan fuera;
-- el reparto por residencia es correcto;
+- el reparto por residencia es correcto, sobre ocio y sobre el total;
 - las pernoctaciones de residentes no cuentan;
 - los días sin dato quedan como NaN y los ceros reales, como 0.

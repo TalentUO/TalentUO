@@ -76,7 +76,8 @@ Parámetros (`config/modelo.yaml`), con el mismo criterio en los dos algoritmos 
 
 Para predecir el día d con h días de antelación solo se usa lo que se conocía en d−h:
 
-- **Tiempo, modo `estricto` (por defecto):** solo la previsión archivada emitida en d−h (`om_*_prev{h}`). Solo existe para h ≤ 3 y desde el 2024-01-22. Para h = 4-7, o antes de esa fecha, el tiempo es NaN y el modelo lo trata como desconocido. Nunca AEMET (observación) ni ERA5. La serie base de Historical Forecast (plazo ≈ 0) no cumple la regla d−h, así que solo se usa en el experimento `tiempo_aproximado`.
+- **Tiempo, modo `estricto` (decisión del equipo, por defecto):** solo la previsión archivada emitida en d−h (`om_*_prev{h}`). Solo existe para h ≤ 3 y desde el 2024-01-22. Para h = 4-7, o antes de esa fecha, el tiempo es NaN y el modelo lo trata como desconocido. Nunca AEMET (observación) ni ERA5. **El efecto del tiempo se aprende solo con datos desde enero de 2024**: unos 17 meses de los 42 del periodo. Por eso sale con el signo correcto, pero infraestimado.
+- **Modo `aproximado`:** solo para el experimento `tiempo_aproximado`. Rellena los huecos con la serie base de Historical Forecast (plazo ≈ 0, casi el tiempo observado), que no cumple la regla d−h. **Es una cota optimista**: indica cuánto podría aportar el tiempo con una previsión perfecta, no lo que se conseguirá en producción. En ningún modo se usa el tiempo del tramo de reanálisis (antes del 2022-11-09).
 - **Wikipedia:** ventana que termina en d−h. Se usa la media del logaritmo, que aguanta picos sin necesitar el marcador de anomalía (ese marcador usa días futuros).
 - **Trends:** semana completa (domingo-sábado) que termina antes de d−h.
 - **Nunca valores pasados del propio objetivo:** el MITMA no se publica en tiempo real.
@@ -84,7 +85,7 @@ Para predecir el día d con h días de antelación solo se usa lo que se conocí
 
 ## Validación (`backtest.py`)
 
-Validación por bloques temporales: se entrena con todo lo anterior a cada bloque y se evalúa en el bloque. Los bloques son 2023-S2 (verano de 2023), 2024-S1, 2024-S2 (verano de 2024) y 2025-S1 (bloque final).
+Validación por bloques temporales: se entrena con todo lo anterior a cada bloque, **desde el 2022-01-01** (decisión del equipo), y se evalúa en el bloque. Los bloques son 2023-S2 (verano de 2023), 2024-S1, 2024-S2 (verano de 2024) y 2025-S1 (bloque final).
 
 - **Sin fuga en el nivel:** el día normal de cada bloque se recalcula con los 365 días anteriores. El normal de 2024 solo define el color.
 - Los días `sin_dato_mitma` y `anomalia_mitma` no se entrenan ni se evalúan.
@@ -95,76 +96,87 @@ Validación por bloques temporales: se entrena con todo lo anterior a cada bloqu
   - WAPE y MAE en visitantes;
   - semáforo: acierto de color, matriz de confusión y recall y precisión de los días rojos.
 - **Experimentos de sensibilidad**, sobre los mismos bloques de prueba:
-  - `con_2022`: entrenamiento desde el 2022-01-01;
+  - `desde_corte`: entrenamiento solo desde el corte del reanálisis (2022-11-09), la configuración anterior;
   - `solo_eventos_verificados`;
   - `tiempo_aproximado`.
 
-### Resultados (SINTÉTICOS)
+### Resultados (SINTÉTICOS, LightGBM)
 
-Experimento base, todos los bloques:
+Experimento base (entrenamiento desde 2022-01-01), todos los bloques:
 
 | Modelo | Método | WAPE | Acierto de color | Recall rojo | Precisión rojo |
 |---|---|---|---|---|---|
-| Corto (1-7 d) | **modelo** | **0,117** | **91,6 %** | 47 % | 83 % |
+| Corto (1-7 d) | **modelo** | **0,101** | **93,4 %** | 58 % | 86 % |
 | | B0 día normal | 0,179 | 87,3 % | 0 % | — |
 | | B1 año anterior | 0,173 | 88,4 % | 55 % | 54 % |
-| Largo (8+ d) | **modelo** | **0,124** | **91,4 %** | 52 % | 79 % |
+| Largo (8+ d) | **modelo** | **0,106** | **94,2 %** | 82 % | 80 % |
 | | B0 / B1 | 0,179 / 0,173 | | 0 % / 55 % | |
 
-Por bloque (modelo de largo plazo, recall de los días rojos): 2023-S2, **13 %**; 2024-S1, 100 % (11 días); 2024-S2, 82 %; 2025-S1, 72 %. El modelo gana a B0 en WAPE en todos los bloques; en el verano de 2024, 0,112 frente a 0,218.
+Recall de los días rojos por bloque:
 
-Experimentos (modelo de largo plazo, todos los bloques):
+| Modelo | 2023-S2 | 2024-S1 | 2024-S2 | 2025-S1 |
+|---|---|---|---|---|
+| Largo plazo | 82 % | 91 % | 82 % | 83 % |
+| Corto plazo | **37 %** | 82 % | 74 % | 68 % |
 
-| Experimento | WAPE | Recall rojo | Lectura |
+- El modelo gana a B0 en WAPE en todos los bloques; en el verano de 2024, 0,108 frente a 0,218.
+- **El corto plazo detecta menos rojos que el largo** (58 % frente a 82 %), aunque con más precisión (86 % frente a 80 %). Falla sobre todo en el verano de 2023, cuando aún no había previsión archivada. Hay que vigilarlo con datos reales; si se repite, la web puede mostrar el color del largo plazo cuando sea más alto (decisión pendiente, ver abajo).
+
+Experimentos (todos los bloques; WAPE · recall de rojos):
+
+| Experimento | Largo plazo | Corto plazo | Lectura |
 |---|---|---|---|
-| base (desde el corte, 2022-11-09) | 0,124 | 52 % | El primer bloque se entrena **sin ningún verano** y no detecta el verano de 2023 (13 %). |
-| `con_2022` (desde 2022-01-01) | **0,106** | **82 %** | Con el verano de 2022, el bloque de 2023 pasa al 82 %. En modo estricto, el tramo de reanálisis no entra como variable de tiempo, así que esto **no introduce fuga**. |
-| `solo_eventos_verificados` | 0,125 | 51 % | Prácticamente igual: los eventos `probable` no meten ruido apreciable. |
-| `tiempo_aproximado` (corto plazo) | 0,102 (frente a 0,117) | 52 % | La serie base mejora porque es casi el tiempo observado. Es optimista y no cumple la regla d−h. |
+| **base** (desde 2022-01-01, estricto) | **0,106 · 82 %** | **0,101 · 58 %** | Configuración elegida. |
+| `desde_corte` (desde 2022-11-09) | 0,124 · 52 % | 0,117 · 47 % | Sin 2022, el primer bloque no ve ningún verano (recall del 13 % en 2023-S2). Incluir 2022 no introduce fuga: en modo estricto el tiempo de ese tramo no se usa. |
+| `solo_eventos_verificados` | 0,110 · 70 % | 0,103 · 60 % | Quitar los eventos `probable` empeora el largo plazo: aportan información. |
+| `tiempo_aproximado` | — | 0,088 · 62 % | Cota optimista (tiempo casi observado). No cumple la regla d−h. |
 
-- **Por horizonte:** el WAPE del corto plazo sube de 0,115 (h = 1) a 0,118 (h = 4-7), cuando deja de haber previsión archivada.
+- **Por horizonte:** el WAPE del corto plazo sube de 0,098 (h = 1) a 0,103 (h = 5-7), cuando deja de haber previsión archivada; el recall de rojos baja del 61 % al 56-57 %.
 - **B1 falla en Semana Santa:** cambia de fecha cada año, y en 2024-S1 y 2025-S1 su recall de los días rojos es 0.
 
 ### SHAP recupera los efectos del generador (SINTÉTICO)
 
 `salidas/sintetico_recuperacion_factores.json` y `figuras/sintetico_recuperacion_factores.png`. Se compara, fila a fila y fuera de muestra, la contribución verdadera de cada factor con la suma de SHAP de su grupo:
 
-- **Signo:** recuperado en **8 de 8** factores en el corto plazo (correlación > 0,3; de 0,36 en «Vacaciones» a 0,98 en «Evento»). En el largo plazo, 6 de 8: los dos que faltan son los de tiempo, que ese modelo no tiene por diseño.
-- **Orden de importancia:** «Época del año» y «Vacaciones escolares» están muy correlacionadas (el verano escolar es la temporada alta) y SHAP reparte el efecto entre las dos. Juntas, su suma SHAP correlaciona 0,91 con la verdadera. Con las dos fusionadas, el orden coincide (ρ de Spearman) con un **1,0** en largo plazo y un **0,82** en corto plazo (jul-2024 a jun-2025).
-- **Factores sin efecto real** (interés en internet, regulación de los Lagos): SHAP pequeño (desviación ≤ 0,03 en escala log).
-- **El tiempo** sale con el signo correcto, pero **infraestimado** (desviación 0,05 frente a 0,12 en montaña). El modelo solo ve previsiones, y solo desde 2024-01-22.
+- **Signo:** recuperado en **8 de 8** factores en el corto plazo (correlación > 0,3; de 0,36 en «Vacaciones» a 0,99 en «Evento»). En el largo plazo, 6 de 8: los dos que faltan son los de tiempo, que ese modelo no tiene por diseño.
+- **Orden de importancia:** «Época del año» y «Vacaciones escolares» están muy correlacionadas (el verano escolar es la temporada alta) y SHAP reparte el efecto entre las dos. Juntas, su suma SHAP correlaciona 0,91 con la verdadera. Con las dos fusionadas, el orden coincide (ρ de Spearman) con un **1,0** en largo plazo y un **0,93** en corto plazo (jul-2024 a jun-2025).
+- **Factores sin efecto real** (interés en internet, regulación de los Lagos): SHAP pequeño (desviación ≤ 0,034 en escala log).
+- **El tiempo** sale con el signo correcto, pero **infraestimado** (desviación 0,054 frente a 0,123 en montaña). El modelo solo ve previsiones, y solo desde enero de 2024.
 - `shap.TreeExplainer` y el TreeSHAP nativo de LightGBM (el que usa el código) coinciden exactamente (diferencia máxima 0). Con XGBoost se usa su TreeSHAP nativo (`pred_contribs`), que también coincide con `shap.TreeExplainer`, incluida la zona categórica.
 
 En la web, el efecto de cada factor se da en % respecto al **día medio del modelo**, no respecto al normal.
 
 ### Fiabilidad (`metricas.py`)
 
-- **Intervalo p10-p90:** conformal simple con los errores de validación (escala log) por zona y horizonte. La cobertura, medida dejando fuera cada bloque, es del **79 %** (objetivo: 80 %).
+- **Intervalo p10-p90:** conformal simple con los errores de validación (escala log) por zona y horizonte. La cobertura, medida dejando fuera cada bloque, es del **79-80 %** (objetivo: 80 %).
 - `incierto = True` si p10 y p90 caen en colores distintos.
-- La nota legible está en `metricas.json → fiabilidad[].nota`, por ejemplo: «Acierta el color en el 86 % de los días; detecta 5 de cada 10 días rojos» (Cangas, h = 1, sintético, base). Con `con_2022`, esa nota mejoraría bastante.
+- La nota legible está en `metricas.json → fiabilidad[].nota`, por ejemplo: «Acierta el color en el 90 % de los días; detecta 8 de cada 10 días rojos» (Cangas, h = 1, sintético).
 
-### Calibración con la regulación de los Lagos (SINTÉTICA)
+### Calibración con la regulación de los Lagos (SINTÉTICA; conclusión PENDIENTE DE DATOS REALES)
 
 `salidas/calibracion_lagos.json` y `figuras/calibracion_lagos.png`. Se busca el umbral cuyo «día en alerta» coincide mejor (F1) con los días regulados del BOE en 2023-2024. Hay dos escalas:
 
-- **Relativa** (la del semáforo, frente al normal de ese día de la semana): mejor umbral 0,85× con el observado (F1 0,70) y 0,95× con el previsto (F1 0,80).
-- **Absoluta** (frente al día normal medio de la zona): 1,0× con el observado (F1 0,74) y 0,85× con el previsto.
+- **Relativa** (la del semáforo, frente al normal de ese día de la semana): mejor umbral 0,85× con el observado (F1 0,70) y 0,90× con el previsto (F1 0,80).
+- **Absoluta** (frente al día normal medio de la zona): 1,0× con el observado (F1 0,74) y 0,80× con el previsto (F1 0,78).
 
-Lectura para la presentación, que habrá que repetir con datos reales: la regulación actual (unos 180 días al año, todos los fines de semana de temporada y el verano) equivale a **cualquier día por encima de lo normal**, no solo a los de presión extrema. Con el umbral rojo (2,0×), el 93 % de los días rojos ya están regulados, pero solo se cubre el 22 % de los días regulados.
+> **⚠ PENDIENTE DE DATOS REALES.** Estas cifras salen del objetivo sintético, que no contiene ningún efecto de la regulación ni de la capacidad real de los Lagos. Lo que sigue es una **hipótesis a comprobar** con `--objetivo real` y **no debe presentarse como conclusión** hasta entonces.
 
-Dicho de otro modo: el semáforo marca menos días que la regulación, pero los que marca ya caen dentro de ella. **No se cambia el valor por defecto.** La regulación es un calendario planificado, no una medida de saturación.
+Hipótesis: la regulación actual (unos 180 días al año, todos los fines de semana de temporada y el verano) equivaldría a **cualquier día por encima de lo normal**, no solo a los de presión extrema. Con el umbral rojo (2,0×), el 93 % de los días rojos ya estarían regulados, pero solo se cubriría el 22 % de los días regulados. **No se cambia el valor por defecto.** La regulación es un calendario planificado, no una medida de saturación.
 
 ## LightGBM frente a XGBoost
 
 Con `--algoritmo ambos`, la validación por bloques del experimento base se hace con los dos algoritmos y se elige uno con la regla de abajo. Los experimentos de sensibilidad, los modelos finales, SHAP, el semáforo, los intervalos, la calibración con los Lagos y todos los JSON de la web se generan con el **ganador**. `metricas.json → algoritmo` dice cuál fue. El contrato de la web no cambia.
 
-### Regla de elección (fijada el 2026-10-15, antes de ver datos reales)
+### Regla de elección (versión 2, fijada el 2026-10-15, antes de ver datos reales)
 
-Gana el de mayor recall de días rojos en los bloques de verano (2023-S2 y 2024-S2); si la diferencia es menor de 3 puntos, el de menor WAPE medio; si también la diferencia de WAPE es menor de 1 punto, LightGBM.
+Gana el de mayor recall de días rojos en verano (misma agregación que ya tienes) siempre que su precisión de días rojos en verano no sea más de 5 puntos inferior a la del otro; si lo es, decide el F1 de días rojos en verano. Si la diferencia en el criterio decisivo es menor de 3 puntos, el de menor WAPE medio; si también es menor de 1 punto, LightGBM.
 
-Cálculo, también fijado ahora:
-- recall de verano = media, entre el modelo de corto plazo (todas las filas de h = 1-7) y el de largo plazo, del recall de días rojos agregado sobre los dos bloques de verano;
+Agregación (la fijada con la versión 1, que se mantiene):
+- recall de verano = media, entre el modelo de corto plazo (todas las filas de h = 1-7) y el de largo plazo, del recall de días rojos agregado sobre los dos bloques de verano (2023-S2 y 2024-S2);
+- la precisión y el F1 de verano se agregan igual: la métrica de cada modelo sobre los dos bloques de verano y, después, la media entre corto y largo. Si un modelo no pinta ningún rojo, su precisión y su F1 cuentan como 0;
 - WAPE medio = media del WAPE de los 4 bloques × 2 modelos.
+
+La versión 1 («gana el de mayor recall de días rojos en verano; si la diferencia es menor de 3 puntos, el de menor WAPE medio; si también es menor de 1 punto, LightGBM») se sustituyó antes de ver datos reales porque premiaba al modelo que pintara más rojos, aunque fueran falsas alarmas.
 
 Está implementada en `src/modelo/comparacion.py` y sus parámetros, en `config/modelo.yaml → seleccion_algoritmo`.
 
@@ -182,36 +194,38 @@ La tabla siguiente la regenera cada ejecución con `--algoritmo ambos`.
 <!-- comparacion_algoritmos:inicio (generado por src/modelo/comparacion.py) -->
 > **⚠ DATOS SINTÉTICOS — NO SON REALES.** Esta comparación usa el objetivo sintético y **no sirve para elegir algoritmo**: los dos modelos aprenden efectos inventados por nosotros. Hay que repetirla con `--objetivo real --algoritmo ambos`.
 
-Objetivo: `llegadas_ocio`. Experimento base. Generado el 2026-10-15 22:58.
+Objetivo: `llegadas_ocio`. Experimento base. Generado el 2026-10-15 23:12.
 
 | Criterio de la regla | LightGBM | XGBoost |
 |---|---|---|
-| Recall de días rojos en verano (%) | 44,2 | 41,3 |
-| WAPE medio (%) | 12,0 | 12,0 |
-| Tiempo total de entrenamiento (s) | 3,7 | 7,8 |
+| Recall de días rojos en verano (%) | 68,5 | 68,7 |
+| Precisión de días rojos en verano (%) | 83,4 | 84,2 |
+| F1 de días rojos en verano (%) | 74,3 | 75,0 |
+| WAPE medio (%) | 10,4 | 10,3 |
+| Tiempo total de entrenamiento (s) | 5,4 | 10,7 |
 
-**Resultado de la regla (SINTÉTICO, no vale para elegir):** lightgbm (paso 3: empate: recall de verano a 2.9 puntos (< 3) y WAPE medio a 0.1 puntos (< 1) -> LightGBM por regla).
+**Resultado de la regla (SINTÉTICO, no vale para elegir):** lightgbm (paso 3: la precisión del de mayor recall (xgboost) no es más de 5 puntos inferior (0.0): decide el recall; recall de días rojos en verano a 0.2 puntos (< 3) y WAPE medio a 0.0 puntos (< 1) -> LightGBM por regla).
 
 Detalle por bloque y horizonte (WAPE, acierto de color, recall y precisión de rojos en %; MAE en visitantes; tiempo = entrenamiento del modelo que produce ese horizonte, en segundos). Corto plazo: media de h = 1-7.
 
 | Bloque | Horizonte | Algoritmo | WAPE | MAE | Acierto color | Recall rojo | Precisión rojo | Rojos obs. | Tiempo (s) |
 |---|---|---|---|---|---|---|---|---|---|
-| 2023-S2 (verano 2023) | 1-7 (corto) | lightgbm | 15,4 | 1064 | 80,2 | 11,2 | 84,0 | 87 | 0,33 |
-| 2023-S2 (verano 2023) | 1-7 (corto) | xgboost | 15,6 | 1079 | 80,1 | 11,5 | 83,3 | 87 | 0,82 |
-| 2023-S2 (verano 2023) | 8+ (largo) | lightgbm | 15,7 | 1086 | 80,0 | 12,6 | 91,7 | 87 | 0,43 |
-| 2023-S2 (verano 2023) | 8+ (largo) | xgboost | 15,7 | 1082 | 79,7 | 9,2 | 100,0 | 87 | 0,43 |
-| 2024-S1 | 1-7 (corto) | lightgbm | 10,7 | 645 | 97,6 | 85,7 | 75,8 | 11 | 0,50 |
-| 2024-S1 | 1-7 (corto) | xgboost | 10,9 | 656 | 97,3 | 81,8 | 70,9 | 11 | 1,43 |
-| 2024-S1 | 8+ (largo) | lightgbm | 11,5 | 692 | 97,0 | 100,0 | 73,3 | 11 | 0,24 |
-| 2024-S1 | 8+ (largo) | xgboost | 11,5 | 692 | 96,8 | 100,0 | 73,3 | 11 | 0,46 |
-| 2024-S2 (verano 2024) | 1-7 (corto) | lightgbm | 10,4 | 718 | 91,5 | 74,4 | 82,8 | 83 | 0,84 |
-| 2024-S2 (verano 2024) | 1-7 (corto) | xgboost | 10,5 | 727 | 90,3 | 69,4 | 85,4 | 83 | 1,85 |
-| 2024-S2 (verano 2024) | 8+ (largo) | lightgbm | 11,2 | 776 | 91,3 | 81,9 | 76,4 | 83 | 0,31 |
-| 2024-S2 (verano 2024) | 8+ (largo) | xgboost | 11,3 | 780 | 91,6 | 78,3 | 82,3 | 83 | 0,65 |
-| 2025-S1 (bloque final) | 1-7 (corto) | lightgbm | 10,0 | 596 | 96,8 | 72,2 | 90,1 | 18 | 0,79 |
-| 2025-S1 (bloque final) | 1-7 (corto) | xgboost | 10,1 | 603 | 96,6 | 77,0 | 87,4 | 18 | 1,75 |
-| 2025-S1 (bloque final) | 8+ (largo) | lightgbm | 10,9 | 649 | 97,1 | 72,2 | 92,9 | 18 | 0,20 |
-| 2025-S1 (bloque final) | 8+ (largo) | xgboost | 10,7 | 640 | 97,2 | 77,8 | 93,3 | 18 | 0,40 |
+| 2023-S2 (verano 2023) | 1-7 (corto) | lightgbm | 10,3 | 714 | 87,8 | 37,1 | 85,9 | 87 | 0,50 |
+| 2023-S2 (verano 2023) | 1-7 (corto) | xgboost | 10,5 | 723 | 87,5 | 40,4 | 86,0 | 87 | 1,32 |
+| 2023-S2 (verano 2023) | 8+ (largo) | lightgbm | 10,5 | 727 | 90,4 | 81,6 | 77,2 | 87 | 0,36 |
+| 2023-S2 (verano 2023) | 8+ (largo) | xgboost | 10,4 | 721 | 89,7 | 77,0 | 74,4 | 87 | 0,82 |
+| 2024-S1 | 1-7 (corto) | lightgbm | 10,1 | 605 | 97,7 | 81,8 | 91,9 | 11 | 0,95 |
+| 2024-S1 | 1-7 (corto) | xgboost | 10,0 | 602 | 97,7 | 81,8 | 93,4 | 11 | 2,04 |
+| 2024-S1 | 8+ (largo) | lightgbm | 10,9 | 652 | 97,2 | 90,9 | 76,9 | 11 | 0,26 |
+| 2024-S1 | 8+ (largo) | xgboost | 10,6 | 638 | 97,3 | 90,9 | 76,9 | 11 | 0,55 |
+| 2024-S2 (verano 2024) | 1-7 (corto) | lightgbm | 10,3 | 711 | 91,4 | 74,2 | 85,4 | 83 | 1,27 |
+| 2024-S2 (verano 2024) | 1-7 (corto) | xgboost | 10,2 | 710 | 91,4 | 77,6 | 87,9 | 83 | 2,48 |
+| 2024-S2 (verano 2024) | 8+ (largo) | lightgbm | 10,8 | 748 | 92,2 | 81,9 | 86,1 | 83 | 0,26 |
+| 2024-S2 (verano 2024) | 8+ (largo) | xgboost | 10,8 | 746 | 91,6 | 80,7 | 89,3 | 83 | 0,58 |
+| 2025-S1 (bloque final) | 1-7 (corto) | lightgbm | 9,6 | 573 | 96,6 | 68,3 | 85,5 | 18 | 1,45 |
+| 2025-S1 (bloque final) | 1-7 (corto) | xgboost | 9,7 | 579 | 96,8 | 69,8 | 90,9 | 18 | 2,39 |
+| 2025-S1 (bloque final) | 8+ (largo) | lightgbm | 10,4 | 622 | 97,0 | 83,3 | 75,0 | 18 | 0,33 |
+| 2025-S1 (bloque final) | 8+ (largo) | xgboost | 10,5 | 628 | 96,6 | 66,7 | 75,0 | 18 | 0,51 |
 
 El detalle por cada horizonte (1, 2, … 7, 8+) está en `salidas/comparacion_algoritmos.json → tabla`.
 <!-- comparacion_algoritmos:fin -->
@@ -219,9 +233,13 @@ El detalle por cada horizonte (1, 2, … 7, 8+) está en `salidas/comparacion_al
 ## Predicciones para la web
 
 - **Futuro de largo plazo:** 60 días desde el 2026-10-16. Solo calendario y eventos: no necesita tiempo ni datos recientes del MITMA.
-- **Futuro de corto plazo:** `openmeteo_prevision_ejemplo.parquet` (emitida el 2026-10-15, punto `covadonga`) se coloca como `_prev{h}` del valle de la zona principal para h = 1-3. Covadonga está en el concejo de Cangas de Onís, así que se usa como aproximación del valle. La montaña y el resto de zonas quedan sin tiempo.
+- **Futuro de corto plazo:** previsión de 7 días de Open-Meteo para las 9 zonas de `config/zonas_meteo.csv`, incluida la montaña de los Lagos (`lagos_enol`). La descarga `python -X utf8 src/modelo/descargar_prevision.py`, con el mismo esquema que `openmeteo_prevision_ejemplo`:
+  - en bruto: `data/prevision/AAAA-MM-DD/<zona>.json`;
+  - limpia: `data/clean/openmeteo_prevision.parquet`.
+
+  La de la demo se emitió el 2026-10-15. Para d = emisión + h, con h = 1-3, se coloca como `_prev{h}` del valle y de la montaña de cada zona; para h = 4-7 el tiempo queda vacío, como en el entrenamiento. Si el fichero no existe, se usa el ejemplo (solo `covadonga`, aplicado al valle de la zona principal).
 - **En producción:**
-  1. cada día se descarga la previsión de Open-Meteo de cada `zona_meteo` y `zona_meteo_montana`;
+  1. cada mañana, `descargar_prevision.py` (previsión de cada `zona_meteo` y `zona_meteo_montana`);
   2. la previsión para d emitida hoy se coloca en `<var>_prev{h}` con h = d − hoy (h ≤ 3);
   3. la Wikipedia se toma hasta ayer (ventana que termina en a−1, más conservadora que en el entrenamiento);
   4. se llama a `produccion.predecir` con el modelo `corto`.
@@ -232,9 +250,10 @@ El detalle por cada horizonte (1, 2, … 7, 8+) está en `salidas/comparacion_al
 
 - **Sin extranjeros:** el MITMA solo cuenta residentes en España. Picos tiene un turismo internacional apreciable que no se ve.
 - **Datos diarios hasta junio de 2025:** el modelo no puede aprender cambios posteriores (la nueva regulación, el auge del turismo, etc.). En 2026-2027 asume que el comportamiento es como el de 2022-2025.
-- **El umbral es nuestro:** 1,5× y 2,0× el normal no salen de un dato oficial de capacidad. La calibración con los Lagos orienta, pero la regulación es un calendario planificado, no una medida de saturación.
+- **El umbral es nuestro:** 1,5× y 2,0× el normal no salen de un dato oficial de capacidad. La calibración con los Lagos orienta, pero la regulación es un calendario planificado, no una medida de saturación. **Su conclusión está pendiente de datos reales.**
 - **Cruceros fuera:** solo hay previsiones de 2025-26; en 2022-2024 serían ceros por falta de dato.
-- **Tiempo en el entrenamiento:** solo hay previsión archivada desde 2024-01-22 y hasta 3 días. Antes de esa fecha, o a 4-7 días, el modelo corto no usa tiempo. Su efecto está infraestimado.
+- **Tiempo en el entrenamiento:** solo hay previsión archivada desde 2024-01-22 y hasta 3 días: el efecto del tiempo se aprende solo con datos desde enero de 2024. Antes de esa fecha, o a 4-7 días, el modelo corto no usa tiempo. Su efecto está infraestimado. El modo aproximado es solo una cota optimista.
+- **El corto plazo detecta menos rojos que el largo** en la validación sintética (58 % frente a 82 %): hay que confirmarlo con datos reales.
 - **2027:** el curso escolar desde septiembre y la regulación de los Lagos son supuestos. Los partidos de 2026-27 tienen fechas de jornada sin confirmar.
 - **Los factores son asociaciones, no causas.** SHAP reparte el efecto entre variables correlacionadas («Época del año» frente a «Vacaciones escolares»).
 - **El día normal de 2024** es una referencia propia. Si existen los estadísticos oficiales del MITMA, conviene usarlos.
@@ -249,10 +268,16 @@ El detalle por cada horizonte (1, 2, … 7, 8+) está en `salidas/comparacion_al
 
 No hay que tocar el código. Si las zonas reales tienen otros puntos meteorológicos, basta con que existan en `config/zonas_meteo.csv` y en `openmeteo_diario`. `objetivo_sintetico.PARAMS` solo se usa en modo sintético.
 
-## Decisiones pendientes del equipo
+## Decisiones del equipo
 
-1. **Inicio del entrenamiento** (`inicio_entrenamiento` en `config/modelo.yaml`). Hoy está en `corte`, como se pidió. Recomiendo `"2022-01-01"`, por dos razones: en modo estricto no se usa el tiempo del tramo de reanálisis, y sin 2022 el primer bloque no ve ningún verano (recall de días rojos del 13 % frente al 82 %, sintético). Cambia una línea.
-2. **Modo del tiempo:** el `estricto` cumple la regla d−h; el `aproximado` gana unos 1,5 puntos de WAPE, pero es optimista. Propongo mantener el estricto.
-3. **Reparto por residencia sobre las llegadas de ocio** (y no sobre el total): ver `contrato_objetivo.md`.
-4. **Algoritmo:** la regla de elección entre LightGBM y XGBoost ya está fijada (sección «LightGBM frente a XGBoost»). Al llegar los datos reales: `--objetivo real --algoritmo ambos`. El resultado sintético (LightGBM, por desempate) no cuenta.
-5. **Umbrales del semáforo:** se mantienen en 1,5× y 2,0×. Hay que decidir si se enseña la calibración con los Lagos como argumento, una vez repetida con datos reales.
+Tomadas el 2026-10-15 (antes de ver datos reales):
+
+1. **Inicio del entrenamiento: 2022-01-01, en modo estricto.** No se usa el tiempo del tramo de reanálisis: en estricto solo entra la previsión archivada, desde 2024-01-22. La configuración anterior queda como el experimento `desde_corte`.
+2. **Tiempo: modo estricto.** El aproximado es una cota optimista, y el efecto del tiempo se aprende solo con datos desde enero de 2024.
+3. **Perfil:** el reparto por residencia se calcula sobre las llegadas de ocio, y además sobre `llegadas_total` como campo aparte (`pct_total_*` en `perfil.json`).
+4. **Previsión:** previsión de 7 días de Open-Meteo en todas las zonas, incluida la montaña (`descargar_prevision.py`).
+5. **Algoritmo:** regla de elección, versión 2 (sección «LightGBM frente a XGBoost»). Al llegar los datos reales: `--objetivo real --algoritmo ambos`. El resultado sintético no cuenta.
+6. **Calibración con los Lagos:** conclusión pendiente de datos reales. Los umbrales del semáforo se mantienen en 1,5× y 2,0×.
+
+Pendiente:
+- Qué color enseña la web cuando el corto y el largo plazo no coinciden. Hoy, el corto cuando existe. Si con datos reales el corto sigue detectando menos rojos que el largo, propongo enseñar el más alto de los dos.

@@ -201,10 +201,13 @@ def perfil(D: Datos) -> list[dict]:
         ocio = g["llegadas_ocio"].sum()
         pern = g["pernoctaciones_no_residentes"].sum()
         ast, resto = g["llegadas_desde_asturias"].sum(), g["llegadas_resto_espana"].sum()
+        t_ast, t_resto = g["llegadas_total_desde_asturias"].sum(), g["llegadas_total_resto_espana"].sum()
         out.append({"zona_mitma_id": z, "nombre_zona": D.nombres[z], "mes": int(m), "dias": int(len(g)),
                     "llegadas_ocio_media_dia": ocio / len(g),
                     "pct_desde_asturias": 100 * ast / (ast + resto) if ast + resto else None,
                     "pct_resto_espana": 100 * resto / (ast + resto) if ast + resto else None,
+                    "pct_total_desde_asturias": 100 * t_ast / (t_ast + t_resto) if t_ast + t_resto else None,
+                    "pct_total_resto_espana": 100 * t_resto / (t_ast + t_resto) if t_ast + t_resto else None,
                     "pernoctaciones_por_100_llegadas": 100 * pern / ocio if ocio else None,
                     "pct_excursionistas_aprox": max(0.0, 100 * (1 - pern / ocio)) if ocio else None,
                     "sintetico": D.sintetico})
@@ -238,9 +241,10 @@ def ejecutar(D: Datos, bt: pd.DataFrame, finales: dict, cuantiles: pd.DataFrame,
     guardar_json({**cab, "fecha_hoy": hoy, "zonas": zonas_info(D),
                   "conjuntos": {
                       "futuro_largo": f"Largo plazo (solo calendario y eventos), {n} días desde {hoy.date()}.",
-                      "futuro_corto": ("Corto plazo con la previsión meteorológica de ejemplo emitida el "
-                                       f"{info_corto['fecha_emision'].date()} (punto {info_corto['punto_prevision']}, "
-                                       "aplicada al valle de la zona principal; resto de zonas sin tiempo)."),
+                      "futuro_corto": ("Corto plazo (1-7 días) con la previsión de Open-Meteo emitida el "
+                                       f"{info_corto['fecha_emision'].date()} ({info_corto['fuente']}; puntos: "
+                                       f"{', '.join(info_corto['puntos_con_prevision']) or 'ninguno'}). El tiempo "
+                                       "solo entra a 1-3 días, como en el entrenamiento."),
                       "historico": ("Predicciones fuera de muestra de la validación (puente de diciembre y agosto de "
                                     "2024), con el valor observado, para enseñar un caso rojo con su explicación."),
                   },
@@ -257,7 +261,8 @@ def ejecutar(D: Datos, bt: pd.DataFrame, finales: dict, cuantiles: pd.DataFrame,
 
     guardar_json({**cab, "perfil": perfil(D),
                   "nota": ("Reparto de las llegadas de ocio por residencia (Asturias / resto de España; el MITMA no "
-                           "incluye extranjeros). 'pct_excursionistas_aprox' = 1 - pernoctaciones / llegadas: "
+                           "incluye extranjeros). 'pct_total_*': el mismo reparto sobre todas las llegadas (también "
+                           "trabajo, estudio y vuelta a casa). 'pct_excursionistas_aprox' = 1 - pernoctaciones / llegadas: "
                            "aproximación, porque una persona puede pernoctar varias noches.")},
                  SALIDAS / "perfil.json")
     guardar_json({**cab, **metricas_json(D, tablas_met, notas, cuantiles, extra_metricas)}, SALIDAS / "metricas.json")

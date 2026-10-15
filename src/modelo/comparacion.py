@@ -1,15 +1,19 @@
 """Comparación LightGBM frente a XGBoost en la validación por bloques
 (experimento base) y elección del algoritmo con la regla fijada de antemano.
 
-Regla (notas/modelo.md, fijada el 2026-10-15, antes de ver datos reales):
-1. Gana el de mayor recall de días rojos en los bloques de verano (2023-S2 y 2024-S2).
-2. Si la diferencia es menor de 3 puntos, el de menor WAPE medio.
-3. Si también la diferencia de WAPE es menor de 1 punto, LightGBM.
+Regla (notas/modelo.md; versión 2, fijada el 2026-10-15, antes de ver datos
+reales; sustituye a la versión 1, que premiaba pintar más rojos):
+Gana el de mayor recall de días rojos en verano siempre que su precisión de
+días rojos en verano no sea más de 5 puntos inferior a la del otro; si lo es,
+decide el F1 de días rojos en verano. Si la diferencia en el criterio decisivo
+es menor de 3 puntos, el de menor WAPE medio; si también es menor de 1 punto,
+LightGBM.
 
-Cómo se calcula cada cifra (también fijado ahora):
-- recall de verano = media, entre el modelo de corto plazo (todas las filas de
-  h = 1..7) y el de largo plazo, del recall de días rojos agregado sobre los dos
-  bloques de verano.
+Cómo se calcula cada cifra (fijado antes de ver datos reales):
+- recall, precisión y F1 de verano = media, entre el modelo de corto plazo
+  (todas las filas de h = 1..7) y el de largo plazo, de la métrica de días
+  rojos agregada sobre los dos bloques de verano (2023-S2 y 2024-S2). Si un
+  modelo no pinta ningún rojo, su precisión y su F1 cuentan como 0.
 - WAPE medio = media del WAPE de los 4 bloques × 2 modelos (corto y largo).
 """
 from __future__ import annotations
@@ -50,32 +54,52 @@ def criterios(bt: pd.DataFrame) -> pd.DataFrame:
     filas = []
     for alg, g in b.groupby("algoritmo"):
         ver = g[g["bloque"].isin(sel["bloques_verano"])]
-        rec = [metricas_color(x["color_obs"], x["color_pred"])["recall_rojo"] for _, x in ver.groupby("modelo")]
+        rec, prec, f1 = [], [], []
+        for _, x in ver.groupby("modelo"):
+            mc = metricas_color(x["color_obs"], x["color_pred"])
+            r = mc["recall_rojo"] if np.isfinite(mc["recall_rojo"]) else 0.0
+            pr = mc["precision_rojo"] if np.isfinite(mc["precision_rojo"]) else 0.0
+            rec.append(r)
+            prec.append(pr)
+            f1.append(2 * r * pr / (r + pr) if r + pr > 0 else 0.0)
         wapes = [wape(x["visitas_obs"], x["visitas_pred"]) for _, x in g.groupby(["bloque", "modelo"])]
         seg = g.drop_duplicates(["bloque", "modelo"])["segundos_entrenamiento"].sum()
-        filas.append({"algoritmo": alg, "recall_rojo_verano": float(np.nanmean(rec)), "wape_medio": float(np.mean(wapes)),
-                      "segundos_entrenamiento_total": float(seg)})
+        filas.append({"algoritmo": alg, "recall_rojo_verano": float(np.mean(rec)),
+                      "precision_rojo_verano": float(np.mean(prec)), "f1_rojo_verano": float(np.mean(f1)),
+                      "wape_medio": float(np.mean(wapes)), "segundos_entrenamiento_total": float(seg)})
     return pd.DataFrame(filas).set_index("algoritmo")
 
 
 def elegir(c: pd.DataFrame) -> dict:
     sel = cfg()["seleccion_algoritmo"]
     l, x = c.loc["lightgbm"], c.loc["xgboost"]
-    d_rec = x["recall_rojo_verano"] - l["recall_rojo_verano"]
+    # candidato por recall (empate exacto -> LightGBM) y control de precisión
+    cand, otro = ("xgboost", "lightgbm") if x["recall_rojo_verano"] > l["recall_rojo_verano"] else ("lightgbm", "xgboost")
+    caida_prec = c.loc[otro, "precision_rojo_verano"] - c.loc[cand, "precision_rojo_verano"]
+    if caida_prec > sel["margen_precision_rojo"]:
+        criterio, col = "F1 de días rojos en verano", "f1_rojo_verano"
+        por_que = (f"el de mayor recall ({cand}) tiene {caida_prec * 100:.1f} puntos menos de precisión (> 5): "
+                   "decide el F1")
+    else:
+        criterio, col = "recall de días rojos en verano", "recall_rojo_verano"
+        por_que = (f"la precisión del de mayor recall ({cand}) no es más de 5 puntos inferior "
+                   f"({max(caida_prec, 0) * 100:.1f}): decide el recall")
+    d_crit = x[col] - l[col]
     d_wape = x["wape_medio"] - l["wape_medio"]
-    if abs(d_rec) >= sel["margen_recall_rojo"]:
-        g, paso = ("xgboost" if d_rec > 0 else "lightgbm"), 1
-        motivo = f"recall de días rojos en verano {abs(d_rec) * 100:.1f} puntos mayor (≥ 3)"
+    if abs(d_crit) >= sel["margen_recall_rojo"]:
+        g, paso = ("xgboost" if d_crit > 0 else "lightgbm"), 1
+        motivo = f"{por_que}; {criterio} {abs(d_crit) * 100:.1f} puntos mayor (≥ 3)"
     elif abs(d_wape) >= sel["margen_wape"]:
         g, paso = ("xgboost" if d_wape < 0 else "lightgbm"), 2
-        motivo = (f"recall de verano empatado ({abs(d_rec) * 100:.1f} < 3 puntos); "
+        motivo = (f"{por_que}; {criterio} a {abs(d_crit) * 100:.1f} puntos (< 3) -> "
                   f"WAPE medio {abs(d_wape) * 100:.1f} puntos menor (≥ 1)")
     else:
         g, paso = sel["desempate"], 3
-        motivo = (f"empate: recall de verano a {abs(d_rec) * 100:.1f} puntos (< 3) y WAPE medio a "
+        motivo = (f"{por_que}; {criterio} a {abs(d_crit) * 100:.1f} puntos (< 3) y WAPE medio a "
                   f"{abs(d_wape) * 100:.1f} puntos (< 1) -> LightGBM por regla")
-    return {"ganador": g, "paso_de_la_regla": paso, "motivo": motivo,
-            "diferencia_recall_rojo_verano_xgb_menos_lgb": d_rec, "diferencia_wape_medio_xgb_menos_lgb": d_wape}
+    return {"ganador": g, "paso_de_la_regla": paso, "criterio_decisivo": criterio, "motivo": motivo,
+            "candidato_por_recall": cand, "caida_precision_del_candidato": caida_prec,
+            "diferencia_criterio_xgb_menos_lgb": d_crit, "diferencia_wape_medio_xgb_menos_lgb": d_wape}
 
 
 def _pct(v) -> str:
@@ -95,6 +119,9 @@ def tabla_markdown(t: pd.DataFrame, c: pd.DataFrame, e: dict, sintetico: bool, o
     lin.append("|---|---|---|")
     lin.append(f"| Recall de días rojos en verano (%) | {_pct(c.loc['lightgbm', 'recall_rojo_verano'])} | "
                f"{_pct(c.loc['xgboost', 'recall_rojo_verano'])} |")
+    for etiqueta, col in (("Precisión de días rojos en verano (%)", "precision_rojo_verano"),
+                          ("F1 de días rojos en verano (%)", "f1_rojo_verano")):
+        lin.append(f"| {etiqueta} | {_pct(c.loc['lightgbm', col])} | {_pct(c.loc['xgboost', col])} |")
     lin.append(f"| WAPE medio (%) | {_pct(c.loc['lightgbm', 'wape_medio'])} | {_pct(c.loc['xgboost', 'wape_medio'])} |")
     seg = {k: f"{c.loc[k, 'segundos_entrenamiento_total']:.1f}".replace(".", ",") for k in ("lightgbm", "xgboost")}
     lin.append(f"| Tiempo total de entrenamiento (s) | {seg['lightgbm']} | {seg['xgboost']} |")
@@ -144,11 +171,14 @@ def ejecutar(bt: pd.DataFrame, D, escribir_notas: bool = True) -> dict:
         "generado": pd.Timestamp.now().strftime("%Y-%m-%d %H:%M"),
         "objetivo": D.objetivo,
         "regla": {
-            "texto": ["Gana el de mayor recall de días rojos en los bloques de verano (2023-S2 y 2024-S2).",
-                      "Si la diferencia es menor de 3 puntos, el de menor WAPE medio.",
-                      "Si también la diferencia de WAPE es menor de 1 punto, LightGBM."],
+            "version": 2,
+            "texto": ("Gana el de mayor recall de días rojos en verano siempre que su precisión de días rojos en "
+                      "verano no sea más de 5 puntos inferior a la del otro; si lo es, decide el F1 de días rojos en "
+                      "verano. Si la diferencia en el criterio decisivo es menor de 3 puntos, el de menor WAPE "
+                      "medio; si también es menor de 1 punto, LightGBM."),
             "parametros": cfg()["seleccion_algoritmo"],
-            "calculo": ("recall de verano = media (corto, largo) del recall de rojos agregado en los bloques de verano; "
+            "calculo": ("recall, precisión y F1 de verano = media (corto, largo) de la métrica de rojos agregada en "
+                        "los bloques de verano (sin rojos pintados: precisión y F1 = 0); "
                         "WAPE medio = media de 4 bloques × 2 modelos."),
         },
         "criterios": c.reset_index().to_dict(orient="records"),

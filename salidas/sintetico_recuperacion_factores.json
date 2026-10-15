@@ -8,36 +8,36 @@
     {
      "factor": "Fin de semana",
      "importancia_real": 0.0,
-     "importancia_shap": 0.0298,
+     "importancia_shap": 0.0253,
      "correlacion": null,
      "signo_real": "+"
     },
     {
      "factor": "Época del año",
      "importancia_real": 0.1949,
-     "importancia_shap": 0.0883,
-     "correlacion": 0.6108,
+     "importancia_shap": 0.0975,
+     "correlacion": 0.7914,
      "signo_real": "+"
     },
     {
      "factor": "Puente o festivo en Asturias",
      "importancia_real": 0.0698,
-     "importancia_shap": 0.0598,
-     "correlacion": 0.7529,
+     "importancia_shap": 0.0588,
+     "correlacion": 0.8538,
      "signo_real": "+"
     },
     {
      "factor": "Festivo en origen (Madrid o Castilla y León)",
      "importancia_real": 0.0779,
-     "importancia_shap": 0.0754,
-     "correlacion": 0.8557,
+     "importancia_shap": 0.0712,
+     "correlacion": 0.8645,
      "signo_real": "+"
     },
     {
      "factor": "Vacaciones escolares",
      "importancia_real": 0.0458,
-     "importancia_shap": 0.1154,
-     "correlacion": 0.3703,
+     "importancia_shap": 0.1348,
+     "correlacion": 0.3437,
      "signo_real": "+"
     },
     {
@@ -57,15 +57,15 @@
     {
      "factor": "Evento",
      "importancia_real": 0.0322,
-     "importancia_shap": 0.0155,
-     "correlacion": 0.6937,
+     "importancia_shap": 0.018,
+     "correlacion": 0.9032,
      "signo_real": "+"
     },
     {
      "factor": "Partido",
      "importancia_real": 0.0284,
-     "importancia_shap": 0.0089,
-     "correlacion": 0.4014,
+     "importancia_shap": 0.0124,
+     "correlacion": 0.4741,
      "signo_real": "+"
     }
    ],
@@ -85,7 +85,7 @@
     "Época del año",
     "Festivo en origen (Madrid o Castilla y León)"
    ],
-   "correlacion_epoca_mas_vacaciones": 0.8032,
+   "correlacion_epoca_mas_vacaciones": 0.9164,
    "spearman_con_epoca_y_vacaciones_fusionados": 1.0,
    "orden_real_fusionado": [
     "Época del año + Vacaciones",
@@ -107,7 +107,7 @@
    ],
    "desv_shap_factores_sin_efecto_real": {
     "Interés en internet": null,
-    "Acceso regulado a los Lagos": 0.0036
+    "Acceso regulado a los Lagos": 0.0016
    }
   },
   "corto_h1": {
@@ -116,169 +116,64 @@
     {
      "factor": "Fin de semana",
      "importancia_real": 0.0,
-     "importancia_shap": 0.0241,
+     "importancia_shap": 0.023,
      "correlacion": null,
      "signo_real": "+"
     },
     {
      "factor": "Época del año",
      "importancia_real": 0.1949,
-     "importancia_shap": 0.0734,
-     "correlacion": 0.5808,
+     "importancia_shap": 0.0672,
+     "correlacion": 0.714,
      "signo_real": "+"
     },
     {
      "factor": "Puente o festivo en Asturias",
      "importancia_real": 0.0698,
-     "importancia_shap": 0.054,
-     "correlacion": 0.865,
+     "importancia_shap": 0.0558,
+     "correlacion": 0.882,
      "signo_real": "+"
     },
     {
      "factor": "Festivo en origen (Madrid o Castilla y León)",
      "importancia_real": 0.0779,
-     "importancia_shap": 0.0698,
-     "correlacion": 0.8675,
+     "importancia_shap": 0.0671,
+     "correlacion": 0.8858,
      "signo_real": "+"
     },
     {
      "factor": "Vacaciones escolares",
      "importancia_real": 0.0458,
-     "importancia_shap": 0.1108,
-     "correlacion": 0.4184,
+     "importancia_shap": 0.1323,
+     "correlacion": 0.3643,
      "signo_real": "+"
     },
     {
      "factor": "Tiempo en el valle",
      "importancia_real": 0.0722,
-     "importancia_shap": 0.0196,
-     "correlacion": 0.4677,
+     "importancia_shap": 0.0236,
+     "correlacion": 0.4701,
      "signo_real": "-"
     },
     {
      "factor": "Tiempo en la montaña",
      "importancia_real": 0.1238,
-     "importancia_shap": 0.0348,
-     "correlacion": 0.4622,
+     "importancia_shap": 0.0379,
+     "correlacion": 0.464,
      "signo_real": "-"
     },
     {
      "factor": "Evento",
      "importancia_real": 0.0322,
-     "importancia_shap": 0.0203,
-     "correlacion": 0.9386,
+     "importancia_shap": 0.022,
+     "correlacion": 0.9718,
      "signo_real": "+"
     },
     {
      "factor": "Partido",
      "importancia_real": 0.0284,
-     "importancia_shap": 0.0077,
-     "correlacion": 0.5937,
-     "signo_real": "+"
-    }
-   ],
-   "spearman_orden_importancia": 0.4524,
-   "signos_recuperados": "8/8",
-   "factores_con_signo_no_recuperado": [],
-   "top3_real": [
-    "Época del año",
-    "Tiempo en la montaña",
-    "Festivo en origen (Madrid o Castilla y León)"
-   ],
-   "top3_shap": [
-    "Vacaciones escolares",
-    "Época del año",
-    "Festivo en origen (Madrid o Castilla y León)"
-   ],
-   "correlacion_epoca_mas_vacaciones": 0.7923,
-   "spearman_con_epoca_y_vacaciones_fusionados": 0.75,
-   "orden_real_fusionado": [
-    "Época del año + Vacaciones",
-    "Tiempo en la montaña",
-    "Festivo en origen (Madrid o Castilla y León)",
-    "Tiempo en el valle",
-    "Puente o festivo en Asturias",
-    "Evento",
-    "Partido"
-   ],
-   "orden_shap_fusionado": [
-    "Época del año + Vacaciones",
-    "Festivo en origen (Madrid o Castilla y León)",
-    "Puente o festivo en Asturias",
-    "Tiempo en la montaña",
-    "Evento",
-    "Tiempo en el valle",
-    "Partido"
-   ],
-   "desv_shap_factores_sin_efecto_real": {
-    "Interés en internet": 0.0252,
-    "Acceso regulado a los Lagos": 0.0007
-   }
-  },
-  "corto_h1_con_prevision_tiempo": {
-   "filas": 1790,
-   "tabla": [
-    {
-     "factor": "Fin de semana",
-     "importancia_real": 0.0,
-     "importancia_shap": 0.0296,
-     "correlacion": null,
-     "signo_real": "+"
-    },
-    {
-     "factor": "Época del año",
-     "importancia_real": 0.1945,
-     "importancia_shap": 0.0757,
-     "correlacion": 0.7746,
-     "signo_real": "+"
-    },
-    {
-     "factor": "Puente o festivo en Asturias",
-     "importancia_real": 0.0697,
-     "importancia_shap": 0.0496,
-     "correlacion": 0.8813,
-     "signo_real": "+"
-    },
-    {
-     "factor": "Festivo en origen (Madrid o Castilla y León)",
-     "importancia_real": 0.0749,
-     "importancia_shap": 0.068,
-     "correlacion": 0.8964,
-     "signo_real": "+"
-    },
-    {
-     "factor": "Vacaciones escolares",
-     "importancia_real": 0.0471,
-     "importancia_shap": 0.1288,
-     "correlacion": 0.3637,
-     "signo_real": "+"
-    },
-    {
-     "factor": "Tiempo en el valle",
-     "importancia_real": 0.0741,
-     "importancia_shap": 0.0273,
-     "correlacion": 0.6492,
-     "signo_real": "-"
-    },
-    {
-     "factor": "Tiempo en la montaña",
-     "importancia_real": 0.1233,
-     "importancia_shap": 0.0491,
-     "correlacion": 0.6555,
-     "signo_real": "-"
-    },
-    {
-     "factor": "Evento",
-     "importancia_real": 0.0322,
-     "importancia_shap": 0.0251,
-     "correlacion": 0.9824,
-     "signo_real": "+"
-    },
-    {
-     "factor": "Partido",
-     "importancia_real": 0.0283,
-     "importancia_shap": 0.0079,
-     "correlacion": 0.5637,
+     "importancia_shap": 0.0103,
+     "correlacion": 0.6976,
      "signo_real": "+"
     }
    ],
@@ -295,7 +190,7 @@
     "Época del año",
     "Festivo en origen (Madrid o Castilla y León)"
    ],
-   "correlacion_epoca_mas_vacaciones": 0.9108,
+   "correlacion_epoca_mas_vacaciones": 0.9036,
    "spearman_con_epoca_y_vacaciones_fusionados": 0.8214,
    "orden_real_fusionado": [
     "Época del año + Vacaciones",
@@ -316,8 +211,113 @@
     "Partido"
    ],
    "desv_shap_factores_sin_efecto_real": {
-    "Interés en internet": 0.0299,
-    "Acceso regulado a los Lagos": 0.0004
+    "Interés en internet": 0.0335,
+    "Acceso regulado a los Lagos": 0.0013
+   }
+  },
+  "corto_h1_con_prevision_tiempo": {
+   "filas": 1790,
+   "tabla": [
+    {
+     "factor": "Fin de semana",
+     "importancia_real": 0.0,
+     "importancia_shap": 0.0279,
+     "correlacion": null,
+     "signo_real": "+"
+    },
+    {
+     "factor": "Época del año",
+     "importancia_real": 0.1945,
+     "importancia_shap": 0.0712,
+     "correlacion": 0.7595,
+     "signo_real": "+"
+    },
+    {
+     "factor": "Puente o festivo en Asturias",
+     "importancia_real": 0.0697,
+     "importancia_shap": 0.05,
+     "correlacion": 0.8903,
+     "signo_real": "+"
+    },
+    {
+     "factor": "Festivo en origen (Madrid o Castilla y León)",
+     "importancia_real": 0.0749,
+     "importancia_shap": 0.0698,
+     "correlacion": 0.9118,
+     "signo_real": "+"
+    },
+    {
+     "factor": "Vacaciones escolares",
+     "importancia_real": 0.0471,
+     "importancia_shap": 0.1347,
+     "correlacion": 0.3603,
+     "signo_real": "+"
+    },
+    {
+     "factor": "Tiempo en el valle",
+     "importancia_real": 0.0741,
+     "importancia_shap": 0.0326,
+     "correlacion": 0.6579,
+     "signo_real": "-"
+    },
+    {
+     "factor": "Tiempo en la montaña",
+     "importancia_real": 0.1233,
+     "importancia_shap": 0.0535,
+     "correlacion": 0.658,
+     "signo_real": "-"
+    },
+    {
+     "factor": "Evento",
+     "importancia_real": 0.0322,
+     "importancia_shap": 0.0244,
+     "correlacion": 0.9876,
+     "signo_real": "+"
+    },
+    {
+     "factor": "Partido",
+     "importancia_real": 0.0283,
+     "importancia_shap": 0.0115,
+     "correlacion": 0.7183,
+     "signo_real": "+"
+    }
+   ],
+   "spearman_orden_importancia": 0.5952,
+   "signos_recuperados": "8/8",
+   "factores_con_signo_no_recuperado": [],
+   "top3_real": [
+    "Época del año",
+    "Tiempo en la montaña",
+    "Festivo en origen (Madrid o Castilla y León)"
+   ],
+   "top3_shap": [
+    "Vacaciones escolares",
+    "Época del año",
+    "Festivo en origen (Madrid o Castilla y León)"
+   ],
+   "correlacion_epoca_mas_vacaciones": 0.9115,
+   "spearman_con_epoca_y_vacaciones_fusionados": 0.9286,
+   "orden_real_fusionado": [
+    "Época del año + Vacaciones",
+    "Tiempo en la montaña",
+    "Festivo en origen (Madrid o Castilla y León)",
+    "Tiempo en el valle",
+    "Puente o festivo en Asturias",
+    "Evento",
+    "Partido"
+   ],
+   "orden_shap_fusionado": [
+    "Época del año + Vacaciones",
+    "Festivo en origen (Madrid o Castilla y León)",
+    "Tiempo en la montaña",
+    "Puente o festivo en Asturias",
+    "Tiempo en el valle",
+    "Evento",
+    "Partido"
+   ],
+   "desv_shap_factores_sin_efecto_real": {
+    "Interés en internet": 0.0316,
+    "Acceso regulado a los Lagos": 0.0012
    }
   }
  }

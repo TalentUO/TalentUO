@@ -54,6 +54,8 @@ def _comprobar(out):
     assert d25["llegadas_ocio"] == 30.5           # sin trabajo/estudio
     assert d25["llegadas_desde_asturias"] == 10.5
     assert d25["llegadas_resto_espana"] == 20
+    assert d25["llegadas_total_desde_asturias"] == 17.5   # ocio 10,5 + trabajo 7
+    assert d25["llegadas_total_resto_espana"] == 20
     assert d25["pernoctaciones_no_residentes"] == 15  # sin los residentes de la zona
     assert d25["calidad"] == "completa"
     # 33044 recibe un viaje de vuelta a casa: llega, pero no es ocio

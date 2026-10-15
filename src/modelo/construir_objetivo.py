@@ -30,8 +30,10 @@ from util import CLEAN, RAW, cfg, cfg_calidad_mitma, ruta  # noqa: E402
 
 COLUMNAS_SALIDA = ["fecha", "zona_mitma_id", "llegadas_total", "llegadas_ocio",
                    "llegadas_desde_asturias", "llegadas_resto_espana",
+                   "llegadas_total_desde_asturias", "llegadas_total_resto_espana",
                    "pernoctaciones_no_residentes", "calidad"]
-VALORES = COLUMNAS_SALIDA[2:7]
+VALORES = COLUMNAS_SALIDA[2:-1]
+COLS_VIAJES = VALORES[:-1]   # las que salen de los ficheros de viajes
 
 ALIAS_VIAJES = {
     "fecha": "fecha", "date": "fecha",
@@ -103,13 +105,16 @@ def agregar_viajes(df: pd.DataFrame, zonas: set[str]) -> pd.DataFrame:
     df["fecha"] = _fecha(df["fecha"])
     df["llegadas_total"] = df["viajes"]
     df["llegadas_ocio"] = df["viajes"].where(ocio, 0.0)
-    # Residencia (provincia) de las llegadas de ocio: ver contrato_objetivo.md.
-    df["llegadas_desde_asturias"] = df["llegadas_ocio"].where(prov == PROVINCIA_ASTURIAS, 0.0)
-    df["llegadas_resto_espana"] = df["llegadas_ocio"].where(
-        (prov != PROVINCIA_ASTURIAS) & prov.str.fullmatch(r"\d{2}"), 0.0)
+    # Residencia (provincia): sobre las llegadas de ocio (perfil del visitante) y,
+    # aparte, sobre las llegadas totales. Ver contrato_objetivo.md.
+    ast = prov == PROVINCIA_ASTURIAS
+    resto = (prov != PROVINCIA_ASTURIAS) & prov.str.fullmatch(r"\d{2}")
+    df["llegadas_desde_asturias"] = df["llegadas_ocio"].where(ast, 0.0)
+    df["llegadas_resto_espana"] = df["llegadas_ocio"].where(resto, 0.0)
+    df["llegadas_total_desde_asturias"] = df["llegadas_total"].where(ast, 0.0)
+    df["llegadas_total_resto_espana"] = df["llegadas_total"].where(resto, 0.0)
     return (df.rename(columns={"destino": "zona_mitma_id"})
-            .groupby(["fecha", "zona_mitma_id"], as_index=False)
-            [["llegadas_total", "llegadas_ocio", "llegadas_desde_asturias", "llegadas_resto_espana"]].sum())
+            .groupby(["fecha", "zona_mitma_id"], as_index=False)[COLS_VIAJES].sum())
 
 
 def agregar_pernoctaciones(df: pd.DataFrame, zonas: set[str]) -> pd.DataFrame:
@@ -145,7 +150,7 @@ def construir(ficheros_viajes: list[Path], ficheros_pern: list[Path], zonas: lis
     # si el día no está en ningún fichero, es ausente (NaN), nunca 0.
     hay_v = out["fecha"].isin(fechas_con_viajes)
     hay_p = out["fecha"].isin(fechas_con_pern)
-    for c in VALORES[:4]:
+    for c in COLS_VIAJES:
         out.loc[hay_v, c] = out.loc[hay_v, c].fillna(0.0)
     out.loc[hay_p, "pernoctaciones_no_residentes"] = out.loc[hay_p, "pernoctaciones_no_residentes"].fillna(0.0)
 

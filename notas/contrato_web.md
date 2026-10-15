@@ -18,7 +18,7 @@ Fecha: 2026-10-15. Los genera `python -X utf8 src/modelo/ejecutar.py --objetivo 
   "fecha_hoy": "2026-10-16",
   "zonas": [ {zona_mitma_id, nombre_zona, lat, lon, es_principal} ],
   "conjuntos": { "futuro_largo": texto, "futuro_corto": texto, "historico": texto },
-  "info_corto_plazo": { fecha_emision, punto_prevision, zona_aplicada, horizontes_con_tiempo, fechas },
+  "info_corto_plazo": { fecha_emision, fuente, puntos_con_prevision, puntos_sin_prevision, horizontes_con_tiempo, fechas },
   "predicciones": [ registro… ] }
 ```
 
@@ -38,7 +38,7 @@ Cada registro es una predicción por `fecha` × `zona_mitma_id` × `horizonte` (
 | `factores` | lista de 3 | Los 3 factores con más peso: `{nombre, efecto_pct, signo}`. `efecto_pct` = exp(suma de SHAP del factor) − 1, **respecto al día medio del modelo** (no respecto al normal). Ejemplo: «Vacaciones escolares +44 %». |
 | `sintetico` | bool | |
 | `modelo` | `corto` \| `largo` | Corto plazo (1-7 días; con tiempo e interés) o largo plazo (8+ días; calendario y eventos). |
-| `conjunto` | texto | `futuro_largo` (60 días desde `fecha_hoy`), `futuro_corto` (con la previsión meteorológica de ejemplo) o `historico` (validación fuera de muestra, para la demo). |
+| `conjunto` | texto | `futuro_largo` (60 días desde `fecha_hoy`), `futuro_corto` (1-7 días desde la emisión de la previsión de Open-Meteo de todas las zonas; el tiempo solo entra a 1-3 días) o `historico` (validación fuera de muestra, para la demo). |
 | `fecha_emision` | fecha | Día en que se habría hecho la predicción. |
 | `observado`, `cociente_observado`, `color_observado` | número / texto / null | Solo en `historico`: el valor real, para enseñar acierto o fallo. |
 
@@ -109,7 +109,8 @@ Nombres posibles de factor (`config/factores.yaml`): Vacaciones escolares · Fes
 |---|---|
 | `zona_mitma_id`, `nombre_zona`, `mes` (1-12), `dias` | |
 | `llegadas_ocio_media_dia` | Media diaria de llegadas de ocio. |
-| `pct_desde_asturias`, `pct_resto_espana` | Reparto de las llegadas de ocio por residencia (suman 100). Sin extranjeros (el MITMA no los incluye). |
+| `pct_desde_asturias`, `pct_resto_espana` | Reparto de las llegadas de **ocio** por residencia (suman 100). Sin extranjeros (el MITMA no los incluye). **Es el que enseña el perfil del visitante.** |
+| `pct_total_desde_asturias`, `pct_total_resto_espana` | El mismo reparto sobre **todas** las llegadas (también trabajo, estudio y vuelta a casa); suman 100. Campo aparte, para comparar. |
 | `pernoctaciones_por_100_llegadas` | Pernoctaciones de no residentes por cada 100 llegadas de ocio. |
 | `pct_excursionistas_aprox` | max(0, 100 − la anterior). **Aproximación**: una persona puede pernoctar varias noches. |
 
@@ -121,7 +122,7 @@ Nombres posibles de factor (`config/factores.yaml`): Vacaciones escolares · Fes
 
 - `tablas.{global, bloque, zona, horizonte, mes, bloque_zona_horizonte}`: filas con las claves de agrupación (`experimento`, `modelo`, `bloque`, `zona_mitma_id`, `horizonte_txt` = «1»…«7» u «8+», `mes`) y `metodo` (`modelo`, `B0` día normal, `B1` mismo día del año anterior). Las métricas son `n, wape, mae, acierto_color, rojos_obs, rojos_pred, recall_rojo, precision_rojo, recall_alerta, matriz_confusion` (claves «obs->pred»).
 - `fiabilidad[]`: por zona y horizonte, `{zona_mitma_id, nombre_zona, horizonte_txt, n, wape, acierto_color, rojos_obs, recall_rojo, precision_rojo, nota, q10, q90, n_errores, cobertura}`. **`nota` es el texto para la web**, p. ej. «Acierta el color en el 86 % de los días; detecta 5 de cada 10 días rojos.». `cobertura` = proporción de días reales dentro del intervalo p10-p90, medida dejando fuera cada bloque (objetivo: 0,80).
-- `experimentos[]`: resumen por experimento (`base`, `con_2022`, `solo_eventos_verificados`, `tiempo_aproximado`) y modelo.
+- `experimentos[]`: resumen por experimento (`base`, `desde_corte`, `solo_eventos_verificados`, `tiempo_aproximado`) y modelo.
 
 ## Comprobación
 

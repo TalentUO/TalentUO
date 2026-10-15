@@ -124,12 +124,15 @@ def generar(mapeo: pd.DataFrame, base: pd.DataFrame, om: pd.DataFrame) -> tuple[
         pern = np.minimum(pern, 1.2 * ocio)
         logit = np.log(p["ast"] / (1 - p["ast"])) - 1.2 * epo - 1.2 * ori - 0.8 * vac + rng.normal(0, 0.1, len(b))
         cuota_ast = 1 / (1 + np.exp(-logit))
+        cuota_ast_trabajo = 0.95   # quien viaja por trabajo o estudio vive casi siempre en Asturias
         filas.append(pd.DataFrame({
             "fecha": f, "zona_mitma_id": z,
             "llegadas_total": np.round(ocio + trabajo, 1),
             "llegadas_ocio": np.round(ocio, 1),
             "llegadas_desde_asturias": np.round(ocio * cuota_ast, 1),
             "llegadas_resto_espana": np.round(ocio * (1 - cuota_ast), 1),
+            "llegadas_total_desde_asturias": np.round(ocio * cuota_ast + trabajo * cuota_ast_trabajo, 1),
+            "llegadas_total_resto_espana": np.round(ocio * (1 - cuota_ast) + trabajo * (1 - cuota_ast_trabajo), 1),
             "pernoctaciones_no_residentes": np.round(pern, 1),
         }))
         contribs.append(c)
@@ -139,7 +142,7 @@ def generar(mapeo: pd.DataFrame, base: pd.DataFrame, om: pd.DataFrame) -> tuple[
     q = cfg_calidad_mitma()
     obj["calidad"] = "completa"
     vals = ["llegadas_total", "llegadas_ocio", "llegadas_desde_asturias", "llegadas_resto_espana",
-            "pernoctaciones_no_residentes"]
+            "llegadas_total_desde_asturias", "llegadas_total_resto_espana", "pernoctaciones_no_residentes"]
     anom = obj["fecha"].isin(pd.to_datetime(q["anomalia_mitma"]))
     obj.loc[anom, vals] = (obj.loc[anom, vals] * E["anomalia_factor"]).round(1)
     obj.loc[anom, "calidad"] = "anomalia_mitma"

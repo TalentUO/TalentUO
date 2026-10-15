@@ -25,9 +25,11 @@ objetivo_periodo: {inicio: "2022-01-01", fin: "2025-06-30"}
 # Corte del reanálisis de Open-Meteo en Asturias (diccionario_B, `es_reanalisis`).
 # Entrenamiento base desde aquí; el tramo anterior solo en el experimento de sensibilidad.
 corte_reanalisis: "2022-11-09"
-# Inicio del entrenamiento: "corte" (por defecto, decisión del equipo) o una
-# fecha ("2022-01-01" = incluir el tramo de 2022; ver experimento con_2022).
-inicio_entrenamiento: corte
+# Inicio del entrenamiento (decisión del equipo, 2026-10-15): 2022-01-01, en modo
+# estricto. El tiempo del tramo de reanálisis (antes del corte) NO se usa como
+# variable: en estricto solo entra la previsión archivada (desde 2024-01-22) y en
+# aproximado la serie base se anula antes del corte. "corte" = experimento desde_corte.
+inicio_entrenamiento: "2022-01-01"
 
 # Zona principal (puerta de los Picos): la del concejo INE 33012 (Cangas de Onís).
 zona_principal_concejo_ine: "33012"
@@ -66,10 +68,11 @@ bloques_validacion:
 # de órdenes: ejecutar.py --algoritmo ...
 algoritmo: lightgbm
 
-# Regla de elección con --algoritmo ambos (fijada ANTES de ver datos reales).
+# Regla de elección con --algoritmo ambos (versión 2, fijada ANTES de ver datos reales; notas/modelo.md).
 seleccion_algoritmo:
   bloques_verano: ["2023-S2 (verano 2023)", "2024-S2 (verano 2024)"]
-  margen_recall_rojo: 0.03     # 3 puntos
+  margen_recall_rojo: 0.03     # 3 puntos en el criterio decisivo (recall o F1)
+  margen_precision_rojo: 0.05  # el de mayor recall no puede perder más de 5 puntos de precisión
   margen_wape: 0.01            # 1 punto
   desempate: lightgbm
 

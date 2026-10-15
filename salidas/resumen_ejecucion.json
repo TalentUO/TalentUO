@@ -5,24 +5,27 @@
  "seleccion_algoritmo": {
   "ganador": "lightgbm",
   "paso_de_la_regla": 3,
-  "motivo": "empate: recall de verano a 2.9 puntos (< 3) y WAPE medio a 0.1 puntos (< 1) -> LightGBM por regla",
-  "diferencia_recall_rojo_verano_xgb_menos_lgb": -0.029,
-  "diferencia_wape_medio_xgb_menos_lgb": 0.0006
+  "criterio_decisivo": "recall de días rojos en verano",
+  "motivo": "la precisión del de mayor recall (xgboost) no es más de 5 puntos inferior (0.0): decide el recall; recall de días rojos en verano a 0.2 puntos (< 3) y WAPE medio a 0.0 puntos (< 1) -> LightGBM por regla",
+  "candidato_por_recall": "xgboost",
+  "caida_precision_del_candidato": -0.0081,
+  "diferencia_criterio_xgb_menos_lgb": 0.0021,
+  "diferencia_wape_medio_xgb_menos_lgb": -0.0001
  },
- "segundos": 74.3,
+ "segundos": 77.5,
  "wape": {
-  "corto/modelo": 0.117,
+  "corto/modelo": 0.1008,
   "corto/B0": 0.1788,
   "corto/B1": 0.1726,
-  "largo/modelo": 0.124,
+  "largo/modelo": 0.1065,
   "largo/B0": 0.1788,
   "largo/B1": 0.1726
  },
  "recall_rojo": {
-  "corto/modelo": 0.4716,
+  "corto/modelo": 0.5786,
   "corto/B0": 0.0,
   "corto/B1": 0.5474,
-  "largo/modelo": 0.5176,
+  "largo/modelo": 0.8241,
   "largo/B0": 0.0,
   "largo/B1": 0.5474
  },
@@ -31,31 +34,13 @@
    "experimento": "base",
    "modelo": "corto",
    "n": 24990,
-   "wape": 0.117,
-   "acierto_color": 0.9156,
-   "recall_rojo": 0.4716,
-   "precision_rojo": 0.8306
-  },
-  {
-   "experimento": "base",
-   "modelo": "largo",
-   "n": 3570,
-   "wape": 0.124,
-   "acierto_color": 0.9137,
-   "recall_rojo": 0.5176,
-   "precision_rojo": 0.7923
-  },
-  {
-   "experimento": "con_2022",
-   "modelo": "corto",
-   "n": 24990,
    "wape": 0.1008,
    "acierto_color": 0.9338,
    "recall_rojo": 0.5786,
    "precision_rojo": 0.8593
   },
   {
-   "experimento": "con_2022",
+   "experimento": "base",
    "modelo": "largo",
    "n": 3570,
    "wape": 0.1065,
@@ -64,43 +49,69 @@
    "precision_rojo": 0.8039
   },
   {
+   "experimento": "desde_corte",
+   "modelo": "corto",
+   "n": 24990,
+   "wape": 0.117,
+   "acierto_color": 0.9156,
+   "recall_rojo": 0.4716,
+   "precision_rojo": 0.8306
+  },
+  {
+   "experimento": "desde_corte",
+   "modelo": "largo",
+   "n": 3570,
+   "wape": 0.124,
+   "acierto_color": 0.9137,
+   "recall_rojo": 0.5176,
+   "precision_rojo": 0.7923
+  },
+  {
    "experimento": "solo_eventos_verificados",
    "modelo": "corto",
    "n": 24990,
-   "wape": 0.1187,
-   "acierto_color": 0.9166,
-   "recall_rojo": 0.5061,
-   "precision_rojo": 0.8169
+   "wape": 0.103,
+   "acierto_color": 0.9359,
+   "recall_rojo": 0.598,
+   "precision_rojo": 0.8338
   },
   {
    "experimento": "solo_eventos_verificados",
    "modelo": "largo",
    "n": 3570,
-   "wape": 0.1251,
-   "acierto_color": 0.9132,
-   "recall_rojo": 0.5126,
-   "precision_rojo": 0.7846
+   "wape": 0.1105,
+   "acierto_color": 0.9339,
+   "recall_rojo": 0.6985,
+   "precision_rojo": 0.7898
   },
   {
    "experimento": "tiempo_aproximado",
    "modelo": "corto",
    "n": 24990,
-   "wape": 0.1024,
-   "acierto_color": 0.9173,
-   "recall_rojo": 0.5154,
-   "precision_rojo": 0.8651
+   "wape": 0.0881,
+   "acierto_color": 0.9374,
+   "recall_rojo": 0.6231,
+   "precision_rojo": 0.8628
   }
  ],
  "calibracion_lagos": {
   "observado_2023_2024/relativo": 0.85,
   "observado_2023_2024/absoluto": 1.0,
-  "previsto_fuera_de_muestra/relativo": 0.95,
-  "previsto_fuera_de_muestra/absoluto": 0.85
+  "previsto_fuera_de_muestra/relativo": 0.9,
+  "previsto_fuera_de_muestra/absoluto": 0.8
  },
  "info_corto_plazo": {
   "fecha_emision": "2026-10-15",
-  "punto_prevision": "covadonga",
-  "zona_aplicada": "EJEMPLO_cangas",
+  "fuente": "openmeteo_prevision.parquet",
+  "puntos_con_prevision": [
+   "cangas_de_onis",
+   "gijon",
+   "lagos_enol",
+   "llanes",
+   "oviedo",
+   "ribadesella"
+  ],
+  "puntos_sin_prevision": [],
   "horizontes_con_tiempo": [
    1,
    2,

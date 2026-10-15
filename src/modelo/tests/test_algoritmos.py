@@ -83,3 +83,27 @@ def test_contrato_web_con_cada_algoritmo(tmp_path, algoritmo):
     import json
     m = json.loads((tmp_path / "metricas.json").read_text(encoding="utf-8"))
     assert m["algoritmo"] == algoritmo and m["sintetico"] is True
+
+
+def _crit(rl, pl, fl, wl, rx, px, fx, wx):
+    return pd.DataFrame({"recall_rojo_verano": [rl, rx], "precision_rojo_verano": [pl, px],
+                         "f1_rojo_verano": [fl, fx], "wape_medio": [wl, wx],
+                         "segundos_entrenamiento_total": [1, 1]}, index=["lightgbm", "xgboost"])
+
+
+@pytest.mark.parametrize("caso,esperado,paso,criterio", [
+    # más recall sin perder más de 5 puntos de precisión -> decide el recall
+    (_crit(.70, .80, .75, .12, .75, .77, .76, .12), "xgboost", 1, "recall"),
+    # más recall pero 8 puntos menos de precisión -> decide el F1 (LightGBM, +4)
+    (_crit(.70, .85, .77, .12, .75, .77, .73, .12), "lightgbm", 1, "F1"),
+    # F1 empatado (< 3 puntos) -> menor WAPE (XGBoost, -2 puntos)
+    (_crit(.70, .85, .77, .12, .75, .77, .76, .10), "xgboost", 2, "F1"),
+    # todo empatado -> LightGBM
+    (_crit(.70, .80, .75, .12, .72, .79, .75, .115), "lightgbm", 3, "recall"),
+    # recall empatado aunque XGBoost tenga algo más -> WAPE (LightGBM mejor)
+    (_crit(.70, .80, .75, .10, .72, .80, .76, .12), "lightgbm", 2, "recall"),
+])
+def test_regla_de_eleccion(caso, esperado, paso, criterio):
+    import comparacion
+    e = comparacion.elegir(caso)
+    assert e["ganador"] == esperado and e["paso_de_la_regla"] == paso and criterio in e["criterio_decisivo"], e

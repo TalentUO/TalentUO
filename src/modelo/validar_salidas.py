@@ -31,6 +31,7 @@ CAL = {"fecha": "fecha", "zona_mitma_id": str, "prediccion": NUM + (type(None),)
        "lagos_regulado": (bool, type(None)), "calendario_supuesto": bool, "sintetico": bool}
 PERFIL = {"zona_mitma_id": str, "nombre_zona": str, "mes": int, "dias": int,
           "pct_desde_asturias": NUM + (type(None),), "pct_resto_espana": NUM + (type(None),),
+          "pct_total_desde_asturias": NUM + (type(None),), "pct_total_resto_espana": NUM + (type(None),),
           "pernoctaciones_por_100_llegadas": NUM + (type(None),), "pct_excursionistas_aprox": NUM + (type(None),),
           "sintetico": bool}
 FIAB = {"zona_mitma_id": str, "nombre_zona": str, "horizonte_txt": str, "acierto_color": NUM + (type(None),),
