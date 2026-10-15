@@ -3,3 +3,14 @@ requests
 openpyxl
 pyaxis
 pySpainMobility
+pytrends==4.9.2
+pypdf==6.20.1
+matplotlib
+pyarrow
+pymupdf
+lightgbm==4.7.0
+shap==0.51.0
+xgboost==3.2.0
+scikit-learn
+pyyaml
+pytest

@@ -1,0 +1,29 @@
+{
+ "tabla": "oapn_anual",
+ "filas": 11,
+ "columnas": [
+  "anio",
+  "parque",
+  "visitantes",
+  "documento",
+  "pagina",
+  "localizacion",
+  "referencia_notas",
+  "verificado",
+  "fuente",
+  "uso"
+ ],
+ "claves": [
+  "anio",
+  "parque"
+ ],
+ "duplicados_por_clave": 0,
+ "nan_pct": {},
+ "anio_min": 2015,
+ "anio_max": 2025,
+ "verificados": 11,
+ "no_verificados": [],
+ "validaciones": [
+  "cifra extraída del PDF = cifra de notas/notas_senales.md"
+ ]
+}

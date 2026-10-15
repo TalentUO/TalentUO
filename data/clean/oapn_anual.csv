@@ -1,0 +1,12 @@
+anio,parque,visitantes,documento,pagina,localizacion,referencia_notas,verificado,fuente,uso
+2015,Picos de Europa,1913858,oapn_memoria_red_2021.pdf,129,tabla 'Visitas anuales' (Ilustración 27) de la memoria 2021,1913858,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto
+2016,Picos de Europa,2101293,oapn_memoria_red_2021.pdf,129,tabla 'Visitas anuales' (Ilustración 27) de la memoria 2021,2101293,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto
+2017,Picos de Europa,2047956,oapn_memoria_red_2021.pdf,129,tabla 'Visitas anuales' (Ilustración 27) de la memoria 2021,2047956,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto
+2018,Picos de Europa,1958240,oapn_memoria_red_2021.pdf,129,tabla 'Visitas anuales' (Ilustración 27) de la memoria 2021,1958240,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto
+2019,Picos de Europa,1791410,oapn_memoria_red_2021.pdf,129,tabla 'Visitas anuales' (Ilustración 27) de la memoria 2021,1791410,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto
+2020,Picos de Europa,1383338,oapn_memoria_red_2021.pdf,129,tabla 'Visitas anuales' (Ilustración 27) de la memoria 2021,1383338,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto
+2021,Picos de Europa,1620739,oapn_memoria_red_2021.pdf,129,tabla 'Visitas anuales' (Ilustración 27) de la memoria 2021,1620739,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto
+2022,Picos de Europa,1798533,oapn_visitantes_2022.pdf,4,frase del texto del informe anual de visitantes,1798533,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto
+2023,Picos de Europa,1698780,oapn_visitantes_2023.pdf,5,frase del texto del informe anual de visitantes,1698780,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto
+2024,Picos de Europa,1632805,oapn_visitantes_2024.pdf,5,frase del texto del informe anual de visitantes,1632805,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto
+2025,Picos de Europa,1565899,oapn_visitantes_2025.pdf,7,frase del texto del informe anual de visitantes,1565899,True,"OAPN / MITECO (Red de Parques Nacionales), data/raw/oapn/",solo_contexto

@@ -1,0 +1,61 @@
+{
+ "tabla": "wikipedia_diario",
+ "filas": 34960,
+ "columnas": [
+  "fecha",
+  "articulo",
+  "proyecto",
+  "titulo",
+  "visitas",
+  "visitas_api",
+  "visitas_imputado",
+  "visitas_media7_ant",
+  "media7_ant_n_imputados",
+  "mediana_movil_29d",
+  "pico",
+  "posible_anomalia",
+  "fuente"
+ ],
+ "claves": [
+  "fecha",
+  "articulo"
+ ],
+ "duplicados_por_clave": 0,
+ "nan_pct": {
+  "visitas_api": 1.8,
+  "visitas_media7_ant": 0.4,
+  "media7_ant_n_imputados": 0.4
+ },
+ "fecha_min": "2022-01-01",
+ "fecha_max": "2026-10-14",
+ "fechas_ausentes_global": 0,
+ "articulos": 20,
+ "dias_imputados_por_articulo": {
+  "covadonga_fr": 630,
+  "parque_nacional_de_los_picos_de_europa": 1
+ },
+ "ceros_explicitos_api": {
+  "covadonga_fr": 405,
+  "descenso_internacional_del_sella": 1,
+  "parque_nacional_de_los_picos_de_europa": 7
+ },
+ "sonda": {
+  "Lago_de_la_Ercina_2022": "HTTP 200 con 296 de 365 días (la API omite días)",
+  "Mirador_de_Entrelagos_2022": "HTTP 404 (sin datos en todo el rango)"
+ },
+ "dias_pico": 14,
+ "posibles_anomalias": [
+  {
+   "articulo": "picos_de_europa",
+   "fecha": "2023-09-17",
+   "visitas": "61525"
+  }
+ ],
+ "validaciones": [
+  "continuidad 2022-01-01..2026-10-14 por artículo",
+  "sin duplicados",
+  "visitas >= 0",
+  "imputados y ceros = recuentos de la auditoría",
+  "3 valores contrastados en vivo por la auditoría (Covadonga 2023-09-17=193, Lagos 2025-08-15=169, Picos 2024-06-01=191)"
+ ]
+}

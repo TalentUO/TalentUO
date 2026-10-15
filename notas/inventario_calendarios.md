@@ -36,7 +36,7 @@ Comprobado: Cangas de Onís, Llanes, Ribadesella, Gijón y Oviedo aparecen en lo
 
 | Curso | Obtenido | Referencia | Págs | Notas |
 |---|---|---|---|---|
-| 2021-22 | **PARCIAL** | Res. 5-may-2021, BOPA nº104 de 1-jun-2021 | — | **El BOPA original no se obtuvo** (no se localizó su código y `miprincipado.asturias.es` dejó de responder; ver abajo). Hay: (a) calendario gráfico oficial de Educastur (1 pág, texto OK) `educastur_calendario_escolar_2021-22_grafico.pdf`, (b) copia NO OFICIAL del texto en Noticias Jurídicas, (c) BOPA 6-sep-2021 cód. 2021-08142 (3 págs) cuya disposición adicional modifica el calendario (FP). |
+| 2021-22 | **PARCIAL** | Res. 5-may-2021, BOPA nº104 de 1-jun-2021 | — | **Hueco conocido: ni el BOPA original ni copia de su texto se obtuvieron** (búsqueda única el 2026-10-15 en BOPA/Educastur/Internet Archive sin resultado; no se insiste) (no se localizó su código y `miprincipado.asturias.es` dejó de responder; ver abajo). Hay: (a) calendario gráfico oficial de Educastur (1 pág, texto OK) `educastur_calendario_escolar_2021-22_grafico.pdf`, (b) ~~copia NO OFICIAL del texto en Noticias Jurídicas~~ **NO OBTENIDA** (el fichero era una página de error de 25 bytes; movido a `_descartados/`), (c) BOPA 6-sep-2021 cód. 2021-08142 (3 págs) cuya disposición adicional modifica el calendario (FP). |
 | 2022-23 | SÍ | Res. 5-abr-2022, BOPA 25-abr-2022, cód. 2022-02717 | 2 | |
 | 2023-24 | SÍ | Res. 27-abr-2023, BOPA 10-may-2023, cód. 2023-03661 | 2 | |
 | 2024-25 | SÍ | Res. 15-may-2024, BOPA 30-may-2024, cód. 2024-04412 | 3 | Anexo II (escuelas 0-3) modificado el 26-nov-2024: no descargado (irrelevante para turismo). |

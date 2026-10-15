@@ -1,0 +1,95 @@
+{
+ "tabla": "eventos_diario",
+ "filas": 674,
+ "columnas": [
+  "fecha",
+  "concejo",
+  "evento",
+  "tipo",
+  "dia_evento",
+  "n_dias_evento",
+  "fecha_ini",
+  "fecha_fin",
+  "hora_ini",
+  "lugar",
+  "evento_multiconcejo",
+  "concejos_evento",
+  "estado",
+  "fuente_tipo",
+  "fuente_url",
+  "aforo",
+  "pasajeros_capacidad",
+  "es_prevision",
+  "competicion",
+  "temporada",
+  "club_local",
+  "rival",
+  "partido_oviedo",
+  "partido_sporting",
+  "derbi_asturiano",
+  "hora_partido",
+  "categoria_temporada",
+  "calendario_confirmado",
+  "nota_calidad",
+  "notas",
+  "id_evento_original"
+ ],
+ "claves": [
+  "fecha",
+  "concejo",
+  "evento"
+ ],
+ "duplicados_por_clave": 0,
+ "nan_pct": {
+  "hora_ini": 41.1,
+  "lugar": 5.34,
+  "aforo": 100.0,
+  "pasajeros_capacidad": 86.65,
+  "es_prevision": 86.65,
+  "competicion": 62.91,
+  "temporada": 62.91,
+  "club_local": 62.91,
+  "rival": 62.91,
+  "hora_partido": 67.21,
+  "categoria_temporada": 62.91,
+  "calendario_confirmado": 62.91,
+  "nota_calidad": 97.48
+ },
+ "fecha_min": "2021-08-15",
+ "fecha_max": "2027-06-06",
+ "fechas_ausentes_global": 1577,
+ "filas_csv_origen": 378,
+ "filas_sin_fecha_no_expandidas": 4,
+ "por_tipo": {
+  "partido_futbol": 250,
+  "fiesta": 104,
+  "festival": 95,
+  "crucero_gijon": 90,
+  "feria": 81,
+  "deportivo": 44,
+  "romeria": 10
+ },
+ "por_estado": {
+  "probable": 403,
+  "verificado": 271
+ },
+ "eventos_por_estado_origen": {
+  "probable": 339,
+  "verificado": 35,
+  "no_encontrado": 4
+ },
+ "cruceros_escalas": 90,
+ "cruceros_anios": [
+  2025,
+  2026
+ ],
+ "partidos_calendario_no_confirmado": 29,
+ "validaciones": [
+  "sin duplicados (fecha, concejo, evento)",
+  "fecha_fin >= fecha_ini",
+  "estados y fuente_tipo válidos",
+  "nº de filas expandidas = suma de duraciones",
+  "cruceros solo 2025-2026 y todos previsión",
+  "hora HH:MM"
+ ]
+}

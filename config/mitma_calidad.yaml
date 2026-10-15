@@ -1,0 +1,24 @@
+# Días con problemas declarados en los datos de movilidad del MITMA.
+# sin_dato_mitma: el MITMA no publica datos (o los declara inválidos) -> NaN,
+#   se excluyen del entrenamiento y de la evaluación (no se rellenan).
+# anomalia_mitma: datos publicados pero anómalos -> se conservan los valores,
+#   pero se excluyen del entrenamiento y de la evaluación.
+sin_dato_mitma:
+  - "2023-10-26"
+  - "2023-10-27"
+  - "2023-10-30"
+  - "2023-10-31"
+  - "2023-11-01"
+  - "2023-11-02"
+  - "2023-11-03"
+  - "2024-04-04"
+  - "2024-04-18"
+  - "2024-04-19"
+  - "2024-11-10"
+  - "2024-11-11"
+  - "2025-04-28"
+  - "2025-04-29"
+anomalia_mitma:
+  - "2024-10-29"
+  - "2024-10-30"
+  - "2024-10-31"

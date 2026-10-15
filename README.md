@@ -2,22 +2,41 @@
 
 Repositorio compartido (privado) para datos y notas del proyecto.
 
+**Hackathon TalentUO 2026 (Universidad de Oviedo), reto de NTT DATA «Predicción de Afluencia Turística en Asturias».** Es un sistema de alerta temprana de presión turística para la administración (ayuntamientos, Principado y Parque Nacional). Un modelo de *machine learning* (LightGBM, con XGBoost como alternativa) predice, por día y zona, cuántos visitantes llegarán y cuánto supone frente a un «día normal». A partir de los datos de movilidad del MITMA y de factores conocidos de antemano (calendario, festivos de Asturias y de las comunidades de origen, vacaciones escolares, eventos, previsión del tiempo e interés en internet), lo muestra en una web como semáforo, con los factores que lo explican. La zona principal es la puerta de los Picos de Europa (Cangas de Onís, con Covadonga y los Lagos).
+
+> **⚠ Las salidas actuales del modelo (`salidas/`) son SINTÉTICAS.** Se han generado con un objetivo inventado para probar la cadena completa mientras se descargan los datos del MITMA. Todas llevan `sintetico=true` y el aviso en los títulos. **No describen Asturias.**
+
+## Estado
+
+- **Parte B (factores explicativos): terminada.** Descarga, auditoría y limpieza en `data/clean/`, con diccionario (`notas/diccionario_B.md`) y control de calidad (`notas/control_calidad_B.md`).
+- **Modelo: completo con objetivo sintético.** Modelos de corto plazo (1-7 días) y largo plazo (8 o más días), validación por bloques temporales, prueba anti-fuga, SHAP, intervalos, calibración con la regulación de los Lagos y JSON para la web. Documentación en `notas/modelo.md`.
+- **Parte A (demanda y movilidad, MITMA): en descarga.** Ver «Estado (Fase 1)» y «Descarga MITMA» más abajo.
+
 ## Estructura
 
 - `data/raw/` – datos descargados tal cual de la fuente (no editar a mano).
 - `data/manual/` – datos introducidos o corregidos manualmente.
+- `data/clean/` – tablas limpias de la parte B (factores) y, cuando exista, `objetivo_diario.parquet` (objetivo real del MITMA).
+- `data/prevision/` – previsiones de Open-Meteo en bruto, por fecha de emisión.
 - `notas/registro_descargas.md` – registro de cada descarga (fecha, fuente, archivo).
 - `notas/decisiones_y_consideraciones.md` – decisiones importantes y límites de los datos.
 - `scripts/` – `descarga_mitma.py` (descarga MITMA día a día, filtrada a Asturias, reanudable) y `verificar_mitma.py`; `descarga_sadei.py` (tablas PC-Axis de SADEI vía el visor PxWeb, en partes si superan 100 000 celdas) y `verificar_sadei.py`.
 - `logs/` – logs de las descargas (locales, no versionados).
 - `data/raw/LEEME_datos_no_versionados.md` – qué ficheros pesados no se suben y cómo regenerarlos.
 - `notas/registro_senales.md`, `notas/notas_senales.md`, `notas/decisiones_senales.md` – señales adelantadas (Wikipedia, Google Trends, OAPN): registro, hallazgos por fuente y decisiones pendientes. Script: `src/descarga_senales.py`.
+- `src/descarga_*.py` – descargas de la parte B (AEMET, Open-Meteo, calendarios y señales).
+- `src/auditoria/` – auditoría de los datos en bruto de B.
+- `src/limpieza_B/` – limpieza de la parte B y unión de factores por zona (`unir_B.py`).
+- `src/modelo/` – modelo: objetivo, variables, validación, SHAP, salidas de la web y pruebas (`tests/`).
+- `config/` – mapeo de zonas (`mapeo_zonas.csv`), puntos meteorológicos y configuración del modelo, del semáforo y de los factores.
+- `salidas/` – salidas del modelo: JSON de la web, `backtest.parquet` y figuras (hoy, sintéticas).
+- `notas/` – diccionario, control de calidad, `modelo.md`, `contrato_objetivo.md` (entrada de la parte A), `contrato_web.md` (salida para la web) y `guion_modelo.md` (presentación).
 
 ## Instalación
 
 ```bash
 python -m venv .venv
-.venv\Scriptsctivate        # Windows (PowerShell/cmd)
+.venv\Scripts\activate        # Windows (PowerShell/cmd)
 # source .venv/bin/activate    # macOS/Linux
 pip install -r requirements.txt
 ```
@@ -25,7 +44,41 @@ pip install -r requirements.txt
 `requirements-lock.txt` contiene las versiones exactas probadas (Python 3.11):
 `pip install -r requirements-lock.txt`.
 
-Dependencias principales: pandas, requests, openpyxl, pyaxis, pySpainMobility.
+Dependencias principales: pandas, requests, openpyxl, pyaxis, pySpainMobility. El modelo usa también lightgbm, xgboost, shap, scikit-learn, pyyaml, matplotlib, pyarrow y pytest.
+
+**Contacto del User-Agent.** Los scripts de descarga se identifican ante las API (por ejemplo, Wikimedia) con un User-Agent que incluye un contacto. Ese contacto se toma de la variable de entorno `TALENTUO_CONTACTO`; si no está definida, se usa «equipo TalentUO». No se versiona ningún dato personal. La clave de AEMET va en la variable de entorno `AEMET_API_KEY`, nunca en el repositorio.
+
+## Cómo ejecutar
+
+```bash
+# Parte B: limpieza completa (unos 50 s; se detiene si falla alguna comprobación)
+python -X utf8 src/limpieza_B/ejecutar_todo.py
+
+# Previsión meteorológica de 7 días para todas las zonas (opcional; la demo ya trae una)
+python -X utf8 src/modelo/descargar_prevision.py
+
+# Modelo de principio a fin (1-2 min). Objetivo: sintetico | real.
+# Algoritmo: lightgbm (por defecto) | xgboost | ambos (compara y elige con la regla de notas/modelo.md)
+python -X utf8 src/modelo/ejecutar.py --objetivo sintetico --algoritmo lightgbm
+python -X utf8 src/modelo/ejecutar.py --objetivo sintetico --algoritmo ambos
+
+# Pruebas: anti-fuga, constructor del objetivo, regla de elección y contrato de la web
+python -X utf8 -m pytest -q -m "not lento" src/modelo/tests   # rápidas (~1 min)
+python -X utf8 -m pytest -q src/modelo/tests                  # todas (~4 min; incluye la cadena completa con cada algoritmo)
+```
+
+## Qué necesita la parte A para conectar los datos reales
+
+Resumen de `notas/contrato_objetivo.md`:
+
+1. **Lista de zonas MITMA de Asturias**, en `data/raw/zonas_mitma_asturias.csv`, con `zona_mitma_id` (o `id`) y `nombre`.
+2. **`zona_mitma_id` de cada zona del proyecto** en `config/mapeo_zonas.csv` (hoy, columna vacía). La zona principal es la del concejo INE 33012 (Cangas de Onís).
+3. **Viajes y pernoctaciones del 2022-01-01 al 2025-06-30**, en formato MITMA original o de spanishoddata (se detecta solo; separador `|`, `,` o `;`):
+   - viajes: `fecha, periodo, origen, destino, actividad_origen, actividad_destino, residencia, viajes`;
+   - pernoctaciones: `fecha, zona_residencia, zona_pernoctacion, personas`.
+4. Después: `python -X utf8 src/modelo/construir_objetivo.py` (genera `data/clean/objetivo_diario.parquet`) y `python -X utf8 src/modelo/ejecutar.py --objetivo real --algoritmo ambos`.
+
+El objetivo por defecto son las **llegadas de ocio**: viajes con destino en la zona, origen fuera de ella y actividad frecuente o no frecuente. Los días sin datos del MITMA quedan ausentes (nunca 0) y no se usan para entrenar ni evaluar.
 
 ## Estado (Fase 1: solo descarga en bruto)
 
@@ -47,4 +100,3 @@ Progreso: `Get-Content logs\descarga_mitma.log -Tail 10 -Wait` (PowerShell).
 - **Límite real**: el ancho de banda del portal (~190 GB de tráfico en total; medido entre ~2 y ~20 MB/s). Usar **4 workers**: con 10 el rendimiento empeoró. Al parar el script en Windows, comprobar que no quedan workers huérfanos (procesos `python` con `multiprocessing.spawn`).
 - **Días sin datos**: un 404 se deja ausente (nunca 0). Detalle y contraste con la lista oficial en `notas/registro_descargas.md`.
 - Mediciones, decisiones y límites: `notas/decisiones_y_consideraciones.md` (secciones «Paso 2» y «cambio de método»).
-

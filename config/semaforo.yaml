@@ -1,0 +1,11 @@
+# Semáforo de presión turística: cociente = visitantes (previstos u observados) / día normal.
+# El umbral lo definimos nosotros: no es un dato oficial de capacidad.
+umbral_ambar: 1.5    # ámbar a partir de 1,5 veces el normal
+umbral_rojo: 2.0     # rojo a partir de 2,0 veces el normal
+
+# Ajuste por zona (opcional). Ejemplo:
+#   EJEMPLO_cangas: {umbral_ambar: 1.4, umbral_rojo: 1.8}
+por_zona: {}
+
+# gris = sin datos del MITMA, sin día normal o sin variables suficientes.
+colores: [verde, ambar, rojo, gris]

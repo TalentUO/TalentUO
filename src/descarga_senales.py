@@ -12,6 +12,7 @@ la clave "respuesta"; "meta" anade parametros y fecha de descarga.
 """
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -27,8 +28,10 @@ RAW = RAIZ / "data" / "raw"
 TRENDS_DIR = RAW / "trends"
 OAPN_DIR = RAW / "oapn"
 
+# Wikimedia pide un User-Agent con contacto: se toma de TALENTUO_CONTACTO (no se
+# versiona ningún dato personal).
 UA = ("TalentUO-Hackathon-2026/0.1 (proyecto academico Universidad de Oviedo; "
-      "contacto: nanaysonic@gmail.com)")
+      f"contacto: {os.environ.get('TALENTUO_CONTACTO', 'equipo TalentUO')})")
 PAUSA_WIKI = 1.0
 INICIO = "20220101"
 
@@ -63,7 +66,7 @@ ARTICULOS = [
 
 TRENDS_TERMINOS = ["lagos de covadonga", "llanes", "cangas de onís", "ruta del cares",
                    "covadonga"]
-TRENDS_ANCLA = "picos de europa"
+TRENDS_ANCLA = "cabrales"  # antes "picos de europa": un solo pico de 100 y mediana 3 aplastaba los demas terminos (ver notas/correcciones_fase_B.md)
 TRENDS_GEOS = ["ES", "ES-MD", "ES-CL", "ES-AS"]
 
 # URLs de los PDF de la OAPN (se rellenan tras localizarlas; ver notas/notas_senales.md)
@@ -174,7 +177,8 @@ def trends(pausa):
     # (a) serie semanal completa por termino + ancla, por geografia
     for geo in TRENDS_GEOS:
         for term in TRENDS_TERMINOS:
-            destino = TRENDS_DIR / f"trends_semanal_{normaliza(term)}_{geo}.json"
+            destino = TRENDS_DIR / f"ancla_{normaliza(TRENDS_ANCLA)}" / f"trends_semanal_{normaliza(term)}_{geo}.json"
+            destino.parent.mkdir(parents=True, exist_ok=True)
             if destino.exists():
                 continue
             kw = [TRENDS_ANCLA, term]
