@@ -230,6 +230,10 @@
       bp.disabled = true;
       bp.querySelector('.sub').textContent = 'ninguno a la vista';
     }
+    $('#dias-barra').addEventListener('click', e => {
+      const b = e.target.closest('[data-dia]');
+      if (b) cambiarSeleccion(b.dataset.dia, b.dataset.dia);
+    });
     $('#btn-antes').addEventListener('click', () => desplazarSeleccion(-1));
     $('#btn-despues').addEventListener('click', () => desplazarSeleccion(1));
     configurarCalendario();
@@ -269,6 +273,7 @@
     E.calSel = cal;
 
     renderFecha();
+    renderBarraDias();
     if (!$('#calendario').hidden) {
       CAL.inicio = null;
       CAL.foco = desde;
@@ -302,9 +307,11 @@
     });
     especiales.slice(0, 2).forEach(t => chips.push(`<span class="etq etq-esp">${esc(t)}</span>`));
     if (especiales.length > 2) chips.push(`<span class="etq etq-esp">y ${especiales.length - 2} más</span>`);
-    if (E.hasta <= lim) chips.push('<span class="etq">Previsión con meteorología</span>');
-    else if (E.desde <= lim) chips.push(`<span class="etq etq-aviso">Meteorología solo hasta el ${esc(diaMes(lim))}</span>`);
-    else chips.push('<span class="etq etq-aviso">Solo calendario, sin meteorología</span>');
+    const conDato = E.prevDia.filter(p => p.ratio != null);
+    if (!conDato.length) chips.push('<span class="etq etq-aviso">Sin predicción para estas fechas</span>');
+    else if (conDato.every(p => p.conMeteo)) chips.push('<span class="etq">Previsión con meteorología</span>');
+    else if (E.desde <= lim && E.hasta > lim) chips.push(`<span class="etq etq-aviso">Meteorología solo hasta el ${esc(diaMes(lim))}</span>`);
+    else chips.push('<span class="etq etq-aviso">Solo calendario y eventos, sin meteorología</span>');
     $('#fecha-estado').innerHTML = chips.join('');
 
     const igual = r => !!r && E.desde === r[0] && E.hasta === r[1];
@@ -322,6 +329,28 @@
     };
     paso('btn-antes', -1, periodo ? `${n} días antes` : 'Día anterior');
     paso('btn-despues', 1, periodo ? `${n} días después` : 'Día siguiente');
+  }
+
+  /* ---------- Barra de los próximos días ---------- */
+  const DIAS_BARRA = 14;
+  const ORDEN_NIVEL = { gris: 0, verde: 1, ambar: 2, rojo: 3 };
+  let seqBarra = 0;
+  async function renderBarraDias() {
+    const s = ++seqBarra;
+    const n = Math.min(DIAS_BARRA, diasEntre(E.info.hoy, E.maxFecha) + 1);
+    const fechas = [];
+    for (let i = 0; i < n; i++) fechas.push(sumar(E.info.hoy, i));
+    const prevs = await Promise.all(fechas.map(f => D.getPrevisionDia(f)));
+    if (s !== seqBarra) return;
+    $('#dias-barra').innerHTML = fechas.map((f, i) => {
+      const ps = prevs[i];
+      const peor = ps.reduce((a, p) => (ORDEN_NIVEL[p.nivel] > ORDEN_NIVEL[a] ? p.nivel : a), 'gris');
+      const rojos = ps.filter(p => p.nivel === 'rojo').length, ambar = ps.filter(p => p.nivel === 'ambar').length;
+      const d = deISO(f), sel = E.desde === f && E.hasta === f;
+      const resumen = peor === 'gris' ? 'sin datos' : `${rojos} ${rojos === 1 ? 'zona' : 'zonas'} en saturación, ${ambar} con afluencia alta`;
+      return `<li><button type="button" class="dia-b nivel-${peor}" data-dia="${f}" aria-pressed="${sel}" aria-label="${esc(fechaLarga(f))}: ${resumen}">
+        <span aria-hidden="true">${LETRA[d.getDay()]}</span><span class="dia-num" aria-hidden="true">${d.getDate()}</span>${ICONO[peor]}</button></li>`;
+    }).join('');
   }
 
   /* ---------- Calendario: un día o un periodo, de hoy a dentro de un año ---------- */
