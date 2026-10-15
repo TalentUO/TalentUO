@@ -1,0 +1,43 @@
+{
+ "tabla": "partidos_diario",
+ "filas": 2122,
+ "columnas": [
+  "fecha",
+  "temporada",
+  "partido_oviedo",
+  "hora_partido_oviedo",
+  "rival_oviedo",
+  "estado_partido_oviedo",
+  "calendario_confirmado_oviedo",
+  "categoria_temporada_oviedo",
+  "partido_sporting",
+  "hora_partido_sporting",
+  "rival_sporting",
+  "estado_partido_sporting",
+  "calendario_confirmado_sporting",
+  "categoria_temporada_sporting",
+  "derbi_asturiano",
+  "fuente"
+ ],
+ "claves": [
+  "fecha"
+ ],
+ "duplicados_por_clave": 0,
+ "nan_pct": {
+  "hora_partido_oviedo": 94.86,
+  "rival_oviedo": 94.16,
+  "estado_partido_oviedo": 94.16,
+  "calendario_confirmado_oviedo": 94.16,
+  "hora_partido_sporting": 94.72,
+  "rival_sporting": 94.06,
+  "estado_partido_sporting": 94.06,
+  "calendario_confirmado_sporting": 94.06
+ },
+ "fecha_min": "2021-08-15",
+ "fecha_max": "2027-06-06",
+ "fechas_ausentes_global": 0,
+ "dias_partido_oviedo": 124,
+ "dias_partido_sporting": 126,
+ "dias_con_ambos": 16,
+ "derbis": 10
+}

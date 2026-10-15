@@ -1,0 +1,46 @@
+{
+ "tabla": "festivos_locales",
+ "filas": 1024,
+ "columnas": [
+  "fecha",
+  "anio",
+  "concejo",
+  "nombre",
+  "ambito",
+  "festivo_parcial",
+  "fuente",
+  "pagina",
+  "metodo_extraccion",
+  "dia_semana_coherente"
+ ],
+ "claves": [
+  "fecha",
+  "concejo",
+  "nombre"
+ ],
+ "duplicados_por_clave": 0,
+ "nan_pct": {
+  "nombre": 5.86,
+  "festivo_parcial": 6.74,
+  "dia_semana_coherente": 83.01
+ },
+ "fecha_min": "2022-01-17",
+ "fecha_max": "2027-12-13",
+ "fechas_ausentes_global": 1734,
+ "filas_por_anio": {
+  "2022": 171,
+  "2023": 171,
+  "2024": 170,
+  "2025": 170,
+  "2026": 171,
+  "2027": 171
+ },
+ "concejos_por_anio": {
+  "2022": 78,
+  "2023": 78,
+  "2024": 78,
+  "2025": 78,
+  "2026": 78,
+  "2027": 78
+ }
+}

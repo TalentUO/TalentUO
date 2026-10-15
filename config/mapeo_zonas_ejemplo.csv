@@ -1,0 +1,6 @@
+zona_mitma_id,nombre,concejos_ine,zona_meteo,zona_meteo_montana,estacion_aemet,concejo_eventos,notas
+EJEMPLO_cangas,Cangas de Onís (EJEMPLO),33012,cangas_de_onis,lagos_enol,1186P,Cangas de Onís,"IDs FICTICIOS: solo para probar unir_B. No usar."
+EJEMPLO_llanes,Llanes (EJEMPLO),33036,llanes,,1183X,Llanes,IDs FICTICIOS
+EJEMPLO_gijon,Gijón (EJEMPLO),33024,gijon,,1207U,Gijón,IDs FICTICIOS
+EJEMPLO_oviedo,Oviedo (EJEMPLO),33044,oviedo,,1249X,Oviedo,IDs FICTICIOS
+EJEMPLO_oriente,Ribadesella+Llanes (EJEMPLO de zona con varios concejos),33056;33036,ribadesella,,,Ribadesella;Llanes,IDs FICTICIOS; zona sin estación AEMET a propósito

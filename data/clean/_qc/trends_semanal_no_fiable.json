@@ -1,0 +1,123 @@
+{
+ "tabla": "trends_semanal_no_fiable",
+ "filas": 2259,
+ "columnas": [
+  "semana_inicio",
+  "termino",
+  "geo",
+  "ancla",
+  "valor",
+  "valor_ancla",
+  "is_partial",
+  "fichero",
+  "origen",
+  "timeframe",
+  "descargado_utc",
+  "termino_sobre_ancla",
+  "fiable",
+  "motivo",
+  "fuente"
+ ],
+ "claves": [
+  "semana_inicio",
+  "termino",
+  "geo",
+  "ancla"
+ ],
+ "duplicados_por_clave": 0,
+ "nan_pct": {},
+ "fecha_min": "2021-12-26",
+ "fecha_max": "2026-10-11",
+ "fechas_ausentes_global": 1500,
+ "series": [
+  {
+   "termino": "cangas de onís",
+   "geo": "ES",
+   "ancla": "picos de europa",
+   "semanas": "251",
+   "mediana": "1.0",
+   "maximo": "3",
+   "semanas_cero": "22"
+  },
+  {
+   "termino": "cangas de onís",
+   "geo": "ES-MD",
+   "ancla": "picos de europa",
+   "semanas": "251",
+   "mediana": "0.0",
+   "maximo": "2",
+   "semanas_cero": "137"
+  },
+  {
+   "termino": "covadonga",
+   "geo": "ES",
+   "ancla": "picos de europa",
+   "semanas": "251",
+   "mediana": "5.0",
+   "maximo": "37",
+   "semanas_cero": "0"
+  },
+  {
+   "termino": "lagos de covadonga",
+   "geo": "ES",
+   "ancla": "picos de europa",
+   "semanas": "251",
+   "mediana": "1.0",
+   "maximo": "16",
+   "semanas_cero": "0"
+  },
+  {
+   "termino": "lagos de covadonga",
+   "geo": "ES-MD",
+   "ancla": "picos de europa",
+   "semanas": "251",
+   "mediana": "1.0",
+   "maximo": "17",
+   "semanas_cero": "16"
+  },
+  {
+   "termino": "llanes",
+   "geo": "ES",
+   "ancla": "picos de europa",
+   "semanas": "251",
+   "mediana": "9.0",
+   "maximo": "38",
+   "semanas_cero": "0"
+  },
+  {
+   "termino": "llanes",
+   "geo": "ES-MD",
+   "ancla": "picos de europa",
+   "semanas": "251",
+   "mediana": "7.0",
+   "maximo": "33",
+   "semanas_cero": "0"
+  },
+  {
+   "termino": "ruta del cares",
+   "geo": "ES",
+   "ancla": "picos de europa",
+   "semanas": "251",
+   "mediana": "1.0",
+   "maximo": "4",
+   "semanas_cero": "76"
+  },
+  {
+   "termino": "ruta del cares",
+   "geo": "ES-MD",
+   "ancla": "picos de europa",
+   "semanas": "251",
+   "mediana": "1.0",
+   "maximo": "4",
+   "semanas_cero": "84"
+  }
+ ],
+ "n_series": 9,
+ "csv_manuales": 0,
+ "validaciones": [
+  "sin duplicados",
+  "valores 0-100",
+  "semanas contiguas de 7 días",
+  "ancla = primer término de kw_list"
+ ]
+}

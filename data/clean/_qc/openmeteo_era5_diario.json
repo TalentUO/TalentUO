@@ -1,0 +1,75 @@
+{
+ "tabla": "openmeteo_era5_diario",
+ "filas": 15741,
+ "columnas": [
+  "fecha",
+  "zona_meteo",
+  "tmax_c",
+  "tmin_c",
+  "prec_mm",
+  "prec_horas",
+  "sol_s",
+  "viento_max_kmh",
+  "racha_max_kmh",
+  "weather_code",
+  "uso",
+  "fuente"
+ ],
+ "claves": [
+  "fecha",
+  "zona_meteo"
+ ],
+ "duplicados_por_clave": 0,
+ "nan_pct": {},
+ "fecha_min": "2022-01-01",
+ "fecha_max": "2026-10-15",
+ "fechas_ausentes_global": 0,
+ "uso": "solo_referencia_no_entrenar",
+ "sesgo_medio_historical_menos_era5_tras_corte": {
+  "cangas_de_onis": {
+   "tmax_c": 1.104,
+   "tmin_c": 0.254,
+   "prec_mm": -0.62
+  },
+  "covadonga": {
+   "tmax_c": 0.366,
+   "tmin_c": 0.574,
+   "prec_mm": -0.956
+  },
+  "gijon": {
+   "tmax_c": 1.332,
+   "tmin_c": 1.572,
+   "prec_mm": -0.797
+  },
+  "lagos_enol": {
+   "tmax_c": -0.865,
+   "tmin_c": -0.341,
+   "prec_mm": 0.196
+  },
+  "llanes": {
+   "tmax_c": -0.317,
+   "tmin_c": -0.453,
+   "prec_mm": -1.021
+  },
+  "madrid": {
+   "tmax_c": 0.006,
+   "tmin_c": 0.299,
+   "prec_mm": -0.195
+  },
+  "oviedo": {
+   "tmax_c": 1.245,
+   "tmin_c": 1.878,
+   "prec_mm": -1.166
+  },
+  "ribadesella": {
+   "tmax_c": -0.164,
+   "tmin_c": 0.65,
+   "prec_mm": -0.395
+  },
+  "sevilla": {
+   "tmax_c": 0.274,
+   "tmin_c": -0.311,
+   "prec_mm": -0.382
+  }
+ }
+}

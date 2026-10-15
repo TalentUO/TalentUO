@@ -1,0 +1,13 @@
+indicativo,nombre,altitud_m,provincia,lat,lon,indsinop,zona,uso,fuente
+1178R,"SOTRES, PARQUE NACIONAL PICOS DE EUROPA",1236,ASTURIAS,43.2375,-4.73667,,picos_de_europa,contraste alta montaña; hueco 2022-01-16..2023-07-06,AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+1179B,CABRALES,458,ASTURIAS,43.31111,-4.85278,,picos_de_europa,"alternativa (Lagos, lado este)",AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+1183X,LLANES,10,ASTURIAS,43.42028,-4.74806,08016,llanes,Llanes; con sol,AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+1186P,"AMIEVA, PANIZALES",370,ASTURIAS,43.26667,-5.11917,,picos_de_europa,principal Cangas de Onís / Covadonga / Lagos,AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+1199X,"PILOÑA, BARGAÉU",280,ASTURIAS,43.37778,-5.39667,,picos_de_europa,alternativa interior,AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+1203D,COLUNGA,30,ASTURIAS,43.49222,-5.24722,,costa_oriental,"Colunga; termina 2026-06-04, no sirve para el presente",AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+1207U,"GIJÓN, CAMPUS",26,ASTURIAS,43.52306,-5.62111,08065,gijon,Gijón Campus,AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+1210X,CABO PEÑAS,100,ASTURIAS,43.65583,-5.84861,08012,gijon,Cabo Peñas; huecos largos,AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+1212E,ASTURIAS AEROPUERTO,127,ASTURIAS,43.56694,-6.04417,08011,asturias_centro,Asturias Aeropuerto; serie completa con sol,AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+1249X,OVIEDO,334,ASTURIAS,43.35333,-5.87389,08015,oviedo,Oviedo,AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+3195,"MADRID, RETIRO",667,MADRID,40.41139,-3.67778,08222,madrid,Madrid Retiro (origen),AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)
+5783,SEVILLA AEROPUERTO,34,SEVILLA,37.41667,-5.87917,08391,sevilla,Sevilla Aeropuerto (origen),AEMET OpenData: inventario de estaciones (data/raw/aemet_inventario.json)

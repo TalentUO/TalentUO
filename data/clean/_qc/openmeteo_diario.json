@@ -1,0 +1,591 @@
+{
+ "tabla": "openmeteo_diario",
+ "filas": 15741,
+ "columnas": [
+  "fecha",
+  "zona_meteo",
+  "tmax_c",
+  "tmin_c",
+  "prec_mm",
+  "prec_horas",
+  "sol_s",
+  "viento_max_kmh",
+  "racha_max_kmh",
+  "weather_code",
+  "tmax_c_prev1",
+  "tmin_c_prev1",
+  "prec_mm_prev1",
+  "prec_horas_prev1",
+  "sol_s_prev1",
+  "viento_max_kmh_prev1",
+  "racha_max_kmh_prev1",
+  "weather_code_prev1",
+  "tmax_c_prev2",
+  "tmin_c_prev2",
+  "prec_mm_prev2",
+  "prec_horas_prev2",
+  "sol_s_prev2",
+  "viento_max_kmh_prev2",
+  "racha_max_kmh_prev2",
+  "weather_code_prev2",
+  "tmax_c_prev3",
+  "tmin_c_prev3",
+  "prec_mm_prev3",
+  "prec_horas_prev3",
+  "sol_s_prev3",
+  "viento_max_kmh_prev3",
+  "racha_max_kmh_prev3",
+  "weather_code_prev3",
+  "es_reanalisis",
+  "dia_posiblemente_incompleto",
+  "fuente"
+ ],
+ "claves": [
+  "fecha",
+  "zona_meteo"
+ ],
+ "duplicados_por_clave": 0,
+ "nan_pct": {
+  "tmax_c_prev1": 42.96,
+  "tmin_c_prev1": 42.96,
+  "prec_mm_prev1": 42.96,
+  "prec_horas_prev1": 42.96,
+  "sol_s_prev1": 42.96,
+  "viento_max_kmh_prev1": 42.96,
+  "racha_max_kmh_prev1": 42.96,
+  "weather_code_prev1": 42.96,
+  "tmax_c_prev2": 42.94,
+  "tmin_c_prev2": 42.94,
+  "prec_mm_prev2": 42.94,
+  "prec_horas_prev2": 42.94,
+  "sol_s_prev2": 42.94,
+  "viento_max_kmh_prev2": 42.94,
+  "racha_max_kmh_prev2": 42.94,
+  "weather_code_prev2": 42.94,
+  "tmax_c_prev3": 42.94,
+  "tmin_c_prev3": 42.94,
+  "prec_mm_prev3": 42.94,
+  "prec_horas_prev3": 42.94,
+  "sol_s_prev3": 42.94,
+  "viento_max_kmh_prev3": 42.94,
+  "racha_max_kmh_prev3": 42.94,
+  "weather_code_prev3": 42.94
+ },
+ "fecha_min": "2022-01-01",
+ "fecha_max": "2026-10-15",
+ "fechas_ausentes_global": 0,
+ "zonas": [
+  "cangas_de_onis",
+  "covadonga",
+  "gijon",
+  "lagos_enol",
+  "llanes",
+  "madrid",
+  "oviedo",
+  "ribadesella",
+  "sevilla"
+ ],
+ "fechas_ausentes_por_zona": {
+  "cangas_de_onis": 0,
+  "covadonga": 0,
+  "gijon": 0,
+  "lagos_enol": 0,
+  "llanes": 0,
+  "madrid": 0,
+  "oviedo": 0,
+  "ribadesella": 0,
+  "sevilla": 0
+ },
+ "dias_es_reanalisis_por_zona": {
+  "cangas_de_onis": 312,
+  "covadonga": 312,
+  "gijon": 312,
+  "lagos_enol": 312,
+  "llanes": 312,
+  "madrid": 319,
+  "oviedo": 312,
+  "ribadesella": 312,
+  "sevilla": 319
+ },
+ "dias_posiblemente_incompletos": [
+  "2026-10-15"
+ ],
+ "primer_dia_prev": "2024-01-22",
+ "meta_por_zona": {
+  "covadonga": {
+   "lat_respuesta": 43.31,
+   "lon_respuesta": -5.06,
+   "elevacion": 278.0,
+   "fecha_descarga": "2026-10-15",
+   "corte_reanalisis": "2022-11-09"
+  },
+  "lagos_enol": {
+   "lat_respuesta": 43.27,
+   "lon_respuesta": -4.9900002,
+   "elevacion": 1070.0,
+   "fecha_descarga": "2026-10-15",
+   "corte_reanalisis": "2022-11-09"
+  },
+  "cangas_de_onis": {
+   "lat_respuesta": 43.35,
+   "lon_respuesta": -5.13,
+   "elevacion": 70.0,
+   "fecha_descarga": "2026-10-15",
+   "corte_reanalisis": "2022-11-09"
+  },
+  "llanes": {
+   "lat_respuesta": 43.42,
+   "lon_respuesta": -4.75,
+   "elevacion": 4.0,
+   "fecha_descarga": "2026-10-15",
+   "corte_reanalisis": "2022-11-09"
+  },
+  "ribadesella": {
+   "lat_respuesta": 43.46,
+   "lon_respuesta": -5.06,
+   "elevacion": 11.0,
+   "fecha_descarga": "2026-10-15",
+   "corte_reanalisis": "2022-11-09"
+  },
+  "gijon": {
+   "lat_respuesta": 43.53,
+   "lon_respuesta": -5.6600003,
+   "elevacion": 30.0,
+   "fecha_descarga": "2026-10-15",
+   "corte_reanalisis": "2022-11-09"
+  },
+  "oviedo": {
+   "lat_respuesta": 43.36,
+   "lon_respuesta": -5.86,
+   "elevacion": 249.0,
+   "fecha_descarga": "2026-10-15",
+   "corte_reanalisis": "2022-11-09"
+  },
+  "madrid": {
+   "lat_respuesta": 40.39599,
+   "lon_respuesta": -3.6793447,
+   "elevacion": 667.0,
+   "fecha_descarga": "2026-10-15",
+   "corte_reanalisis": "2022-11-16"
+  },
+  "sevilla": {
+   "lat_respuesta": 37.364082,
+   "lon_respuesta": -5.956622,
+   "elevacion": 16.0,
+   "fecha_descarga": "2026-10-15",
+   "corte_reanalisis": "2022-11-16"
+  }
+ },
+ "previous_valores_horarios_negativos_anulados": {
+  "covadonga": {
+   "precipitation_previous_day1": [
+    "2025-06-15T12:00"
+   ]
+  },
+  "lagos_enol": {},
+  "cangas_de_onis": {},
+  "llanes": {},
+  "ribadesella": {},
+  "gijon": {
+   "precipitation_previous_day1": [
+    "2025-06-15T12:00"
+   ]
+  },
+  "oviedo": {
+   "precipitation_previous_day1": [
+    "2025-06-15T12:00"
+   ]
+  },
+  "madrid": {},
+  "sevilla": {}
+ },
+ "sanity_dia0_previous_vs_historical": {
+  "covadonga": {
+   "tmax_c": {
+    "mae": 0.18,
+    "pct_iguales_tol": 37.0,
+    "corr": 0.9992
+   },
+   "tmin_c": {
+    "mae": 0.2,
+    "pct_iguales_tol": 30.4,
+    "corr": 0.9983
+   },
+   "prec_mm": {
+    "mae": 0.242,
+    "pct_iguales_tol": 77.8,
+    "corr": 0.9952
+   },
+   "prec_horas": {
+    "mae": 0.001,
+    "pct_iguales_tol": 99.9,
+    "corr": 1.0
+   },
+   "sol_s": {
+    "mae": 0.002,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "viento_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "racha_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "weather_code": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   }
+  },
+  "lagos_enol": {
+   "tmax_c": {
+    "mae": 0.225,
+    "pct_iguales_tol": 30.5,
+    "corr": 0.9992
+   },
+   "tmin_c": {
+    "mae": 0.209,
+    "pct_iguales_tol": 29.1,
+    "corr": 0.9983
+   },
+   "prec_mm": {
+    "mae": 0.354,
+    "pct_iguales_tol": 72.9,
+    "corr": 0.9957
+   },
+   "prec_horas": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "sol_s": {
+    "mae": 0.002,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "viento_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "racha_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "weather_code": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   }
+  },
+  "cangas_de_onis": {
+   "tmax_c": {
+    "mae": 0.173,
+    "pct_iguales_tol": 38.7,
+    "corr": 0.9992
+   },
+   "tmin_c": {
+    "mae": 0.212,
+    "pct_iguales_tol": 27.1,
+    "corr": 0.9983
+   },
+   "prec_mm": {
+    "mae": 0.191,
+    "pct_iguales_tol": 79.4,
+    "corr": 0.9953
+   },
+   "prec_horas": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "sol_s": {
+    "mae": 0.002,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "viento_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "racha_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "weather_code": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   }
+  },
+  "llanes": {
+   "tmax_c": {
+    "mae": 0.175,
+    "pct_iguales_tol": 42.9,
+    "corr": 0.9951
+   },
+   "tmin_c": {
+    "mae": 0.21,
+    "pct_iguales_tol": 25.3,
+    "corr": 0.9981
+   },
+   "prec_mm": {
+    "mae": 0.242,
+    "pct_iguales_tol": 79.3,
+    "corr": 0.9927
+   },
+   "prec_horas": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "sol_s": {
+    "mae": 0.002,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "viento_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "racha_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "weather_code": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   }
+  },
+  "ribadesella": {
+   "tmax_c": {
+    "mae": 0.161,
+    "pct_iguales_tol": 39.4,
+    "corr": 0.9983
+   },
+   "tmin_c": {
+    "mae": 0.214,
+    "pct_iguales_tol": 26.6,
+    "corr": 0.998
+   },
+   "prec_mm": {
+    "mae": 0.183,
+    "pct_iguales_tol": 79.7,
+    "corr": 0.994
+   },
+   "prec_horas": {
+    "mae": 0.003,
+    "pct_iguales_tol": 99.9,
+    "corr": 0.9997
+   },
+   "sol_s": {
+    "mae": 0.002,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "viento_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "racha_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "weather_code": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   }
+  },
+  "gijon": {
+   "tmax_c": {
+    "mae": 0.171,
+    "pct_iguales_tol": 41.1,
+    "corr": 0.9979
+   },
+   "tmin_c": {
+    "mae": 0.194,
+    "pct_iguales_tol": 40.7,
+    "corr": 0.9981
+   },
+   "prec_mm": {
+    "mae": 0.165,
+    "pct_iguales_tol": 81.6,
+    "corr": 0.9921
+   },
+   "prec_horas": {
+    "mae": 0.002,
+    "pct_iguales_tol": 99.8,
+    "corr": 0.9999
+   },
+   "sol_s": {
+    "mae": 0.002,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "viento_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "racha_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "weather_code": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   }
+  },
+  "oviedo": {
+   "tmax_c": {
+    "mae": 0.171,
+    "pct_iguales_tol": 37.8,
+    "corr": 0.9992
+   },
+   "tmin_c": {
+    "mae": 0.196,
+    "pct_iguales_tol": 34.8,
+    "corr": 0.9984
+   },
+   "prec_mm": {
+    "mae": 0.195,
+    "pct_iguales_tol": 81.3,
+    "corr": 0.9901
+   },
+   "prec_horas": {
+    "mae": 0.002,
+    "pct_iguales_tol": 99.8,
+    "corr": 0.9999
+   },
+   "sol_s": {
+    "mae": 1.415,
+    "pct_iguales_tol": 99.9,
+    "corr": 1.0
+   },
+   "viento_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "racha_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "weather_code": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   }
+  },
+  "madrid": {
+   "tmax_c": {
+    "mae": 0.016,
+    "pct_iguales_tol": 84.9,
+    "corr": 1.0
+   },
+   "tmin_c": {
+    "mae": 0.076,
+    "pct_iguales_tol": 50.1,
+    "corr": 0.9998
+   },
+   "prec_mm": {
+    "mae": 0.094,
+    "pct_iguales_tol": 85.4,
+    "corr": 0.9953
+   },
+   "prec_horas": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "sol_s": {
+    "mae": 0.003,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "viento_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "racha_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "weather_code": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   }
+  },
+  "sevilla": {
+   "tmax_c": {
+    "mae": 0.036,
+    "pct_iguales_tol": 66.1,
+    "corr": 1.0
+   },
+   "tmin_c": {
+    "mae": 0.055,
+    "pct_iguales_tol": 63.2,
+    "corr": 0.9998
+   },
+   "prec_mm": {
+    "mae": 0.078,
+    "pct_iguales_tol": 89.7,
+    "corr": 0.9984
+   },
+   "prec_horas": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "sol_s": {
+    "mae": 0.002,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "viento_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "racha_max_kmh": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   },
+   "weather_code": {
+    "mae": 0.0,
+    "pct_iguales_tol": 100.0,
+    "corr": 1.0
+   }
+  }
+ },
+ "comprobaciones": [
+  "sin duplicados (fecha, zona_meteo)",
+  "calendario continuo por zona",
+  "rangos válidos",
+  "tmin<=tmax (también prevN)",
+  "Historical Forecast sin nulos",
+  "prevN NaN antes de 2024-01-22 y completas después",
+  "es_reanalisis coherente con el corte por zona"
+ ]
+}

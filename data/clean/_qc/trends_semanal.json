@@ -1,0 +1,69 @@
+{
+ "tabla": "trends_semanal",
+ "filas": 753,
+ "columnas": [
+  "semana_inicio",
+  "termino",
+  "geo",
+  "ancla",
+  "valor",
+  "valor_ancla",
+  "is_partial",
+  "fichero",
+  "origen",
+  "timeframe",
+  "descargado_utc",
+  "termino_sobre_ancla",
+  "fiable",
+  "motivo",
+  "fuente"
+ ],
+ "claves": [
+  "semana_inicio",
+  "termino",
+  "geo",
+  "ancla"
+ ],
+ "duplicados_por_clave": 0,
+ "nan_pct": {},
+ "fecha_min": "2021-12-26",
+ "fecha_max": "2026-10-11",
+ "fechas_ausentes_global": 1500,
+ "series": [
+  {
+   "termino": "cangas de onís",
+   "geo": "ES",
+   "ancla": "cabrales",
+   "semanas": "251",
+   "mediana": "13.0",
+   "maximo": "46",
+   "semanas_cero": "0"
+  },
+  {
+   "termino": "lagos de covadonga",
+   "geo": "ES",
+   "ancla": "cabrales",
+   "semanas": "251",
+   "mediana": "9.0",
+   "maximo": "100",
+   "semanas_cero": "0"
+  },
+  {
+   "termino": "llanes",
+   "geo": "ES",
+   "ancla": "cabrales",
+   "semanas": "251",
+   "mediana": "24.0",
+   "maximo": "100",
+   "semanas_cero": "0"
+  }
+ ],
+ "n_series": 3,
+ "csv_manuales": 0,
+ "validaciones": [
+  "sin duplicados",
+  "valores 0-100",
+  "semanas contiguas de 7 días",
+  "ancla = primer término de kw_list"
+ ]
+}

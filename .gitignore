@@ -9,3 +9,6 @@ __pycache__/
 
 # Open-Meteo: cache de tramos (reproducible con el script); solo se versiona el manifest
 data/raw/_chunks/*/
+
+# Limpieza B: salida de prueba de unir_B (se regenera con ejecutar_todo.py)
+data/clean/_prueba/
