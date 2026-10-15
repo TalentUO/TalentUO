@@ -1,0 +1,91 @@
+# Configuración del modelo de afluencia (src/modelo/).
+# Todo lo que cambia entre el objetivo sintético y el real está en `fuentes`.
+
+semilla: 42
+
+# Variable a predecir (columna de objetivo_diario):
+#   llegadas_ocio (por defecto) | llegadas_total | pernoctaciones_no_residentes
+objetivo: llegadas_ocio
+
+# "Hoy" para la demo de la web (predicciones futuras de largo plazo).
+fecha_hoy_demo: "2026-10-16"
+dias_futuro_demo: 60
+
+fuentes:
+  sintetico:
+    mapeo: config/mapeo_zonas_ejemplo.csv          # IDs FICTICIOS (EJEMPLO_*)
+    objetivo: salidas/sintetico/objetivo_diario_sintetico.parquet
+  real:
+    mapeo: config/mapeo_zonas.csv                  # necesita zona_mitma_id relleno
+    objetivo: data/clean/objetivo_diario.parquet   # lo genera construir_objetivo.py
+
+# Periodo cubierto por los datos diarios del MITMA (parte A).
+objetivo_periodo: {inicio: "2022-01-01", fin: "2025-06-30"}
+
+# Corte del reanálisis de Open-Meteo en Asturias (diccionario_B, `es_reanalisis`).
+# Entrenamiento base desde aquí; el tramo anterior solo en el experimento de sensibilidad.
+corte_reanalisis: "2022-11-09"
+
+# Zona principal (puerta de los Picos): la del concejo INE 33012 (Cangas de Onís).
+zona_principal_concejo_ine: "33012"
+
+dia_normal:
+  fuente: propio          # propio | mitma (estadísticos oficiales, si A los encuentra)
+  anio_referencia: 2024
+  excluir_meses: [7, 8]
+  # Formato esperado si fuente = mitma: zona_mitma_id, dia_semana (0 = lunes), normal
+  mitma_fichero: data/clean/dia_normal_mitma.csv
+  # En la validación, el normal de cada bloque se recalcula con los 365 días
+  # anteriores al bloque (sin fuga). El normal de referencia (2024) solo define
+  # el semáforo.
+  ventana_backtest_dias: 365
+
+tiempo:
+  # estricto: para el horizonte h solo la previsión archivada emitida en d-h
+  #   (om_*_prev{h}, h <= 3, desde 2024-01-22). Sin previsión -> NaN.
+  # aproximado: además usa la serie base de Historical Forecast (previsión de
+  #   plazo ~0) cuando falta la previsión a h días. Optimista: no cumple la regla
+  #   d-h para h >= 1. Solo como experimento de sensibilidad.
+  modo: estricto
+  max_lead_archivado: 3
+
+horizontes_corto: [1, 2, 3, 4, 5, 6, 7]
+horizonte_largo: 8         # el modelo de largo plazo vale para h >= 8 (sin tiempo ni interés)
+
+bloques_validacion:
+  - {nombre: "2023-S2 (verano 2023)", inicio: "2023-07-01", fin: "2023-12-31"}
+  - {nombre: "2024-S1", inicio: "2024-01-01", fin: "2024-06-30"}
+  - {nombre: "2024-S2 (verano 2024)", inicio: "2024-07-01", fin: "2024-12-31"}
+  - {nombre: "2025-S1 (bloque final)", inicio: "2025-01-01", fin: "2025-06-30"}
+
+lightgbm:
+  objective: regression
+  learning_rate: 0.05
+  num_leaves: 15
+  min_data_in_leaf: 50
+  feature_fraction: 0.8
+  bagging_fraction: 0.8
+  bagging_freq: 1
+  lambda_l2: 1.0
+  max_bin: 63
+  verbose: -1
+  deterministic: true
+  force_row_wise: true
+  num_threads: 4
+max_iteraciones: 2000
+parada_temprana: 100
+dias_validacion_interna: 90     # últimos días del entrenamiento para la parada temprana
+
+interes:
+  # Artículos de Wikipedia que forman la señal "Picos" (suma de visitas).
+  wiki_picos: [lagos_de_covadonga, covadonga, picos_de_europa, parque_nacional_de_los_picos_de_europa, ruta_del_cares]
+  ventana_wiki_dias: 7
+
+alternativas:
+  dias_margen: 3
+  km_zona_cercana: 60
+
+regulacion:
+  anios_observados: [2023, 2024]
+  anios_previstos: [2026, 2027]
+  umbrales_curva: [1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0]
