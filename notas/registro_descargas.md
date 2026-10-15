@@ -168,3 +168,64 @@ Cada serie tiene 260 filas (2005M01–2026M08 × variable); el valor puede ser `
 ### Pendiente / siguiente
 - Confirmar con muestra que `.` y vacío corresponden a meses cerrados/secreto (comparar con el PDF/nota metodológica EOH).
 - Cangas de Onís solo tiene hoteles; para presión turística local no hay apartamentos, campings ni rural por punto.
+
+## 2026-10-15 · Paso 3 · INE: turismo con móviles, interno (estadística experimental) – Persona A
+
+**ALCANCE: turismo interno interprovincial.** Solo cuenta turistas residentes en España que viajan a una provincia **distinta** de la de residencia. **NO incluye a los asturianos que viajan dentro de Asturias** (eso lo cubre MITMA). Las cifras de destino asturiano son visitantes de fuera de Asturias; no son el total de visitantes. Tampoco incluye extranjeros (según la nota del propio Excel; la tabla 53001 NO VERIFICADO que use la misma definición, aunque su concepto es "Turistas").
+
+### 3.1 Excel anuales (sin 404 en ningún año)
+URL: `https://www.ine.es/experimental/turismo_moviles/exp_tmov_interno_mun_<año>.xlsx`, descargados 2026-10-15.
+
+| Fichero | Tamaño | Hojas de datos | Último mes |
+|---|---|---|---|
+| `data/raw/ine_moviles_interno_2022.xlsx` | 39,5 MB | 2022-01 … 2022-12 | 2022-12 |
+| `data/raw/ine_moviles_interno_2023.xlsx` | 46,0 MB | 2023-01 … 2023-12 | 2023-12 |
+| `data/raw/ine_moviles_interno_2024.xlsx` | 48,8 MB | 2024-01 … 2024-12 | 2024-12 (las hojas de sept–dic se llaman `2024_09`… con guion bajo) |
+| `data/raw/ine_moviles_interno_2025.xlsx` | 37,7 MB | 2025-01 … 2025-12 | 2025-12 |
+| `data/raw/ine_moviles_interno_2026.xlsx` | 28,4 MB | 2026-01 … 2026-08 | **2026-08** (8 hojas) |
+
+- Estructura: una hoja `Notas`/`Hoja1` + una hoja por mes. Columnas: `mes, mun_orig_cod, mun_orig, dest_cod, dest, turistas, prov_orig_cod, prov_orig, prov_dest_cod, prov_dest`. Una fila = par municipio de origen → municipio de destino. Códigos como texto con ceros (`'01001'`). Texto con codificación rota al leer (`Alegr�a`) en las hojas leídas con openpyxl: revisar antes de usar nombres.
+- **Secreto estadístico (nota 2 del propio fichero): solo se dan los cruces con más de 30 turistas.** Un cruce que no aparece es "no publicado" (menos de ~30), **nunca 0**. Mínimo observado: 30. Sumar las filas de un destino da una **cota inferior**, no el total. Ejemplo 2025-08, Cangas de Onís: Excel suma 21.675 frente a 34.979 en la tabla 53001.
+- No hay celdas vacías ni "." en `turistas` en ninguna hoja para destinos asturianos (comprobado en las 56 hojas mensuales; la ausencia se expresa quitando la fila).
+- La hoja `2026-05` tiene 1.048.576 filas (el límite de Excel), pero ~974.000 son filas vacías de formato; los datos reales son ~74.000 filas. **No está truncada.**
+- **Cangas de Onís (33012) y Llanes (33036) aparecen como destino en los 56 meses (2022-01 a 2026-08).** Cangas de Onís: 16–229 orígenes por mes; Llanes: 38–334.
+- Comprobado: 62–75 municipios asturianos distintos como destino por hoja (de 78).
+
+### 3.2 Tabla mensual 53001
+- `https://www.ine.es/jaxiT3/files/t/csv_bdsc/53001.csv` **sí funciona** (HTTP 200, `text/plain; charset=ISO-8859-15`, separador `;`, con BOM). Patrón verificado.
+- **Pero el CSV completo es enorme**: más de 2,3 GB (todos los municipios de España × todos los orígenes por CCAA/provincia × 86 meses; las dos descargas completas que probé se interrumpieron o se colgaron antes del final). No se descargó entero.
+- **`data/raw/ine_moviles_53001.csv` NO es el fichero íntegro**: es un extracto que hice filtrando el flujo del INE por **destino = municipios de Asturias (código 33xxx)** y **origen = "Total Nacional"** (sin desglose por CCAA/provincia de origen). 6.708 filas = 78 municipios × 86 meses (2019M07 – 2026M08). Mismas columnas y formato que el original, no limpiado. El desglose por origen se puede pedir por la web (`Tabla.htm?t=53001&L=0`) si hace falta; no se automatizó.
+- Los ficheros temporales (descarga parcial filtrada) quedaron en el scratchpad, no en el repo. `data/raw/ine_moviles_*` está en `.gitignore`.
+- **Último mes de la 53001: 2026M08** (Cangas de Onís 24.430, Llanes 51.592 turistas). Coincide con el último mes del Excel de 2026. La "última modificación 07/10/2026" de la web NO VERIFICADO que corresponda a otro mes; los datos llegan hasta 2026M08.
+- **Cangas de Onís (`33012 Cangas de Onís`) y Llanes (`33036 Llanes`) están completos: 86 meses con dato numérico, sin celdas vacías.**
+- **TRAMPA DE FORMATO: el punto es separador de miles Y marca de dato ausente.** `"1.179"` = 1179; `"."` solo = ausente. Además `""` (comillas vacías) = ausente. Hay que parsear con regex (`^\d{1,3}(\.\d{3})*$`), no con `float()`. Hay 6.434 celdas numéricas, 42 con `.` y 232 vacías. Todas se tratan como **ausentes, nunca 0** (secreto estadístico o no disponible).
+- Municipios con celdas ausentes (`.` / vacía, de 86 meses):
+
+| Municipio | `.` | vacía | Total ausentes | Primer–último mes ausente |
+|---|---|---|---|---|
+| 33078 Yernes y Tameza | 6 | 70 | **76** | 2019M07–2026M08 (último dato numérico: **2026M03**) |
+| 33048 Pesoz | 6 | 51 | 57 | 2020M02–2026M06 |
+| 33064 Santo Adriano | 6 | 37 | 43 | 2020M03–2026M03 |
+| 33030 Illas | 4 | 22 | 26 | 2020M05–2024M10 |
+| 33029 Illano | 4 | 12 | 16 | 2020M04–2026M03 |
+| 33065 Sariego | 0 | 9 | 9 | 2023M11–2024M07 |
+| 33067 Sobrescobio | 3 | 4 | 7 | 2020M04–2021M04 |
+| 33052 Proaza | 1 | 5 | 6 | 2020M03–2024M06 |
+| 33054 Regueras, Las | 0 | 5 | 5 | 2023M11–2024M05 |
+| 33003 Amieva | 2 | 2 | 4 | 2020M04–2021M02 |
+| 33043 Onís | 1 | 3 | 4 | 2020M04–2020M12 |
+| 33077 Villayón | 1 | 3 | 4 | 2020M03–2026M02 |
+| 33050 Ponga | 2 | 1 | 3 | 2020M04–2021M02 |
+| 33072 Teverga | 3 | 0 | 3 | 2020M04–2021M02 |
+| 33038 Morcín | 2 | 0 | 2 | 2020M04–2020M05 |
+| 33042 Noreña | 0 | 2 | 2 | 2024M04–2025M02 |
+| 33053 Quirós | 0 | 2 | 2 | 2020M11–2021M03 |
+| 33062 Santa Eulalia de Oscos | 0 | 2 | 2 | 2024M04–2025M02 |
+| 33006 Bimenes, 33009 Cabranes, 33058 Riosa | – | – | 1 cada uno | 2020M11, 2021M03, 2020M04 |
+
+  Los 78 municipios aparecen; 21 tienen ausentes; el resto (incl. Cangas de Onís, Llanes, Cabrales, Ribadesella, Oviedo, Gijón) está completo. Las ausencias se concentran en 2020 (COVID) y en municipios pequeños (secreto estadístico).
+
+### Coherencia y límites
+- Cotejo Excel vs 53001 (mismo mes y destino): el Excel queda siempre por debajo (p. ej. 2026-08 Llanes 41.172 vs 51.592), coherente con que el Excel omite cruces <30. No se cotejó la causa exacta de la diferencia: NO VERIFICADO.
+- 53001 empieza en 2019M07; los Excel solo desde 2022. No se comprobó si las series de ambos usan el mismo criterio de "turista".
+- NO VERIFICADO: si "Turistas" de la 53001 incluye o excluye los viajes dentro de la misma provincia/comunidad (la nota del Excel dice provincia distinta).
