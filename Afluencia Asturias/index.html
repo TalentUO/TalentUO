@@ -1,0 +1,456 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>NTT Turism</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Previsión de afluencia turística por zonas de Asturias con semáforo de presión turística. Piloto con datos ficticios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Schibsted+Grotesk:wght@600;700;800&display=swap">
+<style>
+/* Diseño: barra de fecha arriba; debajo, el mapa como protagonista y una columna lateral de detalle.
+   Paleta "Cantábrico": azul de mar como acento y neutros fríos; el semáforo va aparte y siempre con icono, trama y palabra. */
+:root {
+  --bg: #F2F5F7; --superficie: #FFFFFF; --superficie-2: #E8EEF2;
+  --tinta: #13202B; --tinta-2: #4B5B69; --linea: #CED8E0; --linea-fuerte: #8FA1B0;
+  --acento: #1B5C8F; --acento-tinta: #FFFFFF; --acento-suave: #D6E6F3;
+  --foco: #0B5FD0; --foco-suave: rgba(11, 95, 208, .25);
+  --mar: #D9E7F0; --mar-tinta: #4F7695; --pista: #D3DDE5;
+  --verde: #2E7D4B; --verde-suave: #DCEFE2;
+  --ambar: #8A5A00; --ambar-vivo: #E3A21A; --ambar-raya: #F4D27E; --ambar-suave: #FCEBC2;
+  --rojo: #B3261E; --rojo-raya: #E26A5F; --rojo-suave: #F9D3CE;
+  --gris: #6A747D; --gris-suave: #E4E7EA;
+  --mapa-verde: #BFE0C9; --mapa-ambar: #F6D98C; --mapa-rojo: #EFA79D; --mapa-gris: #DDE1E5;
+  --trama-ambar: #B87D05; --trama-rojo: #9E2018; --trama-gris: #7D868E;
+  --mapa-borde: #FFFFFF; --mapa-etiqueta: #13202B; --mapa-halo: rgba(255, 255, 255, .9);
+  --aviso-bg: #FFF4D6; --aviso-borde: #E3B13E; --raya-clara: rgba(255, 255, 255, .4);
+  --sombra: 0 1px 2px rgba(19, 32, 43, .06), 0 6px 18px rgba(19, 32, 43, .06);
+  --f-titulo: 'Schibsted Grotesk', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --f-texto: 'Atkinson Hyperlegible', Verdana, 'Segoe UI', sans-serif;
+  --radio: 12px;
+  --sitio-punto: #FFFFFF; --sitio-borde: rgba(19, 32, 43, .55);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D141A; --superficie: #151F28; --superficie-2: #1D2934;
+    --tinta: #E6EDF2; --tinta-2: #A2B2BF; --linea: #2A3946; --linea-fuerte: #566B7C;
+    --acento: #86BDEB; --acento-tinta: #0D141A; --acento-suave: #1B3449;
+    --foco: #8EC5FF; --foco-suave: rgba(142, 197, 255, .3);
+    --mar: #122332; --mar-tinta: #7FA6C6; --pista: #2A3946;
+    --verde: #6BCB8B; --verde-suave: #173825;
+    --ambar: #F3C25C; --ambar-vivo: #E8AE34; --ambar-raya: #8C6514; --ambar-suave: #3A2D0F;
+    --rojo: #FF8B7E; --rojo-raya: #9C3A31; --rojo-suave: #43201C;
+    --gris: #97A2AC; --gris-suave: #262F37;
+    --mapa-verde: #235A3A; --mapa-ambar: #6A5014; --mapa-rojo: #6E2B24; --mapa-gris: #2B343C;
+    --trama-ambar: #E8B54C; --trama-rojo: #FF9184; --trama-gris: #6C7782;
+    --mapa-borde: #0D141A; --mapa-etiqueta: #F2F6F9; --mapa-halo: rgba(13, 20, 26, .85);
+    --aviso-bg: #2E2610; --aviso-borde: #8C6A1E; --raya-clara: rgba(255, 255, 255, .18);
+    --sombra: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D141A; --superficie: #151F28; --superficie-2: #1D2934;
+  --tinta: #E6EDF2; --tinta-2: #A2B2BF; --linea: #2A3946; --linea-fuerte: #566B7C;
+  --acento: #86BDEB; --acento-tinta: #0D141A; --acento-suave: #1B3449;
+  --foco: #8EC5FF; --foco-suave: rgba(142, 197, 255, .3);
+  --mar: #122332; --mar-tinta: #7FA6C6; --pista: #2A3946;
+  --verde: #6BCB8B; --verde-suave: #173825;
+  --ambar: #F3C25C; --ambar-vivo: #E8AE34; --ambar-raya: #8C6514; --ambar-suave: #3A2D0F;
+  --rojo: #FF8B7E; --rojo-raya: #9C3A31; --rojo-suave: #43201C;
+  --gris: #97A2AC; --gris-suave: #262F37;
+  --mapa-verde: #235A3A; --mapa-ambar: #6A5014; --mapa-rojo: #6E2B24; --mapa-gris: #2B343C;
+  --trama-ambar: #E8B54C; --trama-rojo: #FF9184; --trama-gris: #6C7782;
+  --mapa-borde: #0D141A; --mapa-etiqueta: #F2F6F9; --mapa-halo: rgba(13, 20, 26, .85);
+  --aviso-bg: #2E2610; --aviso-borde: #8C6A1E; --raya-clara: rgba(255, 255, 255, .18);
+  --sombra: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--tinta); }
+</style>
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="estilos/estilos.css">
+<!-- /cabeza -->
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+  <div class="envoltura cabecera-in">
+    <div class="marca">
+      <svg class="marca-ico" viewBox="0 0 22 36" aria-hidden="true">
+        <rect x="1" y="1" width="20" height="34" rx="7" class="marca-caja"/>
+        <circle cx="11" cy="9.5" r="4.2" class="ico-rojo"/>
+        <circle cx="11" cy="18" r="4.2" class="ico-ambar-c"/>
+        <circle cx="11" cy="26.5" r="4.2" class="ico-verde"/>
+      </svg>
+      <div>
+        <p class="marca-nombre">NTT Turism</p>
+        <p class="marca-sub">Alerta temprana de presión turística</p>
+      </div>
+    </div>
+    <nav class="nav" aria-label="Secciones">
+      <div class="pestanas" role="tablist">
+        <button type="button" role="tab" id="tab-inicio" aria-controls="panel-inicio" aria-selected="true">Inicio</button>
+        <button type="button" role="tab" id="tab-gestion" aria-controls="panel-gestion" aria-selected="false" tabindex="-1">Gestión</button>
+        <button type="button" role="tab" id="tab-datos" aria-controls="panel-datos" aria-selected="false" tabindex="-1">Sobre los datos</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="aviso-piloto" role="note">
+  <div class="envoltura aviso-in">
+    <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" class="ico-info-c"/><rect x="7.1" y="6.6" width="1.8" height="5.4" rx=".9" class="ico-info-t"/><circle cx="8" cy="4.4" r="1.05" class="ico-info-t"/></svg>
+    <p><strong>Piloto con datos ficticios.</strong> Las previsiones de afluencia son inventadas y solo sirven para probar la interfaz. Los eventos (PredictHQ) y los sitios de interés sí son reales.</p>
+  </div>
+</div>
+
+<main id="contenido" tabindex="-1">
+
+  <!-- ============================ INICIO ============================ -->
+  <section role="tabpanel" id="panel-inicio" aria-labelledby="tab-inicio" class="envoltura panel">
+    <h1 class="titulo-pagina">¿Cuánta gente habrá en Asturias?</h1>
+
+    <div class="controles">
+      <div class="fecha-bloque">
+        <p class="eyebrow" id="fecha-eyebrow">Día elegido</p>
+        <p class="fecha-grande" id="fecha-texto">Cargando…</p>
+        <p class="fecha-estado" id="fecha-estado"></p>
+      </div>
+      <div class="fecha-mandos">
+        <div class="accesos" role="group" aria-label="Accesos rápidos de fecha">
+          <button type="button" class="chip-btn" id="btn-hoy" aria-pressed="true">Hoy</button>
+          <button type="button" class="chip-btn" id="btn-finde" aria-pressed="false">Este finde</button>
+          <button type="button" class="chip-btn" id="btn-semana" aria-pressed="false">Próximos 7 días</button>
+          <button type="button" class="chip-btn" id="btn-puente" aria-pressed="false">Próximo puente <span class="sub"></span></button>
+        </div>
+        <div class="paso-fecha">
+          <button type="button" class="btn-icono" id="btn-antes"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" class="ico-trazo"/></svg><span class="sr" id="btn-antes-txt">Día anterior</span></button>
+          <button type="button" class="btn-cal" id="btn-calendario" aria-expanded="false" aria-controls="calendario">
+            <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.8" y="3" width="12.4" height="11" rx="2" class="ico-trazo"/><path d="M1.8 6.6h12.4M5 1.6v2.8M11 1.6v2.8" class="ico-trazo"/></svg>
+            <span>Elegir fechas</span>
+          </button>
+          <button type="button" class="btn-icono" id="btn-despues"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" class="ico-trazo"/></svg><span class="sr" id="btn-despues-txt">Día siguiente</span></button>
+        </div>
+        <div class="calendario" id="calendario" role="group" aria-label="Calendario" hidden>
+          <fieldset class="segmentado cal-modo">
+            <legend class="filtro-et">Qué quieres consultar</legend>
+            <div class="seg-opciones">
+              <label><input type="radio" name="modo-fecha" value="dia" checked><span>Un día</span></label>
+              <label><input type="radio" name="modo-fecha" value="periodo"><span>Varios días</span></label>
+            </div>
+          </fieldset>
+          <p class="cal-instr" id="cal-instr" aria-live="polite"></p>
+          <div class="cal-cab">
+            <button type="button" class="btn-icono" id="cal-ant"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" class="ico-trazo"/></svg><span class="sr">Mes anterior</span></button>
+            <h2 class="cal-titulo" id="cal-titulo" aria-live="polite"></h2>
+            <button type="button" class="btn-icono" id="cal-sig"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" class="ico-trazo"/></svg><span class="sr">Mes siguiente</span></button>
+          </div>
+          <table class="cal-tabla" aria-labelledby="cal-titulo" aria-describedby="cal-ayuda">
+            <thead><tr>
+              <th scope="col" abbr="lunes">L</th><th scope="col" abbr="martes">M</th><th scope="col" abbr="miércoles">X</th>
+              <th scope="col" abbr="jueves">J</th><th scope="col" abbr="viernes">V</th>
+              <th scope="col" abbr="sábado" class="finde">S</th><th scope="col" abbr="domingo" class="finde">D</th>
+            </tr></thead>
+            <tbody id="cal-dias"></tbody>
+          </table>
+          <p class="sr" id="cal-ayuda">Usa las flechas para moverte por los días, Re Pág y Av Pág para cambiar de mes, e Intro para elegir.</p>
+          <div class="cal-pie">
+            <p class="marcas-ayuda"><span><b>Negrita</b>: fin de semana</span><span><i class="m-punto on"></i> Festivo o puente</span><span id="cal-meteo"></span></p>
+            <button type="button" class="btn" id="cal-cerrar">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filtros">
+      <div class="buscador">
+        <label for="buscar" class="filtro-et">Buscar un lugar</label>
+        <div class="buscador-caja">
+          <svg class="ico lupa" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.8" class="ico-trazo"/><path d="M10.6 10.6 14 14" class="ico-trazo"/></svg>
+          <input id="buscar" type="text" role="combobox" autocomplete="off" spellcheck="false"
+                 aria-autocomplete="list" aria-expanded="false" aria-controls="buscar-lista"
+                 aria-describedby="buscar-ayuda" placeholder="Covadonga, Llanes, Gijón…">
+          <ul id="buscar-lista" role="listbox" aria-label="Lugares encontrados" hidden></ul>
+        </div>
+        <p id="buscar-ayuda" class="sr">Escribe un pueblo, concejo o lugar. Usa las flechas para moverte por los resultados y Intro para elegir.</p>
+      </div>
+      <fieldset class="segmentado" id="filtro-tipo">
+        <legend class="filtro-et">Tipo de destino</legend>
+        <div class="seg-opciones">
+          <label><input type="radio" name="tipo" value="todos" checked><span>Todos</span></label>
+          <label><input type="radio" name="tipo" value="costa"><span>Costa</span></label>
+          <label><input type="radio" name="tipo" value="montana"><span>Montaña</span></label>
+          <label><input type="radio" name="tipo" value="ciudad"><span>Ciudad</span></label>
+        </div>
+      </fieldset>
+      <div class="vista">
+        <p class="filtro-et" id="vista-et">Ver como</p>
+        <div class="seg-opciones" role="group" aria-labelledby="vista-et">
+          <button type="button" class="seg-btn" data-vista="mapa" aria-pressed="true">Mapa</button>
+          <button type="button" class="seg-btn" data-vista="lista" aria-pressed="false">Lista</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="inicio-grid">
+      <div class="col-mapa">
+        <div class="mapa-marco" id="mapa-marco">
+          <div class="mapa" id="mapa" role="region" aria-label="Mapa de Asturias. Con el mapa enfocado, las flechas lo mueven y las teclas más y menos acercan o alejan." aria-describedby="nota-mapa"></div>
+        </div>
+        <!-- Rellenos del semáforo para el mapa: color + trama, para no depender solo del color -->
+        <svg class="defs-mapa" aria-hidden="true" focusable="false" width="0" height="0">
+          <defs>
+            <pattern id="relleno-ambar" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" class="p-ambar"/><rect width="2.6" height="9" class="t-ambar"/></pattern>
+            <pattern id="relleno-rojo" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" class="p-rojo"/><path d="M0 0 10 10M10 0 0 10" class="t-rojo"/></pattern>
+            <pattern id="relleno-gris" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" class="p-gris"/><circle cx="5" cy="5" r="1.4" class="t-gris"/></pattern>
+          </defs>
+        </svg>
+        <div id="lista-zonas" hidden></div>
+        <ul class="leyenda" id="leyenda" aria-label="Leyenda del semáforo"></ul>
+        <p class="nota-mapa" id="nota-mapa">Acerca el mapa (rueda del ratón, pellizco o botones +/−) para pasar de zonas a concejos. Pasa el ratón para ver un resumen; pulsa una zona o un concejo, o llega con el tabulador y pulsa Intro, para ver el detalle. Si prefieres una tabla, elige «Lista».</p>
+      </div>
+      <aside class="col-lateral" id="lateral" aria-label="Detalle">
+        <section id="ranking" class="tarjeta" aria-live="off"></section>
+        <section id="panel-zona" class="tarjeta" hidden></section>
+      </aside>
+    </div>
+
+    <!-- Eventos y sitios de interés: secciones desplegables (<details>), cerradas al principio -->
+    <details class="desplegable" id="eventos">
+      <summary>
+        <span class="desp-txt">
+          <h2 class="sitios-titulo" id="eventos-titulo">Eventos grandes</h2>
+          <span class="desp-resumen" id="eventos-resumen"></span>
+        </span>
+        <svg class="ico desp-flecha" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" class="ico-trazo"/></svg>
+      </summary>
+      <div class="desp-cuerpo">
+        <div class="sitios-cab">
+          <p class="lat-sub" id="eventos-sub"></p>
+          <div class="sitios-orden">
+            <label for="eventos-cat" class="filtro-et">Tipo de evento</label>
+            <select id="eventos-cat" class="select"></select>
+          </div>
+        </div>
+        <p class="sitios-nota" id="eventos-nota"></p>
+        <div id="eventos-lista" class="ev-lista"></div>
+        <div class="sitios-pie">
+          <p class="ayuda" id="eventos-cuenta" aria-live="polite"></p>
+          <button type="button" class="btn" id="eventos-mas">Ver más eventos</button>
+        </div>
+      </div>
+    </details>
+
+    <!-- Sitios de interés: sin previsión propia; se ordenan por la afluencia prevista en su concejo -->
+    <details class="desplegable" id="sitios">
+      <summary>
+        <span class="desp-txt">
+          <h2 class="sitios-titulo" id="sitios-titulo">Sitios de interés</h2>
+          <span class="desp-resumen"><span id="sitios-total"></span> lugares para visitar</span>
+        </span>
+        <svg class="ico desp-flecha" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" class="ico-trazo"/></svg>
+      </summary>
+      <div class="desp-cuerpo">
+        <div class="sitios-cab">
+          <p class="lat-sub" id="sitios-sub"></p>
+          <div class="sitios-orden">
+            <label for="sitios-orden" class="filtro-et">Ordenar</label>
+            <select id="sitios-orden" class="select">
+              <option value="menos">Menos gente primero</option>
+              <option value="mas">Más gente primero</option>
+              <option value="concejo">Por concejo (A–Z)</option>
+            </select>
+          </div>
+        </div>
+        <p class="sitios-nota">No tenemos cifras de cada sitio: el nivel es el previsto para su concejo en las fechas elegidas. En el mapa aparecen como puntos blancos al acercarse.</p>
+        <ul class="sitios-lista" id="sitios-lista"></ul>
+        <div class="sitios-pie">
+          <p class="ayuda" id="sitios-cuenta" aria-live="polite"></p>
+          <button type="button" class="btn" id="sitios-mas">Ver más sitios</button>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============================ GESTIÓN ============================ -->
+  <section role="tabpanel" id="panel-gestion" aria-labelledby="tab-gestion" class="envoltura panel" hidden>
+    <div class="g-intro">
+      <h1 class="titulo-pagina">Gestión</h1>
+      <p class="g-lead">Herramientas para ayuntamientos, el Principado y el Parque Nacional: cuántos días al año hay presión, qué viene en las próximas dos semanas y cuánto podemos fiarnos del modelo.</p>
+      <nav aria-label="Apartados de gestión" class="g-indice">
+        <a href="#g-regular">¿Hace falta regular?</a>
+        <a href="#g-alertas">Alertas</a>
+        <a href="#g-fiabilidad">Fiabilidad</a>
+        <a href="#g-simulador">Simulador</a>
+        <a href="#g-exportar">Exportar</a>
+      </nav>
+    </div>
+
+    <section class="tarjeta g-sec" id="g-regular" aria-labelledby="g-regular-t">
+      <h2 id="g-regular-t">¿Hace falta regular?</h2>
+      <p class="g-desc">Días de 2024 en los que cada zona superó el umbral que elijas. Si una zona lo supera muchos días al año, conviene estudiar medidas.</p>
+      <div class="umbral">
+        <label for="umbral" class="umbral-et">Contar los días con más de <strong id="umbral-valor">+80 %</strong> de visitantes sobre un día normal</label>
+        <input type="range" id="umbral" min="20" max="150" step="10" value="80">
+        <div class="umbral-escala" aria-hidden="true"><span>+20 %</span><span>+150 %</span></div>
+      </div>
+      <p class="g-resumen" id="reg-resumen" aria-live="polite"></p>
+      <ul class="rg-lista" id="reg-lista"></ul>
+      <p class="g-nota">Criterio orientativo: <strong>30 días o más</strong>, estudiar regulación; <strong>entre 10 y 29</strong>, vigilar. Las líneas finas de cada barra marcan 10 y 30 días.</p>
+    </section>
+
+    <section class="tarjeta g-sec" id="g-alertas" aria-labelledby="g-alertas-t">
+      <h2 id="g-alertas-t">Alertas de los próximos 14 días</h2>
+      <p class="g-desc">Nivel previsto por zona y día. Debajo, las acciones sugeridas.</p>
+      <div class="tabla-marco"><table class="matriz" id="matriz"></table></div>
+      <fieldset class="segmentado g-filtro">
+        <legend class="filtro-et">Mostrar</legend>
+        <div class="seg-opciones">
+          <label><input type="radio" name="filtro-alerta" value="rojo" checked><span>Solo saturación</span></label>
+          <label><input type="radio" name="filtro-alerta" value="todas"><span>Alta y saturación</span></label>
+        </div>
+      </fieldset>
+      <div id="alertas-lista" class="al-lista"></div>
+    </section>
+
+    <div class="g-dos">
+      <section class="tarjeta g-sec" id="g-fiabilidad" aria-labelledby="g-fiabilidad-t">
+        <h2 id="g-fiabilidad-t">Fiabilidad del modelo</h2>
+        <p class="g-desc">Lo que habría previsto el modelo frente a lo que pasó, de enero a junio de 2025.</p>
+        <label for="fiab-zona" class="filtro-et">Zona</label>
+        <select id="fiab-zona" class="select"></select>
+        <div class="metricas" id="fiab-metricas"></div>
+        <div class="grafico-marco" id="fiab-grafico"></div>
+        <p class="ley-lineas"><span><i class="ley-real"></i>Real (dato)</span><span><i class="ley-pred"></i>Predicción</span><span>Media diaria por semana</span></p>
+        <details class="detalles"><summary>Ver los datos en una tabla</summary><div class="tabla-marco" id="fiab-tabla"></div></details>
+      </section>
+
+      <section class="tarjeta g-sec" id="g-simulador" aria-labelledby="g-simulador-t">
+        <h2 id="g-simulador-t">Simulador de escenarios</h2>
+        <p class="g-desc">Cambia las condiciones de un día y mira cómo cambiaría la previsión.</p>
+        <div class="sim-form">
+          <div><label for="sim-zona" class="filtro-et">Zona</label><select id="sim-zona" class="select"></select></div>
+          <div><label for="sim-fecha" class="filtro-et">Día</label><input type="date" id="sim-fecha" class="campo" aria-describedby="sim-fecha-ayuda"><p class="ayuda" id="sim-fecha-ayuda"></p></div>
+          <fieldset class="segmentado">
+            <legend class="filtro-et">Tiempo</legend>
+            <div class="seg-opciones">
+              <label><input type="radio" name="sim-lluvia" value="auto" checked><span>Según previsión</span></label>
+              <label><input type="radio" name="sim-lluvia" value="si"><span>Lluvia</span></label>
+              <label><input type="radio" name="sim-lluvia" value="no"><span>Sin lluvia</span></label>
+            </div>
+          </fieldset>
+          <div><label for="sim-puente" class="filtro-et">Puente</label>
+            <select id="sim-puente" class="select"><option value="auto">Según calendario</option><option value="si">Tratar como puente</option><option value="no">Sin puente</option></select></div>
+          <div><label for="sim-lagos" class="filtro-et">Acceso a los Lagos</label>
+            <select id="sim-lagos" class="select" aria-describedby="sim-lagos-ayuda"><option value="auto">Según calendario</option><option value="libre">Libre</option><option value="regulado">Regulado</option><option value="cerrado">Cerrado</option></select>
+            <p class="ayuda" id="sim-lagos-ayuda">Solo afecta a Cangas de Onís y Covadonga.</p></div>
+        </div>
+        <div id="sim-resultado" class="sim-resultado" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <section class="tarjeta g-sec" id="g-exportar" aria-labelledby="g-exportar-t">
+      <h2 id="g-exportar-t">Exportar datos</h2>
+      <p class="g-desc">Tablas en CSV (separadas por punto y coma) para abrir en Excel o LibreOffice.</p>
+      <div class="exp-botones">
+        <button type="button" class="btn" data-exportar="prevision">Previsión de 14 días</button>
+        <button type="button" class="btn" data-exportar="umbral">Días sobre el umbral</button>
+        <button type="button" class="btn" data-exportar="alertas">Alertas y acciones</button>
+      </div>
+    </section>
+  </section>
+
+  <!-- ========================= SOBRE LOS DATOS ========================= -->
+  <section role="tabpanel" id="panel-datos" aria-labelledby="tab-datos" class="envoltura panel" hidden>
+    <div class="prosa">
+      <h1 class="titulo-pagina">Sobre los datos</h1>
+      <p class="g-lead">Predecimos cuántos visitantes recibirá cada zona de Asturias cada día, lo comparamos con un día normal y lo traducimos en un semáforo. Aquí explicamos de dónde salen las cifras y qué no podemos saber.</p>
+
+      <h2>Cómo leer el semáforo</h2>
+      <ul class="leyenda leyenda-grande" id="leyenda-datos"></ul>
+      <p>Cada color va siempre acompañado de un icono, una trama en el mapa y su nombre, para que se entienda sin distinguir colores.</p>
+
+      <h2>Qué es un «día normal»</h2>
+      <p>Es un día típico en esa zona: la mediana de visitantes diarios de los últimos años. Si el semáforo dice <strong>+45 %</strong>, esperamos casi la mitad más de visitantes que en un día típico. Comparar con la propia zona permite tratar igual a Gijón, con miles de visitantes diarios, y a Somiedo, con muchos menos.</p>
+    </div>
+
+    <h2 class="prosa-h">De dónde salen los datos</h2>
+    <div class="fuentes">
+      <article class="fuente">
+        <p class="eyebrow">Variable principal</p>
+        <h3>Movilidad por telefonía</h3>
+        <p>Ministerio de Transportes. Visitantes diarios por zona, de 2022 a junio de 2025, separando quien viene un día y quien hace noche.</p>
+      </article>
+      <article class="fuente">
+        <p class="eyebrow">Factor explicativo</p>
+        <h3>Calendario</h3>
+        <p>Festivos, puentes, vacaciones escolares y días de acceso regulado a los Lagos de Covadonga.</p>
+      </article>
+      <article class="fuente">
+        <p class="eyebrow">Factor explicativo</p>
+        <h3>Meteorología</h3>
+        <p>AEMET. Lluvia y temperatura previstas. Solo es fiable hasta 7 días vista.</p>
+      </article>
+      <article class="fuente">
+        <p class="eyebrow">Factor explicativo</p>
+        <h3>Eventos</h3>
+        <p>PredictHQ. Partidos, conciertos, festivales y ferias en Asturias, con la asistencia que estima para cada uno.</p>
+      </article>
+      <article class="fuente">
+        <p class="eyebrow">Validación</p>
+        <h3>INE</h3>
+        <p>Turistas mensuales por concejo, para comprobar que las cifras diarias cuadran.</p>
+      </article>
+      <article class="fuente">
+        <p class="eyebrow">Contexto</p>
+        <h3>SADEI</h3>
+        <p>Plazas de alojamiento y población, para medir la presión sobre los vecinos.</p>
+      </article>
+    </div>
+
+    <div class="prosa">
+      <h2>Lo que no podemos ofrecer</h2>
+      <ul class="no-lista">
+        <li><strong>Datos en tiempo real.</strong> Trabajamos con previsiones diarias, no con lo que pasa en este momento.</li>
+        <li><strong>Cifras de un punto concreto</strong>, como el lago Enol. La unidad mínima es el concejo.</li>
+        <li><strong>Visitantes extranjeros día a día.</strong> Solo hay dato mensual del INE.</li>
+        <li><strong>Meteorología fiable a más de 7 días.</strong> Más allá, la previsión usa solo el calendario y es más incierta.</li>
+        <li><strong>Una hora exacta.</strong> Los datos son diarios; la «mejor hora» sale de un perfil horario típico y es orientativa.</li>
+      </ul>
+
+      <h2>Sobre este piloto</h2>
+      <p>Todas las cifras de esta versión son ficticias. La interfaz lee los datos a través de una única capa (<code>datos/api.js</code>), de modo que el modelo real puede sustituir a los datos inventados sin cambiar la interfaz.</p>
+    </div>
+  </section>
+</main>
+
+<div id="aviso-vivo" class="sr" aria-live="polite" aria-atomic="true"></div>
+
+<dialog id="dlg-csv" aria-labelledby="dlg-titulo" aria-describedby="dlg-desc">
+  <div class="dlg-in">
+    <h2 id="dlg-titulo">Exportar <span id="dlg-nombre"></span></h2>
+    <p id="dlg-desc" class="g-desc"></p>
+    <label for="dlg-texto" class="filtro-et">Contenido del archivo</label>
+    <textarea id="dlg-texto" rows="9" readonly spellcheck="false"></textarea>
+    <p class="ayuda" id="dlg-estado" role="status"></p>
+    <div class="dlg-botones">
+      <button type="button" class="btn btn-prim" id="dlg-copiar">Copiar</button>
+      <button type="button" class="btn" id="dlg-descargar">Descargar archivo</button>
+      <button type="button" class="btn btn-sec" id="dlg-cerrar">Cerrar</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Capa de datos: para usar el modelo real, sustituye fuente-ficticia.js -->
+<script src="datos/sitios.js"></script>
+<script src="datos/eventos.js"></script>
+<script src="datos/fuente-ficticia.js"></script>
+<script src="datos/api.js"></script>
+<!-- Mapa: librerías locales (funcionan desde file://) y límites de los concejos -->
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="vendor/topojson-client.min.js"></script>
+<script src="interfaz/geo-asturias.js"></script>
+<!-- Interfaz -->
+<script src="interfaz/mapa.js"></script>
+<script src="interfaz/app.js"></script>
+
+</body></html>
