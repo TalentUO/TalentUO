@@ -122,7 +122,7 @@
     };
     return M;
   }
-  const listo = () => (M ? Promise.resolve(M) : DM.cargar().then(preparar));
+  const listo = () => (M ? Promise.resolve(M) : DM.cargarInicio().then(preparar));
 
   /* ---------- Traducción al contrato de la interfaz ---------- */
   const MOTIVO_SIN_PRED = 'El modelo no tiene predicción para este día en esta zona.';

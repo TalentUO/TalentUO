@@ -104,7 +104,12 @@ main { display: block; outline: none; }
 .chip-btn[aria-pressed="true"] .sub { color: inherit; }
 .chip-btn:disabled { opacity: .55; cursor: not-allowed; }
 /* Barra de los próximos días: un botón por día con el peor nivel del semáforo de todas las zonas */
-.dias-bloque { grid-column: 1 / -1; min-width: 0; border-top: 1px solid var(--linea); padding-top: .75rem; }
+.dias-bloque { min-width: 0; }
+/* Pantallas anchas: accesos rápidos y «‹ Elegir fechas ›» en la misma fila, para que el mapa suba */
+@media (min-width: 1180px) {
+  .fecha-mandos { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: .75rem; }
+  .fecha-mandos > .calendario, .fecha-mandos > .dias-bloque { grid-column: 1 / -1; }
+}
 .dias-sub { font-weight: 400; color: var(--tinta-2); }
 .dias-barra { list-style: none; margin: .4rem 0 0; padding: 0 0 .2rem; display: flex; gap: .35rem; overflow-x: auto; position: relative; }
 .dia-b {
@@ -196,6 +201,9 @@ button.cal-dia:hover { background: var(--superficie-2); }
 /* ---------- Filtros ---------- */
 .filtros { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem 1.5rem; margin-block: 1rem; }
 .buscador { flex: 1 1 18rem; min-width: 0; max-width: 30rem; }
+.filtros-btn { display: none; }
+.filtros-mas { display: contents; }
+#buscar-estado:empty { display: none; }
 .buscador-caja { position: relative; }
 .buscador-caja .lupa { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: var(--tinta-2); pointer-events: none; }
 #buscar {
@@ -231,13 +239,28 @@ button.cal-dia:hover { background: var(--superficie-2); }
 .inicio-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 25rem); gap: 1.25rem; align-items: start; }
 .col-mapa { min-width: 0; position: sticky; top: calc(12px + env(safe-area-inset-top, 0px)); }
 .col-lateral { min-width: 0; display: flex; flex-direction: column; gap: 1rem; }
+/* Cabecera del panel de zona (nombre y «Cerrar»): siempre a la vista al bajar por el panel */
+.pz-fija {
+  position: sticky; top: 0; z-index: 5; display: flex; flex-direction: column; gap: .35rem;
+  background: var(--superficie); margin: -1.1rem -1.15rem .35rem; padding: 1.1rem 1.15rem .4rem; border-radius: var(--radio) var(--radio) 0 0;
+  box-shadow: 0 -8px 0 var(--superficie), 0 1px 0 var(--linea);
+}
+/* Secciones secundarias del panel, plegables */
+.pz-plegable > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: .5rem; min-height: 44px; border-radius: 8px; }
+.pz-plegable > summary::-webkit-details-marker { display: none; }
+.pz-plegable > summary:hover { background: var(--superficie-2); }
+.pz-plegable > summary:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+.pz-plegable[open] > summary .desp-flecha { transform: rotate(180deg); }
+.pz-plegable > summary .desp-flecha { font-size: 1.2rem; }
+/* Ranking: nombres largos en dos líneas como mucho */
+.rk-nombre { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 /* Dos columnas: el lateral mide lo mismo que la columna del mapa y se desplaza por dentro
    (como la barra lateral de un mapa). Así el panel de una zona, que es largo, no alarga la página
    y lo que hay debajo (eventos, sitios) se alcanza bajando con normalidad. */
 @media (min-width: 1061px) {
   .inicio-grid { align-items: stretch; }
   .col-mapa { position: static; }
-  .col-lateral { height: 0; min-height: 100%; overflow-y: auto; scrollbar-width: thin; padding: 2px 6px 2px 2px; margin: -2px -6px -2px -2px; }
+  .col-lateral.con-panel { height: 0; min-height: 100%; overflow-y: auto; scrollbar-width: thin; padding: 2px 6px 2px 2px; margin: -2px -6px -2px -2px; }
 }
 .mapa-marco {
   position: relative; background: var(--superficie); border: 1px solid var(--linea);
@@ -342,6 +365,15 @@ button.cal-dia:hover { background: var(--superficie-2); }
 .sw-mapa.nivel-ambar { background: repeating-linear-gradient(45deg, var(--trama-ambar) 0 2px, var(--mapa-ambar) 2px 7px); }
 .sw-mapa.nivel-rojo { background: repeating-linear-gradient(45deg, var(--trama-rojo) 0 1.5px, transparent 1.5px 6px), repeating-linear-gradient(-45deg, var(--trama-rojo) 0 1.5px, var(--mapa-rojo) 1.5px 6px); }
 .sw-mapa.nivel-gris { background: radial-gradient(circle, var(--trama-gris) 1.3px, var(--mapa-gris) 1.6px) 0 0 / 7px 7px; }
+.sw-mapa.sin-zona { background: var(--mapa-gris); }
+.leyenda-mini {
+  position: absolute; left: .6rem; bottom: .6rem; z-index: 460; pointer-events: none; list-style: none; margin: 0;
+  display: flex; flex-wrap: wrap; gap: .25rem .75rem; max-width: calc(100% - 12rem); padding: .3rem .6rem;
+  background: var(--superficie); border: 1px solid var(--linea); border-radius: 8px; box-shadow: var(--sombra); font-size: .78rem; font-weight: 700;
+}
+.leyenda-mini li { display: flex; align-items: center; gap: .3rem; }
+.leyenda-mini .sw-mapa { width: 16px; height: 12px; border-radius: 3px; }
+.leyenda-mini .ico { font-size: .85rem; }
 .leyenda-grande { flex-direction: column; gap: .75rem; margin-block: .5rem 1rem; }
 .leyenda-grande .sw-mapa { width: 40px; height: 28px; }
 .nota-mapa { font-size: .85rem; color: var(--tinta-2); margin-top: .6rem; max-width: 70ch; }
@@ -765,8 +797,13 @@ dialog::backdrop { background: rgba(10, 18, 24, .55); }
   .mapa-modo { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; padding: 0; border: 0; }
   .mapa-todo { padding: .2rem .6rem; font-size: .75rem; }
   .btn-cal { flex: 1 1 auto; }
-  .filtros { flex-direction: column; align-items: stretch; }
+  .filtros { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: .75rem; }
   .buscador { max-width: none; flex-basis: auto; }
+  .filtros-btn { display: inline-flex; align-items: center; min-height: 44px; }
+  .filtros-mas { display: none; grid-column: 1 / -1; flex-direction: column; gap: .75rem; }
+  .filtros.abiertos .filtros-mas { display: flex; }
+  .leyenda-mini { display: none; }
+  .titulo-pagina { margin-bottom: .6rem; }
   .seg-opciones { display: flex; }
   .seg-opciones { flex-wrap: nowrap; }
   .seg-opciones > * { flex: 1 1 0; min-width: 0; }
