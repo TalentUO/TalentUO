@@ -99,3 +99,7 @@ Valida `salidas/` con `src/modelo/validar_salidas.py`, copia los cinco JSON a `A
 
 ### Estado
 - **web-gestion lista** — commit `edcf286` (incluye `origin/web` hasta `71ed483`).
+
+## Integración
+
+- `web-gestion` (`fc6ebb5`) integrada en `web` por avance rápido, sin conflictos. Probado: demo de Inicio → Gestión → Sobre los datos, 20/20 pruebas de `pestanas/gestion/pruebas.html`, sin errores propios en la consola.
