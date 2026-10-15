@@ -120,3 +120,28 @@ Parcialmente. Sí: dato oficial, gratuito, mensual y largo para validar nivel y 
 - Concatenar las 4 partes del nacional (Fase 2) y comprobar que no se solapan fechas.
 - Decidir si se baja `02040202` (padrón por edad/nacionalidad) y buscar ocupación hotelera por concejo.
 - Los `.px` suman ~1,4 MB: se pueden versionar sin problema (a diferencia de los CSV de MITMA). Sin commit todavía.
+
+## 2026-10-15 (tarde) · Persona A · MITMA: cambio de método para acelerar la descarga
+
+### Qué pasó
+La primera versión del script (pandas, `chunksize`, 4 procesos, uno por año) iba a ~11 h: 68 días por año en 63 min, y empeorando (solo ~3,8 GB de RAM libres; un filtrado simple medido en ese estado tardó 847 s en vez de ~10 s).
+
+### Medido (2026-10-15)
+- Descomprimir un día de viajes: 1,5 s. El coste estaba en pandas y en la contención de memoria, no en descomprimir.
+- Nueva versión: **~20 s por día de viajes** con 4 workers y la red disponible entonces (antes ~60-70 s). Resultado **idéntico byte a byte** a la versión pandas en 4 pruebas (viajes y pernoctaciones de 2022-01-02 y 2022-01-03; mismas filas y misma cabecera).
+- Con **10 workers** el rendimiento total cayó (~200 s por día de viajes): el portal rinde peor con muchas conexiones. Con 4 o menos es mejor.
+- A las ~18:10 el portal entregaba solo **~2-3 MB/s en total**, igual con 1 que con 4 conexiones (antes, ráfagas de ~20 MB/s). Es el **límite real**: el volumen es ~190 GB de tráfico (1.277 días × ~100-150 MB) y no se puede filtrar en el servidor (el fichero está ordenado por origen; el destino va mezclado). **NO VERIFICADO** si el límite es temporal, por IP, o por hora.
+
+### Decisiones
+1. **Streaming sin guardar el original**: se descarga y descomprime al vuelo (zlib, con comprobación de CRC y de `Content-Length`); el original nunca toca el disco.
+2. **Filtro por expresión regular sobre bytes** (fecha del día + campo destino/zona_pernoctacion ∈ 46 zonas). Es el único filtro; solo cambia el separador `|` por `,` y aborta si algún valor ya trae coma.
+3. **Un fichero por día** (`data/raw/_mitma_dias/<tipo>/AAAAMMDD.csv`, escritura atómica) y ensamblado a los CSV anuales al terminar; los diarios se borran si el tamaño cuadra. Estado en `data/raw/_mitma_estado_v2.jsonl`.
+4. **4 workers** y comprobación de disco libre (aborta con menos de 20 GB).
+5. **Orden por prioridad**: primero todas las pernoctaciones (pesan poco), después viajes 2024-01 a 2025-06, luego 2023 y 2022. Así, si hay que parar por tiempo, lo más útil ya está.
+
+### Incidencias del proceso (para no repetirlas)
+- Al parar un script con `multiprocessing` en Windows, **los workers quedan huérfanos** y siguen consumiendo ancho de banda (pasó con 10 workers). Hay que buscarlos por su proceso padre, no por el nombre del script.
+- Los CSV parciales de la versión pandas están en `data/raw/_mitma_viejo/` (subconjunto de lo nuevo, ya verificado en 4 casos). Se pueden borrar cuando termine la descarga.
+
+### Estimación de tiempo (provisional)
+~190 GB de tráfico: ~7 h si el portal rinde ~7 MB/s, ~17 h si se queda en ~3 MB/s. Viajes 2024 a junio 2025 (~65 GB): ~2,5-6 h. Decisión del equipo: si no hay tiempo, parar tras 2024-2025 y dejar 2022-2023 como opcional.

@@ -12,3 +12,5 @@ data/raw/mitma_pernoctaciones_*.csv
 logs/
 data/raw/ine_moviles_*
 data/raw/ine_viviendas_turisticas.csv
+
+data/raw/_mitma_estado_v2.jsonl

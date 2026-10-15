@@ -1,24 +1,29 @@
-"""Descarga MITMA (estudios básicos, municipios, v2) filtrando a Asturias día a día.
+"""Descarga MITMA (estudios básicos, municipios, v2) filtrando a Asturias en streaming.
 
-- Viajes: se queda con filas cuyo `destino` está en zonas_mitma_asturias.csv.
-- Pernoctaciones: se queda con filas cuyo `zona_pernoctacion` está en esa lista.
-- Añade al fichero anual data/raw/mitma_{viajes,pernoctaciones}_<año>.csv y BORRA el .csv.gz original.
-- Reanudable: data/raw/_mitma_estado.jsonl guarda, por día y tipo, el estado y el tamaño
-  de los CSV anuales tras escribirlo. Al arrancar se truncan los CSV a ese tamaño, así un
-  corte a mitad de día no deja filas duplicadas ni a medias.
-- Log: logs/descarga_mitma.log. Los datos faltantes quedan ausentes (nunca se rellenan con 0).
+Por cada día y tipo, un worker descarga el .csv.gz del portal y lo descomprime al vuelo SIN guardarlo
+en disco; solo conserva las líneas de Asturias (viajes: `destino`; pernoctaciones: `zona_pernoctacion`,
+usando data/raw/zonas_mitma_asturias.csv). Es el único filtro: las líneas no se agregan ni recodifican;
+solo se cambia el separador `|` por `,` (se aborta si algún valor ya contiene una coma).
 
-Uso:  python scripts/descarga_mitma.py [--inicio 2022-01-01] [--fin 2025-06-30] [--solo 2024-08-15]
-Varios procesos a la vez son seguros si cada uno cubre años distintos (--inicio/--fin dentro de un año).
-Se lee todo como texto (dtype=str, keep_default_na=False) para conservar 'NA' y ceros a la izquierda.
+- Resultado por día: data/raw/_mitma_dias/<tipo>/AAAAMMDD.csv (con cabecera). Escritura atómica.
+- Estado: data/raw/_mitma_estado_v2.jsonl (OK / NO_DISPONIBLE (404) / ERROR por día y tipo). Reanudable:
+  se salta lo ya hecho. Un 404 queda ausente, nunca 0.
+- Al acabar, ensambla data/raw/mitma_<tipo>_<año>.csv (orden por fecha) y, si las filas cuadran con el
+  estado, borra los ficheros diarios.
+- Log: logs/descarga_mitma.log. Aborta si queda menos de 20 GB libres.
+
+Uso: python scripts/descarga_mitma.py [--inicio 2022-01-01] [--fin 2025-06-30] [--workers 8] [--solo-ensamblar]
 """
 import argparse
 import json
 import logging
 import os
+import re
+import shutil
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor
+import zlib
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -27,175 +32,216 @@ import requests
 
 RAIZ = Path(__file__).resolve().parent.parent
 RAW = RAIZ / "data" / "raw"
-TMP = RAW / "_mitma_tmp"
-ESTADO = RAW / "_mitma_estado.jsonl"
+DIAS = RAW / "_mitma_dias"
+ESTADO = RAW / "_mitma_estado_v2.jsonl"
 LOG = RAIZ / "logs" / "descarga_mitma.log"
 BASE = "https://movilidad-opendata.mitma.es/estudios_basicos/por-municipios"
-TIPOS = {
-    # tipo: (carpeta URL, nombre fichero, columna filtro, prefijo salida)
-    "viajes": ("viajes", "Viajes", "destino", "mitma_viajes"),
-    "pernoctaciones": ("pernoctaciones", "Pernoctaciones", "zona_pernoctacion", "mitma_pernoctaciones"),
-}
-CHUNK = 2_000_000
+MIN_LIBRE_GB = 20
 REINTENTOS = 5
+# tipo: (carpeta URL, nombre en fichero, nº de campos '|' antes de la columna filtro)
+TIPOS = {"viajes": ("viajes", "Viajes", 3), "pernoctaciones": ("pernoctaciones", "Pernoctaciones", 2)}
 
 
 def url(tipo, d):
-    carpeta, nombre, _, _ = TIPOS[tipo]
+    carpeta, nombre, _ = TIPOS[tipo]
     return f"{BASE}/{carpeta}/ficheros-diarios/{d:%Y-%m}/{d:%Y%m%d}_{nombre}_municipios.csv.gz"
 
 
-def salida(tipo, anio):
-    return RAW / f"{TIPOS[tipo][3]}_{anio}.csv"
+def ruta_dia(tipo, d):
+    return DIAS / tipo / f"{d:%Y%m%d}.csv"
 
 
-def descargar(tipo, d):
-    """Devuelve ('OK', ruta) | ('NO_DISPONIBLE', None) | ('ERROR', msg)."""
-    destino = TMP / f"{d:%Y%m%d}_{tipo}.csv.gz"
+def libre_gb():
+    return shutil.disk_usage(RAW).free / 1e9
+
+
+def _procesar(tipo, d, zonas):
+    """Una descarga completa. Devuelve dict con el resultado o lanza excepción."""
+    patron = re.compile(
+        rb"^" + d.strftime("%Y%m%d").encode() + rb"\|" + rb"[^|\n]*\|" * (TIPOS[tipo][2] - 1)
+        + rb"(?:" + b"|".join(re.escape(z.encode()) for z in sorted(zonas)) + rb")\|[^\n]*\n",
+        re.M,
+    )
+    with requests.get(url(tipo, d), stream=True, timeout=(30, 120)) as r:
+        if r.status_code == 404:
+            return {"estado": "NO_DISPONIBLE"}
+        r.raise_for_status()
+        esperado = int(r.headers.get("Content-Length", -1))
+        dec = zlib.decompressobj(wbits=31)  # gzip; verifica CRC al final
+        cabecera, resto, total, bajados = None, b"", 0, 0
+        partes, filas, filas_origen = [], 0, 0
+        for bloque in r.iter_content(1 << 22):
+            bajados += len(bloque)
+            datos = resto + dec.decompress(bloque)
+            if cabecera is None:
+                if b"\n" not in datos:
+                    resto = datos
+                    continue
+                cabecera, datos = datos.split(b"\n", 1)
+            corte = datos.rfind(b"\n") + 1
+            resto, datos = datos[corte:], datos[:corte]
+            filas_origen += datos.count(b"\n")
+            for m in patron.findall(datos):
+                partes.append(m)
+            if len(partes) > 200000:  # vuelca a bytes para no acumular listas enormes
+                partes = [b"".join(partes)]
+        resto += dec.flush()
+        if not dec.eof:
+            raise IOError("gzip truncado (sin fin de flujo)")
+        if esperado >= 0 and bajados != esperado:
+            raise IOError(f"descargados {bajados} B != Content-Length {esperado}")
+        if resto:
+            resto += b"\n"
+            filas_origen += 1
+            partes.extend(patron.findall(resto))
+    cuerpo = b"".join(partes)
+    if b"," in cuerpo or b"," in cabecera or b"\r" in cuerpo:
+        raise ValueError("el fichero contiene comas o \\r: no se puede cambiar el separador sin comillas")
+    filas = cuerpo.count(b"\n")
+    salida = ruta_dia(tipo, d)
+    salida.parent.mkdir(parents=True, exist_ok=True)
+    tmp = salida.with_suffix(".tmp")
+    with open(tmp, "wb") as f:
+        f.write(cabecera.replace(b"|", b",") + b"\n" + cuerpo.replace(b"|", b","))
+    os.replace(tmp, salida)
+    return {"estado": "OK", "filas_origen": filas_origen, "filas_asturias": filas, "MB_bajados": round(bajados / 1e6, 1),
+            "cabecera": cabecera.decode()}
+
+
+def trabajo(tipo, d, zonas):
+    t0 = time.time()
     ultimo = ""
     for i in range(1, REINTENTOS + 1):
         try:
-            with requests.get(url(tipo, d), stream=True, timeout=(30, 120)) as r:
-                if r.status_code == 404:
-                    return "NO_DISPONIBLE", None
-                r.raise_for_status()
-                esperado = int(r.headers.get("Content-Length", -1))
-                with open(destino, "wb") as f:
-                    for bloque in r.iter_content(1 << 20):
-                        f.write(bloque)
-            if esperado >= 0 and destino.stat().st_size != esperado:
-                raise IOError(f"tamaño {destino.stat().st_size} != Content-Length {esperado}")
-            return "OK", destino
-        except Exception as e:  # red, HTTP, truncado
+            r = _procesar(tipo, d, zonas)
+            r["seg"] = round(time.time() - t0, 1)
+            return tipo, d, r
+        except Exception as e:
             ultimo = f"{type(e).__name__}: {e}"
             logging.warning("%s %s intento %d/%d: %s", tipo, d, i, REINTENTOS, ultimo)
             time.sleep(min(60, 5 * i))
-    return "ERROR", ultimo
-
-
-def filtrar_y_anexar(tipo, d, ruta, zonas, columnas_ref):
-    """Filtra a Asturias y anexa al CSV anual. Devuelve dict con estadísticas."""
-    col = TIPOS[tipo][2]
-    out = salida(tipo, d.year)
-    leidas = guardadas = 0
-    columnas = None
-    with open(out, "ab") as f:
-        escribir_cabecera = f.tell() == 0
-        for trozo in pd.read_csv(ruta, sep="|", dtype=str, keep_default_na=False, chunksize=CHUNK):
-            if columnas is None:
-                columnas = list(trozo.columns)
-                if columnas_ref.setdefault(tipo, columnas) != columnas:
-                    raise ValueError(f"columnas distintas: {columnas} vs {columnas_ref[tipo]}")
-            leidas += len(trozo)
-            sel = trozo[trozo[col].isin(zonas)]
-            if len(sel):
-                sel.to_csv(f, sep=",", index=False, header=escribir_cabecera, lineterminator="\n")
-                escribir_cabecera = False
-                guardadas += len(sel)
-    return {"filas_origen": leidas, "filas_asturias": guardadas, "columnas": columnas}
+    return tipo, d, {"estado": "ERROR", "error": ultimo}
 
 
 def cargar_estado():
-    estado = {}
+    est = {}
     if ESTADO.exists():
-        for linea in ESTADO.read_text(encoding="utf-8").splitlines():
-            if linea.strip():
-                r = json.loads(linea)
-                estado[(r["tipo"], r["fecha"])] = r
-    return estado
+        for l in ESTADO.read_text(encoding="utf-8").splitlines():
+            if l.strip():
+                r = json.loads(l)
+                est[(r["tipo"], r["fecha"])] = r
+    return est
 
 
-def truncar_a_ultimo_estado(estado, anios):
-    """Deja cada CSV anual (solo de `anios`) exactamente como estaba tras el último día registrado.
-    Se limita a los años de esta ejecución: otros procesos pueden estar escribiendo los demás."""
-    ultimo = {}
-    for (tipo, fecha), r in estado.items():
-        if "tam" in r:
-            ultimo[(tipo, fecha[:4])] = max(ultimo.get((tipo, fecha[:4]), 0), r["tam"])
+def ensamblar(estado, dias):
+    """Concatena los ficheros diarios en los CSV anuales y borra los diarios si las filas cuadran."""
     for tipo in TIPOS:
-        for f in RAW.glob(f"{TIPOS[tipo][3]}_*.csv"):
-            anio = f.stem.rsplit("_", 1)[1]
-            if anio not in anios:
+        for anio in sorted({d.year for d in dias}):
+            ok = [d for d in dias if d.year == anio and estado.get((tipo, d.isoformat()), {}).get("estado") == "OK"
+                  and ruta_dia(tipo, d).exists()]
+            if not ok:
                 continue
-            tam = ultimo.get((tipo, anio), 0)
-            if f.stat().st_size > tam:
-                logging.warning("Truncando %s de %d a %d bytes (resto de un corte)", f.name, f.stat().st_size, tam)
-                with open(f, "r+b") as fh:
-                    fh.truncate(tam)
+            destino = RAW / f"mitma_{tipo}_{anio}.csv"
+            tmp = destino.with_suffix(".tmp")
+            cab, filas, previo = None, 0, 0
+            with open(tmp, "wb") as out:
+                if destino.exists():  # anexa a lo ya ensamblado (cuyos diarios ya se borraron)
+                    with open(destino, "rb") as f:
+                        cab = f.readline()
+                        f.seek(0)
+                        for bloque in iter(lambda: f.read(1 << 24), b""):
+                            out.write(bloque)
+                    previo = destino.stat().st_size
+                for d in ok:
+                    with open(ruta_dia(tipo, d), "rb") as f:
+                        c = f.readline()
+                        if cab is None:
+                            cab = c
+                            out.write(c)
+                        elif c != cab:
+                            raise ValueError(f"cabecera distinta en {tipo} {d}")
+                        for bloque in iter(lambda: f.read(1 << 24), b""):
+                            out.write(bloque)
+                    filas += estado[(tipo, d.isoformat())]["filas_asturias"]
+            os.replace(tmp, destino)
+            logging.info("Ensamblado %s: %d días, %d filas esperadas según estado", destino.name, len(ok), filas)
+            # Las filas reales se comprueban con scripts/verificar_mitma.py; los diarios se borran solo si
+            # el tamaño cuadra con la suma de los diarios.
+            tam = previo + sum(ruta_dia(tipo, d).stat().st_size - (len(cab) if previo or d != ok[0] else 0) for d in ok)
+            if destino.stat().st_size == tam:
+                for d in ok:
+                    ruta_dia(tipo, d).unlink()
+            else:
+                logging.error("Tamaño de %s no cuadra (%d vs %d): NO se borran los diarios", destino.name,
+                              destino.stat().st_size, tam)
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--inicio", default="2022-01-01")
     ap.add_argument("--fin", default="2025-06-30")
-    ap.add_argument("--solo", help="procesa un único día YYYY-MM-DD (para pruebas)")
+    ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--solo-ensamblar", action="store_true")
     ap.add_argument("--reintentar-no-disponibles", action="store_true")
     a = ap.parse_args()
-
     LOG.parent.mkdir(exist_ok=True)
-    TMP.mkdir(parents=True, exist_ok=True)
-    logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s",
-        handlers=[logging.FileHandler(LOG, encoding="utf-8"), logging.StreamHandler(sys.stdout)],
-    )
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s",
+                        handlers=[logging.FileHandler(LOG, encoding="utf-8"), logging.StreamHandler(sys.stdout)])
     zonas = set(pd.read_csv(RAW / "zonas_mitma_asturias.csv", dtype=str)["id_zona_mitma"])
     assert len(zonas) == 46, len(zonas)
-
-    ini = fin = date.fromisoformat(a.solo) if a.solo else None
-    if not a.solo:
-        ini, fin = date.fromisoformat(a.inicio), date.fromisoformat(a.fin)
+    ini, fin = date.fromisoformat(a.inicio), date.fromisoformat(a.fin)
     assert fin <= date(2025, 6, 30), "No descargar desde julio de 2025 (cambio de metodología)"
     dias = [ini + timedelta(n) for n in range((fin - ini).days + 1)]
-
     estado = cargar_estado()
-    anios = {str(d.year) for d in dias}
-    truncar_a_ultimo_estado(estado, anios)
-    columnas_ref = {}
 
     def hecho(tipo, d):
         r = estado.get((tipo, d.isoformat()))
         if not r:
             return False
         if r["estado"] == "OK":
-            return True
+            return ruta_dia(tipo, d).exists() or (RAW / f"mitma_{tipo}_{d.year}.csv").exists()
         return r["estado"] == "NO_DISPONIBLE" and not a.reintentar_no_disponibles
 
-    tareas = [(d, t) for d in dias for t in TIPOS if not hecho(t, d)]
-    logging.info("Inicio: %d tareas pendientes de %d", len(tareas), len(dias) * len(TIPOS))
+    if not a.solo_ensamblar:
+        tareas = [(t, d) for d in dias for t in TIPOS if not hecho(t, d)]
+        # Prioridad: pernoctaciones (pesan poco), luego viajes 2024-25, 2023 y 2022 (cada bloque por fecha).
+        tareas.sort(key=lambda x: (x[0] != "pernoctaciones", 0 if x[1].year >= 2024 else 2024 - x[1].year, x[1]))
+        logging.info("Inicio: %d tareas pendientes de %d, %d workers, %.0f GB libres", len(tareas),
+                     len(dias) * len(TIPOS), a.workers, libre_gb())
+        t0, n = time.time(), 0
+        with ProcessPoolExecutor(max_workers=a.workers) as pool:
+            it = iter(tareas)
+            vivos = set()
 
-    def registrar(tipo, d, est, **extra):
-        reg = {"tipo": tipo, "fecha": d.isoformat(), "estado": est, "ts": time.strftime("%Y-%m-%d %H:%M:%S"), **extra}
-        with open(ESTADO, "a", encoding="utf-8") as f:
-            f.write(json.dumps(reg, ensure_ascii=False) + "\n")
-        estado[(tipo, d.isoformat())] = reg
+            def lanzar():
+                if libre_gb() < MIN_LIBRE_GB:
+                    raise SystemExit(f"Quedan menos de {MIN_LIBRE_GB} GB libres: abortando")
+                t = next(it, None)
+                if t:
+                    vivos.add(pool.submit(trabajo, t[0], t[1], zonas))
+                return t
 
-    t0 = time.time()
-    with ThreadPoolExecutor(max_workers=1) as pool:  # descarga la siguiente mientras se procesa la actual
-        futuro = pool.submit(descargar, tareas[0][1], tareas[0][0]) if tareas else None
-        for i, (d, tipo) in enumerate(tareas):
-            est, res = futuro.result()
-            futuro = pool.submit(descargar, tareas[i + 1][1], tareas[i + 1][0]) if i + 1 < len(tareas) else None
-            if est == "NO_DISPONIBLE":
-                logging.warning("%s %s: 404, no publicado (se deja ausente)", tipo, d)
-                registrar(tipo, d, "NO_DISPONIBLE")
-            elif est == "ERROR":
-                logging.error("%s %s: ERROR tras %d intentos: %s", tipo, d, REINTENTOS, res)
-                registrar(tipo, d, "ERROR", error=res)
-            else:
-                try:
-                    s = filtrar_y_anexar(tipo, d, res, zonas, columnas_ref)
-                except Exception as e:
-                    logging.exception("%s %s: fallo al procesar", tipo, d)
-                    truncar_a_ultimo_estado(estado, anios)  # deshace lo escrito a medias
-                    registrar(tipo, d, "ERROR", error=f"{type(e).__name__}: {e}")
-                    continue
-                finally:
-                    if res and Path(res).exists():
-                        Path(res).unlink()  # BORRA el original
-                registrar(tipo, d, "OK", tam=salida(tipo, d.year).stat().st_size,
-                          filas_origen=s["filas_origen"], filas_asturias=s["filas_asturias"], columnas=s["columnas"])
-                logging.info("%s %s OK: %d -> %d filas (%d/%d, %.0f min)", tipo, d, s["filas_origen"],
-                             s["filas_asturias"], i + 1, len(tareas), (time.time() - t0) / 60)
+            for _ in range(a.workers * 2):
+                if not lanzar():
+                    break
+            while vivos:
+                for fut in as_completed(list(vivos)):
+                    vivos.discard(fut)
+                    tipo, d, r = fut.result()
+                    reg = {"tipo": tipo, "fecha": d.isoformat(), "ts": time.strftime("%Y-%m-%d %H:%M:%S"), **r}
+                    with open(ESTADO, "a", encoding="utf-8") as f:
+                        f.write(json.dumps(reg, ensure_ascii=False) + "\n")
+                    estado[(tipo, d.isoformat())] = reg
+                    n += 1
+                    if r["estado"] == "OK":
+                        logging.info("%s %s OK: %d -> %d filas, %.0f MB, %.0fs (%d/%d, %.1f min)", tipo, d,
+                                     r["filas_origen"], r["filas_asturias"], r["MB_bajados"], r["seg"], n,
+                                     len(tareas), (time.time() - t0) / 60)
+                    else:
+                        logging.warning("%s %s %s %s", tipo, d, r["estado"], r.get("error", ""))
+                    lanzar()
+                    break
+    ensamblar(estado, dias)
     logging.info("FIN. Resumen: %s", {e: sum(1 for r in estado.values() if r["estado"] == e)
                                       for e in ("OK", "NO_DISPONIBLE", "ERROR")})
 

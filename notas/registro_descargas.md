@@ -230,3 +230,8 @@ URL: `https://www.ine.es/experimental/turismo_moviles/exp_tmov_interno_mun_<año
 - Cotejo Excel vs 53001 (mismo mes y destino): el Excel queda siempre por debajo (p. ej. 2026-08 Llanes 41.172 vs 51.592), coherente con que el Excel omite cruces <30. No se cotejó la causa exacta de la diferencia: NO VERIFICADO.
 - 53001 empieza en 2019M07; los Excel solo desde 2022. No se comprobó si las series de ambos usan el mismo criterio de "turista".
 - NO VERIFICADO: si "Turistas" de la 53001 incluye o excluye los viajes dentro de la misma provincia/comunidad (la nota del Excel dice provincia distinta).
+
+### 2026-10-15 18:16 · Paso 2: cambio de script (v2, streaming) — registro de la reanudación
+- Se descartó la tanda inicial (pandas); sus CSV parciales (≈68 días por año) están en `data/raw/_mitma_viejo/`. El script actual `scripts/descarga_mitma.py` rehace la descarga entera con el método de streaming; salida y columnas idénticas (comprobado en 4 casos). Estado en `data/raw/_mitma_estado_v2.jsonl` (el antiguo `_mitma_estado.jsonl` quedó en `_mitma_viejo/`).
+- Orden: pernoctaciones de todo el periodo → viajes 2024-01..2025-06 → 2023 → 2022. Los CSV anuales se ensamblan al terminar la tanda (o con `--solo-ensamblar`). Ver `decisiones_y_consideraciones.md` para las mediciones.
+- Resultados finales por año (filas, días, fechas ausentes): **pendientes** (se anotarán tras `scripts/verificar_mitma.py`).
