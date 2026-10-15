@@ -7,6 +7,7 @@ Repositorio compartido (privado) para datos y notas del proyecto.
 - `data/raw/` – datos descargados tal cual de la fuente (no editar a mano).
 - `data/manual/` – datos introducidos o corregidos manualmente.
 - `notas/registro_descargas.md` – registro de cada descarga (fecha, fuente, archivo).
+- `notas/decisiones_y_consideraciones.md` – decisiones importantes y límites de los datos.
 
 ## Instalación
 

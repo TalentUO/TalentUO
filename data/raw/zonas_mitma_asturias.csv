@@ -1,0 +1,47 @@
+id_zona_mitma,nombre,municipalities,agrupada
+33001_AM,Allande agregacion de municipios,33001;33022;33027;33028,sí
+33002,Aller,33002,no
+33004,Avilés,33004,no
+33006_AM,Bimenes agregacion de municipios,33006;33009;33065,sí
+33007_AM,Boal agregacion de municipios,33007;33029;33048;33061;33077,sí
+33008_AM,Cabrales agregacion de municipios,33008;33043;33046;33047;33055,sí
+33011,Cangas del Narcea,33011,no
+33012,Cangas de Onís,33012,no
+33014,Carreño,33014,no
+33015_AM,Caso agregacion de municipios,33003;33015;33050;33067,sí
+33016,Castrillón,33016,no
+33017,Castropol,33017,no
+33018,Coaña,33018,no
+33019_AM,Colunga agregacion de municipios,33013;33019,sí
+33020_AM,Corvera de Asturias agregacion de municipios,33020;33030,sí
+33021,Cudillero,33021,no
+33023,"Franco, El",33023,no
+33024,Gijón,33024,no
+33025,Gozón,33025,no
+33026_AM,Grado agregacion de municipios,33026;33054,sí
+33031,Langreo,33031,no
+33032,Laviana,33032,no
+33033,Lena,33033,no
+33034,Valdés,33034,no
+33035,Llanera,33035,no
+33036,Llanes,33036,no
+33037,Mieres,33037,no
+33038,Morcín,33038,no
+33040,Nava,33040,no
+33041,Navia,33041,no
+33042,Noreña,33042,no
+33044,Oviedo,33044,no
+33045,Parres,33045,no
+33049,Piloña,33049,no
+33051_AM,Pravia agregacion de municipios,33010;33051,sí
+33056,Ribadesella,33056,no
+33057_AM,Ribera de Arriba agregacion de municipios,33057;33058;33064,sí
+33059,Salas,33059,no
+33060,San Martín del Rey Aurelio,33060,no
+33066,Siero,33066,no
+33069_AM,Soto del Barco agregacion de municipios,33039;33069,sí
+33070,Tapia de Casariego,33070,no
+33072_AM,Teverga agregacion de municipios,33005;33052;33053;33068;33072;33078,sí
+33073,Tineo,33073,no
+33074_AM,Vegadeo agregacion de municipios,33062;33063;33071;33074;33075,sí
+33076,Villaviciosa,33076,no
