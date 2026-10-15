@@ -1,104 +1,104 @@
 {
- "sintetico": true,
+ "sintetico": false,
  "objetivo": "llegadas_ocio",
  "algoritmo": "lightgbm",
  "seleccion_algoritmo": {
   "ganador": "lightgbm",
   "paso_de_la_regla": 3,
   "criterio_decisivo": "recall de días rojos en verano",
-  "motivo": "la precisión del de mayor recall (xgboost) no es más de 5 puntos inferior (0.0): decide el recall; recall de días rojos en verano a 0.2 puntos (< 3) y WAPE medio a 0.0 puntos (< 1) -> LightGBM por regla",
-  "candidato_por_recall": "xgboost",
-  "caida_precision_del_candidato": -0.0081,
-  "diferencia_criterio_xgb_menos_lgb": 0.0021,
-  "diferencia_wape_medio_xgb_menos_lgb": -0.0001
+  "motivo": "la precisión del de mayor recall (lightgbm) no es más de 5 puntos inferior (0.5): decide el recall; recall de días rojos en verano a 1.5 puntos (< 3) y WAPE medio a 0.1 puntos (< 1) -> LightGBM por regla",
+  "candidato_por_recall": "lightgbm",
+  "caida_precision_del_candidato": 0.0052,
+  "diferencia_criterio_xgb_menos_lgb": -0.0145,
+  "diferencia_wape_medio_xgb_menos_lgb": -0.0011
  },
- "segundos": 77.5,
+ "segundos": 124.0,
  "wape": {
-  "corto/modelo": 0.1008,
-  "corto/B0": 0.1788,
-  "corto/B1": 0.1726,
-  "largo/modelo": 0.1065,
-  "largo/B0": 0.1788,
-  "largo/B1": 0.1726
+  "corto/modelo": 0.0884,
+  "corto/B0": 0.1315,
+  "corto/B1": 0.0986,
+  "largo/modelo": 0.0933,
+  "largo/B0": 0.1315,
+  "largo/B1": 0.0986
  },
  "recall_rojo": {
-  "corto/modelo": 0.5786,
+  "corto/modelo": 0.7772,
   "corto/B0": 0.0,
-  "corto/B1": 0.5474,
-  "largo/modelo": 0.8241,
+  "corto/B1": 0.7927,
+  "largo/modelo": 0.799,
   "largo/B0": 0.0,
-  "largo/B1": 0.5474
+  "largo/B1": 0.7927
  },
  "experimentos": [
   {
    "experimento": "base",
    "modelo": "corto",
-   "n": 24990,
-   "wape": 0.1008,
-   "acierto_color": 0.9338,
-   "recall_rojo": 0.5786,
-   "precision_rojo": 0.8593
+   "n": 24920,
+   "wape": 0.0884,
+   "acierto_color": 0.9331,
+   "recall_rojo": 0.7772,
+   "precision_rojo": 0.941
   },
   {
    "experimento": "base",
    "modelo": "largo",
-   "n": 3570,
-   "wape": 0.1065,
-   "acierto_color": 0.942,
-   "recall_rojo": 0.8241,
-   "precision_rojo": 0.8039
+   "n": 3560,
+   "wape": 0.0933,
+   "acierto_color": 0.9354,
+   "recall_rojo": 0.799,
+   "precision_rojo": 0.9602
   },
   {
    "experimento": "desde_corte",
    "modelo": "corto",
-   "n": 24990,
-   "wape": 0.117,
-   "acierto_color": 0.9156,
-   "recall_rojo": 0.4716,
-   "precision_rojo": 0.8306
+   "n": 24920,
+   "wape": 0.0929,
+   "acierto_color": 0.8944,
+   "recall_rojo": 0.426,
+   "precision_rojo": 0.9384
   },
   {
    "experimento": "desde_corte",
    "modelo": "largo",
-   "n": 3570,
-   "wape": 0.124,
-   "acierto_color": 0.9137,
-   "recall_rojo": 0.5176,
-   "precision_rojo": 0.7923
+   "n": 3560,
+   "wape": 0.1012,
+   "acierto_color": 0.8871,
+   "recall_rojo": 0.4351,
+   "precision_rojo": 0.95
   },
   {
    "experimento": "solo_eventos_verificados",
    "modelo": "corto",
-   "n": 24990,
-   "wape": 0.103,
-   "acierto_color": 0.9359,
-   "recall_rojo": 0.598,
-   "precision_rojo": 0.8338
+   "n": 24920,
+   "wape": 0.0896,
+   "acierto_color": 0.9335,
+   "recall_rojo": 0.7757,
+   "precision_rojo": 0.9397
   },
   {
    "experimento": "solo_eventos_verificados",
    "modelo": "largo",
-   "n": 3570,
-   "wape": 0.1105,
-   "acierto_color": 0.9339,
-   "recall_rojo": 0.6985,
-   "precision_rojo": 0.7898
+   "n": 3560,
+   "wape": 0.0937,
+   "acierto_color": 0.9362,
+   "recall_rojo": 0.7964,
+   "precision_rojo": 0.9601
   },
   {
    "experimento": "tiempo_aproximado",
    "modelo": "corto",
-   "n": 24990,
-   "wape": 0.0881,
-   "acierto_color": 0.9374,
-   "recall_rojo": 0.6231,
-   "precision_rojo": 0.8628
+   "n": 24920,
+   "wape": 0.0807,
+   "acierto_color": 0.9387,
+   "recall_rojo": 0.8103,
+   "precision_rojo": 0.9381
   }
  ],
  "calibracion_lagos": {
-  "observado_2023_2024/relativo": 0.85,
-  "observado_2023_2024/absoluto": 1.0,
-  "previsto_fuera_de_muestra/relativo": 0.9,
-  "previsto_fuera_de_muestra/absoluto": 0.8
+  "observado_2023_2024/relativo": 1.1,
+  "observado_2023_2024/absoluto": 1.05,
+  "previsto_fuera_de_muestra/relativo": 1.05,
+  "previsto_fuera_de_muestra/absoluto": 1.0
  },
  "info_corto_plazo": {
   "fecha_emision": "2026-10-15",
