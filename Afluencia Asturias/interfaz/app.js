@@ -181,9 +181,6 @@
     await cambiarSeleccion(dia, dia, { anunciar: false });
     await abrirZona(principal.id, { foco: false });
     encuadrar('zona', principal.id);
-    // Con pantallas bajas (1366×768) el mapa queda por debajo: se lleva a la vista
-    const m = $('#mapa');
-    if (m && m.getBoundingClientRect().top > innerHeight * 0.5) m.scrollIntoView({ block: 'center', behavior: 'auto' });
   }
 
   /* ====================================================================
@@ -1289,7 +1286,6 @@
     window.DatosModelo.cargar().then(d => {
       if (!d.sintetico) return;
       $('#aviso-sintetico').hidden = false;
-      document.body.classList.add('con-aviso-sintetico');
     }).catch(err => {
       console.error(err);
       const a = $('#aviso-sintetico');
