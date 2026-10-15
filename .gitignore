@@ -6,3 +6,6 @@ __pycache__/
 
 .env
 .env.*
+
+# Open-Meteo: cache de tramos (reproducible con el script); solo se versiona el manifest
+data/raw/_chunks/*/

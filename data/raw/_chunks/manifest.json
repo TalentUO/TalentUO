@@ -1,0 +1,94 @@
+{
+ "_chunks/archive/covadonga_2022-01-01_2022-12-31.json": {
+  "descargado": "2026-10-15T16:16:32",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.31&longitude=-5.05&start_date=2022-01-01&end_date=2022-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/covadonga_2023-01-01_2023-12-31.json": {
+  "descargado": "2026-10-15T16:16:35",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.31&longitude=-5.05&start_date=2023-01-01&end_date=2023-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/covadonga_2024-01-01_2024-12-31.json": {
+  "descargado": "2026-10-15T16:16:40",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.31&longitude=-5.05&start_date=2024-01-01&end_date=2024-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/covadonga_2025-01-01_2025-12-31.json": {
+  "descargado": "2026-10-15T16:16:44",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.31&longitude=-5.05&start_date=2025-01-01&end_date=2025-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/covadonga_2026-01-01_2026-10-15.json": {
+  "descargado": "2026-10-15T16:16:48",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.31&longitude=-5.05&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/cangas_de_onis_2022-01-01_2022-12-31.json": {
+  "descargado": "2026-10-15T16:21:29",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.35&longitude=-5.13&start_date=2022-01-01&end_date=2022-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/cangas_de_onis_2023-01-01_2023-12-31.json": {
+  "descargado": "2026-10-15T17:06:57",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.35&longitude=-5.13&start_date=2023-01-01&end_date=2023-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/covadonga_2022-01-01_2022-12-31.json": {
+  "descargado": "2026-10-15T16:12:41",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.31&longitude=-5.05&start_date=2022-01-01&end_date=2022-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/covadonga_2023-01-01_2023-12-31.json": {
+  "descargado": "2026-10-15T16:12:45",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.31&longitude=-5.05&start_date=2023-01-01&end_date=2023-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/covadonga_2024-01-01_2024-12-31.json": {
+  "descargado": "2026-10-15T16:13:07",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.31&longitude=-5.05&start_date=2024-01-01&end_date=2024-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/covadonga_2025-01-01_2025-12-31.json": {
+  "descargado": "2026-10-15T16:13:50",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.31&longitude=-5.05&start_date=2025-01-01&end_date=2025-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/covadonga_2026-01-01_2026-10-15.json": {
+  "descargado": "2026-10-15T16:14:25",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.31&longitude=-5.05&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/lagos_enol_2022-01-01_2022-12-31.json": {
+  "descargado": "2026-10-15T16:16:54",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.27&longitude=-4.99&start_date=2022-01-01&end_date=2022-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/lagos_enol_2023-01-01_2023-12-31.json": {
+  "descargado": "2026-10-15T16:17:12",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.27&longitude=-4.99&start_date=2023-01-01&end_date=2023-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/lagos_enol_2024-01-01_2024-12-31.json": {
+  "descargado": "2026-10-15T16:18:13",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.27&longitude=-4.99&start_date=2024-01-01&end_date=2024-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/lagos_enol_2025-01-01_2025-12-31.json": {
+  "descargado": "2026-10-15T16:18:49",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.27&longitude=-4.99&start_date=2025-01-01&end_date=2025-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/hist/lagos_enol_2026-01-01_2026-10-15.json": {
+  "descargado": "2026-10-15T16:19:16",
+  "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=43.27&longitude=-4.99&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/previous/covadonga_2024-01-01_2024-12-31.json": {
+  "descargado": "2026-10-15T16:15:13",
+  "url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=43.31&longitude=-5.05&start_date=2024-01-01&end_date=2024-12-31&timezone=Europe%2FMadrid&hourly=temperature_2m%2Ctemperature_2m_previous_day1%2Ctemperature_2m_previous_day2%2Ctemperature_2m_previous_day3%2Cprecipitation%2Cprecipitation_previous_day1%2Cprecipitation_previous_day2%2Cprecipitation_previous_day3%2Cwind_speed_10m%2Cwind_speed_10m_previous_day1%2Cwind_speed_10m_previous_day2%2Cwind_speed_10m_previous_day3%2Cwind_gusts_10m%2Cwind_gusts_10m_previous_day1%2Cwind_gusts_10m_previous_day2%2Cwind_gusts_10m_previous_day3%2Cweather_code%2Cweather_code_previous_day1%2Cweather_code_previous_day2%2Cweather_code_previous_day3%2Csunshine_duration%2Csunshine_duration_previous_day1%2Csunshine_duration_previous_day2%2Csunshine_duration_previous_day3"
+ },
+ "_chunks/previous/covadonga_2025-01-01_2025-12-31.json": {
+  "descargado": "2026-10-15T16:15:52",
+  "url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=43.31&longitude=-5.05&start_date=2025-01-01&end_date=2025-12-31&timezone=Europe%2FMadrid&hourly=temperature_2m%2Ctemperature_2m_previous_day1%2Ctemperature_2m_previous_day2%2Ctemperature_2m_previous_day3%2Cprecipitation%2Cprecipitation_previous_day1%2Cprecipitation_previous_day2%2Cprecipitation_previous_day3%2Cwind_speed_10m%2Cwind_speed_10m_previous_day1%2Cwind_speed_10m_previous_day2%2Cwind_speed_10m_previous_day3%2Cwind_gusts_10m%2Cwind_gusts_10m_previous_day1%2Cwind_gusts_10m_previous_day2%2Cwind_gusts_10m_previous_day3%2Cweather_code%2Cweather_code_previous_day1%2Cweather_code_previous_day2%2Cweather_code_previous_day3%2Csunshine_duration%2Csunshine_duration_previous_day1%2Csunshine_duration_previous_day2%2Csunshine_duration_previous_day3"
+ },
+ "_chunks/previous/covadonga_2026-01-01_2026-10-15.json": {
+  "descargado": "2026-10-15T16:16:27",
+  "url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=43.31&longitude=-5.05&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&hourly=temperature_2m%2Ctemperature_2m_previous_day1%2Ctemperature_2m_previous_day2%2Ctemperature_2m_previous_day3%2Cprecipitation%2Cprecipitation_previous_day1%2Cprecipitation_previous_day2%2Cprecipitation_previous_day3%2Cwind_speed_10m%2Cwind_speed_10m_previous_day1%2Cwind_speed_10m_previous_day2%2Cwind_speed_10m_previous_day3%2Cwind_gusts_10m%2Cwind_gusts_10m_previous_day1%2Cwind_gusts_10m_previous_day2%2Cwind_gusts_10m_previous_day3%2Cweather_code%2Cweather_code_previous_day1%2Cweather_code_previous_day2%2Cweather_code_previous_day3%2Csunshine_duration%2Csunshine_duration_previous_day1%2Csunshine_duration_previous_day2%2Csunshine_duration_previous_day3"
+ },
+ "_chunks/previous/lagos_enol_2024-01-01_2024-12-31.json": {
+  "descargado": "2026-10-15T16:20:01",
+  "url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=43.27&longitude=-4.99&start_date=2024-01-01&end_date=2024-12-31&timezone=Europe%2FMadrid&hourly=temperature_2m%2Ctemperature_2m_previous_day1%2Ctemperature_2m_previous_day2%2Ctemperature_2m_previous_day3%2Cprecipitation%2Cprecipitation_previous_day1%2Cprecipitation_previous_day2%2Cprecipitation_previous_day3%2Cwind_speed_10m%2Cwind_speed_10m_previous_day1%2Cwind_speed_10m_previous_day2%2Cwind_speed_10m_previous_day3%2Cwind_gusts_10m%2Cwind_gusts_10m_previous_day1%2Cwind_gusts_10m_previous_day2%2Cwind_gusts_10m_previous_day3%2Cweather_code%2Cweather_code_previous_day1%2Cweather_code_previous_day2%2Cweather_code_previous_day3%2Csunshine_duration%2Csunshine_duration_previous_day1%2Csunshine_duration_previous_day2%2Csunshine_duration_previous_day3"
+ },
+ "_chunks/previous/lagos_enol_2025-01-01_2025-12-31.json": {
+  "descargado": "2026-10-15T16:20:44",
+  "url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=43.27&longitude=-4.99&start_date=2025-01-01&end_date=2025-12-31&timezone=Europe%2FMadrid&hourly=temperature_2m%2Ctemperature_2m_previous_day1%2Ctemperature_2m_previous_day2%2Ctemperature_2m_previous_day3%2Cprecipitation%2Cprecipitation_previous_day1%2Cprecipitation_previous_day2%2Cprecipitation_previous_day3%2Cwind_speed_10m%2Cwind_speed_10m_previous_day1%2Cwind_speed_10m_previous_day2%2Cwind_speed_10m_previous_day3%2Cwind_gusts_10m%2Cwind_gusts_10m_previous_day1%2Cwind_gusts_10m_previous_day2%2Cwind_gusts_10m_previous_day3%2Cweather_code%2Cweather_code_previous_day1%2Cweather_code_previous_day2%2Cweather_code_previous_day3%2Csunshine_duration%2Csunshine_duration_previous_day1%2Csunshine_duration_previous_day2%2Csunshine_duration_previous_day3"
+ },
+ "_chunks/previous/lagos_enol_2026-01-01_2026-10-15.json": {
+  "descargado": "2026-10-15T16:21:24",
+  "url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=43.27&longitude=-4.99&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&hourly=temperature_2m%2Ctemperature_2m_previous_day1%2Ctemperature_2m_previous_day2%2Ctemperature_2m_previous_day3%2Cprecipitation%2Cprecipitation_previous_day1%2Cprecipitation_previous_day2%2Cprecipitation_previous_day3%2Cwind_speed_10m%2Cwind_speed_10m_previous_day1%2Cwind_speed_10m_previous_day2%2Cwind_speed_10m_previous_day3%2Cwind_gusts_10m%2Cwind_gusts_10m_previous_day1%2Cwind_gusts_10m_previous_day2%2Cwind_gusts_10m_previous_day3%2Cweather_code%2Cweather_code_previous_day1%2Cweather_code_previous_day2%2Cweather_code_previous_day3%2Csunshine_duration%2Csunshine_duration_previous_day1%2Csunshine_duration_previous_day2%2Csunshine_duration_previous_day3"
+ }
+}
