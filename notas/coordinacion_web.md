@@ -66,7 +66,7 @@ Valida `salidas/` con `src/modelo/validar_salidas.py`, copia los cinco JSON a `A
 
 ## Estado
 
-- **Esqueleto listo** — commit `PENDIENTE` (rama `web`).
+- **Esqueleto listo** — commit `e446a48` (rama `web`).
 
 ## Peticiones / huecos del contrato
 
