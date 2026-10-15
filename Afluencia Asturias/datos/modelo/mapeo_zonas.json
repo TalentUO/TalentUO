@@ -1,0 +1,41 @@
+{
+ "origen": "config/mapeo_zonas_ejemplo.csv",
+ "zonas": [
+  {
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre": "Cangas de Onís (EJEMPLO)",
+   "concejos_ine": [
+    "33012"
+   ]
+  },
+  {
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre": "Llanes (EJEMPLO)",
+   "concejos_ine": [
+    "33036"
+   ]
+  },
+  {
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre": "Gijón (EJEMPLO)",
+   "concejos_ine": [
+    "33024"
+   ]
+  },
+  {
+   "zona_mitma_id": "EJEMPLO_oviedo",
+   "nombre": "Oviedo (EJEMPLO)",
+   "concejos_ine": [
+    "33044"
+   ]
+  },
+  {
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "concejos_ine": [
+    "33056",
+    "33036"
+   ]
+  }
+ ]
+}

@@ -113,13 +113,11 @@
     sitios: [], sitiosPorId: {}, sitiosOrden: 'menos', sitiosVisibles: 0,
     eventos: { eventos: [] }, eventosCat: 'todas', eventosVisibles: 0,
     prevDia: [], prevPorZona: {}, prevPorConcejo: {},
-    gestionIniciada: false, alertas: [], csvOrigen: null,
   };
-  const DIAS_GESTION = 14; // alertas y exportación de Gestión
   const esPeriodo = () => E.desde !== E.hasta;
   const nDias = () => diasEntre(E.desde, E.hasta) + 1;
   const textoSel = () => (esPeriodo() ? periodoTexto(E.desde, E.hasta) : fechaLarga(E.desde));
-  const nombreZ = id => (E.zonasPorId[id] ? E.zonasPorId[id].nombre : id);
+  const nombreZ = id => (E.zonasPorId[id] ? E.zonasPorId[id].nombre : 'fuera de las zonas del modelo');
   const nombreC = id => (E.concejosPorId[id] ? E.concejosPorId[id].nombre : id);
   const coincideTipo = z => E.tipo === 'todos' || (z && z.tipos.indexOf(E.tipo) !== -1);
 
@@ -135,6 +133,7 @@
    * Arranque
    * ==================================================================== */
   async function iniciar() {
+    avisoSintetico();
     try {
       E.info = await D.getInfo();
       E.zonas = await D.getZonas();
@@ -155,15 +154,33 @@
       configurarLateral();
       configurarSitios();
       await configurarEventos();
-      configurarGestion();
 
       await cambiarSeleccion(E.info.hoy, E.info.hoy, { anunciar: false });
       leerHash();
+      if (E.info.demo) await arrancarDemo();
     } catch (err) {
       console.error(err);
       $('#fecha-texto').textContent = 'No se han podido cargar los datos';
       $('#fecha-estado').innerHTML = '<span class="etq etq-aviso">Recarga la página. Si sigue sin funcionar, revisa la fuente de datos.</span>';
     }
+  }
+
+  /* ---------- Modo demo (?demo=1) ----------
+   * La fuente fija «hoy» en el histórico de diciembre de 2024 (validación fuera de muestra).
+   * Se abre el día del puente con más presión en la zona principal (Picos de Europa) y su panel.
+   * Recorrido: mapa → Picos en rojo → ¿Por qué? → alternativa → Gestión. */
+  async function arrancarDemo() {
+    const principal = E.zonas.find(z => z.principal) || E.zonas[0];
+    if (!principal) return;
+    let dia = E.info.hoy;
+    if (E.puente) {
+      const serie = await D.getSerieZona(principal.id, E.puente.inicio, diasEntre(E.puente.inicio, E.puente.fin) + 1);
+      const con = serie.filter(p => p.ratio != null);
+      if (con.length) dia = con.reduce((a, b) => (b.ratio > a.ratio ? b : a)).fecha;
+    }
+    await cambiarSeleccion(dia, dia, { anunciar: false });
+    await abrirZona(principal.id, { foco: false });
+    encuadrar('zona', principal.id);
   }
 
   /* ====================================================================
@@ -198,7 +215,7 @@
       p.hidden = !on;
     });
     if (actualizarHash) { try { history.replaceState(null, '', '#' + t); } catch (e) { /* sin historial */ } }
-    if (t === 'gestion') cargarGestion();
+    mostrarComponente(t);
   }
 
   /* ====================================================================
@@ -232,6 +249,10 @@
       bp.disabled = true;
       bp.querySelector('.sub').textContent = 'ninguno a la vista';
     }
+    $('#dias-barra').addEventListener('click', e => {
+      const b = e.target.closest('[data-dia]');
+      if (b) cambiarSeleccion(b.dataset.dia, b.dataset.dia);
+    });
     $('#btn-antes').addEventListener('click', () => desplazarSeleccion(-1));
     $('#btn-despues').addEventListener('click', () => desplazarSeleccion(1));
     configurarCalendario();
@@ -271,6 +292,7 @@
     E.calSel = cal;
 
     renderFecha();
+    renderBarraDias();
     if (!$('#calendario').hidden) {
       CAL.inicio = null;
       CAL.foco = desde;
@@ -296,7 +318,8 @@
     $('#fecha-texto').textContent = textoSel();
 
     const chips = [];
-    if (E.desde === hoy) chips.push(`<span class="etq etq-hoy">${periodo ? 'Desde hoy' : 'Hoy'}</span>`);
+    if (E.info.demo) chips.push('<span class="etq etq-hoy">Demo · validación con datos de 2024</span>');
+    else if (E.desde === hoy) chips.push(`<span class="etq etq-hoy">${periodo ? 'Desde hoy' : 'Hoy'}</span>`);
     const especiales = [];
     E.calSel.forEach(c => {
       const t = c.puente || (c.festivo ? 'Festivo: ' + c.festivo : null);
@@ -304,9 +327,11 @@
     });
     especiales.slice(0, 2).forEach(t => chips.push(`<span class="etq etq-esp">${esc(t)}</span>`));
     if (especiales.length > 2) chips.push(`<span class="etq etq-esp">y ${especiales.length - 2} más</span>`);
-    if (E.hasta <= lim) chips.push('<span class="etq">Previsión con meteorología</span>');
-    else if (E.desde <= lim) chips.push(`<span class="etq etq-aviso">Meteorología solo hasta el ${esc(diaMes(lim))}</span>`);
-    else chips.push('<span class="etq etq-aviso">Solo calendario, sin meteorología</span>');
+    const conDato = E.prevDia.filter(p => p.ratio != null);
+    if (!conDato.length) chips.push('<span class="etq etq-aviso">Sin predicción para estas fechas</span>');
+    else if (conDato.every(p => p.conMeteo)) chips.push('<span class="etq">Previsión con meteorología</span>');
+    else if (E.desde <= lim && E.hasta > lim) chips.push(`<span class="etq etq-aviso">Meteorología solo hasta el ${esc(diaMes(lim))}</span>`);
+    else chips.push('<span class="etq etq-aviso">Solo calendario y eventos, sin meteorología</span>');
     $('#fecha-estado').innerHTML = chips.join('');
 
     const igual = r => !!r && E.desde === r[0] && E.hasta === r[1];
@@ -324,6 +349,28 @@
     };
     paso('btn-antes', -1, periodo ? `${n} días antes` : 'Día anterior');
     paso('btn-despues', 1, periodo ? `${n} días después` : 'Día siguiente');
+  }
+
+  /* ---------- Barra de los próximos días ---------- */
+  const DIAS_BARRA = 14;
+  const ORDEN_NIVEL = { gris: 0, verde: 1, ambar: 2, rojo: 3 };
+  let seqBarra = 0;
+  async function renderBarraDias() {
+    const s = ++seqBarra;
+    const n = Math.min(DIAS_BARRA, diasEntre(E.info.hoy, E.maxFecha) + 1);
+    const fechas = [];
+    for (let i = 0; i < n; i++) fechas.push(sumar(E.info.hoy, i));
+    const prevs = await Promise.all(fechas.map(f => D.getPrevisionDia(f)));
+    if (s !== seqBarra) return;
+    $('#dias-barra').innerHTML = fechas.map((f, i) => {
+      const ps = prevs[i];
+      const peor = ps.reduce((a, p) => (ORDEN_NIVEL[p.nivel] > ORDEN_NIVEL[a] ? p.nivel : a), 'gris');
+      const rojos = ps.filter(p => p.nivel === 'rojo').length, ambar = ps.filter(p => p.nivel === 'ambar').length;
+      const d = deISO(f), sel = E.desde === f && E.hasta === f;
+      const resumen = peor === 'gris' ? 'sin datos' : `${rojos} ${rojos === 1 ? 'zona' : 'zonas'} en saturación, ${ambar} con afluencia alta`;
+      return `<li><button type="button" class="dia-b nivel-${peor}" data-dia="${f}" aria-pressed="${sel}" aria-label="${esc(fechaLarga(f))}: ${resumen}">
+        <span aria-hidden="true">${LETRA[d.getDay()]}</span><span class="dia-num" aria-hidden="true">${d.getDate()}</span>${ICONO[peor]}</button></li>`;
+    }).join('');
   }
 
   /* ---------- Calendario: un día o un periodo, de hoy a dentro de un año ---------- */
@@ -493,8 +540,9 @@
       indice.push({ texto, tipo, zonaId, concejoId, n: normalizar(texto) });
     };
     E.zonas.forEach(z => meter(z.nombre, 'zona', z.id));
-    E.concejos.forEach(c => meter(c.nombre, 'concejo', c.zonaId, c.id));
+    E.concejos.forEach(c => { if (c.zonaId) meter(c.nombre, 'concejo', c.zonaId, c.id); });
     E.zonas.forEach(z => z.lugares.forEach(l => meter(l, 'lugar', z.id)));
+    E.sitios.forEach(st => { const c = E.concejosPorId[st.concejos[0]]; if (c && c.zonaId) meter(st.nombre, 'lugar', c.zonaId); });
     const PRIORIDAD = { zona: 2, concejo: 1, lugar: 0 };
 
     let resultados = [], activo = -1;
@@ -642,6 +690,9 @@
 
   function htmlTip(tipo, id) {
     const esZona = tipo === 'zona';
+    if (!esZona && !E.concejosPorId[id].zonaId) {
+      return `<div class="tip-in"><strong class="tip-nombre">${esc(nombreC(id))}</strong><span>Fuera de las zonas del modelo: sin previsión.</span></div>`;
+    }
     const p = esZona ? E.prevPorZona[id] : E.prevPorConcejo[id];
     const n = p ? p.nivel : 'gris', periodo = esPeriodo();
     return `<div class="tip-in"><strong class="tip-nombre">${esc(esZona ? nombreZ(id) : nombreC(id))}</strong>` +
@@ -658,7 +709,6 @@
     const html = ['verde', 'ambar', 'rojo', 'gris'].map(n =>
       `<li><span class="sw-mapa nivel-${n}" aria-hidden="true"></span>${ICONO[n]}<span class="ley-txt"><strong>${NIVEL[n].nombre}</strong><span>${t[n]}</span></span></li>`).join('');
     $('#leyenda').innerHTML = html;
-    $('#leyenda-datos').innerHTML = html;
   }
 
   /* ====================================================================
@@ -756,7 +806,8 @@
     opts = opts || {};
     const c = E.concejosPorId[id];
     if (!c) return;
-    if (opts.encuadrar) encuadrar('concejo', id);
+    if (opts.encuadrar || !c.zonaId) encuadrar('concejo', id);
+    if (!c.zonaId) { anunciar(`${c.nombre} no está en ninguna zona del modelo: no hay previsión.`); return; }
     abrirZona(c.zonaId, { foco: opts.foco, concejo: id });
   }
 
@@ -787,13 +838,14 @@
     // En un periodo, las causas se explican con el día con más gente y el mejor día se busca dentro del periodo
     const fechaFactores = periodo && p.pico ? p.pico.fecha : E.desde;
 
-    const [serie, factores, mejor, alts, perfil, fiab] = await Promise.all([
+    const [serie, factores, mejor, alts, perfil, fiab, mejorDia] = await Promise.all([
       D.getSerieZona(id, v.desde, v.dias),
       D.getFactores(id, fechaFactores),
       periodo ? D.getMejorMomento(id, E.desde, nDias()) : D.getMejorMomento(id, v.desde, v.dias),
       periodo ? D.getAlternativas(id, E.desde, E.hasta) : D.getAlternativas(id, E.desde),
       periodo ? D.getPerfil(id, E.desde, E.hasta) : D.getPerfil(id, E.desde),
       D.getFiabilidad(id),
+      periodo ? Promise.resolve(null) : D.getMejorDia(id, E.desde),
     ]);
     if (s !== seqPanel || E.zona !== id) return;
 
@@ -829,6 +881,8 @@
         <p class="pz-fecha">${c ? 'Toda la zona · ' : ''}${esc(textoSel())}</p>
         <div class="pz-estado-fila">${pill(p.nivel, 'pill-grande')}<p class="pz-delta">${p.ratio != null ? delta(p.ratio, periodo) : 'Sin datos suficientes'}</p></div>
         ${p.visitantes != null ? `<p class="pz-cifra">Unos <strong>${num(p.visitantes)}</strong> visitantes${periodo ? ' al día de media' : ''}, probablemente entre ${num(p.min)} y ${num(p.max)}. Un día normal vienen unos ${num(p.normal)}.</p>` : ''}
+        ${!periodo && p.incierto ? '<p class="pz-cifra"><span class="etq etq-aviso">Incierto</span> El rango probable cae en colores distintos del semáforo.</p>' : ''}
+        ${!periodo && p.nivelObservado ? `<p class="pz-cifra">Lo que pasó de verdad: ${pill(p.nivelObservado)} ${esc(delta(p.ratioObservado))} (unos ${num(p.observado)} visitantes).</p>` : ''}
         ${periodo && p.pico ? resumenPeriodo(p) : ''}
       </div>
     </div>`;
@@ -844,10 +898,10 @@
       html += seccionSitios(id);
       html += seccionSerie(serie, v);
       html += seccionFactores(factores, periodo ? fechaFactores : null);
-      html += seccionMejor(mejor, v);
+      html += seccionMejor(mejor, v, mejorDia);
       html += seccionAlternativas(alts, false);
       html += seccionPerfil(perfil);
-      html += seccionFiabilidad(p, fiab);
+      html += seccionFiabilidad(periodo && p.pico ? p.pico : p, fiab);
     }
 
     const panel = $('#panel-zona');
@@ -884,7 +938,9 @@
     let desde = sumar(E.desde, -Math.floor((dias - n) / 2));
     if (sumar(desde, dias - 1) > E.maxFecha) desde = sumar(E.maxFecha, -(dias - 1));
     if (desde < E.info.hoy) desde = E.info.hoy;
-    return { desde, dias, recortado: false };
+    // No se enseñan días fuera del horizonte con predicción
+    const caben = diasEntre(desde, E.maxFecha) + 1;
+    return { desde, dias: Math.max(1, Math.min(dias, caben)), recortado: false };
   }
 
   function resumenPeriodo(p) {
@@ -936,23 +992,35 @@
       <h3 id="pz-s-b">¿Por qué?</h3>
       <p class="pz-ayuda">${fechaPico ? `Lo que más pesa el día con más gente del periodo: ${esc(fechaLarga(fechaPico).toLowerCase())}.` : 'Lo que más pesa en la previsión de ese día.'}</p>
       <ul class="fx-lista">${filas}</ul>
-      <p class="pz-nota">Los efectos se multiplican entre sí, así que no suman exactamente el total.</p>
+      <p class="pz-nota">Efecto de cada factor frente a un día medio del modelo. Se multiplican entre sí, así que no suman exactamente el total.</p>
     </section>`;
   }
 
-  function seccionMejor(mejor, v) {
-    if (!mejor) return '';
-    const d = mejor.dia, periodo = esPeriodo();
-    const donde = periodo ? 'Dentro de las fechas elegidas.' : `Entre el ${diaMes(v.desde)} y el ${diaMes(sumar(v.desde, v.dias - 1))}.`;
+  // mejorDia: propuesta del modelo (alternativas.json) si el día está en alerta; si no, el día más tranquilo de la gráfica
+  function seccionMejor(mejor, v, mejorDia) {
+    const periodo = esPeriodo();
+    let tarjeta = '';
+    if (mejorDia && mejorDia.fecha) {
+      const dif = mejorDia.diferenciaPct != null ? `: ${Math.abs(Math.round(mejorDia.diferenciaPct))}${NBSP}% ${mejorDia.diferenciaPct < 0 ? 'menos' : 'más'} gente que el día elegido` : '';
+      tarjeta = `<div class="mm"><p class="eyebrow">Mejor día alternativo</p><p class="mm-valor">${esc(fechaLarga(mejorDia.fecha))}</p>
+        <p>${pill(mejorDia.nivel)}</p><p class="mm-nota">${esc(delta(mejorDia.ratio))}${dif}.</p>
+        <p class="mm-nota">El día con menos presión a ±${mejorDia.margen} días en la misma zona, según el modelo.</p>
+        <button type="button" class="btn-mini" data-fecha="${mejorDia.fecha}">Ver ese día</button></div>`;
+    } else if (mejorDia) {
+      tarjeta = `<div class="mm"><p class="eyebrow">Mejor día alternativo</p><p class="mm-nota">Ningún día a ±${mejorDia.margen} días tiene menos presión en esta zona.</p></div>`;
+    } else if (mejor) {
+      const d = mejor.dia;
+      const donde = periodo ? 'Dentro de las fechas elegidas.' : `Entre el ${diaMes(v.desde)} y el ${diaMes(sumar(v.desde, v.dias - 1))}.`;
+      tarjeta = `<div class="mm"><p class="eyebrow">Día más tranquilo</p><p class="mm-valor">${esc(fechaLarga(d.fecha))}</p>
+        <p>${pill(d.nivel)}</p><p class="mm-nota">${esc(delta(d.ratio))}</p><p class="mm-nota">${esc(donde)}</p>
+        ${periodo || d.fecha !== E.desde ? `<button type="button" class="btn-mini" data-fecha="${d.fecha}">${periodo ? 'Ver solo ese día' : 'Ver ese día'}</button>` : '<p class="mm-nota"><strong>Es el día que estás viendo.</strong></p>'}</div>`;
+    }
+    if (!tarjeta) return '';
+    const hora = mejor && mejor.hora ? `<div class="mm"><p class="eyebrow">Mejor hora</p><p class="mm-valor">${esc(mejor.hora.texto)}</p>
+        <p class="mm-nota">${esc(mejor.hora.nota)} Orientativo: los datos de movilidad son diarios.</p></div>` : '';
     return `<section class="pz-sec" aria-labelledby="pz-s-c">
       <h3 id="pz-s-c">Mejor momento para ir</h3>
-      <div class="mm-grid">
-        <div class="mm"><p class="eyebrow">Mejor día</p><p class="mm-valor">${esc(fechaLarga(d.fecha))}</p>
-          <p>${pill(d.nivel)}</p><p class="mm-nota">${esc(delta(d.ratio))}</p><p class="mm-nota">${esc(donde)}</p>
-          ${periodo || d.fecha !== E.desde ? `<button type="button" class="btn-mini" data-fecha="${d.fecha}">${periodo ? 'Ver solo ese día' : 'Ver ese día'}</button>` : '<p class="mm-nota"><strong>Es el día que estás viendo.</strong></p>'}</div>
-        <div class="mm"><p class="eyebrow">Mejor hora</p><p class="mm-valor">${esc(mejor.hora.texto)}</p>
-          <p class="mm-nota">${esc(mejor.hora.nota)} Orientativo: los datos de movilidad son diarios.</p></div>
-      </div>
+      <div class="mm-grid">${tarjeta}${hora}</div>
     </section>`;
   }
 
@@ -962,8 +1030,8 @@
       ? `<ul class="alt-lista">${alts.map(a => `<li><button type="button" class="alt" data-zona="${a.zonaId}">
           <span class="alt-nombre">${esc(a.nombre)}</span>
           <span class="alt-dato">${pill(a.nivel)}<span>${pct(a.ratio)}</span></span>
-          <span class="alt-dist">A unos ${a.minutos} min en coche</span></button></li>`).join('')}</ul>`
-      : `<p class="pz-ayuda">${esPeriodo() ? 'En esas fechas no hay zonas cercanas en verde. Prueba con otras.' : 'Ese día no hay zonas cercanas en verde. Prueba con otro día.'}</p>`;
+          <span class="alt-dist">${a.minutos != null ? `A unos ${a.minutos} min en coche` : `A unos ${a.km} km${a.delModelo ? ' · la menos saturada cerca, según el modelo' : ''}`}</span></button></li>`).join('')}</ul>`
+      : `<p class="pz-ayuda">${esPeriodo() ? 'En esas fechas no hay zonas cercanas con menos gente. Prueba con otras.' : 'Ese día no hay zonas cercanas con menos gente. Prueba con otro día.'}</p>`;
     return `<section class="pz-sec" aria-labelledby="pz-s-d"><h3 id="pz-s-d">${titulo}</h3>${cuerpo}</section>`;
   }
 
@@ -976,22 +1044,19 @@
     if (!perfil) return '';
     return `<section class="pz-sec" aria-labelledby="pz-s-e">
       <h3 id="pz-s-e">Quién viene</h3>
-      ${barraReparto('Tipo de visita', { t: 'De un día', v: perfil.deUnDia }, { t: 'Con pernoctación', v: perfil.conPernocta })}
+      ${perfil.deUnDia != null ? barraReparto('Tipo de visita (aproximado)', { t: 'De un día', v: perfil.deUnDia }, { t: 'Con pernoctación', v: perfil.conPernocta }) : ''}
       ${barraReparto('Procedencia', { t: 'De Asturias', v: perfil.asturias }, { t: 'Resto de España', v: perfil.restoEspana })}
-      <p class="pz-nota">Los visitantes extranjeros solo están disponibles como dato mensual del INE.</p>
+      <p class="pz-nota">Media de ${MES[perfil.mes - 1]} en años anteriores (llegadas de ocio). Sin extranjeros: los datos de movilidad solo cubren residentes en España. El tipo de visita es aproximado, porque una persona puede pasar varias noches.</p>
     </section>`;
   }
 
   function seccionFiabilidad(p, fiab) {
-    const tipo = p.esPrediccion ? '<strong>Predicción</strong>, no es un dato medido.' : '<strong>Dato medido.</strong>';
-    const err = fiab ? ` Error típico del modelo en esta zona: ±${fiab.errorMedio}${NBSP}%.` : '';
-    let meteo = '';
-    if (!p.conMeteo) {
-      meteo = !esPeriodo() ? ' Para este día aún no hay meteorología fiable, así que la incertidumbre es mayor.'
-        : E.desde <= limiteMeteo() ? ' Solo los primeros días del periodo tienen meteorología fiable; en el resto la incertidumbre es mayor.'
-        : ' Para estas fechas aún no hay meteorología fiable, así que la incertidumbre es mayor.';
-    }
-    return `<p class="pz-fiab">${ICONO_INFO}<span>${tipo}${err}${meteo}</span></p>`;
+    const h = p.horizonte == null ? null : p.horizonte >= 8 ? '8+' : String(p.horizonte);
+    const fila = fiab && h && fiab.porHorizonte[h];
+    const antelacion = p.horizonte != null ? ` Hecha con ${p.horizonte} ${p.horizonte === 1 ? 'día' : 'días'} de antelación.` : '';
+    const nota = fila ? ' ' + fila.nota : '';
+    const meteo = !p.conMeteo && p.ratio != null ? ' Sin previsión del tiempo para este día: usa calendario y eventos.' : '';
+    return `<p class="pz-fiab">${ICONO_INFO}<span><strong>Predicción</strong>, no es un dato medido.${antelacion}${esc(nota)}${meteo}</span></p>`;
   }
 
   /* ====================================================================
@@ -1196,290 +1261,45 @@
   }
 
   /* ====================================================================
-   * Gestión
+   * Pestañas de la persona 2 (pestanas/gestion/, pestanas/sobre/)
+   * Se montan la primera vez que se abren, con el objeto del módulo «datos».
    * ==================================================================== */
-  const CRITERIO = { estudiar: 30, vigilar: 10 };
-
-  function configurarGestion() {
-    const zonasConDatos = E.zonas.filter(z => !z.sinDatos);
-    const opciones = zonasConDatos.map(z => `<option value="${z.id}">${esc(z.nombre)}</option>`).join('');
-    $('#fiab-zona').innerHTML = opciones;
-    $('#sim-zona').innerHTML = opciones;
-    const porDefecto = zonasConDatos.some(z => z.id === 'cangas') ? 'cangas' : (zonasConDatos[0] && zonasConDatos[0].id);
-    $('#fiab-zona').value = porDefecto;
-    $('#sim-zona').value = porDefecto;
-
-    const simFecha = $('#sim-fecha');
-    simFecha.min = E.info.hoy;
-    simFecha.max = E.maxFecha;
-    simFecha.value = sumar(E.info.hoy, (6 - deISO(E.info.hoy).getDay() + 7) % 7); // el próximo sábado (o hoy)
-    $('#sim-fecha-ayuda').textContent = `Cualquier día hasta el ${fechaLarga(E.maxFecha).toLowerCase()}.`;
-
-    let tUmbral = null;
-    $('#umbral').addEventListener('input', () => {
-      pintarUmbral();
-      clearTimeout(tUmbral);
-      tUmbral = setTimeout(renderRegulacion, 120);
-    });
-    $$('input[name="filtro-alerta"]').forEach(r => r.addEventListener('change', pintarListaAlertas));
-    $('#fiab-zona').addEventListener('change', renderFiabilidad);
-    ['#sim-zona', '#sim-fecha', '#sim-puente', '#sim-lagos'].forEach(s => $(s).addEventListener('change', renderSimulador));
-    $$('input[name="sim-lluvia"]').forEach(r => r.addEventListener('change', renderSimulador));
-    $$('[data-exportar]').forEach(b => b.addEventListener('click', () => exportar(b.dataset.exportar, b)));
-
-    const dlg = $('#dlg-csv');
-    $('#dlg-cerrar').addEventListener('click', () => dlg.close());
-    $('#dlg-copiar').addEventListener('click', copiarCSV);
-    $('#dlg-descargar').addEventListener('click', descargarCSV);
-    dlg.addEventListener('close', () => { if (E.csvOrigen) E.csvOrigen.focus(); });
-  }
-
-  function cargarGestion() {
-    if (E.gestionIniciada) return;
-    E.gestionIniciada = true;
-    pintarUmbral();
-    renderRegulacion();
-    renderAlertas();
-    renderFiabilidad();
-    renderSimulador();
-  }
-
-  function pintarUmbral() {
-    const u = +$('#umbral').value;
-    $('#umbral-valor').textContent = '+' + u + NBSP + '%';
-    $('#umbral').setAttribute('aria-valuetext', `Más de ${u} por ciento sobre un día normal`);
-  }
-
-  async function renderRegulacion() {
-    const u = +$('#umbral').value;
-    const datos = await D.getDiasSobreUmbral(1 + u / 100, 2024);
-    if (+$('#umbral').value !== u) return;
-    const conDatos = datos.filter(d => !d.sinDatos).sort((a, b) => b.dias - a.dias);
-    const sin = datos.filter(d => d.sinDatos);
-    const maxD = Math.max(40, ...conDatos.map(d => d.dias));
-    const veredicto = d => d.dias >= CRITERIO.estudiar ? 'estudiar' : d.dias >= CRITERIO.vigilar ? 'vigilar' : 'ok';
-    const VER = { estudiar: { t: 'Estudiar regulación', n: 'rojo' }, vigilar: { t: 'Vigilar', n: 'ambar' }, ok: { t: 'Sin presión', n: 'verde' } };
-
-    const estudiar = conDatos.filter(d => veredicto(d) === 'estudiar').map(d => nombreZ(d.zonaId));
-    $('#reg-resumen').textContent = estudiar.length
-      ? `Con este umbral, ${estudiar.length === 1 ? 'una zona supera' : estudiar.length + ' zonas superan'} los ${CRITERIO.estudiar} días al año: ${listaNatural(estudiar)}.`
-      : `Con este umbral, ninguna zona llega a ${CRITERIO.estudiar} días al año.`;
-
-    $('#reg-lista').innerHTML = conDatos.map(d => {
-      const v = veredicto(d);
-      return `<li class="rg">
-        <span class="rg-zona">${esc(nombreZ(d.zonaId))}</span>
-        <span class="rg-barra" aria-hidden="true"><span class="rg-val v-${v}" style="width:${(d.dias / maxD * 100).toFixed(1)}%"></span>
-          <span class="rg-ref" style="left:${(CRITERIO.vigilar / maxD * 100).toFixed(1)}%"></span><span class="rg-ref" style="left:${(CRITERIO.estudiar / maxD * 100).toFixed(1)}%"></span></span>
-        <span class="rg-num">${d.dias} ${d.dias === 1 ? 'día' : 'días'}</span>
-        <span class="rg-ver"><span class="pill pill-${VER[v].n}">${ICONO[VER[v].n]}<span>${VER[v].t}</span></span></span>
-        <span class="rg-pico">Pico: ${num(d.picoPor100)} visitantes por cada 100 vecinos</span>
-      </li>`;
-    }).join('') + sin.map(d => `<li class="rg"><span class="rg-zona">${esc(nombreZ(d.zonaId))}</span><span class="rg-sin">Sin datos suficientes</span></li>`).join('');
-  }
-
-  async function renderAlertas() {
-    const hoy = E.info.hoy, n = DIAS_GESTION;
-    const fechas = Array.from({ length: n }, (_, i) => sumar(hoy, i));
-    const [prevs, alertas, cal] = await Promise.all([
-      Promise.all(fechas.map(f => D.getPrevisionDia(f))),
-      D.getAlertas(hoy, n),
-      D.getCalendario(hoy, n),
-    ]);
-    const cabecera = '<thead><tr><th scope="col"><span class="sr">Zona</span></th>' + cal.map(c => {
-      const d = deISO(c.fecha), esp = c.puente || c.festivo;
-      return `<th scope="col" class="${c.finde ? 'finde' : ''}" title="${esc(fechaLarga(c.fecha) + (esp ? ' · ' + esp : ''))}">` +
-        `<span aria-hidden="true">${LETRA[d.getDay()]}<br>${d.getDate()}</span><span class="sr">${esc(fechaLarga(c.fecha))}${esp ? ', ' + esc(esp) : ''}</span>` +
-        `${esp ? '<br><span class="m-punto on" aria-hidden="true"></span>' : ''}</th>`;
-    }).join('') + '</tr></thead>';
-    const cuerpo = '<tbody>' + E.zonas.map(z => '<tr><th scope="row">' + esc(z.nombre) + '</th>' + prevs.map(lista => {
-      const p = lista.find(x => x.zonaId === z.id) || { nivel: 'gris' };
-      return `<td class="cel cel-${p.nivel}" title="${esc(NIVEL[p.nivel].nombre + (p.ratio != null ? ' · ' + pct(p.ratio) : ''))}">${ICONO[p.nivel]}<span class="sr">${NIVEL[p.nivel].nombre}${p.ratio != null ? ', ' + pct(p.ratio) : ''}</span></td>`;
-    }).join('') + '</tr>').join('') + '</tbody>';
-    $('#matriz').innerHTML = `<caption class="sr">Nivel previsto por zona para los próximos ${n} días</caption>` + cabecera + cuerpo;
-    E.alertas = alertas;
-    pintarListaAlertas();
-  }
-
-  function pintarListaAlertas() {
-    const modo = ($('input[name="filtro-alerta"]:checked') || {}).value || 'rojo';
-    const lista = E.alertas.filter(a => modo === 'todas' || a.nivel === 'rojo');
-    if (!lista.length) {
-      $('#alertas-lista').innerHTML = `<p class="pz-ayuda">No hay alertas de ${modo === 'todas' ? 'afluencia alta ni de saturación' : 'saturación'} en los próximos ${DIAS_GESTION} días.</p>`;
-      return;
-    }
-    const porDia = {};
-    lista.forEach(a => { (porDia[a.fecha] = porDia[a.fecha] || []).push(a); });
-    $('#alertas-lista').innerHTML = Object.keys(porDia).sort().map(f => `<div class="al-dia">
-      <h3>${esc(fechaLarga(f))}</h3>
-      <ul>${porDia[f].sort((a, b) => b.ratio - a.ratio).map(a => `<li class="al">
-        <span>${pill(a.nivel)}</span>
-        <div><p class="al-zona"><strong>${esc(nombreZ(a.zonaId))}</strong> · ${pct(a.ratio)} sobre un día normal</p>
-        <p class="al-accion"><span class="al-etq">Acción sugerida:</span> ${esc(a.accion)}</p></div>
-      </li>`).join('')}</ul></div>`).join('');
-  }
-
-  function pasoBonito(x) {
-    const p = Math.pow(10, Math.floor(Math.log10(x))), f = x / p;
-    return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
-  }
-
-  async function renderFiabilidad() {
-    const id = $('#fiab-zona').value;
-    const f = await D.getFiabilidad(id);
-    if ($('#fiab-zona').value !== id || !f) return;
-
-    $('#fiab-metricas').innerHTML = `
-      <div class="met"><span class="met-valor">±${f.errorMedio}${NBSP}%</span><span class="met-et">Error medio diario entre lo previsto y lo real</span></div>
-      <div class="met"><span class="met-valor">${f.nivelAcertado}${NBSP}%</span><span class="met-et">Días en que el semáforo acertó el color</span></div>
-      <div class="met"><span class="met-valor">${f.rojosDetectados} de ${f.rojosReales}</span><span class="met-et">Días de saturación que el modelo anticipó</span></div>`;
-
-    // Media diaria por semana, para que la gráfica se lea mejor
-    const semanas = [];
-    for (let i = 0; i < f.serie.length; i += 7) {
-      const tramo = f.serie.slice(i, i + 7);
-      semanas.push({
-        fecha: tramo[0].fecha,
-        real: tramo.reduce((a, x) => a + x.real, 0) / tramo.length,
-        pred: tramo.reduce((a, x) => a + x.prediccion, 0) / tramo.length,
+  const COMPONENTE = { gestion: 'gestion', datos: 'sobre' };
+  const montadas = {};
+  function mostrarComponente(t) {
+    const nombre = COMPONENTE[t];
+    const comp = nombre && window.Pestanas && window.Pestanas[nombre];
+    if (!comp) return;
+    const cont = $('#panel-' + t);
+    if (montadas[t]) { if (comp.mostrar) comp.mostrar(); return; }
+    montadas[t] = true;
+    window.DatosModelo.cargar()
+      .then(datos => comp.montar(cont, datos, window.UtilWeb))
+      .catch(err => {
+        console.error(err);
+        cont.innerHTML = `<div class="tarjeta"><p><strong>No se han podido cargar las salidas del modelo.</strong></p><p class="error-datos">${esc(err.message)}</p></div>`;
       });
-    }
-    const W = 720, H = 260, m = { l: 58, r: 14, t: 14, b: 34 };
-    const maxV = Math.max(...semanas.map(s => Math.max(s.real, s.pred)));
-    const paso = pasoBonito(maxV / 4), yMax = Math.ceil(maxV / paso) * paso;
-    const x = i => m.l + i * (W - m.l - m.r) / (semanas.length - 1);
-    const y = v => m.t + (H - m.t - m.b) * (1 - v / yMax);
-    let rejilla = '';
-    for (let v = 0; v <= yMax + 1e-6; v += paso) {
-      rejilla += `<line class="${v === 0 ? 'lc-eje' : 'lc-grid'}" x1="${m.l}" x2="${W - m.r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>` +
-        `<text class="lc-et" x="${m.l - 8}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end">${num(v)}</text>`;
-    }
-    let meses = '', mesPrevio = -1;
-    semanas.forEach((s, i) => {
-      const mm = deISO(s.fecha).getMonth();
-      if (mm !== mesPrevio) {
-        mesPrevio = mm;
-        meses += `<text class="lc-et" x="${x(i).toFixed(1)}" y="${H - 10}" text-anchor="${i === 0 ? 'start' : 'middle'}">${esc(capital(FMT_MES.format(deISO(s.fecha)).replace('.', '')))}</text>`;
-      }
+  }
+
+  /* ---------- Aviso de datos sintéticos ---------- */
+  function avisoSintetico() {
+    window.DatosModelo.cargar().then(d => {
+      if (!d.sintetico) return;
+      $('#aviso-sintetico').hidden = false;
+    }).catch(err => {
+      console.error(err);
+      const a = $('#aviso-sintetico');
+      a.querySelector('p').innerHTML = `<strong>No se han podido cargar las salidas del modelo.</strong> <span class="error-datos">${esc(err.message)}</span>`;
+      a.hidden = false;
     });
-    const linea = k => semanas.map((s, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(s[k]).toFixed(1)}`).join(' ');
-    const ultimo = semanas.length - 1;
-    $('#fiab-grafico').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Visitantes diarios medios por semana en ${esc(nombreZ(id))}, de enero a junio de 2025: real frente a predicción. Error medio ±${f.errorMedio} %.">
-      ${rejilla}${meses}
-      <path class="lc-pred" d="${linea('pred')}"/>
-      <path class="lc-real" d="${linea('real')}"/>
-      <circle class="lc-punto" cx="${x(ultimo).toFixed(1)}" cy="${y(semanas[ultimo].real).toFixed(1)}" r="4"/>
-    </svg>`;
-    $('#fiab-tabla').innerHTML = `<table class="tabla"><caption class="sr">Visitantes diarios medios por semana</caption>
-      <thead><tr><th scope="col">Semana del</th><th scope="col" class="num">Real</th><th scope="col" class="num">Predicción</th></tr></thead>
-      <tbody>${semanas.map(s => `<tr><td>${esc(diaMes(s.fecha))}</td><td class="num">${num(s.real)}</td><td class="num">${num(s.pred)}</td></tr>`).join('')}</tbody></table>`;
   }
 
-  let seqSim = 0;
-  async function renderSimulador() {
-    const s = ++seqSim;
-    const id = $('#sim-zona').value;
-    const valor = $('#sim-fecha').value;
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(valor)) return; // fecha a medio escribir
-    const f = limitarFecha(valor);
-    const lagos = $('#sim-lagos');
-    lagos.disabled = id !== 'cangas';
-    const escenario = {
-      lluvia: ($('input[name="sim-lluvia"]:checked') || {}).value || 'auto',
-      puente: $('#sim-puente').value,
-      lagos: lagos.disabled ? 'auto' : lagos.value,
-    };
-    const r = await D.simular(id, f, escenario);
-    if (s !== seqSim) return;
-    const carta = (p, titulo) => `<div class="sim-carta estado-${p.nivel}">
-      <p class="eyebrow">${titulo}</p>${pill(p.nivel)}
-      <p class="sim-pct">${pct(p.ratio)}</p>
-      <p class="sim-vis">Unos ${num(p.visitantes)} visitantes</p>
-      <p class="sim-factores">${esc(p.factores.map(x => x.texto + ' ' + (x.efecto >= 0 ? '+' : MENOS) + Math.abs(x.efecto) + ' %').join(' · '))}</p></div>`;
-    const b = r.base, e = r.escenario;
-    const dif = Math.round((e.ratio - b.ratio) * 100);
-    let conclusion;
-    if (b.nivel === e.nivel && Math.abs(dif) < 2) conclusion = 'Con estas condiciones la previsión apenas cambia.';
-    else if (b.nivel === e.nivel) conclusion = `Sigue en «${NIVEL[e.nivel].nombre.toLowerCase()}», pero con ${Math.abs(dif)} puntos ${dif > 0 ? 'más' : 'menos'} sobre un día normal.`;
-    else conclusion = `Pasaría de «${NIVEL[b.nivel].nombre.toLowerCase()}» a «${NIVEL[e.nivel].nombre.toLowerCase()}» (${dif > 0 ? '+' : MENOS}${Math.abs(dif)} puntos).`;
-    $('#sim-resultado').innerHTML = `<div class="sim-cartas">${carta(b, 'Previsión actual')}${carta(e, 'Con tu escenario')}</div><p class="sim-concl">${esc(conclusion)}</p>`;
-  }
-
-  /* ---------- Exportación CSV ---------- */
-  const celdaCSV = v => {
-    if (v == null) return '';
-    const s = String(v);
-    return /[;"\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
-  };
-  const pctNum = r => (r == null ? '' : Math.round((r - 1) * 100));
-
-  async function exportar(tipo, boton) {
-    const hoy = E.info.hoy, n = DIAS_GESTION;
-    let nombre, desc, filas;
-    if (tipo === 'prevision') {
-      const fechas = Array.from({ length: n }, (_, i) => sumar(hoy, i));
-      const prevs = await Promise.all(fechas.map(f => D.getPrevisionDia(f)));
-      filas = [['fecha', 'zona', 'nivel', 'visitantes_previstos', 'minimo', 'maximo', 'dia_normal', 'variacion_pct', 'con_meteorologia']];
-      prevs.forEach(lista => lista.forEach(p => filas.push([p.fecha, nombreZ(p.zonaId), p.nivel, p.visitantes, p.min, p.max, p.normal, pctNum(p.ratio), p.conMeteo ? 'si' : 'no'])));
-      nombre = `prevision_${hoy}.csv`;
-      desc = `Previsión de las ${E.zonas.length} zonas para los próximos ${n} días.`;
-    } else if (tipo === 'umbral') {
-      const u = +$('#umbral').value;
-      const datos = await D.getDiasSobreUmbral(1 + u / 100, 2024);
-      filas = [['zona', 'anio', 'umbral_pct', 'dias_sobre_umbral', 'pico_visitantes', 'pico_por_100_vecinos']];
-      datos.forEach(d => filas.push([nombreZ(d.zonaId), d.anio, u, d.dias, d.picoVisitantes, d.picoPor100]));
-      nombre = `dias_sobre_umbral_${u}.csv`;
-      desc = `Días de 2024 con más de +${u} % sobre un día normal, por zona.`;
-    } else {
-      const alertas = await D.getAlertas(hoy, n);
-      filas = [['fecha', 'zona', 'nivel', 'variacion_pct', 'accion_sugerida']];
-      alertas.forEach(a => filas.push([a.fecha, nombreZ(a.zonaId), a.nivel, pctNum(a.ratio), a.accion]));
-      nombre = `alertas_${hoy}.csv`;
-      desc = `Alertas de afluencia alta y saturación de los próximos ${n} días, con la acción sugerida.`;
-    }
-    const csv = filas.map(f => f.map(celdaCSV).join(';')).join('\r\n');
-    E.csv = { nombre, csv };
-    E.csvOrigen = boton || null;
-    $('#dlg-nombre').textContent = nombre;
-    $('#dlg-desc').textContent = desc + ' Son datos ficticios del piloto.';
-    $('#dlg-texto').value = csv;
-    $('#dlg-estado').textContent = '';
-    const dlg = $('#dlg-csv');
-    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
-    $('#dlg-copiar').focus();
-  }
-
-  function copiarCSV() {
-    const ta = $('#dlg-texto'), estado = $('#dlg-estado');
-    const seleccionar = () => {
-      ta.focus();
-      ta.select();
-      estado.textContent = 'No se ha podido copiar automáticamente. El texto está seleccionado: cópialo con Ctrl+C (o Cmd+C).';
-    };
-    try {
-      navigator.clipboard.writeText(E.csv.csv)
-        .then(() => { estado.textContent = 'Copiado. Pégalo en una hoja de cálculo o en un archivo de texto.'; })
-        .catch(seleccionar);
-    } catch (e) { seleccionar(); }
-  }
-
-  function descargarCSV() {
-    const estado = $('#dlg-estado');
-    try {
-      const blob = new Blob(['﻿' + E.csv.csv], { type: 'text/csv;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = E.csv.nombre;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 4000);
-      estado.textContent = 'Descarga iniciada. Si no aparece (la vista previa del piloto puede bloquearla), usa Copiar.';
-    } catch (e) {
-      estado.textContent = 'No se ha podido descargar. Usa Copiar.';
-    }
-  }
+  /* ---------- Utilidades para las pestañas de la persona 2 ---------- */
+  window.UtilWeb = Object.freeze({
+    $, $$, esc, num, pct, delta, pill, anunciar, listaNatural,
+    fechaLarga: f => fechaLarga(f), fechaCorta: f => fechaCorta(f),
+    deISO, aISO, sumar, diasEntre, NIVEL, ICONO, NBSP, MENOS,
+  });
 
   /* ---------- Arranque ---------- */
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar);

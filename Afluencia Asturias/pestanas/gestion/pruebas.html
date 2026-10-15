@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Pruebas de Gestión</title>
+<style>body{font:14px/1.5 system-ui,sans-serif;margin:1rem}.ok{color:#1a7f37}.fallo{color:#b3261e;font-weight:700}</style>
+</head><body>
+<h1>Pruebas de la lógica de Gestión</h1>
+<p>Se ejecutan al abrir la página (doble clic). Usan las salidas reales del modelo en <code>datos/modelo/salidas.js</code>.</p>
+<ul id="res"></ul>
+<script src="../../datos/modelo/salidas.js"></script>
+<script src="config-gestion.js"></script>
+<script src="logica.js"></script>
+<script>
+(function () {
+  const L = window.GestionLogica, D = window.SALIDAS_MODELO, C = window.GestionConfig;
+  const res = document.getElementById('res');
+  let fallos = 0, total = 0;
+  function prueba(nombre, fn) {
+    total++;
+    const li = document.createElement('li');
+    try { fn(); li.className = 'ok'; li.textContent = 'OK  ' + nombre; }
+    catch (e) { fallos++; li.className = 'fallo'; li.textContent = 'FALLO  ' + nombre + ' → ' + e.message; }
+    res.appendChild(li);
+  }
+  const igual = (a, b, m) => { if (a !== b) throw new Error((m || '') + ' esperado ' + b + ', obtenido ' + a); };
+  const cierto = (c, m) => { if (!c) throw new Error(m || 'no se cumple'); };
+
+  const principal = L.zonaPrincipal(D);
+
+  prueba('la zona principal va primero', () => cierto(principal.es_principal && L.zonas(D)[0] === principal));
+
+  prueba('observados: coinciden con curva_umbral en toda la rejilla', () => {
+    L.zonas(D).forEach(z => L.umbralesDisponibles(D).forEach(u => {
+      [2023, 2024].forEach(a => {
+        const c = D.regulacion.por_zona.find(x => x.zona_mitma_id === z.zona_mitma_id).curva_umbral.find(x => x.anio === a && x.umbral === u);
+        igual(L.diasSobreUmbral(D, z.zona_mitma_id, a, u).dias, c.dias, z.zona_mitma_id + ' ' + a + ' ' + u);
+      });
+    }));
+  });
+
+  prueba('observado fuera de la rejilla: sin dato (no se interpola)', () => {
+    const r = L.diasSobreUmbral(D, principal.zona_mitma_id, 2024, 2.1);
+    igual(r.dias, null); igual(r.exacto, false);
+  });
+
+  prueba('previstos recalculados desde el cociente coinciden con curva_umbral (±3 días por redondeo)', () => {
+    L.zonas(D).forEach(z => L.umbralesDisponibles(D).forEach(u => {
+      [2026, 2027].forEach(a => {
+        const c = D.regulacion.por_zona.find(x => x.zona_mitma_id === z.zona_mitma_id).curva_umbral.find(x => x.anio === a && x.umbral === u);
+        const r = L.diasSobreUmbral(D, z.zona_mitma_id, a, u);
+        const tag = z.zona_mitma_id + ' ' + a + ' ' + u;
+        // El JSON redondea cociente, p10 y p90: se admite 3 días de diferencia con la curva del modelo
+        const casi = (x, y, m) => cierto(Math.abs(x - y) <= 3, m + ' esperado ' + y + ', obtenido ' + x);
+        casi(r.dias, c.dias, tag + ' dias');
+        if (c.dias_min != null) { casi(r.min, c.dias_min, tag + ' min'); casi(r.max, c.dias_max, tag + ' max'); }
+      });
+    }));
+  });
+
+  prueba('con los umbrales por defecto cuadra con dias_alerta y dias_rojos de cada año', () => {
+    const u = D.regulacion.umbrales;
+    D.regulacion.por_zona.forEach(z => z.anios.forEach(a => {
+      igual(L.diasSobreUmbral(D, z.zona_mitma_id, a.anio, u.ambar).dias, a.dias_alerta, z.zona_mitma_id + ' ' + a.anio + ' alerta');
+      igual(L.diasSobreUmbral(D, z.zona_mitma_id, a.anio, u.rojo).dias, a.dias_rojos, z.zona_mitma_id + ' ' + a.anio + ' rojos');
+    }));
+  });
+
+  prueba('subir el umbral nunca aumenta los días (monotonía)', () => {
+    L.zonas(D).forEach(z => [2023, 2024, 2026, 2027].forEach(a => {
+      let previo = Infinity;
+      L.umbralesDisponibles(D).forEach(u => { const d = L.diasSobreUmbral(D, z.zona_mitma_id, a, u).dias; cierto(d <= previo, z.zona_mitma_id + ' ' + a + ' ' + u); previo = d; });
+    }));
+  });
+
+  prueba('umbral entre puntos de la rejilla funciona en previstos y es intermedio', () => {
+    const a = L.diasSobreUmbral(D, principal.zona_mitma_id, 2026, 2.0).dias;
+    const m = L.diasSobreUmbral(D, principal.zona_mitma_id, 2026, 2.1).dias;
+    const b = L.diasSobreUmbral(D, principal.zona_mitma_id, 2026, 2.2).dias;
+    cierto(a >= m && m >= b, a + ' ' + m + ' ' + b);
+  });
+
+  prueba('veredicto según el criterio editable', () => {
+    igual(L.veredicto(30), 'estudiar'); igual(L.veredicto(29), 'vigilar'); igual(L.veredicto(10), 'vigilar');
+    igual(L.veredicto(9), 'ok'); igual(L.veredicto(null), 'sin_dato');
+    igual(L.veredicto(5, { criterio: { estudiar: 5, vigilar: 2 } }), 'estudiar', 'config propia');
+  });
+
+  prueba('tablaRegulacion: una fila por zona, principal primero, 4 años', () => {
+    const t = L.tablaRegulacion(D, 1.5);
+    igual(t.length, D.predicciones.zonas.length); igual(t[0].es_principal, true); igual(t[0].anios.length, 4);
+    igual(t[0].anioReferencia, 2026);
+  });
+
+  prueba('Lagos: dias_regulados y reparto de alertas coherentes con regulacion.json', () => {
+    const l = L.compararLagos(D);
+    igual(l.zona_mitma_id, principal.zona_mitma_id);
+    l.anios.forEach((a, i) => {
+      const o = D.regulacion.lagos.por_anio[i];
+      igual(a.dias_regulados, o.dias_regulados);
+      igual(a.alerta_en_regulados + a.alerta_fuera, o.alerta_en_dias_regulados + o.alerta_fuera_de_regulacion);
+      cierto(a.pct_alertas_en_regulados >= 0 && a.pct_alertas_en_regulados <= 100);
+    });
+    igual(l.anios.filter(a => a.supuesta).length, 1, 'solo 2027 supuesto');
+    cierto(l.calibracion && l.calibracion.mejor_umbral > 0);
+  });
+
+  prueba('alertas: ventana de 28 días desde fecha_hoy, 5 zonas por día, ordenadas', () => {
+    const f = L.alertasProximas(D);
+    igual(f.length, 28 * D.predicciones.zonas.length);
+    igual(f[0].fecha, D.predicciones.fecha_hoy);
+    igual(f[f.length - 1].fecha, L.sumarDias(D.predicciones.fecha_hoy, 27));
+    for (let i = 1; i < f.length; i++) cierto(f[i - 1].fecha <= f[i].fecha, 'orden');
+  });
+
+  prueba('alertas: la acción sale de la configuración por color', () => {
+    L.alertasProximas(D).forEach(a => igual(a.accion.texto, C.acciones[a.color].texto, a.fecha + ' ' + a.color));
+  });
+
+  prueba('alertas: la configuración propia sustituye a la de fábrica', () => {
+    const cfg = { acciones: { verde: { texto: 'V' }, ambar: { texto: 'A' }, rojo: { texto: 'R' }, gris: { texto: 'G' } }, diasAlertas: 3 };
+    const f = L.alertasProximas(D, { config: cfg });
+    igual(f.length, 3 * D.predicciones.zonas.length);
+    igual(f[0].accion.texto, { verde: 'V', ambar: 'A', rojo: 'R', gris: 'G' }[f[0].color]);
+  });
+
+  prueba('alertas: a 1-7 días usa futuro_corto cuando existe', () => {
+    const f = L.alertasProximas(D, { dias: 7 });
+    const hayCorto = D.predicciones.predicciones.some(p => p.conjunto === 'futuro_corto' && p.fecha >= D.predicciones.fecha_hoy);
+    if (hayCorto) cierto(f.some(a => a.modelo === 'corto'), 'ninguna fila de corto plazo');
+  });
+
+  prueba('alertas: los colores son válidos y rojo/ámbar llevan cociente por encima del umbral de la cabecera', () => {
+    L.alertasProximas(D, { dias: 60 }).forEach(a => {
+      cierto(['verde', 'ambar', 'rojo', 'gris'].includes(a.color), a.color);
+      if (a.color === 'rojo') cierto(a.cociente >= D.predicciones.umbrales.rojo - 1e-6, 'rojo ' + a.cociente);
+    });
+  });
+
+  prueba('fiabilidad: filas ordenadas 1..7, 8+ y grupos con n sumado', () => {
+    const f = L.fiabilidad(D, principal.zona_mitma_id);
+    igual(f.filas.map(x => x.horizonte_txt).join(','), '1,2,3,4,5,6,7,8+');
+    const total = f.filas.reduce((s, x) => s + x.n, 0);
+    igual(f.grupos.reduce((s, g) => s + g.n, 0), total);
+    f.grupos.forEach(g => cierto(g.acierto_color > 0 && g.acierto_color <= 1));
+  });
+
+  prueba('fiabilidad: el grupo 8+ coincide con la fila 8+ del modelo', () => {
+    const f = L.fiabilidad(D, principal.zona_mitma_id);
+    const fila = f.filas.find(x => x.horizonte_txt === '8+');
+    cierto(Math.abs(f.grupos[f.grupos.length - 1].acierto_color - fila.acierto_color) < 1e-9);
+  });
+
+  prueba('CSV: separador «;», decimales con coma y comillas escapadas', () => {
+    igual(L.aCSV([['a', 1.5, null], ['x;y', 'di"ce']]), 'a;1,5;\r\n"x;y";"di""ce"');
+  });
+
+  prueba('CSV de previsión: una línea por fila + cabecera, con aviso si es sintético', () => {
+    const f = L.alertasProximas(D, { dias: 7 });
+    const csv = L.csvPrevision(f, true).split('\r\n');
+    igual(csv.length, f.length + 1);
+    cierto(csv[0].endsWith(';aviso')); cierto(csv[1].includes('SINTÉTICOS'));
+    igual(L.csvPrevision(f, false).split('\r\n')[0].includes('aviso'), false);
+  });
+
+  prueba('CSV de regulación: una línea por zona', () => {
+    const t = L.tablaRegulacion(D, 1.5);
+    igual(L.csvRegulacion(t, 1.5, false).split('\r\n').length, t.length + 1);
+  });
+
+  const resumen = document.createElement('h2');
+  resumen.id = 'resumen';
+  resumen.textContent = fallos ? 'FALLOS: ' + fallos + ' de ' + total : 'TODO OK: ' + total + ' pruebas';
+  res.before(resumen);
+  document.title = resumen.textContent;
+})();
+</script>
+</body></html>

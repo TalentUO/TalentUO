@@ -93,7 +93,8 @@ window.MapaAsturias = (function () {
   /* ====================================================================
    * crear(contenedor, opciones)
    *   opciones.zonas:    [{ id, nombre }]
-   *   opciones.concejos: [{ id (INE), nombre, zonaId }]
+   *   opciones.concejos: [{ id (INE), nombre, zonaId|null }]   zonaId null = fuera de las zonas del modelo:
+   *                      se ve siempre (también con poco zoom) en gris claro y no se puede elegir
    *   opciones.tooltip(tipo, id)               -> HTML del recuadro al pasar el ratón
    *   opciones.alElegir(tipo, id, porTeclado)  -> al pulsar una zona o un concejo
    *   tipo es 'zona' o 'concejo'
@@ -109,7 +110,7 @@ window.MapaAsturias = (function () {
     const concejos = op.concejos.filter(c => geomPorId[c.id] || (console.warn('Concejo sin geometría:', c.id, c.nombre), false));
 
     const fConcejos = concejos.map(c => ({
-      type: 'Feature', properties: { tipo: 'concejo', id: c.id, nombre: c.nombre },
+      type: 'Feature', properties: { tipo: 'concejo', id: c.id, nombre: c.nombre, sinZona: !c.zonaId },
       geometry: window.topojson.feature(topo, geomPorId[c.id]).geometry,
     }));
     const fZonas = op.zonas.map(z => {
@@ -125,7 +126,8 @@ window.MapaAsturias = (function () {
     map.attributionControl.setPrefix(false);
     map.attributionControl.addAttribution('Límites: <a href="https://www.ign.es">© IGN</a> (CC BY 4.0)');
     // La vista inicial va antes que las capas: Leaflet no crea los polígonos hasta que el mapa tiene vista
-    const limites = L.geoJSON({ type: 'FeatureCollection', features: fZonas }).getBounds();
+    // Encuadre: Asturias entera (todos los concejos), aunque el modelo solo tenga algunas zonas
+    const limites = L.geoJSON({ type: 'FeatureCollection', features: fConcejos }).getBounds();
     // No se puede alejar más allá de Asturias entera ni salirse de ella
     const zoomInicial = () => map.getBoundsZoom(limites, false, L.point(16, 16));
     map.setView(limites.getCenter(), zoomInicial(), { animate: false });
@@ -157,9 +159,14 @@ window.MapaAsturias = (function () {
     const capas = { zona: {}, concejo: {} };
     function preparar(tipo) {
       return {
-        style: { className: 'area area-' + tipo + ' nivel-gris', weight: tipo === 'zona' ? 2 : 1 },
+        style: f => ({ className: 'area area-' + tipo + (f.properties.sinZona ? ' sin-zona' : ' nivel-gris'), weight: tipo === 'zona' ? 2 : 1 }),
         onEachFeature: (f, capa) => {
           capas[tipo][f.properties.id] = capa;
+          if (f.properties.sinZona) {
+            // Fuera de las zonas del modelo: solo un recuadro informativo, sin elegirlo
+            capa.bindTooltip(() => op.tooltip(tipo, f.properties.id), { sticky: true, direction: 'top', offset: [0, -14], opacity: 1, className: 'tip-mapa' });
+            return;
+          }
           capa.bindTooltip(() => op.tooltip(tipo, f.properties.id), {
             sticky: true, direction: 'top', offset: [0, -14], opacity: 1, className: 'tip-mapa',
           });
@@ -179,6 +186,7 @@ window.MapaAsturias = (function () {
     // Teclado: cada polígono visible es un botón. Intro o Espacio lo elige; al enfocarlo se ve su recuadro.
     ['zona', 'concejo'].forEach(tipo => Object.keys(capas[tipo]).forEach(id => {
       const capa = capas[tipo][id], el = capa.getElement();
+      if (capa.feature.properties.sinZona) { el.setAttribute('aria-hidden', 'true'); return; }
       el.setAttribute('tabindex', '0');
       el.setAttribute('role', 'button');
       el.addEventListener('keydown', e => {
@@ -356,6 +364,11 @@ window.MapaAsturias = (function () {
           Object.keys(capas[tipo]).forEach(id => {
             const d = datos[id] || { nivel: 'gris', etiqueta: '', aria: '', atenuada: false };
             const el = capas[tipo][id].getElement();
+            if (capas[tipo][id].feature.properties.sinZona) {
+              el.setAttribute('class', 'leaflet-interactive area area-concejo sin-zona');
+              etiquetas[tipo][id].el.classList.add('sin-zona');
+              return;
+            }
             el.setAttribute('class', `leaflet-interactive area area-${tipo} nivel-${d.nivel}${d.atenuada ? ' atenuada' : ''}`);
             el.setAttribute('aria-label', d.aria);
             el.setAttribute('aria-pressed', String(tipo === 'zona' ? estado.zonaSel === id && !estado.concejoSel : estado.concejoSel === id));
