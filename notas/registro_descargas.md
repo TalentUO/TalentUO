@@ -235,3 +235,25 @@ URL: `https://www.ine.es/experimental/turismo_moviles/exp_tmov_interno_mun_<año
 - Se descartó la tanda inicial (pandas); sus CSV parciales (≈68 días por año) están en `data/raw/_mitma_viejo/`. El script actual `scripts/descarga_mitma.py` rehace la descarga entera con el método de streaming; salida y columnas idénticas (comprobado en 4 casos). Estado en `data/raw/_mitma_estado_v2.jsonl` (el antiguo `_mitma_estado.jsonl` quedó en `_mitma_viejo/`).
 - Orden: pernoctaciones de todo el periodo → viajes 2024-01..2025-06 → 2023 → 2022. Los CSV anuales se ensamblan al terminar la tanda (o con `--solo-ensamblar`). Ver `decisiones_y_consideraciones.md` para las mediciones.
 - Resultados finales por año (filas, días, fechas ausentes): **pendientes** (se anotarán tras `scripts/verificar_mitma.py`).
+
+### 2026-10-15 23:10 · Paso 2: estado de la descarga MITMA al hacer el traspaso (Persona A)
+
+**Estado: PARCIAL.** Descarga detenida por la Persona A a petición propia; se traspasa a otra persona (guía: `notas/traspaso_mitma.md`).
+
+| Fichero (no versionado, `data/raw/`) | Filas | Días distintos | Primera – última | Fechas ausentes | Fuera de Asturias |
+|---|---|---|---|---|---|
+| `mitma_pernoctaciones_2022.csv` (87 MB) | 2 964 041 | 365 | 2022-01-01 – 2022-12-31 | ninguna | 0 |
+| `mitma_pernoctaciones_2023.csv` (95 MB) | 3 244 975 | 358 | 2023-01-01 – 2023-12-31 | 2023-10-26, 27, 30, 31; 2023-11-01, 02, 03 | 0 |
+| `mitma_pernoctaciones_2024.csv` (112 MB) | 3 834 878 | 362 | 2024-01-01 – 2024-12-31 | 2024-04-18; 2024-11-09, 10, 26 | 0 |
+| `mitma_pernoctaciones_2025.csv` (48 MB) | 1 653 463 | 179 | 2025-01-01 – 2025-06-30 | 2025-04-28, 29 | 0 |
+| viajes 2024 (aún en ficheros diarios `_mitma_dias/`, sin ensamblar) | ver `notas/mitma_referencia_filas_por_dia.csv` | 362 | 2024-01-01 – 2024-12-31 | 2024-04-18; 2024-11-09, 10, 26 (404) | no verificado aún (solo se verificó por construcción del filtro) |
+| viajes 2025 (ídem) | ídem | 61 | 2025-01-01 – 2025-03-02 | — | ídem |
+| viajes 2022 | ídem | 4 | 2022-01-01 – 2022-01-06 | — | ídem |
+| viajes 2023 | — | 0 | — | — | — |
+
+- Pernoctaciones: **verificadas** con `scripts/verificar_mitma.py` (2026-10-15 ~23:06). Cada fecha ausente es un 404 del portal y además falta en el RSS oficial. 2 964 041 = 2 945 927 (según estado) + 18 114 (los dos días de la prueba del script, ya ensamblados antes).
+- Viajes: **no** se han ejecutado las comprobaciones por año (faltan 120 días de 2025, 2023 y 2022). Pendiente de quien termine.
+- Los CSV de pernoctaciones **no se pueden subir** (el de 2024 pesa 112 MB; límite de GitHub: 100 MB). Se estimó «pocos MB» al principio y era incorrecto.
+- Referencia por día de lo descargado: `notas/mitma_referencia_filas_por_dia.csv` (1 708 días-tipo, de los que 17 son `NO_DISPONIBLE`). Comparación: `scripts/comparar_con_referencia.py`. Probado solo contra el estado del propio PC de origen (0 diferencias); no se probó con una descarga independiente (**NO VERIFICADO** que detecte diferencias reales).
+- Días sin datos (404 confirmados): pernoctaciones 13 días (los de la tabla); viajes 4 días de 2024 (04-18, 11-09, 11-10, 11-26). Discrepancias con la lista de la página del MITMA y 2024-10-29..31 (DANA): ver `notas/traspaso_mitma.md` §5.
+- Sigue sin registrar mes a mes (`notas/registro_mitma.md`) y sin ficheros por mes: ver decisiones pendientes en `notas/traspaso_mitma.md` §7.

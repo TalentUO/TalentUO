@@ -145,3 +145,16 @@ La primera versión del script (pandas, `chunksize`, 4 procesos, uno por año) i
 
 ### Estimación de tiempo (provisional)
 ~190 GB de tráfico: ~7 h si el portal rinde ~7 MB/s, ~17 h si se queda en ~3 MB/s. Viajes 2024 a junio 2025 (~65 GB): ~2,5-6 h. Decisión del equipo: si no hay tiempo, parar tras 2024-2025 y dejar 2022-2023 como opcional.
+
+## 2026-10-15 (noche) · Persona A · Traspaso de la descarga MITMA a otra persona
+
+### Decisiones
+1. **El estado de la descarga no se versiona** (`data/raw/_mitma_estado_v2.jsonl`, ya ignorado): si viajara por git sin los datos, el script daría por hechos días cuyos ficheros no están en el otro PC. Se sube en su lugar una **tabla de referencia** (`notas/mitma_referencia_filas_por_dia.csv`) y un script de comparación.
+2. **Cambio en el script por esa razón**: un día `OK` del estado solo se da por hecho si existe su fichero diario o consta como `ensamblado` en el CSV anual (antes, bastaba con que existiera el CSV anual, lo que habría ocultado días sin descargar). El script anota `"ensamblado": true` al ensamblar. Nuevo argumento `--tipos` para limitar descarga y ensamblado a viajes o pernoctaciones.
+3. **Los CSV anuales de pernoctaciones no se suben** (112 MB en 2024 > límite de 100 MB; se pensó «pocos MB»). Se regeneran en ~15 min.
+4. **Quien continúe parte con el estado vacío** salvo que reciba los datos fuera de git; ver `notas/traspaso_mitma.md` §4.
+
+### Consideraciones
+- Verificado: pernoctaciones 2022-2025 completas salvo 13 días sin publicar (404 y ausentes del RSS oficial); 0 filas fuera de Asturias.
+- Sin verificar: comprobaciones de los viajes (parciales), cobertura de otro sistema operativo, causa de las discrepancias entre la lista de la página del MITMA y el RSS, y si la velocidad del portal depende de la hora/IP.
+- Pendientes de decisión del equipo: ¿viajes de 2022 y 2023?, ¿ficheros por mes?, ¿`registro_mitma.md`?, ¿fichero origen-destino de «día normal» (1,08 GB)?

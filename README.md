@@ -36,7 +36,7 @@ Persona A (demanda y movilidad): MITMA viajes/pernoctaciones 2022–2025 (Asturi
 Fuente: Open Data Movilidad del MITMA, estudios básicos, zonificación municipal v2 (`https://movilidad-opendata.mitma.es/estudios_basicos/por-municipios/...`). Rango: 2022-01-01 a 2025-06-30 (desde julio de 2025 cambia la metodología: **no se mezcla**). Solo cubre residentes en España.
 
 ```bash
-.venv\Scripts\python.exe scripts/descarga_mitma.py --workers 4      # descarga (reanudable: relanzar el mismo comando)
+.venv\Scripts\python.exe scripts/descarga_mitma.py --workers 4      # descarga (reanudable; --tipos viajes|pernoctaciones, --inicio/--fin)
 .venv\Scripts\python.exe scripts/descarga_mitma.py --solo-ensamblar # junta los ficheros diarios en los CSV anuales
 .venv\Scripts\python.exe scripts/verificar_mitma.py 2024            # filas, días, fechas ausentes, destinos fuera de Asturias
 ```
@@ -46,5 +46,6 @@ Progreso: `Get-Content logs\descarga_mitma.log -Tail 10 -Wait` (PowerShell).
 - **Prioridad**: pernoctaciones de todo el periodo, luego viajes 2024-25, 2023 y 2022.
 - **Límite real**: el ancho de banda del portal (~190 GB de tráfico en total; medido entre ~2 y ~20 MB/s). Usar **4 workers**: con 10 el rendimiento empeoró. Al parar el script en Windows, comprobar que no quedan workers huérfanos (procesos `python` con `multiprocessing.spawn`).
 - **Días sin datos**: un 404 se deja ausente (nunca 0). Detalle y contraste con la lista oficial en `notas/registro_descargas.md`.
+- **Para terminar la descarga en otro ordenador: `notas/traspaso_mitma.md`** (estado exacto, comandos, validación, decisiones pendientes). Referencia de filas por día: `notas/mitma_referencia_filas_por_dia.csv`; compararla con `python scripts/comparar_con_referencia.py`.
 - Mediciones, decisiones y límites: `notas/decisiones_y_consideraciones.md` (secciones «Paso 2» y «cambio de método»).
 
