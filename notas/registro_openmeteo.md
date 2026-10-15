@@ -1,7 +1,7 @@
 # Registro Open-Meteo
 
 Script: `src/descarga_openmeteo.py` (reanudable; zonas en `config/zonas_meteo.csv`).
-Estado a 2026-10-15: descarga **completa** de las 9 zonas (Historical Forecast diaria 2022-01-01→2026-10-15; Previous Runs horaria 2024-01-01→2026-10-15), ERA5 de Covadonga, Cangas de Onís y Lagos de Enol, y previsión en vivo de ejemplo (7 días, funciona: 2026-10-15→10-21). La tabla del final se regenera sola con el script. Incidencias de acceso: 429 por minuto y por hora (absorbidos con espera creciente) y un 503 puntual.
+Estado a 2026-10-15: descarga **completa** de las 9 zonas (Historical Forecast diaria 2022-01-01→2026-10-15; Previous Runs horaria 2024-01-01→2026-10-15), ERA5 (Archive) de las 9 zonas (ampliado el 2026-10-15 para comparar el tramo 2022 por zona), y previsión en vivo de ejemplo (7 días, funciona: 2026-10-15→10-21). La tabla del final se regenera sola con el script. Incidencias de acceso: 429 por minuto y por hora (absorbidos con espera creciente) y un 503 puntual.
 
 ## Condiciones de uso (fuente: open-meteo.com/en/pricing y /en/docs, consultadas 2026-10-15)
 
@@ -71,14 +71,15 @@ Contraste con la API de geocodificación de Open-Meteo (2026-10-15):
 | oviedo | 43,36 / -5,86 | 43,3603 / -5,8448 | verificada (≈0,015° de diferencia) |
 | madrid | 40,42 / -3,70 | 40,4165 / -3,7026 | verificada |
 | sevilla | 37,39 / -5,98 | 37,3828 / -5,9732 | verificada |
-| covadonga | 43,31 / -5,05 | sin resultado en Asturias (devuelve Covadonga de México) | **no verificada por API** |
-| lagos_enol | 43,27 / -4,99 | sin resultado ("Lago Enol", "Lagos de Covadonga") | **no verificada por API**; elevación 1070 m coherente con los Lagos |
+| covadonga | 43,31 / -5,05 | "Basílica de Covadonga" 43,3082 / -5,0549, 258 m (buscar "Covadonga" devuelve sobre todo México). Wikipedia: 43,3121 / -5,0589 | **verificada** (~0,4–0,7 km; elevación del punto 278 m vs 258 m de la basílica) |
+| lagos_enol | 43,27 / -4,99 | la API de geocodificación no tiene el lago (probado: Enol, Lago Enol, Lagos de Covadonga, Ercina). Wikipedia: Lago Enol 43,2721 / -4,9911; Lago Ercina 43,2679 / -4,9809 | **verificada con Wikipedia, no con la API** (~0,25 km del Enol). API de elevación (DEM 90 m): 1070 m, coherente con el lago (~1070 m) |
 
 ## Pendiente / no verificado
 
 - Modelo usado antes de 2022-11-10; si hay más cambios de modelo posteriores a 2025-06-30 (solo se comparó con modelos concretos hasta esa fecha) y si Previous Runs cambia de modelo entre 2024 y 2026.
 - Causa del parecido con ERA5 antes de 2022-11-10 (hipótesis no confirmada).
-- ERA5 solo descargado para 3 zonas (Covadonga, Cangas, Lagos); el resto no es necesario para el contraste pedido.
+- ERA5 descargado ya para las 9 zonas (ver `notas/correcciones_fase_B.md`). Tramo 2022 por zona: `notas/openmeteo_tramo_2022.md` (corte 2022-11-08/09 en las 7 zonas asturianas; 2022-11-15/16 en Madrid y Sevilla; **corrige** la fecha 2022-11-10 de arriba para la identidad con ERA5).
+- Coordenadas: ver tabla; Covadonga y Lagos verificadas el 2026-10-15. `provisional=si` se mantiene: la lista de zonas es decisión del equipo.
 - Valor del último día (2026-10-15) posiblemente provisional.
 - Comparación con AEMET: pendiente de la otra sesión.
 - Nota: `data/raw/_chunks/` (respuestas por tramo) no se sube al repo (duplica los JSON finales); solo su `manifest.json`.
@@ -90,8 +91,13 @@ Contraste con la API de geocodificación de Open-Meteo (2026-10-15):
 |---|---|---|---|---|---|---|
 | `openmeteo_archive_cangas_de_onis.json` | archive-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
 | `openmeteo_archive_covadonga.json` | archive-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
+| `openmeteo_archive_gijon.json` | archive-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
 | `openmeteo_archive_lagos_enol.json` | archive-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
 | `openmeteo_archive_llanes.json` | archive-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
+| `openmeteo_archive_madrid.json` | archive-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
+| `openmeteo_archive_oviedo.json` | archive-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
+| `openmeteo_archive_ribadesella.json` | archive-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
+| `openmeteo_archive_sevilla.json` | archive-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
 | `openmeteo_cangas_de_onis.json` | historical-forecast-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
 | `openmeteo_covadonga.json` | historical-forecast-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |
 | `openmeteo_gijon.json` | historical-forecast-api.open-meteo.com | 2026-10-15 | 2022-01-01 → 2026-10-15 | 1749 | temperature_2m_max=0, temperature_2m_min=0, precipitation_sum=0, precipitation_hours=0, sunshine_duration=0, wind_speed_10m_max=0, wind_gusts_10m_max=0, weather_code=0 | ver notas |

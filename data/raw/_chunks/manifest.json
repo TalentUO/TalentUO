@@ -39,6 +39,26 @@
   "descargado": "2026-10-15T16:16:48",
   "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.31&longitude=-5.05&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
  },
+ "_chunks/archive/gijon_2022-01-01_2022-12-31.json": {
+  "descargado": "2026-10-15T18:02:15",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.53&longitude=-5.66&start_date=2022-01-01&end_date=2022-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/gijon_2023-01-01_2023-12-31.json": {
+  "descargado": "2026-10-15T18:02:21",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.53&longitude=-5.66&start_date=2023-01-01&end_date=2023-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/gijon_2024-01-01_2024-12-31.json": {
+  "descargado": "2026-10-15T18:02:28",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.53&longitude=-5.66&start_date=2024-01-01&end_date=2024-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/gijon_2025-01-01_2025-12-31.json": {
+  "descargado": "2026-10-15T18:02:35",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.53&longitude=-5.66&start_date=2025-01-01&end_date=2025-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/gijon_2026-01-01_2026-10-15.json": {
+  "descargado": "2026-10-15T18:02:42",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.53&longitude=-5.66&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
  "_chunks/archive/lagos_enol_2022-01-01_2022-12-31.json": {
   "descargado": "2026-10-15T17:42:07",
   "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.27&longitude=-4.99&start_date=2022-01-01&end_date=2022-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
@@ -79,6 +99,46 @@
   "descargado": "2026-10-15T18:01:34",
   "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.42&longitude=-4.75&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
  },
+ "_chunks/archive/madrid_2022-01-01_2022-12-31.json": {
+  "descargado": "2026-10-15T18:03:25",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.42&longitude=-3.7&start_date=2022-01-01&end_date=2022-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/madrid_2023-01-01_2023-12-31.json": {
+  "descargado": "2026-10-15T18:03:32",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.42&longitude=-3.7&start_date=2023-01-01&end_date=2023-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/madrid_2024-01-01_2024-12-31.json": {
+  "descargado": "2026-10-15T18:03:39",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.42&longitude=-3.7&start_date=2024-01-01&end_date=2024-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/madrid_2025-01-01_2025-12-31.json": {
+  "descargado": "2026-10-15T18:03:46",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.42&longitude=-3.7&start_date=2025-01-01&end_date=2025-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/madrid_2026-01-01_2026-10-15.json": {
+  "descargado": "2026-10-15T18:03:53",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.42&longitude=-3.7&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/oviedo_2022-01-01_2022-12-31.json": {
+  "descargado": "2026-10-15T18:02:49",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.36&longitude=-5.86&start_date=2022-01-01&end_date=2022-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/oviedo_2023-01-01_2023-12-31.json": {
+  "descargado": "2026-10-15T18:02:56",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.36&longitude=-5.86&start_date=2023-01-01&end_date=2023-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/oviedo_2024-01-01_2024-12-31.json": {
+  "descargado": "2026-10-15T18:03:04",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.36&longitude=-5.86&start_date=2024-01-01&end_date=2024-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/oviedo_2025-01-01_2025-12-31.json": {
+  "descargado": "2026-10-15T18:03:11",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.36&longitude=-5.86&start_date=2025-01-01&end_date=2025-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/oviedo_2026-01-01_2026-10-15.json": {
+  "descargado": "2026-10-15T18:03:18",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.36&longitude=-5.86&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
  "_chunks/archive/ribadesella_2022-01-01_2022-12-31.json": {
   "descargado": "2026-10-15T18:01:41",
   "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.46&longitude=-5.06&start_date=2022-01-01&end_date=2022-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
@@ -86,6 +146,38 @@
  "_chunks/archive/ribadesella_2023-01-01_2023-12-31.json": {
   "descargado": "2026-10-15T18:01:48",
   "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.46&longitude=-5.06&start_date=2023-01-01&end_date=2023-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/ribadesella_2024-01-01_2024-12-31.json": {
+  "descargado": "2026-10-15T18:01:54",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.46&longitude=-5.06&start_date=2024-01-01&end_date=2024-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/ribadesella_2025-01-01_2025-12-31.json": {
+  "descargado": "2026-10-15T18:02:01",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.46&longitude=-5.06&start_date=2025-01-01&end_date=2025-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/ribadesella_2026-01-01_2026-10-15.json": {
+  "descargado": "2026-10-15T18:02:08",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.46&longitude=-5.06&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/sevilla_2022-01-01_2022-12-31.json": {
+  "descargado": "2026-10-15T18:04:00",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.39&longitude=-5.98&start_date=2022-01-01&end_date=2022-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/sevilla_2023-01-01_2023-12-31.json": {
+  "descargado": "2026-10-15T18:04:07",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.39&longitude=-5.98&start_date=2023-01-01&end_date=2023-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/sevilla_2024-01-01_2024-12-31.json": {
+  "descargado": "2026-10-15T18:04:14",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.39&longitude=-5.98&start_date=2024-01-01&end_date=2024-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/sevilla_2025-01-01_2025-12-31.json": {
+  "descargado": "2026-10-15T18:04:21",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.39&longitude=-5.98&start_date=2025-01-01&end_date=2025-12-31&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
+ },
+ "_chunks/archive/sevilla_2026-01-01_2026-10-15.json": {
+  "descargado": "2026-10-15T18:04:28",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.39&longitude=-5.98&start_date=2026-01-01&end_date=2026-10-15&timezone=Europe%2FMadrid&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cprecipitation_hours%2Csunshine_duration%2Cwind_speed_10m_max%2Cwind_gusts_10m_max%2Cweather_code"
  },
  "_chunks/hist/cangas_de_onis_2022-01-01_2022-12-31.json": {
   "descargado": "2026-10-15T16:21:29",

@@ -3,3 +3,5 @@ requests
 openpyxl
 pyaxis
 pySpainMobility
+pytrends==4.9.2
+pypdf==6.20.1

@@ -13,7 +13,7 @@ Repositorio compartido (privado) para datos y notas del proyecto.
 
 ```bash
 python -m venv .venv
-.venv\Scriptsctivate        # Windows (PowerShell/cmd)
+.venv\Scripts\activate        # Windows (PowerShell/cmd)
 # source .venv/bin/activate    # macOS/Linux
 pip install -r requirements.txt
 ```

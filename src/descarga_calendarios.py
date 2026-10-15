@@ -10,6 +10,7 @@ Uso (desde la raíz del repositorio):
 """
 import argparse
 import csv
+import os
 import shutil
 import subprocess
 import sys
@@ -22,8 +23,13 @@ import requests
 RAIZ = Path(__file__).resolve().parents[1]
 DESTINO = RAIZ / "data" / "raw" / "calendario"
 SALIDA_VERIFICACION = RAIZ / "data" / "raw" / "calendario" / "_verificacion.csv"
-UA = "TalentUO-Hackathon-2026 (academic; contact nanaysonic@gmail.com)"
+# Contacto del User-Agent: desde la variable de entorno TALENTUO_CONTACTO (no se
+# versiona ningún dato personal).
+UA = f"TalentUO-Hackathon-2026 (academic; contact {os.environ.get('TALENTUO_CONTACTO', 'equipo TalentUO')})"
 PAUSA = 2.0
+MIN_HTML = 1000  # bytes: una pagina real es mucho mayor; las de error miden decenas de bytes
+MENSAJES_ERROR = ("host no configurado", "access denied", "forbidden", "page not found", "404 not found",
+                  "service unavailable", "bad gateway", "error 404", "no encontrada")
 
 BOPA = "https://miprincipado.asturias.es/bopa"
 BOE = "https://www.boe.es/boe/dias"
@@ -57,7 +63,7 @@ MANIFEST = [
     ("bopa_calendario_escolar_2026-27.pdf", f"{BOPA}/2026/06/01/2026-04361.pdf", True, "Res. 13-may-2026"),
     ("bopa_modif_calendario_escolar_2021-22_FP.pdf", f"https://www.asturias.es/bopa/2021/09/06/2021-08142.pdf", True, "Res. 27-ago-2021 (organización FP); su disposición adicional única modifica el calendario escolar 2021-22 (FP presencial). Descargado desde www.asturias.es/bopa porque miprincipado.asturias.es dejó de responder"),
     ("educastur_calendario_escolar_2021-22_grafico.pdf", "https://www.educastur.es/documents/34868/262513/2021-06-calendario-21-22-vertical.pdf/42001202-fb54-1f40-5200-7530348cbbd5?t=1623323628050", True, "Calendario gráfico Educastur 2021-22; ALTERNATIVA al BOPA de 1-jun-2021 (no obtenido)"),
-    ("juridicas_res_calendario_escolar_asturias_2021-22.html", "https://noticias.juridicas.com/base_datos/CCAA/699208-r-educacion-5-may-2021-ca-asturias-calendario-escolar-para-el-curso-2021-2022.html", False, "NO OFICIAL: copia del texto de la Res. 5-may-2021 (BOPA 1-jun-2021); el BOPA original no se obtuvo"),
+    ("juridicas_res_calendario_escolar_asturias_2021-22.html", "https://noticias.juridicas.com/base_datos/CCAA/699208-r-educacion-5-may-2021-ca-asturias-calendario-escolar-para-el-curso-2021-2022.html", False, "NO OFICIAL: copia del texto de la Res. 5-may-2021 (BOPA 1-jun-2021); el BOPA original no se obtuvo. NOTA 2026-10-15: la URL devuelve una pagina de error; la validacion HTML la rechaza"),
     ("educastur_festivos_locales_23-24.pdf", f"{EDUCASTUR}/2023-10-calendario-escolar-festivos-locales-23-24.pdf/899da8ad-dbb0-9ac8-5710-ed2583d25ea1?t=1696423648123", True, "Días sustitutivos de fiestas locales (no es el calendario escolar)"),
     ("educastur_festivos_locales_24-25.pdf", f"{EDUCASTUR}/2024-10-calendario-festivos-locales-24-25.pdf/3ed01499-b74e-406c-95fb-fb9a85a6fd02?t=1730207988146", True, "Días sustitutivos de fiestas locales (no es el calendario escolar)"),
     ("educastur_festivos_locales_25-26.pdf", f"{EDUCASTUR}/2025-09-calendario-festivos-locales-25-26.pdf", True, "Días sustitutivos de fiestas locales (no es el calendario escolar)"),
@@ -100,6 +106,16 @@ MANIFEST = [
     ("miteco_visitantes_parques_nacionales_2025.pdf", MITECO + "Visitantes%20a%20los%20Parques%20Nacionales%20Espa%C3%B1oles.%20A%C3%B1o%202025.pdf", True, "OAPN, visitantes 2025"),
 ]
 
+def valida_html(contenido):
+    """None si parece una pagina real; si no, el motivo. Misma idea que la cabecera %PDF de los PDF."""
+    if len(contenido) < MIN_HTML:
+        return "error_html_demasiado_corto"
+    inicio = contenido[:1500].decode("utf-8", errors="ignore").lower()
+    if any(m in inicio for m in MENSAJES_ERROR):
+        return "error_html_mensaje_de_error"
+    return None
+
+
 def descarga(sesion, nombre, url):
     destino = DESTINO / nombre
     if destino.exists() and destino.stat().st_size > 0:
@@ -119,6 +135,10 @@ def descarga(sesion, nombre, url):
     es_pdf = nombre.endswith(".pdf")
     if es_pdf and not r.content.startswith(b"%PDF"):
         return "error_no_es_pdf"
+    if nombre.endswith((".html", ".htm")):
+        motivo = valida_html(r.content)
+        if motivo:
+            return motivo
     destino.write_bytes(r.content)
     return "descargado"
 
