@@ -79,3 +79,23 @@ Valida `salidas/` con `src/modelo/validar_salidas.py`, copia los cinco JSON a `A
 
 - **Concejo en dos zonas** en `config/mapeo_zonas_ejemplo.csv`: 33036 (Llanes) está en `EJEMPLO_llanes` y en `EJEMPLO_oriente`. La web lo pinta en la zona con menos concejos. Con el mapeo real, mejor que cada concejo esté en una sola zona.
 - **Perfil por fecha**: `perfil.json` es por zona y mes (media histórica); la web enseña el mes de la fecha elegida. Si hiciera falta el perfil de un día concreto, habría que añadirlo al contrato.
+
+## Persona 2 — Gestión y Sobre los datos (rama `web-gestion`)
+
+### Inventario (piloto `b0aba54`)
+- **Ya existía el diseño** de Gestión (índice, tarjetas `g-sec`, barras `rg-*`, matriz `matriz/cel`, `metricas/met`, `tabla`, diálogo CSV) y de Sobre los datos (`prosa`, `leyenda-grande`, `fuentes/fuente`, `no-lista`). Las clases `g-*`… siguen en `estilos/estilos.css`: **no se ha tocado ningún estilo, ni `index.html`, ni `interfaz/`, ni `datos/`**. `gestion.css` sigue vacío.
+- Se reutiliza el marcado del piloto con datos del modelo. Quitado del piloto (sin datos del modelo): simulador de escenarios y gráfica de real frente a predicción (no hay serie diaria en el contrato).
+- Añadido con clases existentes: comparación con los Lagos (`tabla`), perfil del visitante (`met`, `select`), selector de año de referencia (`select`).
+- **Pendiente de datos:** patrón horario (no existe `data/clean/llegadas_por_hora.parquet`; la tarjeta lo dice).
+
+### Ficheros míos
+- `pestanas/gestion/`: `config-gestion.js` (acciones por color y criterios, editable), `logica.js` (funciones puras), `pruebas.html` (20 pruebas: abrir en el navegador), `gestion.js`.
+- `pestanas/sobre/`: `contenido.js` (textos), `sobre.js`. Cargan sus scripts desde su propio JS.
+
+### Notas para el contrato
+- `cociente`, `p10` y `p90` van redondeados: al recalcular el umbral exacto de la cabecera puede bailar 1-3 días frente a `curva_umbral`. Con los umbrales por defecto se usa el color del modelo (exacto).
+- Los años observados (2023, 2024) solo tienen la curva de umbrales 1,2-3,0 (14 valores): la barra deslizante va por esos valores. Si se quisiera cualquier umbral también en observados, habría que añadir al contrato el cociente diario observado.
+- Mapa: la cita del IGN (CC BY 4.0) de arriba ya está en «Sobre los datos» (`SobreContenido.mapa`); cámbiala ahí si procede.
+
+### Estado
+- **web-gestion lista** — commit `edcf286` (incluye `origin/web` hasta `71ed483`).
