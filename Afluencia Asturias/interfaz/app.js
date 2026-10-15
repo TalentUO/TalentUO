@@ -117,7 +117,7 @@
   const esPeriodo = () => E.desde !== E.hasta;
   const nDias = () => diasEntre(E.desde, E.hasta) + 1;
   const textoSel = () => (esPeriodo() ? periodoTexto(E.desde, E.hasta) : fechaLarga(E.desde));
-  const nombreZ = id => (E.zonasPorId[id] ? E.zonasPorId[id].nombre : id);
+  const nombreZ = id => (E.zonasPorId[id] ? E.zonasPorId[id].nombre : 'fuera de las zonas del modelo');
   const nombreC = id => (E.concejosPorId[id] ? E.concejosPorId[id].nombre : id);
   const coincideTipo = z => E.tipo === 'todos' || (z && z.tipos.indexOf(E.tipo) !== -1);
 
@@ -491,8 +491,9 @@
       indice.push({ texto, tipo, zonaId, concejoId, n: normalizar(texto) });
     };
     E.zonas.forEach(z => meter(z.nombre, 'zona', z.id));
-    E.concejos.forEach(c => meter(c.nombre, 'concejo', c.zonaId, c.id));
+    E.concejos.forEach(c => { if (c.zonaId) meter(c.nombre, 'concejo', c.zonaId, c.id); });
     E.zonas.forEach(z => z.lugares.forEach(l => meter(l, 'lugar', z.id)));
+    E.sitios.forEach(st => { const c = E.concejosPorId[st.concejos[0]]; if (c && c.zonaId) meter(st.nombre, 'lugar', c.zonaId); });
     const PRIORIDAD = { zona: 2, concejo: 1, lugar: 0 };
 
     let resultados = [], activo = -1;
@@ -640,6 +641,9 @@
 
   function htmlTip(tipo, id) {
     const esZona = tipo === 'zona';
+    if (!esZona && !E.concejosPorId[id].zonaId) {
+      return `<div class="tip-in"><strong class="tip-nombre">${esc(nombreC(id))}</strong><span>Fuera de las zonas del modelo: sin previsión.</span></div>`;
+    }
     const p = esZona ? E.prevPorZona[id] : E.prevPorConcejo[id];
     const n = p ? p.nivel : 'gris', periodo = esPeriodo();
     return `<div class="tip-in"><strong class="tip-nombre">${esc(esZona ? nombreZ(id) : nombreC(id))}</strong>` +
@@ -753,7 +757,8 @@
     opts = opts || {};
     const c = E.concejosPorId[id];
     if (!c) return;
-    if (opts.encuadrar) encuadrar('concejo', id);
+    if (opts.encuadrar || !c.zonaId) encuadrar('concejo', id);
+    if (!c.zonaId) { anunciar(`${c.nombre} no está en ninguna zona del modelo: no hay previsión.`); return; }
     abrirZona(c.zonaId, { foco: opts.foco, concejo: id });
   }
 
@@ -784,13 +789,14 @@
     // En un periodo, las causas se explican con el día con más gente y el mejor día se busca dentro del periodo
     const fechaFactores = periodo && p.pico ? p.pico.fecha : E.desde;
 
-    const [serie, factores, mejor, alts, perfil, fiab] = await Promise.all([
+    const [serie, factores, mejor, alts, perfil, fiab, mejorDia] = await Promise.all([
       D.getSerieZona(id, v.desde, v.dias),
       D.getFactores(id, fechaFactores),
       periodo ? D.getMejorMomento(id, E.desde, nDias()) : D.getMejorMomento(id, v.desde, v.dias),
       periodo ? D.getAlternativas(id, E.desde, E.hasta) : D.getAlternativas(id, E.desde),
       periodo ? D.getPerfil(id, E.desde, E.hasta) : D.getPerfil(id, E.desde),
       D.getFiabilidad(id),
+      periodo ? Promise.resolve(null) : D.getMejorDia(id, E.desde),
     ]);
     if (s !== seqPanel || E.zona !== id) return;
 
@@ -826,6 +832,8 @@
         <p class="pz-fecha">${c ? 'Toda la zona · ' : ''}${esc(textoSel())}</p>
         <div class="pz-estado-fila">${pill(p.nivel, 'pill-grande')}<p class="pz-delta">${p.ratio != null ? delta(p.ratio, periodo) : 'Sin datos suficientes'}</p></div>
         ${p.visitantes != null ? `<p class="pz-cifra">Unos <strong>${num(p.visitantes)}</strong> visitantes${periodo ? ' al día de media' : ''}, probablemente entre ${num(p.min)} y ${num(p.max)}. Un día normal vienen unos ${num(p.normal)}.</p>` : ''}
+        ${!periodo && p.incierto ? '<p class="pz-cifra"><span class="etq etq-aviso">Incierto</span> El rango probable cae en colores distintos del semáforo.</p>' : ''}
+        ${!periodo && p.nivelObservado ? `<p class="pz-cifra">Lo que pasó de verdad: ${pill(p.nivelObservado)} ${esc(delta(p.ratioObservado))} (unos ${num(p.observado)} visitantes).</p>` : ''}
         ${periodo && p.pico ? resumenPeriodo(p) : ''}
       </div>
     </div>`;
@@ -841,10 +849,10 @@
       html += seccionSitios(id);
       html += seccionSerie(serie, v);
       html += seccionFactores(factores, periodo ? fechaFactores : null);
-      html += seccionMejor(mejor, v);
+      html += seccionMejor(mejor, v, mejorDia);
       html += seccionAlternativas(alts, false);
       html += seccionPerfil(perfil);
-      html += seccionFiabilidad(p, fiab);
+      html += seccionFiabilidad(periodo && p.pico ? p.pico : p, fiab);
     }
 
     const panel = $('#panel-zona');
@@ -881,7 +889,9 @@
     let desde = sumar(E.desde, -Math.floor((dias - n) / 2));
     if (sumar(desde, dias - 1) > E.maxFecha) desde = sumar(E.maxFecha, -(dias - 1));
     if (desde < E.info.hoy) desde = E.info.hoy;
-    return { desde, dias, recortado: false };
+    // No se enseñan días fuera del horizonte con predicción
+    const caben = diasEntre(desde, E.maxFecha) + 1;
+    return { desde, dias: Math.max(1, Math.min(dias, caben)), recortado: false };
   }
 
   function resumenPeriodo(p) {
@@ -933,23 +943,35 @@
       <h3 id="pz-s-b">¿Por qué?</h3>
       <p class="pz-ayuda">${fechaPico ? `Lo que más pesa el día con más gente del periodo: ${esc(fechaLarga(fechaPico).toLowerCase())}.` : 'Lo que más pesa en la previsión de ese día.'}</p>
       <ul class="fx-lista">${filas}</ul>
-      <p class="pz-nota">Los efectos se multiplican entre sí, así que no suman exactamente el total.</p>
+      <p class="pz-nota">Efecto de cada factor frente a un día medio del modelo. Se multiplican entre sí, así que no suman exactamente el total.</p>
     </section>`;
   }
 
-  function seccionMejor(mejor, v) {
-    if (!mejor) return '';
-    const d = mejor.dia, periodo = esPeriodo();
-    const donde = periodo ? 'Dentro de las fechas elegidas.' : `Entre el ${diaMes(v.desde)} y el ${diaMes(sumar(v.desde, v.dias - 1))}.`;
+  // mejorDia: propuesta del modelo (alternativas.json) si el día está en alerta; si no, el día más tranquilo de la gráfica
+  function seccionMejor(mejor, v, mejorDia) {
+    const periodo = esPeriodo();
+    let tarjeta = '';
+    if (mejorDia && mejorDia.fecha) {
+      const dif = mejorDia.diferenciaPct != null ? `: ${Math.abs(Math.round(mejorDia.diferenciaPct))}${NBSP}% ${mejorDia.diferenciaPct < 0 ? 'menos' : 'más'} gente que el día elegido` : '';
+      tarjeta = `<div class="mm"><p class="eyebrow">Mejor día alternativo</p><p class="mm-valor">${esc(fechaLarga(mejorDia.fecha))}</p>
+        <p>${pill(mejorDia.nivel)}</p><p class="mm-nota">${esc(delta(mejorDia.ratio))}${dif}.</p>
+        <p class="mm-nota">El día con menos presión a ±${mejorDia.margen} días en la misma zona, según el modelo.</p>
+        <button type="button" class="btn-mini" data-fecha="${mejorDia.fecha}">Ver ese día</button></div>`;
+    } else if (mejorDia) {
+      tarjeta = `<div class="mm"><p class="eyebrow">Mejor día alternativo</p><p class="mm-nota">Ningún día a ±${mejorDia.margen} días tiene menos presión en esta zona.</p></div>`;
+    } else if (mejor) {
+      const d = mejor.dia;
+      const donde = periodo ? 'Dentro de las fechas elegidas.' : `Entre el ${diaMes(v.desde)} y el ${diaMes(sumar(v.desde, v.dias - 1))}.`;
+      tarjeta = `<div class="mm"><p class="eyebrow">Día más tranquilo</p><p class="mm-valor">${esc(fechaLarga(d.fecha))}</p>
+        <p>${pill(d.nivel)}</p><p class="mm-nota">${esc(delta(d.ratio))}</p><p class="mm-nota">${esc(donde)}</p>
+        ${periodo || d.fecha !== E.desde ? `<button type="button" class="btn-mini" data-fecha="${d.fecha}">${periodo ? 'Ver solo ese día' : 'Ver ese día'}</button>` : '<p class="mm-nota"><strong>Es el día que estás viendo.</strong></p>'}</div>`;
+    }
+    if (!tarjeta) return '';
+    const hora = mejor && mejor.hora ? `<div class="mm"><p class="eyebrow">Mejor hora</p><p class="mm-valor">${esc(mejor.hora.texto)}</p>
+        <p class="mm-nota">${esc(mejor.hora.nota)} Orientativo: los datos de movilidad son diarios.</p></div>` : '';
     return `<section class="pz-sec" aria-labelledby="pz-s-c">
       <h3 id="pz-s-c">Mejor momento para ir</h3>
-      <div class="mm-grid">
-        <div class="mm"><p class="eyebrow">Mejor día</p><p class="mm-valor">${esc(fechaLarga(d.fecha))}</p>
-          <p>${pill(d.nivel)}</p><p class="mm-nota">${esc(delta(d.ratio))}</p><p class="mm-nota">${esc(donde)}</p>
-          ${periodo || d.fecha !== E.desde ? `<button type="button" class="btn-mini" data-fecha="${d.fecha}">${periodo ? 'Ver solo ese día' : 'Ver ese día'}</button>` : '<p class="mm-nota"><strong>Es el día que estás viendo.</strong></p>'}</div>
-        <div class="mm"><p class="eyebrow">Mejor hora</p><p class="mm-valor">${esc(mejor.hora.texto)}</p>
-          <p class="mm-nota">${esc(mejor.hora.nota)} Orientativo: los datos de movilidad son diarios.</p></div>
-      </div>
+      <div class="mm-grid">${tarjeta}${hora}</div>
     </section>`;
   }
 
@@ -959,8 +981,8 @@
       ? `<ul class="alt-lista">${alts.map(a => `<li><button type="button" class="alt" data-zona="${a.zonaId}">
           <span class="alt-nombre">${esc(a.nombre)}</span>
           <span class="alt-dato">${pill(a.nivel)}<span>${pct(a.ratio)}</span></span>
-          <span class="alt-dist">A unos ${a.minutos} min en coche</span></button></li>`).join('')}</ul>`
-      : `<p class="pz-ayuda">${esPeriodo() ? 'En esas fechas no hay zonas cercanas en verde. Prueba con otras.' : 'Ese día no hay zonas cercanas en verde. Prueba con otro día.'}</p>`;
+          <span class="alt-dist">${a.minutos != null ? `A unos ${a.minutos} min en coche` : `A unos ${a.km} km${a.delModelo ? ' · la menos saturada cerca, según el modelo' : ''}`}</span></button></li>`).join('')}</ul>`
+      : `<p class="pz-ayuda">${esPeriodo() ? 'En esas fechas no hay zonas cercanas con menos gente. Prueba con otras.' : 'Ese día no hay zonas cercanas con menos gente. Prueba con otro día.'}</p>`;
     return `<section class="pz-sec" aria-labelledby="pz-s-d"><h3 id="pz-s-d">${titulo}</h3>${cuerpo}</section>`;
   }
 
@@ -973,22 +995,19 @@
     if (!perfil) return '';
     return `<section class="pz-sec" aria-labelledby="pz-s-e">
       <h3 id="pz-s-e">Quién viene</h3>
-      ${barraReparto('Tipo de visita', { t: 'De un día', v: perfil.deUnDia }, { t: 'Con pernoctación', v: perfil.conPernocta })}
+      ${perfil.deUnDia != null ? barraReparto('Tipo de visita (aproximado)', { t: 'De un día', v: perfil.deUnDia }, { t: 'Con pernoctación', v: perfil.conPernocta }) : ''}
       ${barraReparto('Procedencia', { t: 'De Asturias', v: perfil.asturias }, { t: 'Resto de España', v: perfil.restoEspana })}
-      <p class="pz-nota">Los visitantes extranjeros solo están disponibles como dato mensual del INE.</p>
+      <p class="pz-nota">Media de ${MES[perfil.mes - 1]} en años anteriores (llegadas de ocio). Sin extranjeros: los datos de movilidad solo cubren residentes en España. El tipo de visita es aproximado, porque una persona puede pasar varias noches.</p>
     </section>`;
   }
 
   function seccionFiabilidad(p, fiab) {
-    const tipo = p.esPrediccion ? '<strong>Predicción</strong>, no es un dato medido.' : '<strong>Dato medido.</strong>';
-    const err = fiab ? ` Error típico del modelo en esta zona: ±${fiab.errorMedio}${NBSP}%.` : '';
-    let meteo = '';
-    if (!p.conMeteo) {
-      meteo = !esPeriodo() ? ' Para este día aún no hay meteorología fiable, así que la incertidumbre es mayor.'
-        : E.desde <= limiteMeteo() ? ' Solo los primeros días del periodo tienen meteorología fiable; en el resto la incertidumbre es mayor.'
-        : ' Para estas fechas aún no hay meteorología fiable, así que la incertidumbre es mayor.';
-    }
-    return `<p class="pz-fiab">${ICONO_INFO}<span>${tipo}${err}${meteo}</span></p>`;
+    const h = p.horizonte == null ? null : p.horizonte >= 8 ? '8+' : String(p.horizonte);
+    const fila = fiab && h && fiab.porHorizonte[h];
+    const antelacion = p.horizonte != null ? ` Hecha con ${p.horizonte} ${p.horizonte === 1 ? 'día' : 'días'} de antelación.` : '';
+    const nota = fila ? ' ' + fila.nota : '';
+    const meteo = !p.conMeteo && p.ratio != null ? ' Sin previsión del tiempo para este día: usa calendario y eventos.' : '';
+    return `<p class="pz-fiab">${ICONO_INFO}<span><strong>Predicción</strong>, no es un dato medido.${antelacion}${esc(nota)}${meteo}</span></p>`;
   }
 
   /* ====================================================================

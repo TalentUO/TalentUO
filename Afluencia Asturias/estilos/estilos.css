@@ -255,6 +255,10 @@ button.cal-dia:hover { background: var(--superficie-2); }
 /* Con poco zoom se ven las zonas; al acercarse, los concejos */
 .modo-zonas .area-concejo, .modo-zonas .et-concejo, .modo-zonas .contorno-zona { display: none; }
 .modo-concejos .area-zona, .modo-concejos .et-zona { display: none; }
+/* Concejos fuera de las zonas del modelo: gris claro liso (distinto del gris con trama de «sin datos»), siempre visibles */
+.area.sin-zona { fill: var(--superficie-2); fill-opacity: 1; stroke: var(--linea); cursor: default; }
+.modo-zonas .area-concejo.sin-zona { display: inline; }
+.et-mapa.sin-zona { display: none; }
 
 /* Etiquetas sobre el mapa, al estilo de los portales inmobiliarios */
 .et-mapa {

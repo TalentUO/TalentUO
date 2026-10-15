@@ -68,6 +68,14 @@ Valida `salidas/` con `src/modelo/validar_salidas.py`, copia los cinco JSON a `A
 
 - **Esqueleto listo** — commit `e446a48` (rama `web`).
 
+## Mapa: fuente y licencia (para citar en «Sobre los datos»)
+
+- Límites de los 78 concejos: **Instituto Geográfico Nacional (IGN), licencia CC BY 4.0**, vía el conjunto `georef-spain-municipio` de OpenDataSoft (2022); nombres oficiales de `es-atlas` (también del IGN). Simplificado a ~10 m sin romper fronteras (TopoJSON, 230 KB): `Afluencia Asturias/interfaz/geo-asturias.js`, regenerable con `herramientas/generar_geo.py`. Cita sugerida: «Límites municipales: © Instituto Geográfico Nacional (CC BY 4.0)».
+- Sin teselas externas: el mapa funciona sin internet.
+- Zonas = unión de concejos según `config/mapeo_zonas.csv` (columna `concejos_ine`, separados por `;`). Concejos fuera de toda zona: gris claro liso (distinto del gris con trama, que es «sin datos»).
+- Calendario de los botones de fecha (puentes, festivos): `data/clean/calendario_diario.parquet` (parte B), exportado por el script.
+
 ## Peticiones / huecos del contrato
 
-- (vacío)
+- **Concejo en dos zonas** en `config/mapeo_zonas_ejemplo.csv`: 33036 (Llanes) está en `EJEMPLO_llanes` y en `EJEMPLO_oriente`. La web lo pinta en la zona con menos concejos. Con el mapeo real, mejor que cada concejo esté en una sola zona.
+- **Perfil por fecha**: `perfil.json` es por zona y mes (media histórica); la web enseña el mes de la fecha elegida. Si hiciera falta el perfil de un día concreto, habría que añadirlo al contrato.

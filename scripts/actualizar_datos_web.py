@@ -10,7 +10,10 @@ Qué hace:
 2. Copia el mapeo de zonas a concejos (config/mapeo_zonas.csv). Si los IDs de
    zona de predicciones.json no están en ese fichero (modo sintético, IDs
    EJEMPLO_*), usa config/mapeo_zonas_ejemplo.csv.
-3. Escribe «datos/modelo/salidas.js» con todo lo anterior, para que la web se
+3. Resume el calendario oficial (data/clean/calendario_diario.parquet: festivos
+   de Asturias, puentes, vacaciones escolares y regulación de los Lagos) para los
+   botones de fecha de la web. Si no está, la web usa su calendario aproximado.
+4. Escribe «datos/modelo/salidas.js» con todo lo anterior, para que la web se
    abra con doble clic (desde file:// el navegador no deja leer JSON con fetch).
 """
 from __future__ import annotations
@@ -52,6 +55,30 @@ def elegir_mapeo(ids_zonas: set[str]) -> tuple[Path, list[dict]]:
     sys.exit(f"ERROR: ningún mapeo de config/ cubre las zonas de predicciones.json: {sorted(ids_zonas)}")
 
 
+def leer_calendario() -> dict | None:
+    ruta = RAIZ / "data" / "clean" / "calendario_diario.parquet"
+    try:
+        import pandas as pd
+        d = pd.read_parquet(ruta)
+    except Exception as e:  # sin pandas/pyarrow o sin fichero: la web sigue funcionando
+        print(f"AVISO: sin calendario oficial ({e}); la web usará su calendario aproximado")
+        return None
+    texto = lambda v: None if pd.isna(v) else str(v)
+    si = lambda v: False if pd.isna(v) else bool(v)
+    dias = [
+        {
+            "fecha": r.fecha.strftime("%Y-%m-%d"),
+            "finde": si(r.es_fin_de_semana),
+            "festivo": texto(r.nombre_festivo_ast) if si(r.festivo_ast) else None,
+            "puente": si(r.finde_largo_con_puente_ast),
+            "vacaciones": texto(r.periodo_escolar_ast) if si(r.vacaciones_escolares_ast) else None,
+            "lagos_regulado": None if pd.isna(r.lagos_regulado) else bool(r.lagos_regulado),
+        }
+        for r in d.sort_values("fecha").itertuples()
+    ]
+    return {"origen": "data/clean/calendario_diario.parquet", "dias": dias}
+
+
 def main() -> None:
     faltan = [n for n in FICHEROS if not (SALIDAS / f"{n}.json").exists()]
     if faltan:
@@ -81,6 +108,10 @@ def main() -> None:
         encoding="utf-8")
 
     paquete = dict(datos, mapeo={"origen": f"config/{ruta_mapeo.name}", "zonas": mapeo})
+    calendario = leer_calendario()
+    if calendario:
+        paquete["calendario"] = calendario
+        (DESTINO / "calendario.json").write_text(json.dumps(calendario, ensure_ascii=False), encoding="utf-8")
     (DESTINO / "salidas.js").write_text(
         "// GENERADO por scripts/actualizar_datos_web.py. No editar a mano.\n"
         "window.SALIDAS_MODELO = " + json.dumps(paquete, ensure_ascii=False, separators=(",", ":")) + ";\n",

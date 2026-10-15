@@ -56,16 +56,16 @@
  *                                      sin hasta: Prevision del día; con hasta: PrevisionPeriodo
  * getSerieZona(zonaId, desde, dias) -> Prevision[]   (una por día)
  * getFactores(zonaId, fecha)        -> [{ clave, texto, efecto }]   efecto en % (38 = +38 %), los 3 que más pesan
- * getMejorMomento(zonaId, desde, dias) -> { dia: Prevision, hora: { texto, nota } } | null
- * getAlternativas(zonaId, fecha, hasta?) -> [Prevision + { nombre, minutos }]   zonas cercanas en verde
+ * getMejorMomento(zonaId, desde, dias) -> { dia: Prevision, hora: { texto, nota } | null } | null
+ * getMejorDia(zonaId, fecha)        -> { fecha, nivel, ratio, visitantes, diferenciaPct, margen } | { fecha:null, margen } | null
+ *                                      mejor día alternativo del modelo (alternativas.json); null si el día no está en alerta
+ * getAlternativas(zonaId, fecha, hasta?) -> [Prevision + { nombre, minutos|null, km|null, delModelo? }]   zonas cercanas
  *                                      con hasta: PrevisionPeriodo, comparando la media del periodo
  * getPerfil(zonaId, fecha, hasta?)  -> { deUnDia, conPernocta, asturias, restoEspana } en % | null
  *                                      con hasta: media del periodo
- * getFiabilidad(zonaId)             -> { desde, hasta, serie:[{fecha, real, prediccion}], errorMedio, nivelAcertado, rojosReales, rojosDetectados } | null
- * getDiasSobreUmbral(umbral, anio)  -> [{ zonaId, anio, dias, picoVisitantes, picoPor100, sinDatos? }]   umbral como ratio (1.5 = +50 %)
- * getAlertas(desde, dias)           -> [{ fecha, zonaId, nivel, ratio, visitantes, accion }]
- * simular(zonaId, fecha, escenario) -> { base: Prevision+{factores}, escenario: Prevision+{factores} }
- *      escenario = { lluvia:'auto'|'si'|'no', puente:'auto'|'si'|'no', lagos:'auto'|'libre'|'regulado'|'cerrado' }
+ * getFiabilidad(zonaId)             -> { porHorizonte: { '1'…'7', '8+': { nota, aciertoColor, n } }, algoritmo } | null
+ *
+ * Gestión y Sobre los datos (pestanas/) no usan esta fachada: leen window.DatosModelo directamente.
  * ========================================================================== */
 window.Datos = (function () {
   'use strict';
@@ -73,10 +73,9 @@ window.Datos = (function () {
   const METODOS = [
     'getInfo', 'getZonas', 'getConcejos', 'getSitios', 'getEventos', 'getCalendario', 'getProximoPuente', 'getPrevisionDia', 'getPrevisionPeriodo',
     'getPrevisionConcejos', 'getSerieZona',
-    'getFactores', 'getMejorMomento', 'getAlternativas', 'getPerfil', 'getFiabilidad',
-    'getDiasSobreUmbral', 'getAlertas', 'simular',
+    'getFactores', 'getMejorMomento', 'getMejorDia', 'getAlternativas', 'getPerfil', 'getFiabilidad',
   ];
-  const SIN_CACHE = new Set(['simular']);
+  const SIN_CACHE = new Set();
 
   const fuente = window.FuenteDatos;
   if (!fuente) throw new Error('No hay ninguna fuente de datos cargada (falta window.FuenteDatos).');

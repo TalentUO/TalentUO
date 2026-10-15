@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>NTT Turism</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Previsión de afluencia turística por zonas de Asturias con semáforo de presión turística. Piloto con datos ficticios.">
+<meta name="description" content="Previsión de afluencia turística por zonas de Asturias con semáforo de presión turística. Predicciones del modelo de afluencia por zonas.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Schibsted+Grotesk:wght@600;700;800&display=swap">
@@ -105,12 +105,6 @@ body { background: var(--bg); color: var(--tinta); }
   </div>
 </div>
 
-<div class="aviso-piloto" role="note">
-  <div class="envoltura aviso-in">
-    <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" class="ico-info-c"/><rect x="7.1" y="6.6" width="1.8" height="5.4" rx=".9" class="ico-info-t"/><circle cx="8" cy="4.4" r="1.05" class="ico-info-t"/></svg>
-    <p><strong>Piloto con datos ficticios.</strong> Las previsiones de afluencia son inventadas y solo sirven para probar la interfaz. Los eventos (PredictHQ) y los sitios de interés sí son reales.</p>
-  </div>
-</div>
 
 <main id="contenido" tabindex="-1">
 
@@ -290,14 +284,15 @@ body { background: var(--bg); color: var(--tinta); }
 <div id="aviso-vivo" class="sr" aria-live="polite" aria-atomic="true"></div>
 
 
-<!-- Capa de datos: para usar el modelo real, sustituye fuente-ficticia.js -->
+<!-- Capa de datos: salidas del modelo (generado por scripts/actualizar_datos_web.py) → módulo «datos» →
+     fuente-modelo.js (Inicio). fuente-ficticia.js solo aporta nombres, tipos de destino y el calendario de reserva. -->
 <script src="datos/sitios.js"></script>
 <script src="datos/eventos.js"></script>
-<script src="datos/fuente-ficticia.js"></script>
-<script src="datos/api.js"></script>
-<!-- Salidas del modelo (generado por scripts/actualizar_datos_web.py) y módulo «datos» -->
 <script src="datos/modelo/salidas.js"></script>
 <script src="datos/datos.js"></script>
+<script src="datos/fuente-ficticia.js"></script>
+<script src="datos/fuente-modelo.js"></script>
+<script src="datos/api.js"></script>
 <!-- Mapa: librerías locales (funcionan desde file://) y límites de los concejos -->
 <script src="vendor/leaflet/leaflet.js"></script>
 <script src="vendor/topojson-client.min.js"></script>
