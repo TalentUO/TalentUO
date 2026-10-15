@@ -34,7 +34,7 @@ Desde el **2025-07-01 cambia la metodología del MITMA: no descargar nada poster
 
 ## 2. Qué hay en el repositorio y qué NO
 
-**En git (rama `paso1-zonas-mitma` / PR #2 hacia `main`)**
+**En git (rama `paso1-zonas-mitma`; la PR #2 ya está fusionada en `main` con el Paso 1 y la primera versión del script; este traspaso va en una PR posterior)**
 
 | Fichero | Para qué |
 |---|---|
@@ -57,7 +57,7 @@ Probado en: Windows 11, Python 3.14.8, PowerShell, 8 núcleos/16 hilos, ~4 GB de
 ```powershell
 git clone https://github.com/hugoomez/TalentUO.git
 cd TalentUO
-git checkout paso1-zonas-mitma        # hasta que la PR #2 esté fusionada en main
+git checkout paso1-zonas-mitma        # hasta que la PR del traspaso esté fusionada en main; después basta con main
 python -m venv .venv
 .venv\Scripts\activate                # Linux/macOS: source .venv/bin/activate
 pip install -r requirements.txt       # el script solo necesita pandas y requests
