@@ -4,13 +4,24 @@ Repositorio compartido (privado) para datos y notas del proyecto.
 
 **Hackathon TalentUO 2026 (Universidad de Oviedo), reto de NTT DATA «Predicción de Afluencia Turística en Asturias».** Es un sistema de alerta temprana de presión turística para la administración (ayuntamientos, Principado y Parque Nacional). Un modelo de *machine learning* (LightGBM, con XGBoost como alternativa) predice, por día y zona, cuántos visitantes llegarán y cuánto supone frente a un «día normal». A partir de los datos de movilidad del MITMA y de factores conocidos de antemano (calendario, festivos de Asturias y de las comunidades de origen, vacaciones escolares, eventos, previsión del tiempo e interés en internet), lo muestra en una web como semáforo, con los factores que lo explican. La zona principal es la puerta de los Picos de Europa (Cangas de Onís, con Covadonga y los Lagos).
 
-> **⚠ Las salidas actuales del modelo (`salidas/`) son SINTÉTICAS.** Se han generado con un objetivo inventado para probar la cadena completa mientras se descargan los datos del MITMA. Todas llevan `sintetico=true` y el aviso en los títulos. **No describen Asturias.**
+> **Las salidas del modelo (`salidas/`) son REALES** desde el 2026-10-16 (rama `resultados-reales`), con el objetivo del MITMA de la parte A. Los JSON de la web llevan `sintetico=false`. Resultados, con cada cifra y su fichero de origen: `notas/resultados_reales.md`. Quedan en `salidas/` dos ficheros de la prueba sintética, `sintetico_efectos_reales.json` y `sintetico_recuperacion_factores.json`, que no usa la web.
 
 ## Estado
 
 - **Parte B (factores explicativos): terminada.** Descarga, auditoría y limpieza en `data/clean/`, con diccionario (`notas/diccionario_B.md`) y control de calidad (`notas/control_calidad_B.md`).
-- **Modelo: completo con objetivo sintético.** Modelos de corto plazo (1-7 días) y largo plazo (8 o más días), validación por bloques temporales, prueba anti-fuga, SHAP, intervalos, calibración con la regulación de los Lagos y JSON para la web. Documentación en `notas/modelo.md`.
-- **Parte A (demanda y movilidad, MITMA): en descarga.** Ver «Estado (Fase 1)» y «Descarga MITMA» más abajo.
+- **Parte A (demanda y movilidad, MITMA): entregada.** `data/clean/objetivo_diario.parquet`: 5 zonas, 2022-01-01 → 2025-06-30, días sin dato oficial en NaN. Validación en `notas/estado_resultados.md`.
+- **Modelo: entrenado con datos reales.** Algoritmo **LightGBM**, por la regla de elección (empate técnico con XGBoost). Modelos de corto plazo (1-7 días) y largo plazo (8 o más días), validación por bloques temporales, prueba anti-fuga, SHAP, intervalos, calibración con la regulación de los Lagos y JSON para la web. Documentación en `notas/modelo.md`.
+  - **Resultados principales** (`salidas/metricas.json`, todos los bloques): error en visitantes (WAPE) del 8,8 % a corto plazo y del 9,3 % a largo, frente al 13,2 % de suponer un día normal y al 9,9 % de repetir el año anterior. Detecta el 78-80 % de los días rojos, con una precisión del 94-96 %.
+  - **Zona de los Picos** (`salidas/regulacion.json`): 39 días rojos en 2023 y 48 en 2024; 85 de esos 87 ya caían en días de acceso regulado a los Lagos. Previsión para 2026: 36 (29-66).
+  - **Limitaciones:**
+    - sin visitantes extranjeros (el MITMA solo cuenta residentes en España);
+    - datos diarios solo hasta junio de 2025;
+    - el umbral del semáforo (1,5× y 2,0×) lo hemos definido nosotros;
+    - cruceros fuera;
+    - el modelo se queda corto en volumen (entre −4 % y −11 %) y no gana al día normal en Gijón y Oviedo en 2025;
+    - falla en los puentes de diciembre;
+    - los intervalos cubren el 77,7 % en lugar del 80 %.
+  - Detalle: `notas/resultados_reales.md`.
 
 ## Estructura
 
@@ -29,7 +40,7 @@ Repositorio compartido (privado) para datos y notas del proyecto.
 - `src/limpieza_B/` – limpieza de la parte B y unión de factores por zona (`unir_B.py`).
 - `src/modelo/` – modelo: objetivo, variables, validación, SHAP, salidas de la web y pruebas (`tests/`).
 - `config/` – mapeo de zonas (`mapeo_zonas.csv`), puntos meteorológicos y configuración del modelo, del semáforo y de los factores.
-- `salidas/` – salidas del modelo: JSON de la web, `backtest.parquet` y figuras (hoy, sintéticas).
+- `salidas/` – salidas del modelo con datos reales: JSON de la web, `backtest.parquet`, figuras y `tablas_resultados_reales.md`.
 - `notas/` – diccionario, control de calidad, `modelo.md`, `contrato_objetivo.md` (entrada de la parte A), `contrato_web.md` (salida para la web) y `guion_modelo.md` (presentación).
 
 ## Instalación
@@ -68,6 +79,8 @@ python -X utf8 -m pytest -q src/modelo/tests                  # todas (~4 min; i
 ```
 
 ## Qué necesita la parte A para conectar los datos reales
+
+**Hecho** (2026-10-16): la parte A entregó directamente `data/clean/objetivo_diario.parquet`, así que no hace falta el paso 4 de `construir_objetivo.py`. Basta con `python -X utf8 src/modelo/ejecutar.py --objetivo real --algoritmo ambos`.
 
 Resumen de `notas/contrato_objetivo.md`:
 

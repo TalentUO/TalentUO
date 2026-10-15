@@ -2,7 +2,19 @@
 
 Fecha: 2026-10-15. Rama `modelo`. Código en `src/modelo/`, configuración en `config/modelo.yaml`, `config/semaforo.yaml`, `config/factores.yaml` y `config/mitma_calidad.yaml`. Contratos: `notas/contrato_objetivo.md` (entrada de la parte A) y `notas/contrato_web.md` (salida para la web).
 
-> **⚠ Todos los resultados de este documento son SINTÉTICOS.** Hoy el objetivo es inventado (`src/modelo/objetivo_sintetico.py`), porque el MITMA aún se está descargando. Las cifras demuestran que la cadena funciona y que el modelo recupera efectos conocidos. **No dicen nada de Asturias.**
+> **Estado (2026-10-16): el modelo está entrenado con datos reales** del MITMA (`data/clean/objetivo_diario.parquet`, parte A; 5 zonas, 2022-01-01 → 2025-06-30). Rama `resultados-reales`. Todas las salidas de la web llevan `sintetico=false`. **Los resultados reales, con cada cifra y su fichero de origen, están en `notas/resultados_reales.md`.** Resumen:
+> - **Algoritmo: LightGBM**, por la regla de elección v2 (paso 3, desempate). Recall de rojos en verano 82,7 % frente a 81,3 %, precisión 95,5 % frente a 96,0 % y WAPE medio 9,04 % frente a 8,94 % (`salidas/comparacion_algoritmos.json`).
+> - **Error, todos los bloques (`salidas/metricas.json → tablas.global`):** WAPE del 8,8 % (corto) y 9,3 % (largo), frente al 13,2 % del día normal (B0) y al 9,9 % del año anterior (B1). Recall de rojos del 77,7 % y 79,9 %, con precisión del 94,1 % y 96,0 %.
+> - **Peor de lo esperado:**
+>   - en el bloque final (2025-S1), el modelo no gana a B0 en WAPE (9,5 % y 11,7 % frente a 8,6 %), por Gijón y Oviedo;
+>   - se queda corto en volumen en todos los bloques (entre −4 % y −11 %);
+>   - en verano, B1 detecta más rojos;
+>   - el corto plazo a 4-7 días es peor que el largo;
+>   - los intervalos p10-p90 cubren el 77,7 %;
+>   - falla en los puentes de diciembre.
+> - **Regulación (Picos):** 39 días rojos en 2023 y 48 en 2024, y 85 de esos 87 caen en días regulados. El umbral que mejor reproduce la regulación de los Lagos es 1,10× (F1 0,87). Para 2026 se prevén 36 rojos (29-66).
+>
+> Las secciones de resultados que siguen («Resultados», «SHAP recupera…», «Fiabilidad» y «Calibración») son las de la **prueba con el objetivo SINTÉTICO** del 2026-10-15. Se conservan como registro de la validación de la cadena y **no describen Asturias**. La tabla «LightGBM frente a XGBoost» sí está regenerada con datos reales.
 
 ## Cómo se ejecuta
 
@@ -100,7 +112,7 @@ Validación por bloques temporales: se entrena con todo lo anterior a cada bloqu
   - `solo_eventos_verificados`;
   - `tiempo_aproximado`.
 
-### Resultados (SINTÉTICOS, LightGBM)
+### Resultados (SINTÉTICOS, LightGBM; los reales están en `notas/resultados_reales.md`)
 
 Experimento base (entrenamiento desde 2022-01-01), todos los bloques:
 
@@ -146,7 +158,7 @@ Experimentos (todos los bloques; WAPE · recall de rojos):
 
 En la web, el efecto de cada factor se da en % respecto al **día medio del modelo**, no respecto al normal.
 
-### Fiabilidad (`metricas.py`)
+### Fiabilidad (`metricas.py`; cifras SINTÉTICAS; con datos reales la cobertura es del 77,7 %, ver `notas/resultados_reales.md` §4)
 
 - **Intervalo p10-p90:** conformal simple con los errores de validación (escala log) por zona y horizonte. La cobertura, medida dejando fuera cada bloque, es del **79-80 %** (objetivo: 80 %).
 - `incierto = True` si p10 y p90 caen en colores distintos.
@@ -159,7 +171,11 @@ En la web, el efecto de cada factor se da en % respecto al **día medio del mode
 - **Relativa** (la del semáforo, frente al normal de ese día de la semana): mejor umbral 0,85× con el observado (F1 0,70) y 0,90× con el previsto (F1 0,80).
 - **Absoluta** (frente al día normal medio de la zona): 1,0× con el observado (F1 0,74) y 0,80× con el previsto (F1 0,78).
 
-> **⚠ PENDIENTE DE DATOS REALES.** Estas cifras salen del objetivo sintético, que no contiene ningún efecto de la regulación ni de la capacidad real de los Lagos. Lo que sigue es una **hipótesis a comprobar** con `--objetivo real` y **no debe presentarse como conclusión** hasta entonces.
+> **Comprobado con datos reales (2026-10-16, `salidas/calibracion_lagos.json`, `notas/resultados_reales.md` §7).**
+> - Mejor umbral relativo: 1,10× con el observado (F1 0,867) y 1,05× con el previsto fuera de muestra (F1 0,911).
+> - Con el umbral rojo (2,0×), 85 de los 87 días rojos de 2023-2024 están regulados, pero solo se cubre el 24 % de los 352 días regulados con dato.
+>
+> La hipótesis de abajo (escrita con el objetivo sintético) se confirma en lo esencial. Las cifras sintéticas citadas en ella no valen.
 
 Hipótesis: la regulación actual (unos 180 días al año, todos los fines de semana de temporada y el verano) equivaldría a **cualquier día por encima de lo normal**, no solo a los de presión extrema. Con el umbral rojo (2,0×), el 93 % de los días rojos ya estarían regulados, pero solo se cubriría el 22 % de los días regulados. **No se cambia el valor por defecto.** La regulación es un calendario planificado, no una medida de saturación.
 
@@ -235,7 +251,7 @@ El detalle por cada horizonte (1, 2, … 7, 8+) está en `salidas/comparacion_al
   - en bruto: `data/prevision/AAAA-MM-DD/<zona>.json`;
   - limpia: `data/clean/openmeteo_prevision.parquet`.
 
-  La de la demo se emitió el 2026-10-15. Para d = emisión + h, con h = 1-3, se coloca como `_prev{h}` del valle y de la montaña de cada zona; para h = 4-7 el tiempo queda vacío, como en el entrenamiento. Si el fichero no existe, se usa el ejemplo (solo `covadonga`, aplicado al valle de la zona principal).
+  La de la demo se emitió el 2026-10-16. Para d = emisión + h, con h = 1-3, se coloca como `_prev{h}` del valle y de la montaña de cada zona; para h = 4-7 el tiempo queda vacío, como en el entrenamiento. Si el fichero no existe, se usa el ejemplo (solo `covadonga`, aplicado al valle de la zona principal).
 - **En producción:**
   1. cada mañana, `descargar_prevision.py` (previsión de cada `zona_meteo` y `zona_meteo_montana`);
   2. la previsión para d emitida hoy se coloca en `<var>_prev{h}` con h = d − hoy (h ≤ 3);
@@ -248,15 +264,23 @@ El detalle por cada horizonte (1, 2, … 7, 8+) está en `salidas/comparacion_al
 
 - **Sin extranjeros:** el MITMA solo cuenta residentes en España. Picos tiene un turismo internacional apreciable que no se ve.
 - **Datos diarios hasta junio de 2025:** el modelo no puede aprender cambios posteriores (la nueva regulación, el auge del turismo, etc.). En 2026-2027 asume que el comportamiento es como el de 2022-2025.
-- **El umbral es nuestro:** 1,5× y 2,0× el normal no salen de un dato oficial de capacidad. La calibración con los Lagos orienta, pero la regulación es un calendario planificado, no una medida de saturación. **Su conclusión está pendiente de datos reales.**
+- **El umbral es nuestro:** 1,5× y 2,0× el normal no salen de un dato oficial de capacidad. La calibración con los Lagos orienta, pero la regulación es un calendario planificado, no una medida de saturación. Además, el MITMA mide llegadas al concejo de Cangas de Onís, no accesos a los Lagos.
 - **Cruceros fuera:** solo hay previsiones de 2025-26; en 2022-2024 serían ceros por falta de dato.
 - **Tiempo en el entrenamiento:** solo hay previsión archivada desde 2024-01-22 y hasta 3 días: el efecto del tiempo se aprende solo con datos desde enero de 2024. Antes de esa fecha, o a 4-7 días, el modelo corto no usa tiempo. Su efecto está infraestimado. El modo aproximado es solo una cota optimista.
-- **El corto plazo detecta menos rojos que el largo** en la validación sintética (58 % frente a 82 %): hay que confirmarlo con datos reales.
+- **El corto plazo detecta menos rojos que el largo** a partir de h = 4. Confirmado con datos reales: a h = 7, recall del 73,5 % frente al 79,9 % del largo, con el mismo WAPE.
+- **Sesgo a la baja (datos reales):** se queda corto en todos los bloques, entre −3,9 % y −10,8 % del volumen. Fuera de muestra predijo 69 de los 87 días rojos de los Picos, así que la previsión de rojos para 2026-2027 probablemente se queda corta. No hay ninguna variable de tendencia, y las llegadas crecen de un año a otro.
+- **Bloque final (2025-S1):** no gana al día normal en WAPE (9,5 % y 11,7 % frente a 8,6 %), por Gijón y Oviedo. En las zonas turísticas sí gana.
+- **Puentes de diciembre:** el modelo los infraestima mucho (2023 y 2024).
+- **Intervalos p10-p90:** cobertura real del 77,7 %, por debajo del 80 %; en los Picos, el 76 %.
+- **«Interés en internet»** es el factor más importante del corto plazo y tiene una tendencia temporal sospechosa (efecto medio de +7 % en 2023 y −7 % en 2025).
+- **Gijón y Oviedo** no tienen días rojos con los umbrales actuales: su semáforo siempre está en verde.
 - **2027:** el curso escolar desde septiembre y la regulación de los Lagos son supuestos. Los partidos de 2026-27 tienen fechas de jornada sin confirmar.
 - **Los factores son asociaciones, no causas.** SHAP reparte el efecto entre variables correlacionadas («Época del año» frente a «Vacaciones escolares»).
 - **El día normal de 2024** es una referencia propia. Si existen los estadísticos oficiales del MITMA, conviene usarlos.
 
 ## Cómo conectar los datos reales (pasos exactos)
+
+**Hecho el 2026-10-16** con el parquet ya entregado por la parte A, sin el paso 3 (los ficheros mensuales no están en el repositorio).
 
 1. A deja `data/raw/zonas_mitma_asturias.csv` (`zona_mitma_id`, `nombre`) y los ficheros mensuales `data/raw/mitma_viajes/AAAA-MM.csv` y `data/raw/mitma_pernoctaciones/AAAA-MM.csv`, del 2022-01 al 2025-06, en el formato del MITMA o de spanishoddata (`notas/contrato_objetivo.md`).
 2. Rellenar `zona_mitma_id` en `config/mapeo_zonas.csv`, una fila por zona del proyecto. Si A separa Covadonga y los Lagos en otra zona MITMA, hay que añadir una fila; la zona principal es la del concejo INE 33012.
@@ -275,7 +299,7 @@ Tomadas el 2026-10-15 (antes de ver datos reales):
 3. **Perfil:** el reparto por residencia se calcula sobre las llegadas de ocio, y además sobre `llegadas_total` como campo aparte (`pct_total_*` en `perfil.json`).
 4. **Previsión:** previsión de 7 días de Open-Meteo en todas las zonas, incluida la montaña (`descargar_prevision.py`).
 5. **Algoritmo:** regla de elección, versión 2 (sección «LightGBM frente a XGBoost»). Al llegar los datos reales: `--objetivo real --algoritmo ambos`. El resultado sintético no cuenta.
-6. **Calibración con los Lagos:** conclusión pendiente de datos reales. Los umbrales del semáforo se mantienen en 1,5× y 2,0×.
+6. **Calibración con los Lagos:** los umbrales del semáforo se mantienen en 1,5× y 2,0×. Con datos reales, la regulación se parece a un umbral de 1,10× (`notas/resultados_reales.md` §7).
 
 Pendiente:
-- Qué color enseña la web cuando el corto y el largo plazo no coinciden. Hoy, el corto cuando existe. Si con datos reales el corto sigue detectando menos rojos que el largo, propongo enseñar el más alto de los dos.
+- Qué color enseña la web cuando el corto y el largo plazo no coinciden. Hoy, el corto cuando existe. Con datos reales, el corto sigue detectando menos rojos que el largo a 4-7 días (`notas/resultados_reales.md` §2), lo que apoya enseñar el más alto de los dos. **Sin aplicar:** decisión del equipo.
