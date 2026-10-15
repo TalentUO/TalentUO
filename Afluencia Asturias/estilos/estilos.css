@@ -63,6 +63,12 @@ a { color: var(--acento); }
 .aviso-piloto { background: var(--aviso-bg); border-bottom: 1px solid var(--aviso-borde); }
 .aviso-in { display: flex; gap: .6rem; align-items: flex-start; padding-block: .55rem; font-size: .95rem; }
 .aviso-in .ico { margin-top: .2em; font-size: 1.05rem; }
+/* Aviso de datos sintéticos: fijo arriba mientras el modelo no use datos reales */
+.aviso-sintetico { position: sticky; top: 0; z-index: 1100; background: var(--rojo-suave); border-bottom: 2px solid var(--rojo); color: var(--tinta); }
+.aviso-sintetico strong { color: var(--rojo); letter-spacing: .02em; }
+.con-aviso-sintetico .col-mapa { top: calc(3.4rem + env(safe-area-inset-top, 0px)); }
+/* Error al cargar las salidas del modelo */
+.error-datos { white-space: pre-wrap; font-size: .9rem; }
 
 /* ---------- Estructura general ---------- */
 main { display: block; outline: none; }

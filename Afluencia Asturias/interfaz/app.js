@@ -113,9 +113,7 @@
     sitios: [], sitiosPorId: {}, sitiosOrden: 'menos', sitiosVisibles: 0,
     eventos: { eventos: [] }, eventosCat: 'todas', eventosVisibles: 0,
     prevDia: [], prevPorZona: {}, prevPorConcejo: {},
-    gestionIniciada: false, alertas: [], csvOrigen: null,
   };
-  const DIAS_GESTION = 14; // alertas y exportación de Gestión
   const esPeriodo = () => E.desde !== E.hasta;
   const nDias = () => diasEntre(E.desde, E.hasta) + 1;
   const textoSel = () => (esPeriodo() ? periodoTexto(E.desde, E.hasta) : fechaLarga(E.desde));
@@ -135,6 +133,7 @@
    * Arranque
    * ==================================================================== */
   async function iniciar() {
+    avisoSintetico();
     try {
       E.info = await D.getInfo();
       E.zonas = await D.getZonas();
@@ -155,7 +154,6 @@
       configurarLateral();
       configurarSitios();
       await configurarEventos();
-      configurarGestion();
 
       await cambiarSeleccion(E.info.hoy, E.info.hoy, { anunciar: false });
       leerHash();
@@ -198,7 +196,7 @@
       p.hidden = !on;
     });
     if (actualizarHash) { try { history.replaceState(null, '', '#' + t); } catch (e) { /* sin historial */ } }
-    if (t === 'gestion') cargarGestion();
+    mostrarComponente(t);
   }
 
   /* ====================================================================
@@ -658,7 +656,6 @@
     const html = ['verde', 'ambar', 'rojo', 'gris'].map(n =>
       `<li><span class="sw-mapa nivel-${n}" aria-hidden="true"></span>${ICONO[n]}<span class="ley-txt"><strong>${NIVEL[n].nombre}</strong><span>${t[n]}</span></span></li>`).join('');
     $('#leyenda').innerHTML = html;
-    $('#leyenda-datos').innerHTML = html;
   }
 
   /* ====================================================================
@@ -1196,290 +1193,46 @@
   }
 
   /* ====================================================================
-   * Gestión
+   * Pestañas de la persona 2 (pestanas/gestion/, pestanas/sobre/)
+   * Se montan la primera vez que se abren, con el objeto del módulo «datos».
    * ==================================================================== */
-  const CRITERIO = { estudiar: 30, vigilar: 10 };
-
-  function configurarGestion() {
-    const zonasConDatos = E.zonas.filter(z => !z.sinDatos);
-    const opciones = zonasConDatos.map(z => `<option value="${z.id}">${esc(z.nombre)}</option>`).join('');
-    $('#fiab-zona').innerHTML = opciones;
-    $('#sim-zona').innerHTML = opciones;
-    const porDefecto = zonasConDatos.some(z => z.id === 'cangas') ? 'cangas' : (zonasConDatos[0] && zonasConDatos[0].id);
-    $('#fiab-zona').value = porDefecto;
-    $('#sim-zona').value = porDefecto;
-
-    const simFecha = $('#sim-fecha');
-    simFecha.min = E.info.hoy;
-    simFecha.max = E.maxFecha;
-    simFecha.value = sumar(E.info.hoy, (6 - deISO(E.info.hoy).getDay() + 7) % 7); // el próximo sábado (o hoy)
-    $('#sim-fecha-ayuda').textContent = `Cualquier día hasta el ${fechaLarga(E.maxFecha).toLowerCase()}.`;
-
-    let tUmbral = null;
-    $('#umbral').addEventListener('input', () => {
-      pintarUmbral();
-      clearTimeout(tUmbral);
-      tUmbral = setTimeout(renderRegulacion, 120);
-    });
-    $$('input[name="filtro-alerta"]').forEach(r => r.addEventListener('change', pintarListaAlertas));
-    $('#fiab-zona').addEventListener('change', renderFiabilidad);
-    ['#sim-zona', '#sim-fecha', '#sim-puente', '#sim-lagos'].forEach(s => $(s).addEventListener('change', renderSimulador));
-    $$('input[name="sim-lluvia"]').forEach(r => r.addEventListener('change', renderSimulador));
-    $$('[data-exportar]').forEach(b => b.addEventListener('click', () => exportar(b.dataset.exportar, b)));
-
-    const dlg = $('#dlg-csv');
-    $('#dlg-cerrar').addEventListener('click', () => dlg.close());
-    $('#dlg-copiar').addEventListener('click', copiarCSV);
-    $('#dlg-descargar').addEventListener('click', descargarCSV);
-    dlg.addEventListener('close', () => { if (E.csvOrigen) E.csvOrigen.focus(); });
-  }
-
-  function cargarGestion() {
-    if (E.gestionIniciada) return;
-    E.gestionIniciada = true;
-    pintarUmbral();
-    renderRegulacion();
-    renderAlertas();
-    renderFiabilidad();
-    renderSimulador();
-  }
-
-  function pintarUmbral() {
-    const u = +$('#umbral').value;
-    $('#umbral-valor').textContent = '+' + u + NBSP + '%';
-    $('#umbral').setAttribute('aria-valuetext', `Más de ${u} por ciento sobre un día normal`);
-  }
-
-  async function renderRegulacion() {
-    const u = +$('#umbral').value;
-    const datos = await D.getDiasSobreUmbral(1 + u / 100, 2024);
-    if (+$('#umbral').value !== u) return;
-    const conDatos = datos.filter(d => !d.sinDatos).sort((a, b) => b.dias - a.dias);
-    const sin = datos.filter(d => d.sinDatos);
-    const maxD = Math.max(40, ...conDatos.map(d => d.dias));
-    const veredicto = d => d.dias >= CRITERIO.estudiar ? 'estudiar' : d.dias >= CRITERIO.vigilar ? 'vigilar' : 'ok';
-    const VER = { estudiar: { t: 'Estudiar regulación', n: 'rojo' }, vigilar: { t: 'Vigilar', n: 'ambar' }, ok: { t: 'Sin presión', n: 'verde' } };
-
-    const estudiar = conDatos.filter(d => veredicto(d) === 'estudiar').map(d => nombreZ(d.zonaId));
-    $('#reg-resumen').textContent = estudiar.length
-      ? `Con este umbral, ${estudiar.length === 1 ? 'una zona supera' : estudiar.length + ' zonas superan'} los ${CRITERIO.estudiar} días al año: ${listaNatural(estudiar)}.`
-      : `Con este umbral, ninguna zona llega a ${CRITERIO.estudiar} días al año.`;
-
-    $('#reg-lista').innerHTML = conDatos.map(d => {
-      const v = veredicto(d);
-      return `<li class="rg">
-        <span class="rg-zona">${esc(nombreZ(d.zonaId))}</span>
-        <span class="rg-barra" aria-hidden="true"><span class="rg-val v-${v}" style="width:${(d.dias / maxD * 100).toFixed(1)}%"></span>
-          <span class="rg-ref" style="left:${(CRITERIO.vigilar / maxD * 100).toFixed(1)}%"></span><span class="rg-ref" style="left:${(CRITERIO.estudiar / maxD * 100).toFixed(1)}%"></span></span>
-        <span class="rg-num">${d.dias} ${d.dias === 1 ? 'día' : 'días'}</span>
-        <span class="rg-ver"><span class="pill pill-${VER[v].n}">${ICONO[VER[v].n]}<span>${VER[v].t}</span></span></span>
-        <span class="rg-pico">Pico: ${num(d.picoPor100)} visitantes por cada 100 vecinos</span>
-      </li>`;
-    }).join('') + sin.map(d => `<li class="rg"><span class="rg-zona">${esc(nombreZ(d.zonaId))}</span><span class="rg-sin">Sin datos suficientes</span></li>`).join('');
-  }
-
-  async function renderAlertas() {
-    const hoy = E.info.hoy, n = DIAS_GESTION;
-    const fechas = Array.from({ length: n }, (_, i) => sumar(hoy, i));
-    const [prevs, alertas, cal] = await Promise.all([
-      Promise.all(fechas.map(f => D.getPrevisionDia(f))),
-      D.getAlertas(hoy, n),
-      D.getCalendario(hoy, n),
-    ]);
-    const cabecera = '<thead><tr><th scope="col"><span class="sr">Zona</span></th>' + cal.map(c => {
-      const d = deISO(c.fecha), esp = c.puente || c.festivo;
-      return `<th scope="col" class="${c.finde ? 'finde' : ''}" title="${esc(fechaLarga(c.fecha) + (esp ? ' · ' + esp : ''))}">` +
-        `<span aria-hidden="true">${LETRA[d.getDay()]}<br>${d.getDate()}</span><span class="sr">${esc(fechaLarga(c.fecha))}${esp ? ', ' + esc(esp) : ''}</span>` +
-        `${esp ? '<br><span class="m-punto on" aria-hidden="true"></span>' : ''}</th>`;
-    }).join('') + '</tr></thead>';
-    const cuerpo = '<tbody>' + E.zonas.map(z => '<tr><th scope="row">' + esc(z.nombre) + '</th>' + prevs.map(lista => {
-      const p = lista.find(x => x.zonaId === z.id) || { nivel: 'gris' };
-      return `<td class="cel cel-${p.nivel}" title="${esc(NIVEL[p.nivel].nombre + (p.ratio != null ? ' · ' + pct(p.ratio) : ''))}">${ICONO[p.nivel]}<span class="sr">${NIVEL[p.nivel].nombre}${p.ratio != null ? ', ' + pct(p.ratio) : ''}</span></td>`;
-    }).join('') + '</tr>').join('') + '</tbody>';
-    $('#matriz').innerHTML = `<caption class="sr">Nivel previsto por zona para los próximos ${n} días</caption>` + cabecera + cuerpo;
-    E.alertas = alertas;
-    pintarListaAlertas();
-  }
-
-  function pintarListaAlertas() {
-    const modo = ($('input[name="filtro-alerta"]:checked') || {}).value || 'rojo';
-    const lista = E.alertas.filter(a => modo === 'todas' || a.nivel === 'rojo');
-    if (!lista.length) {
-      $('#alertas-lista').innerHTML = `<p class="pz-ayuda">No hay alertas de ${modo === 'todas' ? 'afluencia alta ni de saturación' : 'saturación'} en los próximos ${DIAS_GESTION} días.</p>`;
-      return;
-    }
-    const porDia = {};
-    lista.forEach(a => { (porDia[a.fecha] = porDia[a.fecha] || []).push(a); });
-    $('#alertas-lista').innerHTML = Object.keys(porDia).sort().map(f => `<div class="al-dia">
-      <h3>${esc(fechaLarga(f))}</h3>
-      <ul>${porDia[f].sort((a, b) => b.ratio - a.ratio).map(a => `<li class="al">
-        <span>${pill(a.nivel)}</span>
-        <div><p class="al-zona"><strong>${esc(nombreZ(a.zonaId))}</strong> · ${pct(a.ratio)} sobre un día normal</p>
-        <p class="al-accion"><span class="al-etq">Acción sugerida:</span> ${esc(a.accion)}</p></div>
-      </li>`).join('')}</ul></div>`).join('');
-  }
-
-  function pasoBonito(x) {
-    const p = Math.pow(10, Math.floor(Math.log10(x))), f = x / p;
-    return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
-  }
-
-  async function renderFiabilidad() {
-    const id = $('#fiab-zona').value;
-    const f = await D.getFiabilidad(id);
-    if ($('#fiab-zona').value !== id || !f) return;
-
-    $('#fiab-metricas').innerHTML = `
-      <div class="met"><span class="met-valor">±${f.errorMedio}${NBSP}%</span><span class="met-et">Error medio diario entre lo previsto y lo real</span></div>
-      <div class="met"><span class="met-valor">${f.nivelAcertado}${NBSP}%</span><span class="met-et">Días en que el semáforo acertó el color</span></div>
-      <div class="met"><span class="met-valor">${f.rojosDetectados} de ${f.rojosReales}</span><span class="met-et">Días de saturación que el modelo anticipó</span></div>`;
-
-    // Media diaria por semana, para que la gráfica se lea mejor
-    const semanas = [];
-    for (let i = 0; i < f.serie.length; i += 7) {
-      const tramo = f.serie.slice(i, i + 7);
-      semanas.push({
-        fecha: tramo[0].fecha,
-        real: tramo.reduce((a, x) => a + x.real, 0) / tramo.length,
-        pred: tramo.reduce((a, x) => a + x.prediccion, 0) / tramo.length,
+  const COMPONENTE = { gestion: 'gestion', datos: 'sobre' };
+  const montadas = {};
+  function mostrarComponente(t) {
+    const nombre = COMPONENTE[t];
+    const comp = nombre && window.Pestanas && window.Pestanas[nombre];
+    if (!comp) return;
+    const cont = $('#panel-' + t);
+    if (montadas[t]) { if (comp.mostrar) comp.mostrar(); return; }
+    montadas[t] = true;
+    window.DatosModelo.cargar()
+      .then(datos => comp.montar(cont, datos, window.UtilWeb))
+      .catch(err => {
+        console.error(err);
+        cont.innerHTML = `<div class="tarjeta"><p><strong>No se han podido cargar las salidas del modelo.</strong></p><p class="error-datos">${esc(err.message)}</p></div>`;
       });
-    }
-    const W = 720, H = 260, m = { l: 58, r: 14, t: 14, b: 34 };
-    const maxV = Math.max(...semanas.map(s => Math.max(s.real, s.pred)));
-    const paso = pasoBonito(maxV / 4), yMax = Math.ceil(maxV / paso) * paso;
-    const x = i => m.l + i * (W - m.l - m.r) / (semanas.length - 1);
-    const y = v => m.t + (H - m.t - m.b) * (1 - v / yMax);
-    let rejilla = '';
-    for (let v = 0; v <= yMax + 1e-6; v += paso) {
-      rejilla += `<line class="${v === 0 ? 'lc-eje' : 'lc-grid'}" x1="${m.l}" x2="${W - m.r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>` +
-        `<text class="lc-et" x="${m.l - 8}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end">${num(v)}</text>`;
-    }
-    let meses = '', mesPrevio = -1;
-    semanas.forEach((s, i) => {
-      const mm = deISO(s.fecha).getMonth();
-      if (mm !== mesPrevio) {
-        mesPrevio = mm;
-        meses += `<text class="lc-et" x="${x(i).toFixed(1)}" y="${H - 10}" text-anchor="${i === 0 ? 'start' : 'middle'}">${esc(capital(FMT_MES.format(deISO(s.fecha)).replace('.', '')))}</text>`;
-      }
+  }
+
+  /* ---------- Aviso de datos sintéticos ---------- */
+  function avisoSintetico() {
+    window.DatosModelo.cargar().then(d => {
+      if (!d.sintetico) return;
+      $('#aviso-sintetico').hidden = false;
+      document.body.classList.add('con-aviso-sintetico');
+    }).catch(err => {
+      console.error(err);
+      const a = $('#aviso-sintetico');
+      a.querySelector('p').innerHTML = `<strong>No se han podido cargar las salidas del modelo.</strong> <span class="error-datos">${esc(err.message)}</span>`;
+      a.hidden = false;
     });
-    const linea = k => semanas.map((s, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(s[k]).toFixed(1)}`).join(' ');
-    const ultimo = semanas.length - 1;
-    $('#fiab-grafico').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Visitantes diarios medios por semana en ${esc(nombreZ(id))}, de enero a junio de 2025: real frente a predicción. Error medio ±${f.errorMedio} %.">
-      ${rejilla}${meses}
-      <path class="lc-pred" d="${linea('pred')}"/>
-      <path class="lc-real" d="${linea('real')}"/>
-      <circle class="lc-punto" cx="${x(ultimo).toFixed(1)}" cy="${y(semanas[ultimo].real).toFixed(1)}" r="4"/>
-    </svg>`;
-    $('#fiab-tabla').innerHTML = `<table class="tabla"><caption class="sr">Visitantes diarios medios por semana</caption>
-      <thead><tr><th scope="col">Semana del</th><th scope="col" class="num">Real</th><th scope="col" class="num">Predicción</th></tr></thead>
-      <tbody>${semanas.map(s => `<tr><td>${esc(diaMes(s.fecha))}</td><td class="num">${num(s.real)}</td><td class="num">${num(s.pred)}</td></tr>`).join('')}</tbody></table>`;
   }
 
-  let seqSim = 0;
-  async function renderSimulador() {
-    const s = ++seqSim;
-    const id = $('#sim-zona').value;
-    const valor = $('#sim-fecha').value;
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(valor)) return; // fecha a medio escribir
-    const f = limitarFecha(valor);
-    const lagos = $('#sim-lagos');
-    lagos.disabled = id !== 'cangas';
-    const escenario = {
-      lluvia: ($('input[name="sim-lluvia"]:checked') || {}).value || 'auto',
-      puente: $('#sim-puente').value,
-      lagos: lagos.disabled ? 'auto' : lagos.value,
-    };
-    const r = await D.simular(id, f, escenario);
-    if (s !== seqSim) return;
-    const carta = (p, titulo) => `<div class="sim-carta estado-${p.nivel}">
-      <p class="eyebrow">${titulo}</p>${pill(p.nivel)}
-      <p class="sim-pct">${pct(p.ratio)}</p>
-      <p class="sim-vis">Unos ${num(p.visitantes)} visitantes</p>
-      <p class="sim-factores">${esc(p.factores.map(x => x.texto + ' ' + (x.efecto >= 0 ? '+' : MENOS) + Math.abs(x.efecto) + ' %').join(' · '))}</p></div>`;
-    const b = r.base, e = r.escenario;
-    const dif = Math.round((e.ratio - b.ratio) * 100);
-    let conclusion;
-    if (b.nivel === e.nivel && Math.abs(dif) < 2) conclusion = 'Con estas condiciones la previsión apenas cambia.';
-    else if (b.nivel === e.nivel) conclusion = `Sigue en «${NIVEL[e.nivel].nombre.toLowerCase()}», pero con ${Math.abs(dif)} puntos ${dif > 0 ? 'más' : 'menos'} sobre un día normal.`;
-    else conclusion = `Pasaría de «${NIVEL[b.nivel].nombre.toLowerCase()}» a «${NIVEL[e.nivel].nombre.toLowerCase()}» (${dif > 0 ? '+' : MENOS}${Math.abs(dif)} puntos).`;
-    $('#sim-resultado').innerHTML = `<div class="sim-cartas">${carta(b, 'Previsión actual')}${carta(e, 'Con tu escenario')}</div><p class="sim-concl">${esc(conclusion)}</p>`;
-  }
-
-  /* ---------- Exportación CSV ---------- */
-  const celdaCSV = v => {
-    if (v == null) return '';
-    const s = String(v);
-    return /[;"\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
-  };
-  const pctNum = r => (r == null ? '' : Math.round((r - 1) * 100));
-
-  async function exportar(tipo, boton) {
-    const hoy = E.info.hoy, n = DIAS_GESTION;
-    let nombre, desc, filas;
-    if (tipo === 'prevision') {
-      const fechas = Array.from({ length: n }, (_, i) => sumar(hoy, i));
-      const prevs = await Promise.all(fechas.map(f => D.getPrevisionDia(f)));
-      filas = [['fecha', 'zona', 'nivel', 'visitantes_previstos', 'minimo', 'maximo', 'dia_normal', 'variacion_pct', 'con_meteorologia']];
-      prevs.forEach(lista => lista.forEach(p => filas.push([p.fecha, nombreZ(p.zonaId), p.nivel, p.visitantes, p.min, p.max, p.normal, pctNum(p.ratio), p.conMeteo ? 'si' : 'no'])));
-      nombre = `prevision_${hoy}.csv`;
-      desc = `Previsión de las ${E.zonas.length} zonas para los próximos ${n} días.`;
-    } else if (tipo === 'umbral') {
-      const u = +$('#umbral').value;
-      const datos = await D.getDiasSobreUmbral(1 + u / 100, 2024);
-      filas = [['zona', 'anio', 'umbral_pct', 'dias_sobre_umbral', 'pico_visitantes', 'pico_por_100_vecinos']];
-      datos.forEach(d => filas.push([nombreZ(d.zonaId), d.anio, u, d.dias, d.picoVisitantes, d.picoPor100]));
-      nombre = `dias_sobre_umbral_${u}.csv`;
-      desc = `Días de 2024 con más de +${u} % sobre un día normal, por zona.`;
-    } else {
-      const alertas = await D.getAlertas(hoy, n);
-      filas = [['fecha', 'zona', 'nivel', 'variacion_pct', 'accion_sugerida']];
-      alertas.forEach(a => filas.push([a.fecha, nombreZ(a.zonaId), a.nivel, pctNum(a.ratio), a.accion]));
-      nombre = `alertas_${hoy}.csv`;
-      desc = `Alertas de afluencia alta y saturación de los próximos ${n} días, con la acción sugerida.`;
-    }
-    const csv = filas.map(f => f.map(celdaCSV).join(';')).join('\r\n');
-    E.csv = { nombre, csv };
-    E.csvOrigen = boton || null;
-    $('#dlg-nombre').textContent = nombre;
-    $('#dlg-desc').textContent = desc + ' Son datos ficticios del piloto.';
-    $('#dlg-texto').value = csv;
-    $('#dlg-estado').textContent = '';
-    const dlg = $('#dlg-csv');
-    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
-    $('#dlg-copiar').focus();
-  }
-
-  function copiarCSV() {
-    const ta = $('#dlg-texto'), estado = $('#dlg-estado');
-    const seleccionar = () => {
-      ta.focus();
-      ta.select();
-      estado.textContent = 'No se ha podido copiar automáticamente. El texto está seleccionado: cópialo con Ctrl+C (o Cmd+C).';
-    };
-    try {
-      navigator.clipboard.writeText(E.csv.csv)
-        .then(() => { estado.textContent = 'Copiado. Pégalo en una hoja de cálculo o en un archivo de texto.'; })
-        .catch(seleccionar);
-    } catch (e) { seleccionar(); }
-  }
-
-  function descargarCSV() {
-    const estado = $('#dlg-estado');
-    try {
-      const blob = new Blob(['﻿' + E.csv.csv], { type: 'text/csv;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = E.csv.nombre;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 4000);
-      estado.textContent = 'Descarga iniciada. Si no aparece (la vista previa del piloto puede bloquearla), usa Copiar.';
-    } catch (e) {
-      estado.textContent = 'No se ha podido descargar. Usa Copiar.';
-    }
-  }
+  /* ---------- Utilidades para las pestañas de la persona 2 ---------- */
+  window.UtilWeb = Object.freeze({
+    $, $$, esc, num, pct, delta, pill, anunciar, listaNatural,
+    fechaLarga: f => fechaLarga(f), fechaCorta: f => fechaCorta(f),
+    deISO, aISO, sumar, diasEntre, NIVEL, ICONO, NBSP, MENOS,
+  });
 
   /* ---------- Arranque ---------- */
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar);
