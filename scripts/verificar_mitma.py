@@ -1,5 +1,5 @@
 """Comprobaciones de los CSV anuales MITMA: días distintos, primera/última fecha, filas,
-fechas ausentes y (viajes) que todos los destinos estén en Asturias. Uso: python scripts/verificar_mitma.py 2022"""
+fechas ausentes y (viajes) que todos los destinos estén en Asturias. Uso: python scripts/verificar_mitma.py 2022 [viajes|pernoctaciones]"""
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -11,6 +11,8 @@ anio = int(sys.argv[1])
 fin = date(anio, 6, 30) if anio == 2025 else date(anio, 12, 31)
 esperadas = {(date(anio, 1, 1) + timedelta(n)).strftime("%Y%m%d") for n in range((fin - date(anio, 1, 1)).days + 1)}
 for tipo, col in (("viajes", "destino"), ("pernoctaciones", "zona_pernoctacion")):
+    if len(sys.argv) > 2 and sys.argv[2] != tipo:
+        continue
     f = raw / f"mitma_{tipo}_{anio}.csv"
     fechas, filas, fuera = set(), 0, 0
     for t in pd.read_csv(f, dtype=str, keep_default_na=False, chunksize=2_000_000, usecols=["fecha", col]):

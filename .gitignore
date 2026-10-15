@@ -32,3 +32,8 @@ data/clean/_prueba/
 data/raw/mitma_viajes/
 data/raw/mitma_pernoctaciones/
 *.csv.gz
+
+# MITMA (parte A): ficheros mensuales y anuales en bruto; solo se versionan las dos carpetas pequeñas de abajo
+data/raw/mitma_*
+!data/raw/mitma_zonificacion_v2/
+!data/raw/mitma_estadisticos_dia_normal_2024/
