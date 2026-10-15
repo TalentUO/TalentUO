@@ -7,6 +7,7 @@ Repositorio compartido (privado) para datos y notas del proyecto.
 - `data/raw/` – datos descargados tal cual de la fuente (no editar a mano).
 - `data/manual/` – datos introducidos o corregidos manualmente.
 - `notas/registro_descargas.md` – registro de cada descarga (fecha, fuente, archivo).
+- `notas/registro_senales.md`, `notas/notas_senales.md`, `notas/decisiones_senales.md` – señales adelantadas (Wikipedia, Google Trends, OAPN): registro, hallazgos por fuente y decisiones pendientes. Script: `src/descarga_senales.py`.
 
 ## Instalación
 
