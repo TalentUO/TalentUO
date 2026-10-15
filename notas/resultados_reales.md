@@ -179,3 +179,67 @@ Fuente: `salidas/metricas.json → tablas.global`.
 6. **Intervalos p10-p90 con cobertura del 77,7 % de media,** por debajo del 80 % buscado; en los Picos, el 76 %.
 7. **«Interés en internet» es el factor más importante del corto plazo** y tiene una tendencia temporal sospechosa (sección 3).
 8. En Gijón y Oviedo el semáforo nunca sale de verde con los umbrales actuales: el producto solo tiene sentido en las 3 zonas turísticas.
+
+## 7. ¿Hace falta regular? (zona de los Picos, Cangas de Onís 33012)
+
+Fuentes:
+- `salidas/regulacion.json` (`por_zona`, `lagos.por_anio`, `calendario_alertas`);
+- `salidas/calibracion_lagos.json`;
+- comprobación independiente de las cifras observadas con `scripts/verificar_regulacion.py`, que recalcula desde `data/clean/objetivo_diario.parquet` y la columna `lagos_regulado` de `data/clean/calendario_diario.parquet`. Coinciden todas.
+
+Rojo = al menos 2,0 veces el día normal de ese día de la semana; ámbar = de 1,5 a 2,0 veces. Son umbrales definidos por nosotros, no una capacidad oficial.
+
+### Observado (2023 y 2024)
+
+| Año | Días con dato | Días rojos | Días ámbar | Días regulados en los Lagos (con dato) | Rojos en días regulados | Alerta (ámbar + rojo) en días regulados | Días regulados por debajo de lo normal (< 1,0) |
+|---|---|---|---|---|---|---|---|
+| 2023 | 358 | **39** | 43 | 172 | 38 de 39 | 79 de 82 | 16 |
+| 2024 | 356 | **48** | 42 | 180 | 47 de 48 | 88 de 90 | 16 |
+
+- **Días por encima de 2 veces lo normal: 39 en 2023 y 48 en 2024.** Están concentrados en agosto (25 y 29), julio (8 y 12) y Semana Santa (3 y 3).
+- Casi todos los días de presión alta ya caen en días regulados: 85 de los 87 rojos y 167 de los 172 días en alerta de los dos años.
+- Al revés no ocurre: la regulación cubre muchos más días de los que superan los umbrales. Solo el 24 % de los días regulados es rojo, y 93 días regulados en 2023 y 92 en 2024 están por debajo de 1,5 veces lo normal.
+
+### ¿Qué umbral reproduce mejor la regulación actual?
+
+Fuente: `salidas/calibracion_lagos.json`. Positivo = día regulado. Máximo F1 en una rejilla de 0,5 a 3,0 con paso 0,05.
+
+| Escala | Fuente del cociente | Mejor umbral | F1 | Precisión | Recall | F1 con el umbral ámbar (1,5) | F1 con el umbral rojo (2,0) |
+|---|---|---|---|---|---|---|---|
+| Relativa (la del semáforo) | observado 2023-2024 | **1,10×** | 0,867 | 0,892 | 0,844 | 0,637 | 0,387 |
+| Absoluta (frente al día normal medio) | observado 2023-2024 | 1,05× | 0,867 | 0,854 | 0,881 | 0,678 | 0,388 |
+| Relativa | previsto fuera de muestra (bloques de validación) | 1,05× | 0,911 | 0,949 | 0,877 | 0,596 | 0,324 |
+| Absoluta | previsto fuera de muestra | 1,00× | 0,897 | 0,883 | 0,910 | 0,587 | 0,336 |
+
+**La regulación actual equivale a «cualquier día un 10 % por encima de lo normal»,** no a los días de presión extrema. Se confirma, ahora con datos reales, la hipótesis que en `notas/modelo.md` estaba pendiente.
+
+Hay que tener en cuenta dos cosas:
+- la regulación es un calendario planificado (fines de semana de temporada y verano), no una respuesta a la afluencia medida;
+- el MITMA mide llegadas al municipio de Cangas de Onís, no accesos a los Lagos.
+
+Esta comparación orienta, pero no valida.
+
+### Previsión con el modelo de largo plazo (2026 y 2027)
+
+Fuente: `salidas/regulacion.json → por_zona` (33012). Intervalo = días con p10 por encima del umbral (mínimo) y días con p90 por encima del umbral (máximo).
+
+| Año | Días rojos (intervalo) | Días ámbar | Días en alerta (intervalo) | Días regulados | Rojos en días regulados | Calendario supuesto |
+|---|---|---|---|---|---|---|
+| 2026 | **36** (29-66) | 48 | 84 (63-131) | 185 | 36 de 36 | no |
+| 2027 | **34** (28-61) | 44 | 78 (56-126) | 185 (supuesta) | 34 de 34 | sí (los 365 días) |
+
+- Rojos previstos por mes: en 2026, abril 2, julio 6 y agosto 28; en 2027, julio 5 y agosto 29.
+- En 2027 no sale ningún rojo en Semana Santa. Es un año con el curso escolar y la regulación supuestos iguales a los de 364 días antes (`calendario_supuesto`); **no verificado** que la Semana Santa de 2027 (marzo) esté bien recogida.
+- **La previsión cuenta probablemente de menos.** En la validación fuera de muestra de los Picos, el modelo de largo plazo predijo 69 rojos frente a 87 observados (−21 %) y 153 días en alerta frente a 179 (−15 %), por el sesgo a la baja de la sección 6. Las cifras centrales de 2026 (36) y 2027 (34) quedan por debajo de lo observado en 2023 (39) y 2024 (48); lo observado sí cae dentro del intervalo.
+
+### Respuesta
+
+**Hechos.**
+- En la zona de los Picos, las llegadas de ocio superaron 2 veces lo normal 39 días en 2023 y 48 en 2024, sobre todo en agosto, y el modelo prevé de 29 a 66 días así en 2026.
+- La regulación actual de los Lagos (172-180 días con dato al año) ya cubre 85 de esos 87 días.
+- La regulación reproduce mejor un umbral de 1,1 veces lo normal (F1 0,87) que el de 2 veces (F1 0,39).
+
+**Opinión del equipo.**
+- Los datos respaldan que hace falta regular: hay un núcleo de unos 40-50 días al año con más del doble de visitantes de lo normal, y se repite cada verano.
+- El calendario actual llega a esos días, pero es mucho más amplio: regula también días normales o casi normales.
+- Un sistema de alerta como este podría servir para concentrar las medidas más duras en los días rojos y revisar el resto del calendario. No hemos medido la capacidad física de los Lagos, así que no podemos decir cuál es el umbral correcto.
