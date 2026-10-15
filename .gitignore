@@ -14,3 +14,5 @@ data/raw/ine_moviles_*
 data/raw/ine_viviendas_turisticas.csv
 
 data/raw/_mitma_estado_v2.jsonl
+.env
+.env.*

@@ -11,6 +11,7 @@ Repositorio compartido (privado) para datos y notas del proyecto.
 - `scripts/` – `descarga_mitma.py` (descarga MITMA día a día, filtrada a Asturias, reanudable) y `verificar_mitma.py`; `descarga_sadei.py` (tablas PC-Axis de SADEI vía el visor PxWeb, en partes si superan 100 000 celdas) y `verificar_sadei.py`.
 - `logs/` – logs de las descargas (locales, no versionados).
 - `data/raw/LEEME_datos_no_versionados.md` – qué ficheros pesados no se suben y cómo regenerarlos.
+- `notas/registro_senales.md`, `notas/notas_senales.md`, `notas/decisiones_senales.md` – señales adelantadas (Wikipedia, Google Trends, OAPN): registro, hallazgos por fuente y decisiones pendientes. Script: `src/descarga_senales.py`.
 
 ## Instalación
 
