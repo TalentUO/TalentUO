@@ -33,7 +33,7 @@ REGISTRO = RAIZ / "notas" / "registro_openmeteo.md"
 TZ = "Europe/Madrid"
 INICIO_HIST = date(2022, 1, 1)
 INICIO_PREVIOUS = date(2024, 1, 1)  # la doc dice que la mayoria de modelos se archivan desde ene-2024
-ZONAS_ARCHIVE = ("covadonga", "cangas_de_onis")
+ZONAS_ARCHIVE = ("covadonga", "cangas_de_onis", "lagos_enol", "llanes", "ribadesella", "gijon", "oviedo", "madrid", "sevilla")  # todas: la comparacion hist-vs-ERA5 por zona lo necesita
 PAUSA = 6.0  # segundos entre llamadas (limite gratuito: 600/min, 5000/h, 10000/dia, ponderadas)
 
 DIARIAS = ["temperature_2m_max", "temperature_2m_min", "precipitation_sum", "precipitation_hours",
