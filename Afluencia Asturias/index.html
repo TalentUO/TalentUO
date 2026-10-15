@@ -161,10 +161,10 @@ body { background: var(--bg); color: var(--tinta); }
             <button type="button" class="btn" id="cal-cerrar">Cerrar</button>
           </div>
         </div>
-      </div>
-      <div class="dias-bloque">
-        <p class="filtro-et" id="dias-barra-t">Próximos días en Asturias <span class="dias-sub">(el peor nivel de todas las zonas)</span></p>
-        <ul class="dias-barra" id="dias-barra" aria-labelledby="dias-barra-t"></ul>
+        <div class="dias-bloque">
+          <p class="filtro-et" id="dias-barra-t">Próximos días en Asturias <span class="dias-sub">(el peor nivel de todas las zonas)</span></p>
+          <ul class="dias-barra" id="dias-barra" aria-labelledby="dias-barra-t"></ul>
+        </div>
       </div>
     </div>
 
@@ -179,7 +179,10 @@ body { background: var(--bg); color: var(--tinta); }
           <ul id="buscar-lista" role="listbox" aria-label="Lugares encontrados" hidden></ul>
         </div>
         <p id="buscar-ayuda" class="sr">Escribe un pueblo, concejo o lugar. Usa las flechas para moverte por los resultados y Intro para elegir.</p>
+        <p id="buscar-estado" class="ayuda" role="status"></p>
       </div>
+      <button type="button" class="btn filtros-btn" id="btn-filtros" aria-expanded="false" aria-controls="filtros-mas">Filtros</button>
+      <div class="filtros-mas" id="filtros-mas">
       <fieldset class="segmentado" id="filtro-tipo">
         <legend class="filtro-et">Tipo de destino</legend>
         <div class="seg-opciones">
@@ -196,11 +199,13 @@ body { background: var(--bg); color: var(--tinta); }
           <button type="button" class="seg-btn" data-vista="lista" aria-pressed="false">Lista</button>
         </div>
       </div>
+      </div>
     </div>
 
     <div class="inicio-grid">
       <div class="col-mapa">
         <div class="mapa-marco" id="mapa-marco">
+          <ul class="leyenda-mini" id="leyenda-mini" aria-hidden="true"></ul>
           <div class="mapa" id="mapa" role="region" aria-label="Mapa de Asturias. Con el mapa enfocado, las flechas lo mueven y las teclas más y menos acercan o alejan." aria-describedby="nota-mapa"></div>
         </div>
         <!-- Rellenos del semáforo para el mapa: color + trama, para no depender solo del color -->
@@ -292,7 +297,7 @@ body { background: var(--bg); color: var(--tinta); }
      fuente-modelo.js (Inicio). fuente-ficticia.js solo aporta nombres, tipos de destino y el calendario de reserva. -->
 <script src="datos/sitios.js"></script>
 <script src="datos/eventos.js"></script>
-<script src="datos/modelo/salidas.js"></script>
+<script src="datos/modelo/salidas-inicio.js"></script>
 <script src="datos/datos.js"></script>
 <script src="datos/fuente-ficticia.js"></script>
 <script src="datos/fuente-modelo.js"></script>

@@ -9,7 +9,7 @@ python scripts/servir_web.py          # abre http://127.0.0.1:8000/
 python scripts/servir_web.py --demo   # abre el modo demo
 ```
 
-Solo necesita Python 3 (biblioteca estándar). También se puede abrir `Afluencia Asturias/index.html` con doble clic: los datos van en `datos/modelo/salidas.js`, que el navegador lee también desde `file://`.
+Solo necesita Python 3 (biblioteca estándar). También se puede abrir `Afluencia Asturias/index.html` con doble clic: los datos van en `datos/modelo/salidas-inicio.js` y `salidas.js`, que el navegador lee también desde `file://`.
 
 ## Modo demo (`?demo=1`)
 
@@ -35,7 +35,7 @@ Después basta con recargar la página. El script:
 - copia los cinco JSON a `Afluencia Asturias/datos/modelo/`;
 - elige `config/mapeo_zonas.csv` si cubre las zonas de las predicciones (si no, el de ejemplo);
 - exporta el calendario oficial (puentes y festivos);
-- genera `salidas.js`.
+- genera `salidas.js` (todo) y `salidas-inicio.js` (lo que usa Inicio, para que la página cargue antes).
 
 Mientras los datos sean sintéticos, la web muestra arriba y en todas las pestañas el aviso **«DATOS SINTÉTICOS – solo para pruebas»**. Con datos reales (`sintetico: false`) el aviso desaparece solo.
 

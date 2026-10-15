@@ -112,7 +112,7 @@
     concejos: [], concejosPorId: {}, mapa: null,
     sitios: [], sitiosPorId: {}, sitiosOrden: 'menos', sitiosVisibles: 0,
     eventos: { eventos: [] }, eventosCat: 'todas', eventosVisibles: 0,
-    prevDia: [], prevPorZona: {}, prevPorConcejo: {},
+    prevDia: [], prevPorZona: {}, prevPorConcejo: {}, plegablesAbiertos: {},
   };
   const esPeriodo = () => E.desde !== E.hasta;
   const nDias = () => diasEntre(E.desde, E.hasta) + 1;
@@ -137,6 +137,11 @@
    * ==================================================================== */
   async function iniciar() {
     avisoSintetico();
+    // Recuerda qué secciones plegables del panel ha abierto el usuario (el panel se repinta al cambiar de fecha)
+    $('#panel-zona').addEventListener('toggle', e => {
+      const h = e.target.matches && e.target.matches('.pz-plegable') && e.target.querySelector('h3[id]');
+      if (h) E.plegablesAbiertos[h.id] = e.target.open;
+    }, true);
     try {
       E.info = await D.getInfo();
       E.zonas = await D.getZonas();
@@ -543,7 +548,7 @@
       indice.push({ texto, tipo, zonaId, concejoId, n: normalizar(texto) });
     };
     E.zonas.forEach(z => meter(z.nombre, 'zona', z.id));
-    E.concejos.forEach(c => { if (c.zonaId) meter(c.nombre, 'concejo', c.zonaId, c.id); });
+    E.concejos.forEach(c => meter(c.nombre, 'concejo', c.zonaId, c.id));
     E.zonas.forEach(z => z.lugares.forEach(l => meter(l, 'lugar', z.id)));
     E.sitios.forEach(st => { const c = E.concejosPorId[st.concejos[0]]; if (c && c.zonaId) meter(st.nombre, 'lugar', c.zonaId); });
     const PRIORIDAD = { zona: 2, concejo: 1, lugar: 0 };
@@ -563,7 +568,7 @@
         lista.innerHTML = resultados.map((r, i) =>
           `<li role="option" id="op-${i}" data-i="${i}" aria-selected="${i === activo}">` +
           `<span>${esc(r.texto)}</span>` +
-          `<span class="op-zona">${r.tipo === 'zona' ? 'Zona' : r.tipo === 'concejo' ? 'Concejo · ' + esc(nombreZ(r.zonaId)) : 'en ' + esc(nombreZ(r.zonaId))}</span>` +
+          `<span class="op-zona">${r.tipo === 'zona' ? 'Zona' : r.tipo === 'concejo' ? (r.zonaId ? 'Concejo · ' + esc(nombreZ(r.zonaId)) : 'Concejo · sin previsión') : 'en ' + esc(nombreZ(r.zonaId))}</span>` +
           '</li>').join('');
       }
       lista.hidden = false;
@@ -589,12 +594,18 @@
       if (!r) return;
       input.value = '';
       cerrar();
+      $('#buscar-estado').textContent = '';
+      if (r.tipo === 'concejo' && !r.zonaId) {
+        $('#buscar-estado').textContent = `${r.texto} no tiene previsión: no está en ninguna zona del modelo. Lo señalamos en el mapa.`;
+        abrirConcejo(r.concejoId, { foco: false, encuadrar: true });
+        return;
+      }
       if (r.tipo === 'concejo') { abrirConcejo(r.concejoId, { foco: true, encuadrar: true }); return; }
       abrirZona(r.zonaId, { foco: true, lugar: r.tipo === 'lugar' ? r.texto : null });
       encuadrar('zona', r.zonaId);
     }
 
-    input.addEventListener('input', buscar);
+    input.addEventListener('input', () => { $('#buscar-estado').textContent = ''; buscar(); });
     input.addEventListener('focus', () => { if (input.value.trim()) buscar(); });
     input.addEventListener('keydown', e => {
       if (e.key === 'ArrowDown') {
@@ -645,6 +656,20 @@
       const b = e.target.closest('[data-zona]');
       if (b) abrirZona(b.dataset.zona, { foco: true });
     });
+    const bf = $('#btn-filtros');
+    const resumirFiltros = () => {
+      const partes = [];
+      if (E.tipo !== 'todos') partes.push(TIPO_NOMBRE[E.tipo]);
+      if (E.vista === 'lista') partes.push('Lista');
+      bf.textContent = partes.length ? 'Filtros · ' + partes.join(', ') : 'Filtros';
+    };
+    bf.addEventListener('click', () => {
+      const abierto = !$('.filtros').classList.contains('abiertos');
+      $('.filtros').classList.toggle('abiertos', abierto);
+      bf.setAttribute('aria-expanded', String(abierto));
+    });
+    $$('input[name="tipo"]').forEach(r => r.addEventListener('change', resumirFiltros));
+    $$('[data-vista]').forEach(b => b.addEventListener('click', resumirFiltros));
   }
 
   /* ====================================================================
@@ -711,7 +736,12 @@
     const t = textosNivel();
     const html = ['verde', 'ambar', 'rojo', 'gris'].map(n =>
       `<li><span class="sw-mapa nivel-${n}" aria-hidden="true"></span>${ICONO[n]}<span class="ley-txt"><strong>${NIVEL[n].nombre}</strong><span>${t[n]}</span></span></li>`).join('');
-    $('#leyenda').innerHTML = html;
+    const sinZona = E.concejos.some(c => !c.zonaId);
+    const extra = sinZona ? '<li><span class="sw-mapa sin-zona" aria-hidden="true"></span><span class="ley-txt"><strong>Sin previsión</strong><span>Concejo fuera de las zonas del modelo</span></span></li>' : '';
+    $('#leyenda').innerHTML = html + extra;
+    $('#leyenda-mini').innerHTML = ['verde', 'ambar', 'rojo', 'gris'].map(n =>
+      `<li><span class="sw-mapa nivel-${n}"></span>${ICONO[n]}${NIVEL[n].nombre}</li>`).join('') +
+      (sinZona ? '<li><span class="sw-mapa sin-zona"></span>Sin previsión</li>' : '');
   }
 
   /* ====================================================================
@@ -720,22 +750,24 @@
   function renderRanking() {
     const visibles = E.prevDia.filter(p => p.nivel !== 'gris' && coincideTipo(E.zonasPorId[p.zonaId]));
     const top = visibles.slice().sort((a, b) => b.ratio - a.ratio).slice(0, 5);
-    const tranquilas = visibles.filter(p => p.nivel === 'verde').sort((a, b) => a.ratio - b.ratio).slice(0, 3);
+    const enTop = new Set(top.map(p => p.zonaId));
+    const tranquilas = visibles.filter(p => p.nivel === 'verde' && !enTop.has(p.zonaId)).sort((a, b) => a.ratio - b.ratio).slice(0, 3);
     const filtro = E.tipo === 'todos' ? '' : ' · Solo ' + TIPO_NOMBRE[E.tipo].toLowerCase();
     const periodo = esPeriodo(), media = periodo ? ', de media' : '';
 
     $('#ranking').innerHTML = `
-      <h2 class="lat-titulo">Dónde habrá más gente</h2>
+      <h2 class="lat-titulo">Dónde habrá más presión</h2>
       <p class="lat-sub">${esc(textoSel())}${periodo ? ' · Media por día' : ''}${esc(filtro)}</p>
+      <p class="lat-sub">Comparado con un día normal en cada zona.</p>
       <ol class="ranking">${top.map((p, i) => `<li><button type="button" class="rk" data-zona="${p.zonaId}">
         <span class="rk-n" aria-hidden="true">${i + 1}</span>
-        <span class="rk-nombre">${esc(nombreZ(p.zonaId))}</span>
-        <span class="rk-dato">${pill(p.nivel)}<span class="rk-pct">${pct(p.ratio)}<span class="sr"> sobre un día normal${media}</span></span></span>
+        <span class="rk-nombre" title="${esc(nombreZ(p.zonaId))}">${esc(nombreZ(p.zonaId))}</span>
+        <span class="rk-dato">${pill(p.nivel)}<span class="rk-pct"><span aria-hidden="true">${pct(p.ratio)}</span><span class="sr">${esc(delta(p.ratio, periodo))}</span></span></span>
       </button></li>`).join('') || '<li class="vacio">No hay zonas con este filtro.</li>'}</ol>
-      ${tranquilas.length ? `<h3 class="lat-titulo2">Con menos gente ${periodo ? 'esos días' : 'ese día'}</h3>
+      ${tranquilas.length ? `<h3 class="lat-titulo2">Con menos presión ${periodo ? 'esos días' : 'ese día'}</h3>
       <ul class="tranquilas">${tranquilas.map(p => `<li><button type="button" class="tq" data-zona="${p.zonaId}">
-        <span class="rk-nombre">${esc(nombreZ(p.zonaId))}</span>
-        <span class="rk-dato">${pill(p.nivel)}<span class="rk-pct">${pct(p.ratio)}<span class="sr"> respecto a un día normal${media}</span></span></span>
+        <span class="rk-nombre" title="${esc(nombreZ(p.zonaId))}">${esc(nombreZ(p.zonaId))}</span>
+        <span class="rk-dato">${pill(p.nivel)}<span class="rk-pct"><span aria-hidden="true">${pct(p.ratio)}</span><span class="sr">${esc(delta(p.ratio, periodo))}</span></span></span>
       </button></li>`).join('')}</ul>` : ''}
       <p class="lat-ayuda">Elige una zona en el mapa para ver la previsión de los próximos días, las causas y alternativas con menos gente.</p>`;
   }
@@ -797,6 +829,7 @@
     E.lugarBuscado = opts.lugar || null;
     $('#ranking').hidden = true;
     $('#panel-zona').hidden = false;
+    $('#lateral').classList.add('con-panel');
     if (E.zona !== E.zonaPanelAnterior) $('#lateral').scrollTop = 0; // otra zona: el lateral empieza arriba
     E.zonaPanelAnterior = E.zona;
     renderMapa();
@@ -829,6 +862,7 @@
     panel.hidden = true;
     panel.innerHTML = '';
     $('#ranking').hidden = false;
+    $('#lateral').classList.remove('con-panel');
     $('#lateral').scrollTop = 0;
     E.zonaPanelAnterior = null;
     renderMapa();
@@ -881,12 +915,14 @@
       </div>` : '';
 
     const tipos = z.tipos.map(t => TIPO_NOMBRE[t]).join(' y ');
-    let html = `<div class="pz-cab">
+    let html = `<div class="pz-fija">
       <div class="pz-cab-fila">
         <p class="eyebrow">${esc(tipos)}</p>
         <button type="button" class="btn-cerrar" id="pz-cerrar">${ICONO_CERRAR}Cerrar<span class="sr"> el detalle de ${esc(z.nombre)}</span></button>
       </div>
       <h2 id="pz-titulo" tabindex="-1">${esc(z.nombre)}</h2>
+    </div>
+    <div class="pz-cab">
       <p class="pz-concejos">${esc(z.concejos.join(', '))}</p>
       ${E.lugarBuscado ? `<p class="pz-nota-lugar">Has buscado <strong>${esc(E.lugarBuscado)}</strong>. Mostramos los datos de toda la zona: no tenemos cifras de puntos concretos.</p>` : ''}
       ${tarjetaConcejo}
@@ -932,14 +968,24 @@
     const periodo = esPeriodo();
     const filas = lista.map(c => ({ c, p: E.prevPorConcejo[c.id] || { nivel: 'gris' } }))
       .sort((a, b) => (b.p.ratio == null ? -1 : b.p.ratio) - (a.p.ratio == null ? -1 : a.p.ratio));
-    return `<section class="pz-sec" aria-labelledby="pz-s-f">
+    return plegable(`<section class="pz-sec" aria-labelledby="pz-s-f">
       <h3 id="pz-s-f">Por concejos</h3>
       <p class="pz-ayuda">${periodo ? 'Media por día de las fechas elegidas. ' : ''}Pulsa un concejo para verlo en el mapa.</p>
       <ul class="cj-lista">${filas.map(({ c, p }) => `<li><button type="button" class="tq cj" data-concejo="${c.id}" aria-pressed="${c.id === E.concejo}">
         <span class="rk-nombre">${esc(c.nombre)}</span>
-        <span class="rk-dato">${pill(p.nivel)}<span class="rk-pct">${pct(p.ratio)}<span class="sr"> sobre un día normal${periodo ? ', de media' : ''}</span></span></span>
+        <span class="rk-dato">${pill(p.nivel)}<span class="rk-pct"><span aria-hidden="true">${pct(p.ratio)}</span><span class="sr">${esc(delta(p.ratio, periodo))}</span></span></span>
       </button></li>`).join('')}</ul>
-    </section>`;
+    </section>`, !!E.concejo);
+  }
+
+  // Secciones secundarias del panel: se pliegan (el panel es largo) y recuerdan si estaban abiertas
+  function plegable(html, abierta) {
+    const id = (html.match(/<h3 id="([^"]+)"/) || [])[1];
+    const abrir = abierta || (id && E.plegablesAbiertos[id]);
+    return html
+      .replace(/^<section class="pz-sec" aria-labelledby="([^"]+)">\s*(<h3[^>]*>[\s\S]*?<\/h3>)/,
+        `<details class="pz-sec pz-plegable"${abrir ? ' open' : ''}><summary>$2<svg class="ico desp-flecha" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" class="ico-trazo"/></svg></summary>`)
+      .replace(/<\/section>\s*$/, '</details>');
   }
 
   // Días que muestra la gráfica del panel: al menos 14 alrededor de la selección y como mucho 31
@@ -1003,9 +1049,9 @@
     }).join('');
     return `<section class="pz-sec" aria-labelledby="pz-s-b">
       <h3 id="pz-s-b">¿Por qué?</h3>
-      <p class="pz-ayuda">${fechaPico ? `Lo que más pesa el día con más gente del periodo: ${esc(fechaLarga(fechaPico).toLowerCase())}.` : 'Lo que más pesa en la previsión de ese día.'}</p>
+      <p class="pz-ayuda">${fechaPico ? `Lo que más pesa el día con más gente del periodo: ${esc(fechaLarga(fechaPico).toLowerCase())}.` : 'Lo que más sube o baja la previsión de ese día.'}</p>
       <ul class="fx-lista">${filas}</ul>
-      <p class="pz-nota">Efecto de cada factor frente a un día medio del modelo. Se multiplican entre sí, así que no suman exactamente el total.</p>
+      <p class="pz-nota">Cada efecto se mide frente a un día medio del modelo, no frente al día normal, y se multiplican entre sí: no se suman para dar la cifra de arriba.</p>
     </section>`;
   }
 
@@ -1055,12 +1101,12 @@
   }
   function seccionPerfil(perfil) {
     if (!perfil) return '';
-    return `<section class="pz-sec" aria-labelledby="pz-s-e">
+    return plegable(`<section class="pz-sec" aria-labelledby="pz-s-e">
       <h3 id="pz-s-e">Quién viene</h3>
       ${perfil.deUnDia != null ? barraReparto('Tipo de visita (aproximado)', { t: 'De un día', v: perfil.deUnDia }, { t: 'Con pernoctación', v: perfil.conPernocta }) : ''}
       ${barraReparto('Procedencia', { t: 'De Asturias', v: perfil.asturias }, { t: 'Resto de España', v: perfil.restoEspana })}
       <p class="pz-nota">Media de ${MES[perfil.mes - 1]} en años anteriores (llegadas de ocio). Sin extranjeros: los datos de movilidad solo cubren residentes en España. El tipo de visita es aproximado, porque una persona puede pasar varias noches.</p>
-    </section>`;
+    </section>`);
   }
 
   function seccionFiabilidad(p, fiab) {
@@ -1123,14 +1169,14 @@
       : E.concejosPorId[s.concejos[0]] && E.concejosPorId[s.concejos[0]].zonaId === zonaId);
     if (!lista.length) return '';
     const titulo = c ? `Qué ver en ${c.nombre}` : 'Qué ver en la zona';
-    return `<section class="pz-sec" aria-labelledby="pz-s-h">
+    return plegable(`<section class="pz-sec" aria-labelledby="pz-s-h">
       <h3 id="pz-s-h">${esc(titulo)}</h3>
       <p class="pz-ayuda">Pulsa un sitio para verlo en el mapa.${c ? '' : ' Elige un concejo para ver solo los suyos.'}</p>
       <ul class="ss-lista">${lista.map(s => `<li><button type="button" class="ss" data-sitio="${s.id}">
         ${s.foto ? `<img src="${esc(s.foto.src)}" alt="" loading="lazy" width="64" height="48">` : '<span class="ss-sin"></span>'}
         <span class="ss-txt"><span class="ss-nombre">${esc(s.nombre)}</span>${c ? '' : `<span class="ss-concejo">${esc(nombreC(s.concejos[0]))}</span>`}</span>
       </button></li>`).join('')}</ul>
-    </section>`;
+    </section>`);
   }
 
   /* ---------- Sección propia en Inicio, ordenable por la afluencia del concejo ---------- */
@@ -1296,7 +1342,7 @@
 
   /* ---------- Aviso de datos sintéticos ---------- */
   function avisoSintetico() {
-    window.DatosModelo.cargar().then(d => {
+    window.DatosModelo.cargarInicio().then(d => {
       if (!d.sintetico) return;
       $('#aviso-sintetico').hidden = false;
     }).catch(err => {

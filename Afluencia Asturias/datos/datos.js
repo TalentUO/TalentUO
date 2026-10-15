@@ -4,6 +4,11 @@
  * Carga los cinco JSON del modelo (contrato en notas/contrato_web.md) y los
  * devuelve en un único objeto. Es la única puerta de entrada a las salidas.
  *
+ *   window.DatosModelo.cargarInicio() -> Promise<{ predicciones, alternativas, perfil,
+ *     metricas (solo cabecera, algoritmo y fiabilidad), mapeo, calendario, sintetico, aviso }>
+ *     Lo que necesita la pestaña Inicio. Sale de datos/modelo/salidas-inicio.js (≈1 MB), que
+ *     index.html carga al principio: así la página se pinta sin esperar a los datos de Gestión.
+ *
  *   window.DatosModelo.cargar() -> Promise<{
  *     predicciones, alternativas, regulacion, perfil, metricas,  // JSON tal cual
  *     mapeo,        // { origen, zonas:[{ zona_mitma_id, nombre, concejos_ine:[INE] }] }
@@ -17,7 +22,8 @@
  *
  * Origen de los datos, por orden:
  *   1. window.SALIDAS_MODELO (datos/modelo/salidas.js, generado por
- *      scripts/actualizar_datos_web.py): funciona con doble clic (file://).
+ *      scripts/actualizar_datos_web.py). Si no está cargado, cargar() lo inserta
+ *      la primera vez que se pide (al abrir Gestión). Funciona con doble clic (file://).
  *   2. fetch de datos/modelo/<nombre>.json: solo con servidor (http://).
  * ========================================================================== */
 window.DatosModelo = (function () {
@@ -44,12 +50,15 @@ window.DatosModelo = (function () {
   };
   const COLORES = ['verde', 'ambar', 'rojo', 'gris'];
 
-  function validar(d) {
+  // ficheros: los que se comprueban (por defecto, los cinco). En metricas ligero (Inicio) no hay «tablas»
+  function validar(d, ficheros) {
     const err = [];
-    FICHEROS.forEach(n => {
+    const lista = ficheros || FICHEROS;
+    lista.forEach(n => {
       const f = d[n];
       if (!f || typeof f !== 'object') { err.push(`falta ${n}.json`); return; }
-      CABECERA.concat(RAIZ[n]).forEach(k => { if (!(k in f)) err.push(`${n}.json: falta «${k}»`); });
+      const raiz = ficheros && n === 'metricas' ? ['algoritmo', 'fiabilidad'] : RAIZ[n];
+      CABECERA.concat(raiz).forEach(k => { if (!(k in f)) err.push(`${n}.json: falta «${k}»`); });
       const [lista, campos] = REGISTRO[n];
       const regs = Array.isArray(f[lista]) ? f[lista] : [];
       // Basta con mirar una muestra: el validador del modelo ya revisa todo
@@ -69,8 +78,25 @@ window.DatosModelo = (function () {
     return unicos.length > 15 ? unicos.slice(0, 15).concat(`… y ${unicos.length - 15} problemas más`) : unicos;
   }
 
+  // Inserta un <script> (funciona también desde file://, donde fetch no puede leer ficheros)
+  function insertarScript(src) {
+    return new Promise((ok, ko) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = ok;
+      s.onerror = () => ko(new Error('no se puede cargar ' + src));
+      document.head.appendChild(s);
+    });
+  }
+
   function leer() {
     if (window.SALIDAS_MODELO) return Promise.resolve(window.SALIDAS_MODELO);
+    return insertarScript('datos/modelo/salidas.js')
+      .then(() => { if (!window.SALIDAS_MODELO) throw new Error('salidas.js no define SALIDAS_MODELO'); return window.SALIDAS_MODELO; })
+      .catch(() => leerJSON());
+  }
+
+  function leerJSON() {
     const json = n => fetch('datos/modelo/' + n + '.json').then(r => {
       if (!r.ok) throw new Error(`no se puede leer datos/modelo/${n}.json (${r.status})`);
       return r.json();
@@ -83,6 +109,31 @@ window.DatosModelo = (function () {
       d.calendario = v[FICHEROS.length + 1];
       return d;
     });
+  }
+
+  // Inicio: solo lo que necesita la pestaña. Sin el fichero ligero, se usa el completo
+  const FICHEROS_INICIO = ['predicciones', 'alternativas', 'perfil', 'metricas'];
+  let promesaInicio = null;
+  function cargarInicio() {
+    if (promesaInicio) return promesaInicio;
+    const b = window.SALIDAS_MODELO_INICIO;
+    if (!b) { promesaInicio = cargar(); return promesaInicio; }
+    promesaInicio = Promise.resolve().then(() => {
+      const errores = validar(b, FICHEROS_INICIO);
+      if (errores.length) {
+        const e = new Error('Las salidas del modelo no cumplen el contrato:\n- ' + errores.join('\n- '));
+        e.errores = errores;
+        throw e;
+      }
+      const d = {};
+      FICHEROS_INICIO.forEach(n => { d[n] = b[n]; });
+      d.mapeo = b.mapeo;
+      d.calendario = b.calendario || null;
+      d.sintetico = FICHEROS_INICIO.some(n => b[n].sintetico === true);
+      d.aviso = (FICHEROS_INICIO.map(n => b[n].aviso).filter(Boolean)[0]) || null;
+      return Object.freeze(d);
+    });
+    return promesaInicio;
   }
 
   let promesa = null;
@@ -106,5 +157,5 @@ window.DatosModelo = (function () {
     return promesa;
   }
 
-  return Object.freeze({ cargar, validar, FICHEROS });
+  return Object.freeze({ cargar, cargarInicio, validar, FICHEROS });
 })();

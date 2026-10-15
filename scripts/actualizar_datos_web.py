@@ -13,7 +13,7 @@ Qué hace:
 3. Resume el calendario oficial (data/clean/calendario_diario.parquet: festivos
    de Asturias, puentes, vacaciones escolares y regulación de los Lagos) para los
    botones de fecha de la web. Si no está, la web usa su calendario aproximado.
-4. Escribe «datos/modelo/salidas.js» con todo lo anterior, para que la web se
+4. Escribe «datos/modelo/salidas.js» (completo) y «salidas-inicio.js» (lo que usa Inicio) con todo lo anterior, para que la web se
    abra con doble clic (desde file:// el navegador no deja leer JSON con fetch).
 """
 from __future__ import annotations
@@ -22,6 +22,7 @@ import csv
 import json
 import shutil
 import sys
+from datetime import date, timedelta
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -115,6 +116,27 @@ def main() -> None:
     (DESTINO / "salidas.js").write_text(
         "// GENERADO por scripts/actualizar_datos_web.py. No editar a mano.\n"
         "window.SALIDAS_MODELO = " + json.dumps(paquete, ensure_ascii=False, separators=(",", ":")) + ";\n",
+        encoding="utf-8")
+
+    # Versión ligera para la pestaña Inicio (la que carga index.html al principio): sin regulacion,
+    # métricas solo con cabecera, algoritmo y fiabilidad, y el calendario recortado a las fechas útiles.
+    # Gestión pide salidas.js (completo) al abrirse.
+    metricas = datos["metricas"]
+    inicio = {
+        "predicciones": datos["predicciones"],
+        "alternativas": datos["alternativas"],
+        "perfil": datos["perfil"],
+        "metricas": {k: metricas[k] for k in ("sintetico", "aviso", "generado", "objetivo", "umbrales", "algoritmo", "fiabilidad") if k in metricas},
+        "mapeo": paquete["mapeo"],
+    }
+    if calendario:
+        fechas = sorted(r["fecha"] for r in datos["predicciones"]["predicciones"])
+        desde = (date.fromisoformat(fechas[0]) - timedelta(days=31)).isoformat()
+        hasta = (date.fromisoformat(max(fechas[-1], datos["predicciones"]["fecha_hoy"])) + timedelta(days=400)).isoformat()
+        inicio["calendario"] = dict(calendario, dias=[d for d in calendario["dias"] if desde <= d["fecha"] <= hasta])
+    (DESTINO / "salidas-inicio.js").write_text(
+        "// GENERADO por scripts/actualizar_datos_web.py. No editar a mano. Datos de la pestaña Inicio.\n"
+        "window.SALIDAS_MODELO_INICIO = " + json.dumps(inicio, ensure_ascii=False, separators=(",", ":")) + ";\n",
         encoding="utf-8")
 
     sint = {d.get("sintetico") for d in datos.values()}

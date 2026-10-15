@@ -105,6 +105,11 @@ Valida `salidas/` con `src/modelo/validar_salidas.py`, copia los cinco JSON a `A
 - Mapa: en pantallas táctiles un dedo desplaza la página y dos dedos mueven el mapa; con ratón, Ctrl + rueda acerca. Al tocar una zona en una sola columna, la página baja a su panel; al cerrarlo, vuelve al mapa.
 - **Gestión a 390 px**: la tabla ancha (`table.tabla`, ~1.080 px) se desliza dentro de su contenedor, pero en el móvil cuesta leerla. Propuesta: menos columnas en móvil, o una tarjeta por zona. Es de `pestanas/gestion/`, no la he tocado.
 
+## Revisión de usabilidad (persona 1)
+
+- **Carga en dos partes.** `index.html` carga `datos/modelo/salidas-inicio.js` (≈0,7 MB: predicciones, alternativas, perfil, fiabilidad, mapeo y calendario). `DatosModelo.cargar()` (la que usan Gestión y Sobre los datos) inserta `salidas.js` completo la primera vez que se pide. El objeto y su forma no cambian para la persona 2, y `pruebas.html` sigue leyendo `salidas.js`. Nuevo: `DatosModelo.cargarInicio()` (lo usa Inicio).
+- **Decisión pendiente del equipo:** con `config/semaforo.yaml`, «Normal» (verde) llega hasta +49 % sobre un día normal. Un día con casi la mitad más de gente sale como «Normal». Opciones: bajar `umbral_ambar` o renombrar el verde (p. ej. «Sin presión»).
+
 ## Integración
 
 - `web-gestion` (`fc6ebb5`) integrada en `web` por avance rápido, sin conflictos. Probado: demo de Inicio → Gestión → Sobre los datos, 20/20 pruebas de `pestanas/gestion/pruebas.html`, sin errores propios en la consola.
