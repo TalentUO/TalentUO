@@ -115,7 +115,9 @@ Nombres posibles de factor (`config/factores.yaml`): Vacaciones escolares · Fes
 
 ## 5. `metricas.json` (Gestión: fiabilidad; Sobre los datos)
 
-`{cabecera…, tablas, fiabilidad, experimentos, modelos_finales, dia_normal, comprobacion_treeexplainer, calibracion_lagos[, recuperacion_sintetico]}`
+`{cabecera…, algoritmo, tablas, fiabilidad, experimentos, modelos_finales, dia_normal, comprobacion_treeexplainer, calibracion_lagos[, recuperacion_sintetico]}`
+
+- `algoritmo`: `lightgbm` o `xgboost`, el que ha generado todas las salidas de la web (con `--algoritmo ambos`, el ganador de la regla de `notas/modelo.md`). Es el único campo nuevo: el resto del contrato no depende del algoritmo.
 
 - `tablas.{global, bloque, zona, horizonte, mes, bloque_zona_horizonte}`: filas con las claves de agrupación (`experimento`, `modelo`, `bloque`, `zona_mitma_id`, `horizonte_txt` = «1»…«7» u «8+», `mes`) y `metodo` (`modelo`, `B0` día normal, `B1` mismo día del año anterior). Las métricas son `n, wape, mae, acierto_color, rojos_obs, rojos_pred, recall_rojo, precision_rojo, recall_alerta, matriz_confusion` (claves «obs->pred»).
 - `fiabilidad[]`: por zona y horizonte, `{zona_mitma_id, nombre_zona, horizonte_txt, n, wape, acierto_color, rojos_obs, recall_rojo, precision_rojo, nota, q10, q90, n_errores, cobertura}`. **`nota` es el texto para la web**, p. ej. «Acierta el color en el 86 % de los días; detecta 5 de cada 10 días rojos.». `cobertura` = proporción de días reales dentro del intervalo p10-p90, medida dejando fuera cada bloque (objetivo: 0,80).

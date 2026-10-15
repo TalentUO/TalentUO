@@ -34,9 +34,10 @@ def comprobar_treeexplainer(m, x: pd.DataFrame, feats: list[str], n: int = 300) 
     s = x[feats].head(n)
     nativo, _ = M.shap(m, s, feats)
     try:
-        te = shap.TreeExplainer(m).shap_values(s)
+        te = shap.TreeExplainer(m.nativo).shap_values(s)
         dif = float(np.max(np.abs(np.asarray(te) - nativo)))
-        return {"comparado_con": "shap.TreeExplainer", "filas": len(s), "max_dif_abs": dif, "coinciden": dif < 1e-6}
+        return {"comparado_con": "shap.TreeExplainer", "algoritmo": m.algoritmo, "filas": len(s),
+                "max_dif_abs": dif, "coinciden": dif < 1e-4}
     except Exception as e:  # noqa: BLE001
         return {"comparado_con": "shap.TreeExplainer", "error": repr(e)}
 

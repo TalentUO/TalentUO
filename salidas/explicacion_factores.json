@@ -172,6 +172,7 @@
  },
  "comprobacion_treeexplainer": {
   "comparado_con": "shap.TreeExplainer",
+  "algoritmo": "lightgbm",
   "filas": 300,
   "max_dif_abs": 0.0,
   "coinciden": true

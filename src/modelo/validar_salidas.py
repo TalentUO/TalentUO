@@ -109,6 +109,8 @@ def validar(salidas: Path) -> list[str]:
             _registro(r, PERFIL, f"perfil[{i}]", err)
     if "metricas" in datos:
         d = datos["metricas"]
+        if d.get("algoritmo") not in ("lightgbm", "xgboost"):
+            err.append(f"metricas: 'algoritmo' debe ser lightgbm o xgboost (es {d.get('algoritmo')!r})")
         for k in ("tablas", "fiabilidad", "experimentos"):
             if k not in d:
                 err.append(f"metricas: falta '{k}'")

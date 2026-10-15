@@ -14,7 +14,7 @@ from datos import Datos
 from util import a_log_cociente, cfg, colores, desde_log_cociente
 
 
-def entrenar_finales(D: Datos, log=print) -> dict:
+def entrenar_finales(D: Datos, algoritmo: str | None = None, log=print) -> dict:
     ini = inicio_entrenamiento()
     fin = pd.Timestamp(cfg()["objetivo_periodo"]["fin"])
     fechas = pd.date_range(ini, fin, freq="D")
@@ -28,7 +28,7 @@ def entrenar_finales(D: Datos, log=print) -> dict:
         ok = (t["calidad"] == "completa") & t[D.objetivo].notna() & t["normal_ref"].notna()
         t = t[ok].reset_index(drop=True)
         feats = F.columnas_modelo(t, tipo)
-        m, info = M.entrenar(t, feats, a_log_cociente(t[D.objetivo], t["normal_ref"]))
+        m, info = M.entrenar(t, feats, a_log_cociente(t[D.objetivo], t["normal_ref"]), algoritmo)
         out[tipo] = {"modelo": m, "feats": feats, "info": info, "muestra": t}
         log(f"  modelo final {tipo}: {info}")
     return out

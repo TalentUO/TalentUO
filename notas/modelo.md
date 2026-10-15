@@ -8,10 +8,12 @@ Fecha: 2026-10-15. Rama `modelo`. Código en `src/modelo/`, configuración en `c
 
 ```bash
 python -X utf8 src/modelo/ejecutar.py --objetivo sintetico   # ~35 s (hasta ~2 min con la máquina cargada)
-python -X utf8 -m pytest -q src/modelo/tests                 # anti-fuga, constructor del objetivo y contrato web
+python -X utf8 src/modelo/ejecutar.py --objetivo sintetico --algoritmo ambos   # compara LightGBM y XGBoost
+python -X utf8 -m pytest -q src/modelo/tests                 # todo (~4 min: incluye la cadena completa con cada algoritmo)
+python -X utf8 -m pytest -q src/modelo/tests -m "not lento"  # rápido (~30 s)
 ```
 
-Semilla fija (42) y LightGBM determinista: dos ejecuciones dan el mismo resultado. Al final, `ejecutar.py` comprueba el contrato de la web y se detiene si algo no cumple.
+Semilla fija (42); LightGBM y XGBoost deterministas: dos ejecuciones dan el mismo resultado. `--algoritmo lightgbm|xgboost|ambos` (por defecto, el de `config/modelo.yaml`: `lightgbm`). Al final, `ejecutar.py` comprueba el contrato de la web y se detiene si algo no cumple.
 
 | Paso | Módulo | Salida |
 |---|---|---|
@@ -25,6 +27,7 @@ Semilla fija (42) y LightGBM determinista: dos ejecuciones dan el mismo resultad
 | SHAP y gráficas | `explicar.py` | `salidas/explicacion_factores.json`, `salidas/figuras/*.png` |
 | Calibración con los Lagos | `calibracion.py` | `salidas/calibracion_lagos.json`, `figuras/calibracion_lagos.png` |
 | JSON de la web | `web_salidas.py` | `predicciones`, `alternativas`, `regulacion`, `perfil` y `metricas.json` |
+| Comparación de algoritmos (`--algoritmo ambos`) | `comparacion.py` | `salidas/comparacion_algoritmos.json` y la tabla de este documento |
 | Contrato | `validar_salidas.py` | — |
 
 ## Qué predice
@@ -37,7 +40,7 @@ Para cada día y zona: **cuántos visitantes llegarán** (por defecto `llegadas_
 
 Como el normal es por día de la semana, «Fin de semana» casi no aparece como factor: un sábado de agosto se compara con un sábado normal.
 
-## Dos modelos (LightGBM, uno global para todas las zonas)
+## Dos modelos (LightGBM o XGBoost, uno global para todas las zonas)
 
 | | Largo plazo (h ≥ 8) | Corto plazo (h = 1-7) |
 |---|---|---|
@@ -45,8 +48,10 @@ Como el normal es por día de la semana, «Fin de semana» casi no aparece como 
 | Filas | fecha × zona | fecha × zona × horizonte |
 | Variables | calendario, eventos, partidos y zona | lo mismo + tiempo + interés en internet + horizonte |
 
-Parámetros (`config/modelo.yaml`):
-- `num_leaves` 15, `min_data_in_leaf` 50, `feature_fraction` y `bagging` 0,8, `lambda_l2` 1 y `learning_rate` 0,05;
+Parámetros (`config/modelo.yaml`), con el mismo criterio en los dos algoritmos (pocos datos, evitar sobreajuste):
+- **LightGBM** (por defecto): `num_leaves` 15, `min_data_in_leaf` 50, `feature_fraction` y `bagging` 0,8, `lambda_l2` 1 y `learning_rate` 0,05;
+- **XGBoost** (alternativa): `XGBRegressor` con `tree_method="hist"`, `enable_categorical=True` (zona como `category`), `max_depth` 5, `min_child_weight` 50 (con pérdida cuadrática equivale a `min_data_in_leaf`), `subsample` y `colsample_bytree` 0,8, `reg_lambda` 1 y `learning_rate` 0,05;
+- en los dos, las mismas variables, los mismos bloques, el mismo día normal y la misma semilla;
 - *early stopping* con los últimos 90 días del entrenamiento como validación temporal y reentrenamiento con todo el periodo con ese número de árboles;
 - sin búsqueda de hiperparámetros.
 
@@ -128,7 +133,7 @@ Experimentos (modelo de largo plazo, todos los bloques):
 - **Orden de importancia:** «Época del año» y «Vacaciones escolares» están muy correlacionadas (el verano escolar es la temporada alta) y SHAP reparte el efecto entre las dos. Juntas, su suma SHAP correlaciona 0,91 con la verdadera. Con las dos fusionadas, el orden coincide (ρ de Spearman) con un **1,0** en largo plazo y un **0,82** en corto plazo (jul-2024 a jun-2025).
 - **Factores sin efecto real** (interés en internet, regulación de los Lagos): SHAP pequeño (desviación ≤ 0,03 en escala log).
 - **El tiempo** sale con el signo correcto, pero **infraestimado** (desviación 0,05 frente a 0,12 en montaña). El modelo solo ve previsiones, y solo desde 2024-01-22.
-- `shap.TreeExplainer` y el TreeSHAP nativo de LightGBM (el que usa el código) coinciden exactamente (diferencia máxima 0).
+- `shap.TreeExplainer` y el TreeSHAP nativo de LightGBM (el que usa el código) coinciden exactamente (diferencia máxima 0). Con XGBoost se usa su TreeSHAP nativo (`pred_contribs`), que también coincide con `shap.TreeExplainer`, incluida la zona categórica.
 
 En la web, el efecto de cada factor se da en % respecto al **día medio del modelo**, no respecto al normal.
 
@@ -148,6 +153,68 @@ En la web, el efecto de cada factor se da en % respecto al **día medio del mode
 Lectura para la presentación, que habrá que repetir con datos reales: la regulación actual (unos 180 días al año, todos los fines de semana de temporada y el verano) equivale a **cualquier día por encima de lo normal**, no solo a los de presión extrema. Con el umbral rojo (2,0×), el 93 % de los días rojos ya están regulados, pero solo se cubre el 22 % de los días regulados.
 
 Dicho de otro modo: el semáforo marca menos días que la regulación, pero los que marca ya caen dentro de ella. **No se cambia el valor por defecto.** La regulación es un calendario planificado, no una medida de saturación.
+
+## LightGBM frente a XGBoost
+
+Con `--algoritmo ambos`, la validación por bloques del experimento base se hace con los dos algoritmos y se elige uno con la regla de abajo. Los experimentos de sensibilidad, los modelos finales, SHAP, el semáforo, los intervalos, la calibración con los Lagos y todos los JSON de la web se generan con el **ganador**. `metricas.json → algoritmo` dice cuál fue. El contrato de la web no cambia.
+
+### Regla de elección (fijada el 2026-10-15, antes de ver datos reales)
+
+Gana el de mayor recall de días rojos en los bloques de verano (2023-S2 y 2024-S2); si la diferencia es menor de 3 puntos, el de menor WAPE medio; si también la diferencia de WAPE es menor de 1 punto, LightGBM.
+
+Cálculo, también fijado ahora:
+- recall de verano = media, entre el modelo de corto plazo (todas las filas de h = 1-7) y el de largo plazo, del recall de días rojos agregado sobre los dos bloques de verano;
+- WAPE medio = media del WAPE de los 4 bloques × 2 modelos.
+
+Está implementada en `src/modelo/comparacion.py` y sus parámetros, en `config/modelo.yaml → seleccion_algoritmo`.
+
+Pruebas (`src/modelo/tests/test_algoritmos.py`), con los dos algoritmos:
+- anti-fuga de punta a punta: la predicción y el SHAP de (d, h) no cambian al corromper lo publicado después de d−h;
+- SHAP suma la predicción;
+- la cadena completa con el objetivo sintético genera JSON que cumplen el contrato.
+
+La prueba anti-fuga de variables (`test_antifuga.py`) no depende del algoritmo.
+
+### Resultado
+
+La tabla siguiente la regenera cada ejecución con `--algoritmo ambos`.
+
+<!-- comparacion_algoritmos:inicio (generado por src/modelo/comparacion.py) -->
+> **⚠ DATOS SINTÉTICOS — NO SON REALES.** Esta comparación usa el objetivo sintético y **no sirve para elegir algoritmo**: los dos modelos aprenden efectos inventados por nosotros. Hay que repetirla con `--objetivo real --algoritmo ambos`.
+
+Objetivo: `llegadas_ocio`. Experimento base. Generado el 2026-10-15 22:58.
+
+| Criterio de la regla | LightGBM | XGBoost |
+|---|---|---|
+| Recall de días rojos en verano (%) | 44,2 | 41,3 |
+| WAPE medio (%) | 12,0 | 12,0 |
+| Tiempo total de entrenamiento (s) | 3,7 | 7,8 |
+
+**Resultado de la regla (SINTÉTICO, no vale para elegir):** lightgbm (paso 3: empate: recall de verano a 2.9 puntos (< 3) y WAPE medio a 0.1 puntos (< 1) -> LightGBM por regla).
+
+Detalle por bloque y horizonte (WAPE, acierto de color, recall y precisión de rojos en %; MAE en visitantes; tiempo = entrenamiento del modelo que produce ese horizonte, en segundos). Corto plazo: media de h = 1-7.
+
+| Bloque | Horizonte | Algoritmo | WAPE | MAE | Acierto color | Recall rojo | Precisión rojo | Rojos obs. | Tiempo (s) |
+|---|---|---|---|---|---|---|---|---|---|
+| 2023-S2 (verano 2023) | 1-7 (corto) | lightgbm | 15,4 | 1064 | 80,2 | 11,2 | 84,0 | 87 | 0,33 |
+| 2023-S2 (verano 2023) | 1-7 (corto) | xgboost | 15,6 | 1079 | 80,1 | 11,5 | 83,3 | 87 | 0,82 |
+| 2023-S2 (verano 2023) | 8+ (largo) | lightgbm | 15,7 | 1086 | 80,0 | 12,6 | 91,7 | 87 | 0,43 |
+| 2023-S2 (verano 2023) | 8+ (largo) | xgboost | 15,7 | 1082 | 79,7 | 9,2 | 100,0 | 87 | 0,43 |
+| 2024-S1 | 1-7 (corto) | lightgbm | 10,7 | 645 | 97,6 | 85,7 | 75,8 | 11 | 0,50 |
+| 2024-S1 | 1-7 (corto) | xgboost | 10,9 | 656 | 97,3 | 81,8 | 70,9 | 11 | 1,43 |
+| 2024-S1 | 8+ (largo) | lightgbm | 11,5 | 692 | 97,0 | 100,0 | 73,3 | 11 | 0,24 |
+| 2024-S1 | 8+ (largo) | xgboost | 11,5 | 692 | 96,8 | 100,0 | 73,3 | 11 | 0,46 |
+| 2024-S2 (verano 2024) | 1-7 (corto) | lightgbm | 10,4 | 718 | 91,5 | 74,4 | 82,8 | 83 | 0,84 |
+| 2024-S2 (verano 2024) | 1-7 (corto) | xgboost | 10,5 | 727 | 90,3 | 69,4 | 85,4 | 83 | 1,85 |
+| 2024-S2 (verano 2024) | 8+ (largo) | lightgbm | 11,2 | 776 | 91,3 | 81,9 | 76,4 | 83 | 0,31 |
+| 2024-S2 (verano 2024) | 8+ (largo) | xgboost | 11,3 | 780 | 91,6 | 78,3 | 82,3 | 83 | 0,65 |
+| 2025-S1 (bloque final) | 1-7 (corto) | lightgbm | 10,0 | 596 | 96,8 | 72,2 | 90,1 | 18 | 0,79 |
+| 2025-S1 (bloque final) | 1-7 (corto) | xgboost | 10,1 | 603 | 96,6 | 77,0 | 87,4 | 18 | 1,75 |
+| 2025-S1 (bloque final) | 8+ (largo) | lightgbm | 10,9 | 649 | 97,1 | 72,2 | 92,9 | 18 | 0,20 |
+| 2025-S1 (bloque final) | 8+ (largo) | xgboost | 10,7 | 640 | 97,2 | 77,8 | 93,3 | 18 | 0,40 |
+
+El detalle por cada horizonte (1, 2, … 7, 8+) está en `salidas/comparacion_algoritmos.json → tabla`.
+<!-- comparacion_algoritmos:fin -->
 
 ## Predicciones para la web
 
@@ -187,4 +254,5 @@ No hay que tocar el código. Si las zonas reales tienen otros puntos meteorológ
 1. **Inicio del entrenamiento** (`inicio_entrenamiento` en `config/modelo.yaml`). Hoy está en `corte`, como se pidió. Recomiendo `"2022-01-01"`, por dos razones: en modo estricto no se usa el tiempo del tramo de reanálisis, y sin 2022 el primer bloque no ve ningún verano (recall de días rojos del 13 % frente al 82 %, sintético). Cambia una línea.
 2. **Modo del tiempo:** el `estricto` cumple la regla d−h; el `aproximado` gana unos 1,5 puntos de WAPE, pero es optimista. Propongo mantener el estricto.
 3. **Reparto por residencia sobre las llegadas de ocio** (y no sobre el total): ver `contrato_objetivo.md`.
-4. **Umbrales del semáforo:** se mantienen en 1,5× y 2,0×. Hay que decidir si se enseña la calibración con los Lagos como argumento, una vez repetida con datos reales.
+4. **Algoritmo:** la regla de elección entre LightGBM y XGBoost ya está fijada (sección «LightGBM frente a XGBoost»). Al llegar los datos reales: `--objetivo real --algoritmo ambos`. El resultado sintético (LightGBM, por desempate) no cuenta.
+5. **Umbrales del semáforo:** se mantienen en 1,5× y 2,0×. Hay que decidir si se enseña la calibración con los Lagos como argumento, una vez repetida con datos reales.

@@ -57,8 +57,11 @@ def tablas_experimento(D: Datos, exp: dict) -> dict[str, pd.DataFrame]:
     return out
 
 
-def ejecutar(D: Datos, experimentos: list[str] | None = None, log=print) -> pd.DataFrame:
+def ejecutar(D: Datos, experimentos: list[str] | None = None, algoritmos: list[str] | None = None,
+            log=print) -> pd.DataFrame:
+    """Una fila por predicción de prueba; columnas `algoritmo` y `segundos_entrenamiento`."""
     experimentos = experimentos or list(EXPERIMENTOS)
+    algoritmos = algoritmos or [M.algoritmo_por_defecto()]
     filas = []
     for nombre in experimentos:
         exp = EXPERIMENTOS[nombre]
@@ -66,14 +69,14 @@ def ejecutar(D: Datos, experimentos: list[str] | None = None, log=print) -> pd.D
         for bl in cfg()["bloques_validacion"]:
             ini, fin = pd.Timestamp(bl["inicio"]), pd.Timestamp(bl["fin"])
             nb = dia_normal.normal_ventana(D.obj, D.base, D.objetivo, ini)
-            for tipo, t in tabs.items():
+            for tipo, t, alg in [(tp, tb, a) for tp, tb in tabs.items() for a in algoritmos]:
                 t = dia_normal.anadir_normal(t, nb, "normal_bt")
                 feats = F.columnas_modelo(t, tipo)
                 ok = (t["calidad"] == "completa") & t[D.objetivo].notna() & t["normal_bt"].notna()
                 tr = ok & (t["fecha"] < ini)
                 te = ok & (t["fecha"] >= ini) & (t["fecha"] <= fin)
                 y = a_log_cociente(t[D.objetivo], t["normal_bt"])
-                m, info = M.entrenar(t[tr].reset_index(drop=True), feats, y[tr.to_numpy()])
+                m, info = M.entrenar(t[tr].reset_index(drop=True), feats, y[tr.to_numpy()], alg)
                 x = t[te].reset_index(drop=True)
                 p = M.predecir(m, x, feats)
                 r = x[["fecha", "zona_mitma_id", "horizonte", "normal_bt", "normal_ref", "b1_visitas"]].copy()
@@ -83,14 +86,16 @@ def ejecutar(D: Datos, experimentos: list[str] | None = None, log=print) -> pd.D
                 r["visitas_pred"] = desde_log_cociente(p, x["normal_bt"])
                 r["b0_visitas"] = x["normal_bt"].to_numpy()
                 r["n_arboles"] = info["n_arboles"]
+                r["algoritmo"] = alg
+                r["segundos_entrenamiento"] = info["segundos_entrenamiento"]
                 if nombre == "base":
                     sv, _ = M.shap(m, x, feats)
                     fx = M.sumar_por_factor(sv, feats)
                     for c in fx.columns:
                         r[f"fx_{c}"] = fx[c].to_numpy()
                 filas.append(r)
-                log(f"  [{nombre}] {bl['nombre']} {tipo}: {tr.sum()} filas de entrenamiento, "
-                    f"{te.sum()} de prueba, {info['n_arboles']} árboles")
+                log(f"  [{nombre}/{alg}] {bl['nombre']} {tipo}: {tr.sum()} filas de entrenamiento, "
+                    f"{te.sum()} de prueba, {info['n_arboles']} árboles, {info['segundos_entrenamiento']:.1f} s")
     bt = pd.concat(filas, ignore_index=True)
     for col, q in (("visitas_obs", "cociente_obs"), ("visitas_pred", "cociente_pred"),
                    ("b0_visitas", "cociente_b0"), ("b1_visitas", "cociente_b1")):

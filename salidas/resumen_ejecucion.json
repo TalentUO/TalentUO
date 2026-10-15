@@ -1,7 +1,15 @@
 {
  "sintetico": true,
  "objetivo": "llegadas_ocio",
- "segundos": 128.4,
+ "algoritmo": "lightgbm",
+ "seleccion_algoritmo": {
+  "ganador": "lightgbm",
+  "paso_de_la_regla": 3,
+  "motivo": "empate: recall de verano a 2.9 puntos (< 3) y WAPE medio a 0.1 puntos (< 1) -> LightGBM por regla",
+  "diferencia_recall_rojo_verano_xgb_menos_lgb": -0.029,
+  "diferencia_wape_medio_xgb_menos_lgb": 0.0006
+ },
+ "segundos": 74.3,
  "wape": {
   "corto/modelo": 0.117,
   "corto/B0": 0.1788,

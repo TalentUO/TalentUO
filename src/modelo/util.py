@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
 import sys
 import unicodedata
@@ -17,7 +18,8 @@ RAIZ = Path(__file__).resolve().parents[2]
 CONFIG = RAIZ / "config"
 CLEAN = RAIZ / "data" / "clean"
 RAW = RAIZ / "data" / "raw"
-SALIDAS = RAIZ / "salidas"
+# MODELO_SALIDAS permite escribir las salidas en otra carpeta (lo usan las pruebas).
+SALIDAS = Path(os.environ["MODELO_SALIDAS"]) if os.environ.get("MODELO_SALIDAS") else RAIZ / "salidas"
 FIGURAS = SALIDAS / "figuras"
 NOTAS = RAIZ / "notas"
 
@@ -49,7 +51,11 @@ def cfg_calidad_mitma() -> dict:
 
 def ruta(rel: str | Path) -> Path:
     p = Path(rel)
-    return p if p.is_absolute() else RAIZ / p
+    if p.is_absolute():
+        return p
+    if p.parts and p.parts[0] == "salidas":
+        return SALIDAS.joinpath(*p.parts[1:])
+    return RAIZ / p
 
 
 def importar_limpieza_B():

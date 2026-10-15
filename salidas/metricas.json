@@ -1,7 +1,7 @@
 {
  "sintetico": true,
  "aviso": "DATOS SINTÉTICOS — NO SON REALES",
- "generado": "2026-10-15 22:34",
+ "generado": "2026-10-15 22:59",
  "objetivo": "llegadas_ocio",
  "umbrales": {
   "ambar": 1.5,
@@ -27460,6 +27460,7 @@
    "nombre_zona": "Oviedo (EJEMPLO)"
   }
  ],
+ "algoritmo": "lightgbm",
  "experimentos": [
   {
    "experimento": "base",
@@ -27527,14 +27528,18 @@
  ],
  "modelos_finales": {
   "largo": {
+   "algoritmo": "lightgbm",
    "n_arboles": 182,
    "n_filas": 4740,
+   "segundos_entrenamiento": 0.335,
    "inicio": "2022-11-09",
    "fin": "2025-06-30"
   },
   "corto": {
+   "algoritmo": "lightgbm",
    "n_arboles": 304,
    "n_filas": 33180,
+   "segundos_entrenamiento": 1.618,
    "inicio": "2022-11-09",
    "fin": "2025-06-30"
   }
@@ -27788,6 +27793,7 @@
  ],
  "comprobacion_treeexplainer": {
   "comparado_con": "shap.TreeExplainer",
+  "algoritmo": "lightgbm",
   "filas": 300,
   "max_dif_abs": 0.0,
   "coinciden": true
