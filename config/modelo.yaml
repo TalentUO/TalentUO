@@ -25,6 +25,9 @@ objetivo_periodo: {inicio: "2022-01-01", fin: "2025-06-30"}
 # Corte del reanálisis de Open-Meteo en Asturias (diccionario_B, `es_reanalisis`).
 # Entrenamiento base desde aquí; el tramo anterior solo en el experimento de sensibilidad.
 corte_reanalisis: "2022-11-09"
+# Inicio del entrenamiento: "corte" (por defecto, decisión del equipo) o una
+# fecha ("2022-01-01" = incluir el tramo de 2022; ver experimento con_2022).
+inicio_entrenamiento: corte
 
 # Zona principal (puerta de los Picos): la del concejo INE 33012 (Cangas de Onís).
 zona_principal_concejo_ine: "33012"

@@ -26,7 +26,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from comun import CLEAN, RAW, cfg, cfg_calidad_mitma, ruta  # noqa: E402
+from util import CLEAN, RAW, cfg, cfg_calidad_mitma, ruta  # noqa: E402
 
 COLUMNAS_SALIDA = ["fecha", "zona_mitma_id", "llegadas_total", "llegadas_ocio",
                    "llegadas_desde_asturias", "llegadas_resto_espana",
