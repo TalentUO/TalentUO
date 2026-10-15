@@ -157,11 +157,33 @@
 
       await cambiarSeleccion(E.info.hoy, E.info.hoy, { anunciar: false });
       leerHash();
+      if (E.info.demo) await arrancarDemo();
     } catch (err) {
       console.error(err);
       $('#fecha-texto').textContent = 'No se han podido cargar los datos';
       $('#fecha-estado').innerHTML = '<span class="etq etq-aviso">Recarga la página. Si sigue sin funcionar, revisa la fuente de datos.</span>';
     }
+  }
+
+  /* ---------- Modo demo (?demo=1) ----------
+   * La fuente fija «hoy» en el histórico de diciembre de 2024 (validación fuera de muestra).
+   * Se abre el día del puente con más presión en la zona principal (Picos de Europa) y su panel.
+   * Recorrido: mapa → Picos en rojo → ¿Por qué? → alternativa → Gestión. */
+  async function arrancarDemo() {
+    const principal = E.zonas.find(z => z.principal) || E.zonas[0];
+    if (!principal) return;
+    let dia = E.info.hoy;
+    if (E.puente) {
+      const serie = await D.getSerieZona(principal.id, E.puente.inicio, diasEntre(E.puente.inicio, E.puente.fin) + 1);
+      const con = serie.filter(p => p.ratio != null);
+      if (con.length) dia = con.reduce((a, b) => (b.ratio > a.ratio ? b : a)).fecha;
+    }
+    await cambiarSeleccion(dia, dia, { anunciar: false });
+    await abrirZona(principal.id, { foco: false });
+    encuadrar('zona', principal.id);
+    // Con pantallas bajas (1366×768) el mapa queda por debajo: se lleva a la vista
+    const m = $('#mapa');
+    if (m && m.getBoundingClientRect().top > innerHeight * 0.5) m.scrollIntoView({ block: 'center', behavior: 'auto' });
   }
 
   /* ====================================================================
@@ -299,7 +321,8 @@
     $('#fecha-texto').textContent = textoSel();
 
     const chips = [];
-    if (E.desde === hoy) chips.push(`<span class="etq etq-hoy">${periodo ? 'Desde hoy' : 'Hoy'}</span>`);
+    if (E.info.demo) chips.push('<span class="etq etq-hoy">Demo · validación con datos de 2024</span>');
+    else if (E.desde === hoy) chips.push(`<span class="etq etq-hoy">${periodo ? 'Desde hoy' : 'Hoy'}</span>`);
     const especiales = [];
     E.calSel.forEach(c => {
       const t = c.puente || (c.festivo ? 'Festivo: ' + c.festivo : null);
