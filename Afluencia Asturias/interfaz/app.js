@@ -121,6 +121,9 @@
   const nombreC = id => (E.concejosPorId[id] ? E.concejosPorId[id].nombre : id);
   const coincideTipo = z => E.tipo === 'todos' || (z && z.tipos.indexOf(E.tipo) !== -1);
 
+  // Una sola columna (móvil y tableta): el panel de zona va debajo del mapa
+  const estrecho = () => !!(window.matchMedia && matchMedia('(max-width: 1060px)').matches);
+
   let temporizadorAviso = null;
   function anunciar(texto) {
     const v = $('#aviso-vivo');
@@ -179,7 +182,7 @@
       if (con.length) dia = con.reduce((a, b) => (b.ratio > a.ratio ? b : a)).fecha;
     }
     await cambiarSeleccion(dia, dia, { anunciar: false });
-    await abrirZona(principal.id, { foco: false });
+    await abrirZona(principal.id, { foco: false, mostrar: false });
     encuadrar('zona', principal.id);
   }
 
@@ -797,6 +800,10 @@
     renderMapa();
     await renderPanel();
     if (opts.foco !== false) { const h = $('#pz-titulo'); if (h) h.focus(); }
+    else if (opts.mostrar !== false && estrecho()) {
+      const panel = $('#panel-zona');
+      if (panel.getBoundingClientRect().top > innerHeight * 0.6) panel.scrollIntoView({ block: 'start' });
+    }
     else if (opts.concejo) anunciar(`Concejo de ${nombreC(opts.concejo)}, en ${nombreZ(id)}.`);
     else anunciar(`${nombreZ(id)}.`);
   }
@@ -821,6 +828,8 @@
     panel.innerHTML = '';
     $('#ranking').hidden = false;
     renderMapa();
+    // En una sola columna, al cerrar se vuelve al mapa (el panel estaba debajo)
+    if (estrecho() && E.vista === 'mapa') $('.mapa-marco').scrollIntoView({ block: 'start' });
     const enMapa = E.vista === 'mapa' && E.mapa && ((cid && E.mapa.enfocar('concejo', cid)) || (id && E.mapa.enfocar('zona', id)));
     if (!enMapa) { const t = $('#ranking .lat-titulo'); if (t) { t.tabIndex = -1; t.focus(); } }
     anunciar('Detalle cerrado.');
@@ -893,15 +902,15 @@
       html += seccionSitios(id);
       html += seccionAlternativas(alts, true);
     } else {
-      html += seccionConcejos(id);
-      html += seccionEventosPanel(id);
-      html += seccionSitios(id);
+      html += seccionFiabilidad(periodo && p.pico ? p.pico : p, fiab);
       html += seccionSerie(serie, v);
       html += seccionFactores(factores, periodo ? fechaFactores : null);
       html += seccionMejor(mejor, v, mejorDia);
       html += seccionAlternativas(alts, false);
+      html += seccionConcejos(id);
+      html += seccionEventosPanel(id);
       html += seccionPerfil(perfil);
-      html += seccionFiabilidad(periodo && p.pico ? p.pico : p, fiab);
+      html += seccionSitios(id);
     }
 
     const panel = $('#panel-zona');
