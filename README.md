@@ -31,6 +31,16 @@ Repositorio compartido (privado) para datos y notas del proyecto.
 - `config/` – mapeo de zonas (`mapeo_zonas.csv`), puntos meteorológicos y configuración del modelo, del semáforo y de los factores.
 - `salidas/` – salidas del modelo: JSON de la web, `backtest.parquet` y figuras (hoy, sintéticas).
 - `notas/` – diccionario, control de calidad, `modelo.md`, `contrato_objetivo.md` (entrada de la parte A), `contrato_web.md` (salida para la web) y `guion_modelo.md` (presentación).
+- `Afluencia Asturias/` – **web (frontend)**: piloto de interfaz estático (HTML, CSS y JS sin compilación; se abre con doble clic en `index.html`). **Todavía usa datos ficticios** (`datos/fuente-ficticia.js`) y no está conectada al modelo. Detalle en `Afluencia Asturias/README.md`.
+
+## Web (frontend)
+
+La interfaz vive en `Afluencia Asturias/` y lee sus datos solo a través de la fachada `window.Datos` (`datos/api.js`). Hoy la alimenta una fuente ficticia y determinista. **Pendiente para la integración con el backend:**
+
+1. Crear `datos/fuente-modelo.js` que lea los JSON de `salidas/` (contrato en `notas/contrato_web.md`) y exponga las mismas funciones que `fuente-ficticia.js`.
+2. Cambiar en `index.html` el script de la fuente ficticia por el nuevo.
+3. Resolver las diferencias entre los dos contratos: zonas (15 zonas propias de la web frente a `zona_mitma_id` del modelo), umbrales del semáforo (la web los recibe de `getInfo().umbrales`, el modelo publica `ambar`/`rojo` en `umbrales`) y nombres de campos (`ratio` frente a `cociente`, `min`/`max` frente a `p10`/`p90`, etc.).
+4. Sustituir la banda de «datos ficticios» por el aviso `aviso` de los JSON mientras sean sintéticos.
 
 ## Instalación
 
