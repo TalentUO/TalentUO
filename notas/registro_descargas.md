@@ -184,7 +184,7 @@ URL: `https://www.ine.es/experimental/turismo_moviles/exp_tmov_interno_mun_<año
 | `data/raw/ine_moviles_interno_2025.xlsx` | 37,7 MB | 2025-01 … 2025-12 | 2025-12 |
 | `data/raw/ine_moviles_interno_2026.xlsx` | 28,4 MB | 2026-01 … 2026-08 | **2026-08** (8 hojas) |
 
-- Estructura: una hoja `Notas`/`Hoja1` + una hoja por mes. Columnas: `mes, mun_orig_cod, mun_orig, dest_cod, dest, turistas, prov_orig_cod, prov_orig, prov_dest_cod, prov_dest`. Una fila = par municipio de origen → municipio de destino. Códigos como texto con ceros (`'01001'`). Texto con codificación rota al leer (`Alegr�a`) en las hojas leídas con openpyxl: revisar antes de usar nombres.
+- Estructura: una hoja `Notas`/`Hoja1` + una hoja por mes. Columnas: `mes, mun_orig_cod, mun_orig, dest_cod, dest, turistas, prov_orig_cod, prov_orig, prov_dest_cod, prov_dest`. Una fila = par municipio de origen → municipio de destino. Códigos como texto con ceros (`'01001'`). Los textos se leen bien con openpyxl (`Alegría-Dulantzi`, `Araba/Álava`); el `�` que se ve en la consola de Windows es solo de la consola.
 - **Secreto estadístico (nota 2 del propio fichero): solo se dan los cruces con más de 30 turistas.** Un cruce que no aparece es "no publicado" (menos de ~30), **nunca 0**. Mínimo observado: 30. Sumar las filas de un destino da una **cota inferior**, no el total. Ejemplo 2025-08, Cangas de Onís: Excel suma 21.675 frente a 34.979 en la tabla 53001.
 - No hay celdas vacías ni "." en `turistas` en ninguna hoja para destinos asturianos (comprobado en las 56 hojas mensuales; la ausencia se expresa quitando la fila).
 - La hoja `2026-05` tiene 1.048.576 filas (el límite de Excel), pero ~974.000 son filas vacías de formato; los datos reales son ~74.000 filas. **No está truncada.**
@@ -192,9 +192,10 @@ URL: `https://www.ine.es/experimental/turismo_moviles/exp_tmov_interno_mun_<año
 - Comprobado: 62–75 municipios asturianos distintos como destino por hoja (de 78).
 
 ### 3.2 Tabla mensual 53001
-- `https://www.ine.es/jaxiT3/files/t/csv_bdsc/53001.csv` **sí funciona** (HTTP 200, `text/plain; charset=ISO-8859-15`, separador `;`, con BOM). Patrón verificado.
+- `https://www.ine.es/jaxiT3/files/t/csv_bdsc/53001.csv` **sí funciona** (HTTP 200, cabecera HTTP `charset=ISO-8859-15`, pero los bytes son UTF-8 con BOM; separador `;`). Patrón verificado.
 - **Pero el CSV completo es enorme**: más de 2,3 GB (todos los municipios de España × todos los orígenes por CCAA/provincia × 86 meses; las dos descargas completas que probé se interrumpieron o se colgaron antes del final). No se descargó entero.
 - **`data/raw/ine_moviles_53001.csv` NO es el fichero íntegro**: es un extracto que hice filtrando el flujo del INE por **destino = municipios de Asturias (código 33xxx)** y **origen = "Total Nacional"** (sin desglose por CCAA/provincia de origen). 6.708 filas = 78 municipios × 86 meses (2019M07 – 2026M08). Mismas columnas y formato que el original, no limpiado. El desglose por origen se puede pedir por la web (`Tabla.htm?t=53001&L=0`) si hace falta; no se automatizó.
+- Reproducible con `scripts/descarga_ine_moviles.py` (lee en streaming y corta al acabar el bloque "Total Nacional"). **NO VERIFICADO de principio a fin**: el INE cortó la conexión a los 14 min en la prueba; lo descargado coincidió byte a byte con el extracto manual.
 - Los ficheros temporales (descarga parcial filtrada) quedaron en el scratchpad, no en el repo. `data/raw/ine_moviles_*` está en `.gitignore`.
 - **Último mes de la 53001: 2026M08** (Cangas de Onís 24.430, Llanes 51.592 turistas). Coincide con el último mes del Excel de 2026. La "última modificación 07/10/2026" de la web NO VERIFICADO que corresponda a otro mes; los datos llegan hasta 2026M08.
 - **Cangas de Onís (`33012 Cangas de Onís`) y Llanes (`33036 Llanes`) están completos: 86 meses con dato numérico, sin celdas vacías.**
