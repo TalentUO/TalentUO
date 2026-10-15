@@ -137,19 +137,27 @@ window.MapaAsturias = (function () {
       clearTimeout(tGesto);
       tGesto = setTimeout(() => gesto.classList.remove('visible'), 1400);
     }
+    let ultimoAvisoRueda = -Infinity;
     contenedor.addEventListener('wheel', e => {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
         const paso = e.deltaY < 0 ? map.options.zoomDelta : -map.options.zoomDelta;
         map.setZoomAround(map.mouseEventToContainerPoint(e), map.getZoom() + paso);
-      } else {
+      } else if (Date.now() - ultimoAvisoRueda > 30000) {
+        // La rueda desplaza la página: el aviso sale como mucho una vez cada 30 s, para no molestar al bajar
+        ultimoAvisoRueda = Date.now();
         avisarGesto(/Mac/.test(navigator.platform) ? 'Usa Cmd + rueda para acercar el mapa' : 'Usa Ctrl + rueda para acercar el mapa');
       }
     }, { passive: false });
     if (tactil) {
       let unDedo = false;
       contenedor.addEventListener('touchstart', e => { unDedo = e.touches.length === 1; }, { passive: true });
-      contenedor.addEventListener('touchmove', e => { if (unDedo && e.touches.length === 1) avisarGesto('Usa dos dedos para mover el mapa'); }, { passive: true });
+      let ultimoAvisoDedo = -Infinity;
+      contenedor.addEventListener('touchmove', e => {
+        if (!unDedo || e.touches.length !== 1 || Date.now() - ultimoAvisoDedo < 30000) return;
+        ultimoAvisoDedo = Date.now();
+        avisarGesto('Usa dos dedos para mover el mapa');
+      }, { passive: true });
     }
     map.attributionControl.setPrefix(false);
     map.attributionControl.addAttribution('Límites: <a href="https://www.ign.es">© IGN</a> (CC BY 4.0)');
