@@ -1,0 +1,86 @@
+{
+ "descargado_utc": "2026-10-15T14:10:19+00:00",
+ "casos": [
+  {
+   "titulo": "Parque_nacional_de_Covadonga",
+   "rango": [
+    "20220101",
+    "20220131"
+   ],
+   "http": 404,
+   "n_items": 0,
+   "primer": null,
+   "ultimo": null,
+   "respuesta": {
+    "detail": "The date(s) you used are valid, but we either do not have data for those date(s), or the project you asked for is not loaded yet. Please check documentation for more information",
+    "method": "get",
+    "status": 404,
+    "title": "Not Found",
+    "type": "about:blank",
+    "uri": "/metrics/pageviews/per-article/es.wikipedia/all-access/user/Parque_nacional_de_Covadonga/daily/20220101/20220131"
+   }
+  },
+  {
+   "titulo": "Lago_Enol",
+   "rango": [
+    "20220101",
+    "20220131"
+   ],
+   "http": 200,
+   "n_items": 31,
+   "primer": "2022010100",
+   "ultimo": "2022013100",
+   "respuesta": null
+  },
+  {
+   "titulo": "Lago_de_la_Ercina",
+   "rango": [
+    "20220101",
+    "20221231"
+   ],
+   "http": 200,
+   "n_items": 296,
+   "primer": "2022010100",
+   "ultimo": "2022123100",
+   "respuesta": null
+  },
+  {
+   "titulo": "Mirador_de_Entrelagos",
+   "rango": [
+    "20220101",
+    "20221231"
+   ],
+   "http": 404,
+   "n_items": 0,
+   "primer": null,
+   "ultimo": null,
+   "respuesta": {
+    "detail": "The date(s) you used are valid, but we either do not have data for those date(s), or the project you asked for is not loaded yet. Please check documentation for more information",
+    "method": "get",
+    "status": 404,
+    "title": "Not Found",
+    "type": "about:blank",
+    "uri": "/metrics/pageviews/per-article/es.wikipedia/all-access/user/Mirador_de_Entrelagos/daily/20220101/20221231"
+   }
+  },
+  {
+   "titulo": "Lagos_de_Covadonga",
+   "rango": [
+    "20150101",
+    "20150630"
+   ],
+   "http": 404,
+   "n_items": 0,
+   "primer": null,
+   "ultimo": null,
+   "respuesta": {
+    "detail": "The date(s) you used are valid, but we either do not have data for those date(s), or the project you asked for is not loaded yet. Please check documentation for more information",
+    "method": "get",
+    "status": 404,
+    "title": "Not Found",
+    "type": "about:blank",
+    "uri": "/metrics/pageviews/per-article/es.wikipedia/all-access/user/Lagos_de_Covadonga/daily/20150101/20150630"
+   }
+  }
+ ]
+}
