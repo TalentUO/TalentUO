@@ -4,6 +4,16 @@ __pycache__/
 .ipynb_checkpoints/
 .DS_Store
 
+# Datos pesados (GitHub limita a 100 MB por fichero): se regeneran con scripts/ y notas/registro_descargas.md
+data/raw/_*/
+data/raw/_mitma_estado.jsonl
+data/raw/mitma_viajes_*.csv
+data/raw/mitma_pernoctaciones_*.csv
+logs/
+data/raw/ine_moviles_*
+data/raw/ine_viviendas_turisticas.csv
+
+data/raw/_mitma_estado_v2.jsonl
 .env
 .env.*
 
@@ -12,3 +22,13 @@ data/raw/_chunks/*/
 
 # Limpieza B: salida de prueba de unir_B (se regenera con ejecutar_todo.py)
 data/clean/_prueba/
+
+# Cachés locales (pruebas, herramientas)
+.pytest_cache/
+.claude/
+
+# MITMA: carpetas de ficheros mensuales del contrato del modelo (notas/contrato_objetivo.md)
+# y descargas comprimidas temporales; pesados y regenerables con scripts/descarga_mitma.py
+data/raw/mitma_viajes/
+data/raw/mitma_pernoctaciones/
+*.csv.gz
