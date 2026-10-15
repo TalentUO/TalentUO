@@ -3,3 +3,12 @@ __pycache__/
 .venv/
 .ipynb_checkpoints/
 .DS_Store
+
+# Datos pesados (GitHub limita a 100 MB por fichero): se regeneran con scripts/ y notas/registro_descargas.md
+data/raw/_*/
+data/raw/_mitma_estado.jsonl
+data/raw/mitma_viajes_*.csv
+data/raw/mitma_pernoctaciones_*.csv
+logs/
+data/raw/ine_moviles_*
+data/raw/ine_viviendas_turisticas.csv

@@ -94,3 +94,77 @@ Carpeta `https://movilidad-opendata.mitma.es/estudios_basicos/estadisticos/` (a�
 - Problemas: nombres en mayúsculas sin tildes y con caracteres corruptos (`CARRE�O`, `COA�A`: codificación de origen); sin código INE (hay que cruzar por nombre); cabecera en varias filas.
 - **NO DISPONIBLE (descargable)**: 2022–2025. Solo existen como paneles Power BI (en línea, sin descarga según la página) y folletos PDF resumen 2024 y 2025 (no descargados; **NO VERIFICADO** si traen datos por concejo). **NO VERIFICADO** si los paneles Power BI muestran detalle mensual (no se abrieron). Anteriores: XLSX 2020 (incluido en el de 2021), XLS 2019/2018, PDF 2011–2017 (no descargados).
 - Utilidad: con datos anuales y solo hasta 2021 no sirve para entrenar la serie diaria; solo como indicador estructural/anual. El rango temporal descargable (2020–2021) no solapa con MITMA (2022–2025).
+
+## 2026-10-15 · Paso 5 · SADEI: tablas PC-Axis por concejo – Persona A
+
+**Estado: HECHO** (6 tablas + padrón). Los 7 ficheros se abren con pyaxis y contienen Cangas de Onís y Llanes (salvo las 2 tablas de Asturias, que no son por concejo; ver abajo).
+
+### Cómo se descargó (el método de la guía NO funcionó)
+- Los enlaces "Ver fichero .px" (`...html?f=<código>`) **devuelven la página HTML**, no el .px. El enlace directo del iframe (`http://sadei.sentidocomun.es/sadei/pxweb/...px`) redirige (301) a `www.sadei.sentidocomun.es`, que **no resuelve**.
+- Método que sí funciona: el visor PxWeb de SADEI `https://www.sadei.es/sadei/pxweb/es/01/<carpeta>/<código>.px`: seleccionar todos los valores de cada variable → "Continuar" → botón "Archivo de PC-Axis" (POST de formulario ASP.NET). Sin API REST (`/api/v1` da error). Script: `scripts/descarga_sadei.py` (reanudable por fichero: `python scripts/descarga_sadei.py <nombre.px>`); comprobación: `scripts/verificar_sadei.py`.
+- **Límite del PxWeb: 100 000 celdas por consulta.** El turismo receptor nacional (79 concejos × 52 provincias × 80 meses) lo excede → se bajó en **4 partes por fecha**, sin tocar: `sadei_receptor_nacional_concejos_parte1..4.px` (partes 1–3: 24 meses cada una; parte 4: 8). No hay un único fichero; hay que concatenarlas (Fase 2).
+- Los .px bajados son una **consulta con todos los valores** de cada variable, no el fichero original del servidor (cabecera con fecha de la descarga), pero con el mismo contenido seleccionable.
+- `pyaxis.parse` solo existe como `from pyaxis import pyaxis; pyaxis.parse(...)` (no `import pyaxis`). Todos abren con `encoding="ISO-8859-1"`; las cabeceras declaran `Windows-1252` o `iso-8859-15` (equivalentes para los acentos).
+
+### Ficheros
+Códigos de la guía: todos **verificados por el título** de la tabla (columna "Título"), salvo la discrepancia de nombre indicada.
+
+| Fichero en `data/raw/` | Código PxWeb | Título real (TITLE del .px) | Dimensiones | Filas | Cobertura (último dato NO vacío) | Cangas de Onís / Llanes |
+|---|---|---|---|---|---|---|
+| `sadei_receptor_nacional_concejos_parte{1-4}.px` | `11__04__07/11040706` | Número de turistas nacionales por Municipio, Provincia de origen y Fecha (fuente INE, estadística experimental de teléfonos móviles) | Municipio (79) × Provincia de origen (52) × Fecha mensual | 98 592 ×3 + 32 864 | **2019-07 a 2026-02** (80 meses) | sí / sí |
+| `sadei_receptor_extranjero_concejos.px` | `11__04__07/11040704` | Número de turistas extranjeros por Municipio y Fecha | Municipio (78) × Fecha mensual | 6 162 | **2019-07 a 2025-12** (78 meses) | sí / sí |
+| `sadei_rentabilidad.px` | `99__04__08__04/9904080406` | Indicadores de rentabilidad del sector hotelero por Periodo y Indicador | Periodo mensual × 2 indicadores (tarifa media diaria, ingresos por habitación disponible) | 480 | **2008-01 a 2026-08** | **no aplica**: solo Asturias, sin concejos |
+| `sadei_eoh_viajeros.px` | `99__04__08__04/9904080402` | Viajeros y pernoctaciones según origen del viajero y tipo de establecimiento por Periodo, Tipo de alojamiento, Indicador y Origen del viajero | Periodo (años 1995+ y meses) × 5 tipos × 2 indicadores × origen | 12 330 | **1995 a 2026-08** (mezcla años y meses en `Periodo`) | **no aplica**: solo Asturias, sin concejos |
+| `sadei_plazas_concejos.px` | `11__02__02/11020202` | Alojamientos y plazas según tipo. Concejos | Ámbito territorial × Establecimientos/plazas × Tipo × Periodo anual | 50 560 | **2006 a 2025** (anual) | sí / sí |
+| `sadei_apartamentos_concejos.px` | `11__02__04/11020418` | Apartamentos turísticos. Establecimientos y plazas según categoría. Concejos | Ámbito × Categoría × Estab./plazas × Periodo anual | 18 960 | **2006 a 2025** (anual) | sí / sí |
+| `padron_concejos.px` | `02__02__02/02020202` | Evolución de la población. Censo, oficial padronal, residente de referencia y provisional. Concejos | Ámbito territorial (79) × Periodo (60, 1900 (Censo) … 2026 (Provisional 1-jul)) | 4 740 | último con dato: 2026 (Provisional 1-jul) | sí / sí (Cangas: 1900 = 8 559) |
+
+- **Discrepancias de nombre** (no de contenido): la guía llama "Turismo receptor nacional/extranjero. Concejos" a lo que el fichero titula "Número de turistas nacionales/extranjeros"; y "Otros alojamientos. Apartamentos turísticos" a lo que titula "Apartamentos turísticos…". Mismo código, tabla coherente.
+- **Plazas llegan hasta 2025**, no 2023 (hipótesis de la guía desmentida para estas dos tablas).
+- Los dos ficheros de **Asturias en conjunto** (rentabilidad, EOH) no tienen concejos: valen como contexto regional/estacionalidad, no para Cangas de Onís. En EOH el nombre de la guía sugiere detalle por origen de viajero, no por concejo.
+- Páginas de origen: `.../turismo/viajeros--pernoctaciones--gasto-e-indicadores-de-rentabilidad_212_1_ap.html` (en ella están también los códigos de receptor nacional/extranjero, no en la de establecimientos) y `.../establecimientos-y-plazas_211_1_ap.html`.
+
+### Valores ausentes (regla 1)
+Los .px traen celdas vacías (`NaN` al abrirlas): **no se rellenan con 0**. En los receptores la propia página indica "las celdas vacías corresponden a valores inferiores a 30 personas, omitidos por secreto estadístico" (el INE los suprime) → ausentes, no cero. Proporción de celdas vacías en bruto: receptor nacional 72–80 % por parte, extranjero 19 %, EOH 23 %, plazas 3 %, apartamentos 0 %, rentabilidad 1 %, padrón 10 % (periodos futuros/provisionales). No analizado en qué concejos/meses (Fase 2).
+- Las celdas de turistas de Cangas de Onís **no se han inspeccionado** (¿cuántas vacías?): NO VERIFICADO.
+
+### Padrón
+**Encontrado** en https://www.sadei.es/sadei/poblacion/evolucion-e-indicadores_166_1_ap.html (Población → Evolución e indicadores). Se eligió `02020202` por ser una sola tabla compacta concejo × periodo. Alternativas en la página "Padrones de habitantes" (`.../padrones-de-habitantes_167_1_ap.html`), no descargadas: `02__04__02/02040202` (población por nacionalidad, sexo y edad, concejos) y `02__04__01/02040102` (Población. Concejos). **NO VERIFICADO**: qué filas del periodo 2021–2026 son padrón definitivo, residente de referencia o provisional (la columna `Periodo` mezcla etiquetas "(Censo)", "(Provisional…)" etc.; mirar las etiquetas completas antes de usarla).
+
+## 2026-10-15 · Paso 4 · INE: encuestas de ocupación por punto turístico – Persona A
+
+**Estado: DESCARGADO y abierto (8 CSV). Sin limpiar.** URL patrón (funciona, HTTP 200): `https://www.ine.es/jaxiT3/files/t/csv_bdsc/<tabla>.csv`. Formato: separador `;`, UTF-8 con BOM (la cabecera HTTP dice ISO-8859-15 pero el contenido es UTF-8), decimal/millar con `.` (p. ej. `25.874` = 25 874 viajeros; **NO VERIFICADO** si algún valor lleva decimales). Formato largo: punto turístico; variable; [residencia]; `Periodo` (`2026M08`); `Total`.
+
+### Verificación de números de tabla (API INE `servicios.ine.es/wstempus`, TABLAS_OPERACION)
+- **2078 = EOH, Viajeros y pernoctaciones por puntos turísticos** (hoteles) → CORRECTA.
+- **2076 = EOH, Establecimientos, plazas estimadas, grados de ocupación y personal empleado por puntos turísticos** → CORRECTA.
+- **2082 = EOAP (apartamentos), Viajeros y pernoctaciones por puntos turísticos** → CORRECTA, pero **solo cubre Llanes y Cudillero** en Asturias (no hay Cangas de Onís ni Covadonga).
+- Las tres supuestas eran correctas; ninguna era provincial/CCAA.
+
+### Ficheros
+| Fichero | Tabla | Contenido | Hasta | Puntos asturianos |
+|---|---|---|---|---|
+| `ine_eoh_2078.csv` | 2078 | Hoteles: viajeros y pernoctaciones, residentes España / extranjero | 2026M08 (desde 2005M01) | Cangas de Onís (33012), Gijón (33024), Llanes (33036), Oviedo (33044), Villaviciosa (33076) |
+| `ine_eoh_2076.csv` | 2076 | Hoteles: establecimientos, habitaciones, plazas, grado de ocupación (habitaciones, plazas, plazas fin de semana), personal | 2026M08 | los mismos 5 |
+| `ine_eoap_2082.csv` | 2082 | Apartamentos: viajeros y pernoctaciones | 2026M08 | Llanes, Cudillero (33021) |
+| `ine_eoap_2083.csv` | 2083 (extra) | Apartamentos: apartamentos, plazas, ocupación, personal | 2026M08 | Llanes, Cudillero |
+| `ine_camping_2084.csv` | 2084 | Campings: viajeros y pernoctaciones | 2026M08 | solo Llanes |
+| `ine_camping_2085.csv` | 2085 (extra) | Campings: establecimientos, parcelas, plazas, ocupación | 2026M08 | solo Llanes |
+| `ine_rural_1999.csv` | 1999 | Turismo rural: viajeros y pernoctaciones | 2026M08 | **no hay puntos**: solo zona turística "Asturias (Principado De): Costa Verde" |
+| `ine_rural_2005.csv` | 2005 (extra) | Turismo rural: establecimientos, plazas, ocupación, personal | 2026M08 | solo zona "Costa Verde" |
+
+- **Turismo rural: el INE no publica puntos turísticos** (la operación EOTR 241 solo tiene tablas por CCAA, zonas turísticas y provincias). Se usa zona Costa Verde (todo Asturias costero; **NO VERIFICADO** qué municipios incluye) → no sirve para Cangas de Onís/Covadonga. Alternativa para rural/vivienda: `ine_viviendas_turisticas.csv`.
+- **Ninguna tabla trae Covadonga ni Lagos** (no son municipio; Covadonga y Lagos están dentro de Cangas de Onís). 2078/2076 contienen 139 puntos en toda España.
+- Existen tablas `751xx` (75191–75198) con las mismas variables pero solo desde 2025M01 (probable serie nueva; **NO VERIFICADO** el motivo). No descargadas; las 20xx llegan igualmente a 2026M08 y tienen histórico desde 2005.
+
+### Datos ausentes (secreto estadístico) – NO convertir en 0
+Cada serie tiene 260 filas (2005M01–2026M08 × variable); el valor puede ser `.`, `..` o vacío. Cangas (viajeros, España) tiene 202 `.`, 60 `..`, 30 vacíos y solo 4 `0` entre sus series; **NO VERIFICADO** si `.` y `..` significan lo mismo para el INE (se asume ausente en ambos; los `0` reales se conservan). Filas ausentes por serie (de 260):
+- Hoteles 2078: Cangas de Onís ~66, Llanes ~56 (viaj. España 56, extranj. 50), Villaviciosa ~111–118, Gijón 2, Oviedo 2. Cangas tiene dato real en 2026M05–08 (p. ej. 2026M08 viajeros españoles = 25 874). **Villaviciosa: último dato real 2025M08** (después, ausente).
+- Hoteles 2076: Cangas 66 (habitaciones 46), Llanes 56, Villaviciosa 118, Gijón/Oviedo 2.
+- Apartamentos: Llanes 7 ausentes; **Cudillero ~155 ausentes, último dato real 2024M10**.
+- Camping Llanes: **120 de 260 ausentes** (campings abren solo parte del año o por secreto; causa **NO VERIFICADO**).
+- Rural Costa Verde: 7 ausentes (personal empleado 19).
+
+### Pendiente / siguiente
+- Confirmar con muestra que `.` y vacío corresponden a meses cerrados/secreto (comparar con el PDF/nota metodológica EOH).
+- Cangas de Onís solo tiene hoteles; para presión turística local no hay apartamentos, campings ni rural por punto.

@@ -62,3 +62,61 @@ Un apunte por decisión. Añadir al final, con fecha y autoría.
 - Esperar fin de descarga, ejecutar `verificar_mitma.py` para 2022-2025, registrar filas/fechas/ausencias y contrastar con el RSS.
 - Decidir si se baja el fichero ODS de estadísticos (1,08 GB).
 - Leer el PDF metodológico de julio de 2025 (heredado del Paso 1).
+
+## 2026-10-15 · Persona A · INE ocupación por punto turístico (Paso 4, Fase 1)
+
+**Estado: COMPLETADO como descarga bruta, con cobertura PARCIAL respecto al objetivo.** Hoteles sí cubren Cangas de Onís; apartamentos, campings y rural no. Detalle de ficheros y ausencias en `registro_descargas.md`.
+
+### Decisiones
+1. **Descarga directa del CSV de JAXI** (`jaxiT3/files/t/csv_bdsc/<tabla>.csv`) en vez de exportar por pantalla: funciona, trae histórico completo (2005M01–2026M08) y es reproducible.
+2. **Los números de tabla se verificaron con la API del INE** (`servicios.ine.es/wstempus`, `TABLAS_OPERACION/<operación>`), no con el catálogo supuesto: 2078/2076 = EOH, 2082 = EOAP. Operaciones: EOH 238, EOAP 239, EOAC 240, EOTR 241.
+3. **Se descargaron tablas extra** que el reto no pedía pero completan el dato: 2083 (apartamentos: plazas/ocupación), 2085 (campings: parcelas/ocupación), 2005 (rural: plazas/ocupación). Sin ellas no hay denominador (plazas) para convertir viajeros en presión.
+4. **Rural: zona turística "Costa Verde"** (tablas 1999/2005) como único dato disponible, al no existir tabla por punto. Se guarda aunque no sirve para Cangas/Covadonga.
+5. **Se copian los ficheros tal cual** (UTF-8 con BOM, `;`, miles con `.`): sin limpieza, sin conversión de tipos.
+6. **Se descartan por ahora las tablas 75191–75198** (solo desde 2025M01).
+7. **Ausentes (`.`, `..`, vacío) se conservan como ausentes, nunca 0**; los `0` reales se respetan.
+
+### Consideraciones y límites
+- **Cangas de Onís solo existe en hoteles.** Apartamentos y campings solo cubren Llanes (y Cudillero en apartamentos); el INE no publica los demás por secreto estadístico o falta de muestra. Cualquier validación de Cangas/Covadonga con estos datos infravalora el alojamiento total (no incluye rural, apartamentos, campings ni vivienda de uso turístico, ni segundas residencias).
+- **Covadonga y Lagos no existen como punto**; son parte de Cangas de Onís. No se puede validar el modelo a nivel de Lagos.
+- **Granularidad mensual**: sirve para validar el patrón estacional y el nivel, no para validar predicciones diarias.
+- **Cobertura de hoteles con huecos**: Cangas ~66/260 meses ausentes, Llanes 56, Villaviciosa ~115 (último dato real 2025M08). Hay que mirar en qué meses faltan antes de usarlo; si faltan en temporada baja el sesgo es hacia meses de mayor actividad.
+- **Significado exacto de `.` vs `..` NO VERIFICADO.** Se asume "ausente" en ambos casos; no se ha leído la nota metodológica del INE.
+- **Solape temporal con MITMA**: MITMA cubre 2022-01 a 2025-06 (tope por cambio metodológico); INE hasta 2026M08. Para validar, el solape útil es 2022M01–2025M06.
+- **Los viajeros del INE son viajeros alojados en establecimientos**, no visitantes de un día (excursionistas); la presión real en Covadonga incluye muchos visitantes que no pernoctan. Es un límite de fondo de esta fuente.
+- **Tablas viejas vs nuevas**: la 20xx llega a 2026M08 pese a existir las 751xx; se asume que ambas son consistentes, **NO VERIFICADO**.
+
+### ¿Cumple el objetivo del proyecto?
+Parcialmente. Sí: dato oficial, gratuito, mensual y largo para validar nivel y estacionalidad de Cangas de Onís, Llanes, Oviedo, Gijón y Villaviciosa en hoteles. No: no cubre toda la oferta ni el nivel diario ni Covadonga/Lagos. Úsese como **validación de contexto**, no como verdad de campo del modelo diario.
+
+### Pendiente
+- Leer la nota metodológica del INE sobre `.`/`..` y secreto estadístico.
+- Decidir si se añade la tabla de viviendas turísticas (`ine_viviendas_turisticas.csv`, ya descargada en otro paso) como complemento de oferta.
+- Borrar `data/raw/_ine_tmp/` si sigue existiendo (quedó bloqueada por un proceso).
+
+## 2026-10-15 · Persona A · SADEI por concejo (Paso 5, Fase 1)
+
+**Estado: COMPLETADO** (descarga en bruto y apertura comprobada). Detalle de ficheros, títulos y cobertura: `registro_descargas.md`. Cumple el objetivo de Fase 1; el valor para el modelo tiene los límites de abajo.
+
+### Decisiones
+1. **Se descarga por el visor PxWeb, no por los enlaces `?f=` de la guía.** Esos enlaces devuelven HTML y el enlace directo apunta a un host que no resuelve. El script reproduce el flujo del formulario (todos los valores → Continuar → "Archivo de PC-Axis"). Es frágil: si SADEI cambia la web, hay que revisarlo (`scripts/descarga_sadei.py`).
+2. **Se baja siempre con todos los valores de todas las variables** (sin filtrar concejos ni fechas), para no perder nada en bruto.
+3. **Receptor nacional en 4 partes por fecha** (límite de 100 000 celdas del PxWeb). Se guardan tal cual, sin unir; unirlas es trabajo de la Fase 2.
+4. **Padrón: se eligió `02020202`** (evolución de la población por concejo, 1900-2026) porque es una sola tabla compacta concejo × periodo, suficiente para calcular visitantes/habitante. No es la serie de edad/sexo/nacionalidad (`02040202`), que queda sin bajar.
+5. **Códigos de la guía validados por título**, no por suposición. Se borró el HTML que dejó el primer intento fallido con el nombre `.px`.
+6. **Celdas vacías = ausentes, nunca 0** (secreto estadístico: <30 personas en los receptores).
+
+### Consideraciones (qué aporta y qué no)
+- **Utilidad real para el reto**: son datos **mensuales por concejo** de turistas nacionales (por provincia de origen) y extranjeros, más plazas/apartamentos y población. Sirven de **referencia y validación externa** de MITMA (otra fuente de visitantes, incluye extranjeros, que MITMA no tiene) y para la capacidad de carga (plazas) y la presión relativa (turistas/habitante). **No son diarios**: no alimentan directamente un modelo por día; sirven para calibrar niveles/estacionalidad mensual.
+- **Los turistas son del INE (estadística experimental de teléfonos móviles)**, no de SADEI: misma familia de método que MITMA (telefonía), así que **no son fuentes independientes**; hay que tratarlas como contraste, no como confirmación.
+- **Resolución**: concejo. Covadonga y Lagos no se pueden aislar (igual que en MITMA). Cangas de Onís sí aparece como concejo propio, y Cabrales/Onís no están agrupados aquí (a diferencia de MITMA), lo que da una comparación útil.
+- **Cobertura temporal desigual**: nacional hasta 2026-02, extranjero hasta 2025-12, plazas/apartamentos solo **anuales** hasta 2025. Plazas anuales no captan cambios estacionales de oferta (apertura de temporada).
+- **Rentabilidad y EOH (viajeros/pernoctaciones hoteleras) son solo Asturias**, sin concejo: contexto regional. Si se necesita ocupación hotelera por concejo, esta descarga no la cubre (**pendiente de buscar**, p. ej. otra tabla de la misma página o INE/Frontur).
+- **Mucho dato ausente en el receptor nacional** (72–80 % de celdas vacías, sobre todo por la desagregación por provincia de origen). Para concejos pequeños puede haber meses sin dato; antes de usarlo, medir la ausencia en Cangas de Onís y Llanes (**no hecho, NO VERIFICADO**). Agregar por origen (total) reducirá los huecos.
+- **No verificado**: qué filas del periodo 2021-2026 del padrón son definitivas o provisionales; si el límite de 100 000 celdas cambia en el futuro; que las tablas se actualicen con la periodicidad que sugiere su último dato.
+
+### Pendiente
+- Medir ausencias de Cangas de Onís y Llanes en los receptores.
+- Concatenar las 4 partes del nacional (Fase 2) y comprobar que no se solapan fechas.
+- Decidir si se baja `02040202` (padrón por edad/nacionalidad) y buscar ocupación hotelera por concejo.
+- Los `.px` suman ~1,4 MB: se pueden versionar sin problema (a diferencia de los CSV de MITMA). Sin commit todavía.
