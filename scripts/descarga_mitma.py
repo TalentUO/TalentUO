@@ -185,7 +185,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--inicio", default="2022-01-01")
     ap.add_argument("--fin", default="2025-06-30")
-    ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--workers", type=int, default=4)  # con 10 el portal rindió peor (medido)
     ap.add_argument("--solo-ensamblar", action="store_true")
     ap.add_argument("--tipos", nargs="+", choices=list(TIPOS), default=list(TIPOS), help="limita ensamblado y descarga a estos tipos")
     ap.add_argument("--reintentar-no-disponibles", action="store_true")
