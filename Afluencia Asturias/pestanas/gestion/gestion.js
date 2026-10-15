@@ -272,6 +272,21 @@ window.Pestanas = window.Pestanas || {};
         m(Math.round(p.pct_resto_espana) + NBSP + '%', 'Llegan del resto de España') +
         m(Math.round(p.pct_excursionistas_aprox) + NBSP + '%', 'Vienen solo por el día (aprox.)');
       q('#perfil-nota').textContent = `${p.nombre_zona}, ${MESES[mes - 1]}: unas ${num(p.llegadas_ocio_media_dia)} llegadas de ocio al día (${p.dias} días de muestra); ${Math.round(p.pernoctaciones_por_100_llegadas)} pernoctaciones de no residentes por cada 100 llegadas. Sin visitantes extranjeros.`;
+      pintarHoras(id, mes);
+    }
+    // Patrón horario: hora con más llegadas de ocio (data/clean/llegadas_por_hora.parquet vía datos.horas)
+    function pintarHoras(id, mes) {
+      if (!datos.horas) return; // sin datos: queda el texto «Pendiente de datos»
+      const tipos = [['laborable', 'los laborables'], ['fin_de_semana_o_festivo', 'los fines de semana y festivos']];
+      const partes = tipos.map(([t, et]) => {
+        const f = datos.horas.filas.filter(x => x.zona_mitma_id === id && x.mes === mes && x.tipo_dia === t);
+        if (!f.length) return null;
+        const pico = f.reduce((a, b) => (b.llegadas_ocio_media > a.llegadas_ocio_media ? b : a));
+        return `${et}, de ${pico.hora} a ${pico.hora + 1} h (unas ${num(pico.llegadas_ocio_media)} llegadas de ocio en esa hora; ${pico.n_dias} días de muestra)`;
+      }).filter(Boolean);
+      q('#perfil-horas').textContent = partes.length
+        ? `Hora con más llegadas, media de ${MESES[mes - 1]}: ${partes.join('; ')}. Hora local; festivos de Asturias, sin los locales.`
+        : 'Sin datos de llegadas por hora para esta zona y mes.';
     }
     q('#perfil-zona').addEventListener('change', pintarPerfil);
     q('#perfil-mes').addEventListener('change', pintarPerfil);

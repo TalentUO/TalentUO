@@ -13,7 +13,9 @@ Qué hace:
 3. Resume el calendario oficial (data/clean/calendario_diario.parquet: festivos
    de Asturias, puentes, vacaciones escolares y regulación de los Lagos) para los
    botones de fecha de la web. Si no está, la web usa su calendario aproximado.
-4. Escribe «datos/modelo/salidas.js» (completo) y «salidas-inicio.js» (lo que usa Inicio) con todo lo anterior, para que la web se
+4. Resume las llegadas de ocio por hora (data/clean/llegadas_por_hora.parquet) para el
+   patrón horario de Gestión. Si no está, Gestión lo marca como pendiente de datos.
+5. Escribe «datos/modelo/salidas.js» (completo) y «salidas-inicio.js» (lo que usa Inicio) con todo lo anterior, para que la web se
    abra con doble clic (desde file:// el navegador no deja leer JSON con fetch).
 """
 from __future__ import annotations
@@ -80,6 +82,25 @@ def leer_calendario() -> dict | None:
     return {"origen": "data/clean/calendario_diario.parquet", "dias": dias}
 
 
+def leer_horas() -> dict | None:
+    """Llegadas de ocio por hora (zona × mes × tipo de día), para el patrón horario de Gestión."""
+    ruta = RAIZ / "data" / "clean" / "llegadas_por_hora.parquet"
+    try:
+        import pandas as pd
+        d = pd.read_parquet(ruta)
+    except Exception as e:  # sin pandas/pyarrow o sin fichero: Gestión lo marca como pendiente de datos
+        print(f"AVISO: sin llegadas por hora ({e}); el patrón horario saldrá como pendiente de datos")
+        return None
+    filas = [
+        {
+            "zona_mitma_id": str(r.zona_mitma_id), "mes": int(r.mes), "tipo_dia": str(r.tipo_dia),
+            "hora": int(r.hora), "llegadas_ocio_media": float(r.llegadas_ocio_media), "n_dias": int(r.n_dias),
+        }
+        for r in d.sort_values(["zona_mitma_id", "mes", "tipo_dia", "hora"]).itertuples()
+    ]
+    return {"origen": "data/clean/llegadas_por_hora.parquet", "filas": filas}
+
+
 def main() -> None:
     faltan = [n for n in FICHEROS if not (SALIDAS / f"{n}.json").exists()]
     if faltan:
@@ -113,6 +134,10 @@ def main() -> None:
     if calendario:
         paquete["calendario"] = calendario
         (DESTINO / "calendario.json").write_text(json.dumps(calendario, ensure_ascii=False), encoding="utf-8")
+    horas = leer_horas()
+    if horas:
+        paquete["horas"] = horas
+        (DESTINO / "horas.json").write_text(json.dumps(horas, ensure_ascii=False), encoding="utf-8")
     (DESTINO / "salidas.js").write_text(
         "// GENERADO por scripts/actualizar_datos_web.py. No editar a mano.\n"
         "window.SALIDAS_MODELO = " + json.dumps(paquete, ensure_ascii=False, separators=(",", ":")) + ";\n",
