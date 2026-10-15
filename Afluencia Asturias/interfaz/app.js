@@ -797,6 +797,8 @@
     E.lugarBuscado = opts.lugar || null;
     $('#ranking').hidden = true;
     $('#panel-zona').hidden = false;
+    if (E.zona !== E.zonaPanelAnterior) $('#lateral').scrollTop = 0; // otra zona: el lateral empieza arriba
+    E.zonaPanelAnterior = E.zona;
     renderMapa();
     await renderPanel();
     if (opts.foco !== false) { const h = $('#pz-titulo'); if (h) h.focus(); }
@@ -827,6 +829,8 @@
     panel.hidden = true;
     panel.innerHTML = '';
     $('#ranking').hidden = false;
+    $('#lateral').scrollTop = 0;
+    E.zonaPanelAnterior = null;
     renderMapa();
     // En una sola columna, al cerrar se vuelve al mapa (el panel estaba debajo)
     if (estrecho() && E.vista === 'mapa') $('.mapa-marco').scrollIntoView({ block: 'start' });
