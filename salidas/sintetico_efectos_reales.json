@@ -1,0 +1,169 @@
+{
+ "sintetico": true,
+ "aviso": "DATOS SINTÉTICOS: efectos inventados para probar el modelo. No describen Asturias.",
+ "parametros_zona": {
+  "cangas_de_onis": {
+   "base": 2500,
+   "temporada": 0.95,
+   "sens": 1.3,
+   "trabajo": 900,
+   "peso_valle": 0.4,
+   "montana": true,
+   "pern": 0.55,
+   "ast": 0.45
+  },
+  "llanes": {
+   "base": 3000,
+   "temporada": 0.75,
+   "sens": 1.1,
+   "trabajo": 1500,
+   "peso_valle": 1.0,
+   "pern": 0.6,
+   "ast": 0.4
+  },
+  "gijon": {
+   "base": 9000,
+   "temporada": 0.3,
+   "sens": 0.6,
+   "trabajo": 12000,
+   "peso_valle": 0.5,
+   "pern": 0.25,
+   "ast": 0.65,
+   "club": "sporting"
+  },
+  "oviedo": {
+   "base": 10000,
+   "temporada": 0.12,
+   "sens": 0.5,
+   "trabajo": 15000,
+   "peso_valle": 0.3,
+   "pern": 0.2,
+   "ast": 0.6,
+   "club": "oviedo"
+  },
+  "ribadesella": {
+   "base": 3800,
+   "temporada": 0.7,
+   "sens": 1.0,
+   "trabajo": 2200,
+   "peso_valle": 1.0,
+   "pern": 0.5,
+   "ast": 0.45
+  }
+ },
+ "zonas": {
+  "EJEMPLO_cangas": "cangas_de_onis",
+  "EJEMPLO_llanes": "llanes",
+  "EJEMPLO_gijon": "gijon",
+  "EJEMPLO_oviedo": "oviedo",
+  "EJEMPLO_oriente": "ribadesella"
+ },
+ "perfil_semana_log": [
+  -0.12,
+  -0.15,
+  -0.15,
+  -0.08,
+  0.05,
+  0.35,
+  0.22
+ ],
+ "efectos_log": {
+  "festivo_ast_laborable": 0.22,
+  "puente_ast": 0.18,
+  "finde_largo_ast": 0.1,
+  "semana_santa": 0.25,
+  "festivo_local": 0.08,
+  "festivo_mad": 0.22,
+  "finde_largo_mad": 0.1,
+  "festivo_cyl": 0.12,
+  "vacaciones_mad_fuera_verano": 0.12,
+  "vacaciones_ast_fuera_verano": 0.08,
+  "lluvia_valle_por_log1p_mm": -0.09,
+  "frio_valle_por_grado_bajo_17": -0.015,
+  "lluvia_montana_por_log1p_mm": -0.14,
+  "frio_montana_por_grado_bajo_14": -0.025,
+  "evento_por_evento_max2": 0.15,
+  "festival_extra": 0.1,
+  "partido_en_casa": 0.18,
+  "derbi_extra": 0.1,
+  "ruido_sd": 0.07,
+  "ruido_ar1_sd": 0.04,
+  "ruido_ar1_phi": 0.6,
+  "anomalia_factor": 0.45
+ },
+ "interes_en_internet": "sin efecto (0) por construcción",
+ "acceso_regulado_lagos": "sin efecto (0) por construcción",
+ "resumen_por_factor": {
+  "Fin de semana": {
+   "desv_tipica_log": 0.1783,
+   "media_abs_log": 0.1538,
+   "efecto_medio_pct_cuando_activo": 1.6898,
+   "pct_dias_activo": 100.0,
+   "signo_esperado": "+"
+  },
+  "Época del año": {
+   "desv_tipica_log": 0.1827,
+   "media_abs_log": 0.0949,
+   "efecto_medio_pct_cuando_activo": 8.8229,
+   "pct_dias_activo": 95.3171,
+   "signo_esperado": "+"
+  },
+  "Puente o festivo en Asturias": {
+   "desv_tipica_log": 0.0722,
+   "media_abs_log": 0.0179,
+   "efecto_medio_pct_cuando_activo": 21.6448,
+   "pct_dias_activo": 9.1308,
+   "signo_esperado": "+"
+  },
+  "Festivo en origen (Madrid o Castilla y León)": {
+   "desv_tipica_log": 0.0791,
+   "media_abs_log": 0.019,
+   "efecto_medio_pct_cuando_activo": 24.473,
+   "pct_dias_activo": 8.6922,
+   "signo_esperado": "+"
+  },
+  "Vacaciones escolares": {
+   "desv_tipica_log": 0.0452,
+   "media_abs_log": 0.0119,
+   "efecto_medio_pct_cuando_activo": 16.9549,
+   "pct_dias_activo": 7.5959,
+   "signo_esperado": "+"
+  },
+  "Tiempo en el valle": {
+   "desv_tipica_log": 0.074,
+   "media_abs_log": 0.0546,
+   "efecto_medio_pct_cuando_activo": -7.5076,
+   "pct_dias_activo": 69.9295,
+   "signo_esperado": "-"
+  },
+  "Tiempo en la montaña": {
+   "desv_tipica_log": 0.1236,
+   "media_abs_log": 0.0422,
+   "efecto_medio_pct_cuando_activo": -23.2638,
+   "pct_dias_activo": 15.9436,
+   "signo_esperado": "-"
+  },
+  "Evento": {
+   "desv_tipica_log": 0.0299,
+   "media_abs_log": 0.0046,
+   "efecto_medio_pct_cuando_activo": 20.4514,
+   "pct_dias_activo": 2.4745,
+   "signo_esperado": "+"
+  },
+  "Partido": {
+   "desv_tipica_log": 0.0281,
+   "media_abs_log": 0.0044,
+   "efecto_medio_pct_cuando_activo": 19.8306,
+   "pct_dias_activo": 2.4119,
+   "signo_esperado": "+"
+  },
+  "Ruido": {
+   "desv_tipica_log": 0.0875,
+   "media_abs_log": 0.0695,
+   "efecto_medio_pct_cuando_activo": 0.1631,
+   "pct_dias_activo": 100.0,
+   "signo_esperado": "+"
+  }
+ },
+ "nota": "El efecto 'Fin de semana' queda absorbido por el día normal (que es por día de la semana): no debe aparecer en SHAP. 'Época del año' y 'Vacaciones escolares' están correlacionadas."
+}

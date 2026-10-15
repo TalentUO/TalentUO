@@ -65,13 +65,18 @@ def cuantiles_error(bt: pd.DataFrame) -> pd.DataFrame:
     b = bt[bt["experimento"] == "base"].copy()
     b["horizonte_txt"] = b["horizonte"].map(etiqueta_horizonte)
     q = (b.groupby(["zona_mitma_id", "horizonte_txt"])["residuo_log"]
-         .agg(q10=lambda s: s.quantile(0.10), q90=lambda s: s.quantile(0.90), n="size").reset_index())
-    # cobertura empírica del intervalo dentro de la validación (debería rondar el 80 %)
-    b = b.merge(q, on=["zona_mitma_id", "horizonte_txt"])
-    dentro = (b["residuo_log"] >= b["q10"]) & (b["residuo_log"] <= b["q90"])
-    q = q.merge(dentro.groupby([b["zona_mitma_id"], b["horizonte_txt"]]).mean().rename("cobertura").reset_index(),
-                on=["zona_mitma_id", "horizonte_txt"])
-    return q
+         .agg(q10=lambda s: s.quantile(0.10), q90=lambda s: s.quantile(0.90), n_errores="size").reset_index())
+    # Cobertura honesta del intervalo p10-p90 (objetivo: 80 %): para cada bloque,
+    # cuantiles calculados con los OTROS bloques y evaluados en este.
+    partes = []
+    for bl in b["bloque"].unique():
+        otros = (b[b["bloque"] != bl].groupby(["zona_mitma_id", "horizonte_txt"])["residuo_log"]
+                 .agg(a=lambda s: s.quantile(0.10), z=lambda s: s.quantile(0.90)).reset_index())
+        x = b[b["bloque"] == bl].merge(otros, on=["zona_mitma_id", "horizonte_txt"])
+        x["dentro"] = (x["residuo_log"] >= x["a"]) & (x["residuo_log"] <= x["z"])
+        partes.append(x[["zona_mitma_id", "horizonte_txt", "dentro"]])
+    cob = pd.concat(partes).groupby(["zona_mitma_id", "horizonte_txt"])["dentro"].mean().rename("cobertura")
+    return q.merge(cob.reset_index(), on=["zona_mitma_id", "horizonte_txt"], how="left")
 
 
 def intervalo(pred, q10, q90) -> tuple[np.ndarray, np.ndarray]:

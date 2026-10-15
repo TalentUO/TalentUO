@@ -97,8 +97,7 @@ def ejemplo_dia_rojo(bt: pd.DataFrame, zona: str, nombre_zona: str, sintetico: b
     ax.set_xlabel("Efecto sobre la afluencia prevista (%): azul suma, naranja resta")
     ax.grid(axis="y", visible=False)
     f = fila["fecha"].strftime("%d-%m-%Y")
-    _titulo(fig, f"Por qué {nombre_zona} está en ROJO el {f}
-Previsto {fila['cociente_pred']:.1f}× el normal "
+    _titulo(fig, f"Por qué {nombre_zona} está en ROJO el {f}\nPrevisto {fila['cociente_pred']:.1f}× el normal "
                  f"(observado {fila['cociente_obs']:.1f}×); factores del modelo de largo plazo", sintetico)
     fig.tight_layout()
     fig.savefig(FIGURAS / "ejemplo_dia_rojo.png", dpi=150)
@@ -178,6 +177,20 @@ def recuperacion_sintetico(bt: pd.DataFrame) -> dict:
         for fac in ["Interés en internet", "Acceso regulado a los Lagos"]:
             c = f"fx_{fac}"
             sin_efecto[fac] = float(b[c].std()) if c in b.columns else 0.0
+        # Orden con 'Época del año' y 'Vacaciones escolares' fusionados (están
+        # muy correlacionados: el verano escolar coincide con la temporada alta).
+        fus = relevantes.copy()
+        ev_mask = fus["factor"].isin(["Época del año", "Vacaciones escolares"])
+        if ev_mask.sum() == 2:
+            sv = b[[f"fx_{f}" for f in ["Época del año", "Vacaciones escolares"] if f"fx_{f}" in b.columns]].sum(axis=1)
+            fila = {"factor": "Época del año + Vacaciones",
+                    "importancia_real": float((b["Época del año"] + b["Vacaciones escolares"]).std()),
+                    "importancia_shap": float(sv.std())}
+            fus = pd.concat([fus[~ev_mask], pd.DataFrame([fila])], ignore_index=True)
+        rho_fus = float(fus["importancia_real"].rank().corr(fus["importancia_shap"].rank(), method="spearman")) \
+            if len(fus) > 2 else float("nan")
+        orden_fus_real = fus.sort_values("importancia_real", ascending=False)["factor"].tolist()
+        orden_fus_shap = fus.sort_values("importancia_shap", ascending=False)["factor"].tolist()
         epo_vac = (b["Época del año"] + b["Vacaciones escolares"]).to_numpy()
         epo_vac_s = sum(b[f"fx_{f}"] for f in ["Época del año", "Vacaciones escolares"] if f"fx_{f}" in b.columns)
         res["modelos"][etiqueta] = {
@@ -188,6 +201,8 @@ def recuperacion_sintetico(bt: pd.DataFrame) -> dict:
             "factores_con_signo_no_recuperado": relevantes.loc[~signo_ok, "factor"].tolist(),
             "top3_real": top3_real, "top3_shap": top3_shap,
             "correlacion_epoca_mas_vacaciones": float(np.corrcoef(epo_vac, epo_vac_s)[0, 1]),
+            "spearman_con_epoca_y_vacaciones_fusionados": rho_fus,
+            "orden_real_fusionado": orden_fus_real, "orden_shap_fusionado": orden_fus_shap,
             "desv_shap_factores_sin_efecto_real": sin_efecto,
         }
     return res
