@@ -67,15 +67,32 @@ def _separador(f: Path) -> str:
     return max(["|", ",", ";"], key=linea.count)
 
 
-def _leer(f: Path, alias: dict) -> pd.DataFrame:
-    cab = pd.read_csv(f, sep=_separador(f), nrows=0).columns
+TROZO = 1_000_000   # filas por trozo: un mes real de viajes tiene ~8 millones y no cabe entero como texto
+
+
+def _leer_trozos(f: Path, alias: dict, trozo: int = TROZO):
+    """Lee `f` por trozos de `trozo` filas con los nombres de columna ya unificados."""
+    sep = _separador(f)
+    cab = pd.read_csv(f, sep=sep, nrows=0).columns
     usar = [c for c in cab if c in alias]
-    df = pd.read_csv(f, sep=_separador(f), usecols=usar, dtype=str)
-    df = df.rename(columns=alias)
-    faltan = sorted(set(alias.values()) - set(df.columns))
+    faltan = sorted(set(alias.values()) - {alias[c] for c in usar})
     if faltan:
         raise ValueError(f"{f.name}: faltan columnas {faltan} (cabecera: {list(cab)})")
-    return df
+    for df in pd.read_csv(f, sep=sep, usecols=usar, dtype=str, chunksize=trozo):
+        yield df.rename(columns=alias)
+
+
+def _leer(f: Path, alias: dict) -> pd.DataFrame:
+    return pd.concat(_leer_trozos(f, alias), ignore_index=True)
+
+
+def _agregar_fichero(f: Path, alias: dict, agregar, zonas: set[str], trozo: int = TROZO) -> pd.DataFrame:
+    """Agrega un fichero trozo a trozo. Exacto: se vuelve a sumar por (fecha, zona) al final."""
+    partes = [agregar(t, zonas) for t in _leer_trozos(f, alias, trozo)]
+    partes = [p for p in partes if len(p)]
+    if not partes:
+        return agregar(next(_leer_trozos(f, alias, 1)).iloc[0:0], zonas)
+    return pd.concat(partes, ignore_index=True).groupby(["fecha", "zona_mitma_id"], as_index=False).sum()
 
 
 def _fecha(s: pd.Series) -> pd.Series:
@@ -126,10 +143,10 @@ def agregar_pernoctaciones(df: pd.DataFrame, zonas: set[str]) -> pd.DataFrame:
 
 
 def construir(ficheros_viajes: list[Path], ficheros_pern: list[Path], zonas: list[str],
-              inicio: str, fin: str) -> pd.DataFrame:
+              inicio: str, fin: str, trozo: int = TROZO) -> pd.DataFrame:
     zs = set(zonas)
-    v = [agregar_viajes(_leer(f, ALIAS_VIAJES), zs) for f in ficheros_viajes]
-    p = [agregar_pernoctaciones(_leer(f, ALIAS_PERN), zs) for f in ficheros_pern]
+    v = [_agregar_fichero(f, ALIAS_VIAJES, agregar_viajes, zs, trozo) for f in ficheros_viajes]
+    p = [_agregar_fichero(f, ALIAS_PERN, agregar_pernoctaciones, zs, trozo) for f in ficheros_pern]
     v = pd.concat(v, ignore_index=True) if v else pd.DataFrame(columns=["fecha", "zona_mitma_id"])
     p = pd.concat(p, ignore_index=True) if p else pd.DataFrame(columns=["fecha", "zona_mitma_id"])
     fechas_con_viajes = set(pd.to_datetime(v["fecha"]))
@@ -168,10 +185,11 @@ def construir(ficheros_viajes: list[Path], ficheros_pern: list[Path], zonas: lis
 
 def leer_zonas(ruta_zonas: Path) -> pd.DataFrame:
     z = pd.read_csv(ruta_zonas, dtype=str)
-    if "zona_mitma_id" not in z.columns and "id" in z.columns:
-        z = z.rename(columns={"id": "zona_mitma_id"})
+    for alias in ("id", "id_zona_mitma"):   # `id_zona_mitma` es la columna de zonas_mitma_asturias.csv (parte A)
+        if "zona_mitma_id" not in z.columns and alias in z.columns:
+            z = z.rename(columns={alias: "zona_mitma_id"})
     if "zona_mitma_id" not in z.columns:
-        raise ValueError(f"{ruta_zonas}: falta la columna zona_mitma_id (o id)")
+        raise ValueError(f"{ruta_zonas}: falta la columna zona_mitma_id (o id, o id_zona_mitma)")
     return z
 
 

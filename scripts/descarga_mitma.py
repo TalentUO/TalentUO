@@ -12,7 +12,7 @@ solo se cambia el separador `|` por `,` (se aborta si algún valor ya contiene u
   estado, borra los ficheros diarios.
 - Log: logs/descarga_mitma.log. Aborta si queda menos de 20 GB libres.
 
-Uso: python scripts/descarga_mitma.py [--inicio 2022-01-01] [--fin 2025-06-30] [--workers 8] [--solo-ensamblar]
+Uso: python scripts/descarga_mitma.py [--inicio 2022-01-01] [--fin 2025-06-30] [--workers 4] [--tipos viajes pernoctaciones] [--solo-ensamblar]
 """
 import argparse
 import json
@@ -133,9 +133,9 @@ def cargar_estado():
     return est
 
 
-def ensamblar(estado, dias):
+def ensamblar(estado, dias, tipos=tuple(TIPOS)):
     """Concatena los ficheros diarios en los CSV anuales y borra los diarios si las filas cuadran."""
-    for tipo in TIPOS:
+    for tipo in tipos:
         for anio in sorted({d.year for d in dias}):
             ok = [d for d in dias if d.year == anio and estado.get((tipo, d.isoformat()), {}).get("estado") == "OK"
                   and ruta_dia(tipo, d).exists()]
@@ -169,8 +169,13 @@ def ensamblar(estado, dias):
             # el tamaño cuadra con la suma de los diarios.
             tam = previo + sum(ruta_dia(tipo, d).stat().st_size - (len(cab) if previo or d != ok[0] else 0) for d in ok)
             if destino.stat().st_size == tam:
-                for d in ok:
-                    ruta_dia(tipo, d).unlink()
+                with open(ESTADO, "a", encoding="utf-8") as fe:
+                    for d in ok:
+                        ruta_dia(tipo, d).unlink()
+                        reg = {**estado[(tipo, d.isoformat())], "ensamblado": True,
+                               "ts_ensamblado": time.strftime("%Y-%m-%d %H:%M:%S")}
+                        fe.write(json.dumps(reg, ensure_ascii=False) + "\n")
+                        estado[(tipo, d.isoformat())] = reg
             else:
                 logging.error("Tamaño de %s no cuadra (%d vs %d): NO se borran los diarios", destino.name,
                               destino.stat().st_size, tam)
@@ -180,8 +185,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--inicio", default="2022-01-01")
     ap.add_argument("--fin", default="2025-06-30")
-    ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--workers", type=int, default=4)  # con 10 el portal rindió peor (medido)
     ap.add_argument("--solo-ensamblar", action="store_true")
+    ap.add_argument("--tipos", nargs="+", choices=list(TIPOS), default=list(TIPOS), help="limita ensamblado y descarga a estos tipos")
     ap.add_argument("--reintentar-no-disponibles", action="store_true")
     a = ap.parse_args()
     LOG.parent.mkdir(exist_ok=True)
@@ -199,11 +205,13 @@ def main():
         if not r:
             return False
         if r["estado"] == "OK":
-            return ruta_dia(tipo, d).exists() or (RAW / f"mitma_{tipo}_{d.year}.csv").exists()
+            # Un OK solo vale si el fichero diario existe o el día ya se ensambló en el CSV anual.
+            # Así el estado (que viaja por git) no da por hechos días cuyos datos no están en este PC.
+            return ruta_dia(tipo, d).exists() or bool(r.get("ensamblado"))
         return r["estado"] == "NO_DISPONIBLE" and not a.reintentar_no_disponibles
 
     if not a.solo_ensamblar:
-        tareas = [(t, d) for d in dias for t in TIPOS if not hecho(t, d)]
+        tareas = [(t, d) for d in dias for t in a.tipos if not hecho(t, d)]
         # Prioridad: pernoctaciones (pesan poco), luego viajes 2024-25, 2023 y 2022 (cada bloque por fecha).
         tareas.sort(key=lambda x: (x[0] != "pernoctaciones", 0 if x[1].year >= 2024 else 2024 - x[1].year, x[1]))
         logging.info("Inicio: %d tareas pendientes de %d, %d workers, %.0f GB libres", len(tareas),
@@ -241,7 +249,7 @@ def main():
                         logging.warning("%s %s %s %s", tipo, d, r["estado"], r.get("error", ""))
                     lanzar()
                     break
-    ensamblar(estado, dias)
+    ensamblar(estado, dias, tuple(a.tipos))
     logging.info("FIN. Resumen: %s", {e: sum(1 for r in estado.values() if r["estado"] == e)
                                       for e in ("OK", "NO_DISPONIBLE", "ERROR")})
 

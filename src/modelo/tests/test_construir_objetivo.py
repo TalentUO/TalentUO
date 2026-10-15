@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from construir_objetivo import construir  # noqa: E402
+from construir_objetivo import construir, leer_zonas  # noqa: E402
 
 VIAJES_MITMA = """fecha|periodo|origen|destino|actividad_origen|actividad_destino|residencia|viajes
 20231025|10|33044|33012|casa|frecuente|33|10.5
@@ -85,3 +85,22 @@ def test_los_dos_formatos_dan_lo_mismo(tmp_path):
     a = _caso(tmp_path, VIAJES_MITMA, PERN_MITMA, "mitma")
     b = _caso(tmp_path, VIAJES_SOD, PERN_SOD, "sod")
     pd.testing.assert_frame_equal(a, b)
+
+
+def test_lectura_por_trozos_da_lo_mismo(tmp_path):
+    """Con trozos de 1 fila (un mes real no cabe entero en memoria) el resultado es idéntico."""
+    fv, fp = tmp_path / "v.csv", tmp_path / "p.csv"
+    fv.write_text(VIAJES_MITMA, encoding="utf-8")
+    fp.write_text(PERN_MITMA, encoding="utf-8")
+    entero = construir([fv], [fp], ["33012", "33044"], "2023-10-25", "2023-10-29")
+    for trozo in (1, 2, 3):
+        pd.testing.assert_frame_equal(
+            entero, construir([fv], [fp], ["33012", "33044"], "2023-10-25", "2023-10-29", trozo=trozo))
+
+
+def test_zonas_con_columna_id_zona_mitma(tmp_path):
+    """zonas_mitma_asturias.csv (parte A) usa `id_zona_mitma`; debe aceptarse igual que `zona_mitma_id` o `id`."""
+    for col in ("id_zona_mitma", "zona_mitma_id", "id"):
+        f = tmp_path / f"zonas_{col}.csv"
+        f.write_text(f"{col},nombre\n33012,Cangas de Onís\n33044,Oviedo\n", encoding="utf-8")
+        assert leer_zonas(f)["zona_mitma_id"].tolist() == ["33012", "33044"]
