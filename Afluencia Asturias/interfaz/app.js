@@ -524,6 +524,11 @@
     E.concejos.forEach(c => meter(c.nombre, 'concejo', c.zonaId, c.id));
     E.zonas.forEach(z => z.lugares.forEach(l => meter(l, 'lugar', z.id)));
     E.sitios.forEach(st => { const c = E.concejosPorId[st.concejos[0]]; if (c && c.zonaId) meter(st.nombre, 'lugar', c.zonaId); });
+    // Lugares muy buscados que no son concejo ni sitio de la lista, con el concejo (INE) donde están
+    const ALIAS = [['Lagos de Covadonga', '33012'], ['Covadonga', '33012'], ['Lago Enol', '33012'], ['Lago Ercina', '33012'],
+      ['Picos de Europa', '33012'], ['Bulnes', '33008'], ['Naranjo de Bulnes', '33008'], ['Ruta del Cares', '33008'],
+      ['Luarca', '33034'], ['Lastres', '33019'], ['Tazones', '33076'], ['Cudillero', '33021']];
+    ALIAS.forEach(([t, ine]) => { const c = E.concejosPorId[ine]; if (c && c.zonaId) meter(t, 'lugar', c.zonaId); });
     const PRIORIDAD = { zona: 2, concejo: 1, lugar: 0 };
 
     let resultados = [], activo = -1;
@@ -882,7 +887,7 @@
     const tarjetaConcejo = c ? `<div class="pz-estado pz-concejo estado-${pc.nivel}">
         <p class="pz-fecha">Concejo de ${esc(c.nombre)} · ${esc(textoSel())}</p>
         <div class="pz-estado-fila">${pill(pc.nivel, 'pill-grande')}<p class="pz-delta">${pc.ratio != null ? delta(pc.ratio, periodo) : 'Sin datos suficientes'}</p></div>
-        ${pc.visitantes != null ? `<p class="pz-cifra">Unos <strong>${num(pc.visitantes)}</strong> visitantes${periodo ? ' al día de media' : ''} en el concejo. Un día normal vienen unos ${num(pc.normal)}.</p>` : ''}
+        ${pc.visitantes != null ? `<details class="detalles"><summary>Ver más cifras</summary><p class="pz-cifra">Unos <strong>${num(pc.visitantes)}</strong> visitantes${periodo ? ' al día de media' : ''} en el concejo. Un día normal vienen unos ${num(pc.normal)}.</p></details>` : ''}
         ${periodo && pc.pico ? `<p class="pz-cifra">Día con más gente: <strong>${esc(fechaLarga(pc.pico.fecha))}</strong>, ${pct(pc.pico.ratio)}.</p>` : ''}
         <button type="button" class="btn-mini" data-ver-zona>Ver la zona entera</button>
       </div>` : '';
@@ -902,8 +907,10 @@
       <div class="pz-estado estado-${p.nivel}">
         <p class="pz-fecha">${c ? 'Toda la zona · ' : ''}${esc(textoSel())}</p>
         <div class="pz-estado-fila">${pill(p.nivel, 'pill-grande')}<p class="pz-delta">${p.ratio != null ? delta(p.ratio, periodo) : 'Sin datos suficientes'}</p></div>
-        ${p.visitantes != null ? `<p class="pz-cifra">Unos <strong>${num(p.visitantes)}</strong> visitantes${periodo ? ' al día de media' : ''}, probablemente entre ${num(p.min)} y ${num(p.max)}. Un día normal vienen unos ${num(p.normal)}.</p>` : ''}
-        ${!periodo && p.incierto ? '<p class="pz-cifra"><span class="etq etq-aviso">Incierto</span> El rango probable cae en colores distintos del semáforo.</p>' : ''}
+        ${p.visitantes != null ? `<details class="detalles"><summary>Ver más cifras</summary>
+          <p class="pz-cifra">Unos <strong>${num(p.visitantes)}</strong> visitantes${periodo ? ' al día de media' : ''}, probablemente entre ${num(p.min)} y ${num(p.max)}. Un día normal vienen unos ${num(p.normal)}.</p>
+          ${!periodo && p.incierto ? '<p class="pz-cifra"><span class="etq etq-aviso">Incierto</span> El rango probable cae en colores distintos del semáforo.</p>' : ''}
+        </details>` : ''}
         ${!periodo && p.nivelObservado ? `<p class="pz-cifra">Lo que pasó de verdad: ${pill(p.nivelObservado)} ${esc(delta(p.ratioObservado))} (unos ${num(p.observado)} visitantes).</p>` : ''}
         ${periodo && p.pico ? resumenPeriodo(p) : ''}
       </div>
@@ -915,7 +922,6 @@
       html += seccionSitios(id);
       html += seccionAlternativas(alts, true);
     } else {
-      html += seccionFiabilidad(periodo && p.pico ? p.pico : p, fiab);
       html += seccionSerie(serie, v);
       html += seccionFactores(factores, periodo ? fechaFactores : null);
       html += seccionMejor(mejor, v, mejorDia);
@@ -924,6 +930,7 @@
       html += seccionEventosPanel(id);
       html += seccionPerfil(perfil);
       html += seccionSitios(id);
+      html += seccionFiabilidad(periodo && p.pico ? p.pico : p, fiab); // aviso de predicción, al final
     }
 
     const panel = $('#panel-zona');
@@ -1058,6 +1065,7 @@
 
   function seccionAlternativas(alts, sinDatos) {
     const titulo = sinDatos ? 'Zonas cercanas con previsión' : 'Alternativas cercanas con menos gente';
+    alts = (alts || []).slice().sort((a, b) => (a.km == null ? 1e9 : a.km) - (b.km == null ? 1e9 : b.km)).slice(0, 3); // las 3 más cercanas
     const cuerpo = alts && alts.length
       ? `<ul class="alt-lista">${alts.map(a => `<li><button type="button" class="alt" data-zona="${a.zonaId}">
           <span class="alt-nombre">${esc(a.nombre)}</span>
