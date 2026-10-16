@@ -1,7 +1,7 @@
 {
  "sintetico": false,
  "aviso": null,
- "generado": "2026-10-16 09:26",
+ "generado": "2026-10-16 09:41",
  "objetivo": "llegadas_ocio",
  "umbrales": {
   "ambar": 1.5,
@@ -11,7 +11,7 @@
  "perfil": [
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 1,
    "dias": 124,
    "llegadas_ocio_media_dia": 1556.6569,
@@ -25,7 +25,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 2,
    "dias": 113,
    "llegadas_ocio_media_dia": 1690.2463,
@@ -39,7 +39,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 3,
    "dias": 124,
    "llegadas_ocio_media_dia": 1806.1782,
@@ -53,7 +53,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 4,
    "dias": 115,
    "llegadas_ocio_media_dia": 2096.3332,
@@ -67,7 +67,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 5,
    "dias": 124,
    "llegadas_ocio_media_dia": 1995.5054,
@@ -81,7 +81,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 6,
    "dias": 120,
    "llegadas_ocio_media_dia": 2137.1518,
@@ -95,7 +95,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 7,
    "dias": 93,
    "llegadas_ocio_media_dia": 2472.0535,
@@ -109,7 +109,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 8,
    "dias": 93,
    "llegadas_ocio_media_dia": 2896.1901,
@@ -123,7 +123,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 9,
    "dias": 90,
    "llegadas_ocio_media_dia": 2052.3199,
@@ -137,7 +137,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 10,
    "dias": 86,
    "llegadas_ocio_media_dia": 1886.6471,
@@ -151,7 +151,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 11,
    "dias": 83,
    "llegadas_ocio_media_dia": 1695.9849,
@@ -165,7 +165,7 @@
   },
   {
    "zona_mitma_id": "33001_AM",
-   "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+   "nombre_zona": "Allande y 3 más",
    "mes": 12,
    "dias": 93,
    "llegadas_ocio_media_dia": 1896.9765,
@@ -515,7 +515,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 1,
    "dias": 124,
    "llegadas_ocio_media_dia": 2240.315,
@@ -529,7 +529,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 2,
    "dias": 113,
    "llegadas_ocio_media_dia": 2420.3184,
@@ -543,7 +543,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 3,
    "dias": 124,
    "llegadas_ocio_media_dia": 2477.4634,
@@ -557,7 +557,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 4,
    "dias": 115,
    "llegadas_ocio_media_dia": 2629.4113,
@@ -571,7 +571,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 5,
    "dias": 124,
    "llegadas_ocio_media_dia": 2701.6207,
@@ -585,7 +585,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 6,
    "dias": 120,
    "llegadas_ocio_media_dia": 2628.1783,
@@ -599,7 +599,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 7,
    "dias": 93,
    "llegadas_ocio_media_dia": 2747.913,
@@ -613,7 +613,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 8,
    "dias": 93,
    "llegadas_ocio_media_dia": 3051.9933,
@@ -627,7 +627,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 9,
    "dias": 90,
    "llegadas_ocio_media_dia": 2662.6479,
@@ -641,7 +641,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 10,
    "dias": 86,
    "llegadas_ocio_media_dia": 2460.5832,
@@ -655,7 +655,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 11,
    "dias": 83,
    "llegadas_ocio_media_dia": 2295.969,
@@ -669,7 +669,7 @@
   },
   {
    "zona_mitma_id": "33006_AM",
-   "nombre_zona": "Bimenes, Cabranes y Sariego",
+   "nombre_zona": "Cabranes y 2 más",
    "mes": 12,
    "dias": 93,
    "llegadas_ocio_media_dia": 2288.3796,
@@ -683,7 +683,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 1,
    "dias": 124,
    "llegadas_ocio_media_dia": 1709.4514,
@@ -697,7 +697,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 2,
    "dias": 113,
    "llegadas_ocio_media_dia": 1799.5663,
@@ -711,7 +711,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 3,
    "dias": 124,
    "llegadas_ocio_media_dia": 1854.9249,
@@ -725,7 +725,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 4,
    "dias": 115,
    "llegadas_ocio_media_dia": 2106.2492,
@@ -739,7 +739,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 5,
    "dias": 124,
    "llegadas_ocio_media_dia": 2011.3143,
@@ -753,7 +753,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 6,
    "dias": 120,
    "llegadas_ocio_media_dia": 2162.7216,
@@ -767,7 +767,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 7,
    "dias": 93,
    "llegadas_ocio_media_dia": 2733.377,
@@ -781,7 +781,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 8,
    "dias": 93,
    "llegadas_ocio_media_dia": 3152.8189,
@@ -795,7 +795,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 9,
    "dias": 90,
    "llegadas_ocio_media_dia": 2237.4114,
@@ -809,7 +809,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 10,
    "dias": 86,
    "llegadas_ocio_media_dia": 2108.0005,
@@ -823,7 +823,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 11,
    "dias": 83,
    "llegadas_ocio_media_dia": 1935.7834,
@@ -837,7 +837,7 @@
   },
   {
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "mes": 12,
    "dias": 93,
    "llegadas_ocio_media_dia": 1966.8999,
@@ -851,7 +851,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 1,
    "dias": 124,
    "llegadas_ocio_media_dia": 3404.9824,
@@ -865,7 +865,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 2,
    "dias": 113,
    "llegadas_ocio_media_dia": 3765.0003,
@@ -879,7 +879,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 3,
    "dias": 124,
    "llegadas_ocio_media_dia": 4498.6611,
@@ -893,7 +893,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 4,
    "dias": 115,
    "llegadas_ocio_media_dia": 5931.9877,
@@ -907,7 +907,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 5,
    "dias": 124,
    "llegadas_ocio_media_dia": 4909.8811,
@@ -921,7 +921,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 6,
    "dias": 120,
    "llegadas_ocio_media_dia": 5910.7929,
@@ -935,7 +935,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 7,
    "dias": 93,
    "llegadas_ocio_media_dia": 9486.5074,
@@ -949,7 +949,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 8,
    "dias": 93,
    "llegadas_ocio_media_dia": 13604.3843,
@@ -963,7 +963,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 9,
    "dias": 90,
    "llegadas_ocio_media_dia": 6336.865,
@@ -977,7 +977,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 10,
    "dias": 86,
    "llegadas_ocio_media_dia": 5287.0682,
@@ -991,7 +991,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 11,
    "dias": 83,
    "llegadas_ocio_media_dia": 3933.8878,
@@ -1005,7 +1005,7 @@
   },
   {
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "mes": 12,
    "dias": 93,
    "llegadas_ocio_media_dia": 4166.4305,
@@ -1523,7 +1523,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 1,
    "dias": 124,
    "llegadas_ocio_media_dia": 1299.7866,
@@ -1537,7 +1537,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 2,
    "dias": 113,
    "llegadas_ocio_media_dia": 1398.1759,
@@ -1551,7 +1551,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 3,
    "dias": 124,
    "llegadas_ocio_media_dia": 1556.64,
@@ -1565,7 +1565,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 4,
    "dias": 115,
    "llegadas_ocio_media_dia": 1933.4653,
@@ -1579,7 +1579,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 5,
    "dias": 124,
    "llegadas_ocio_media_dia": 1729.0479,
@@ -1593,7 +1593,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 6,
    "dias": 120,
    "llegadas_ocio_media_dia": 1821.818,
@@ -1607,7 +1607,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 7,
    "dias": 93,
    "llegadas_ocio_media_dia": 2484.2178,
@@ -1621,7 +1621,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 8,
    "dias": 93,
    "llegadas_ocio_media_dia": 3073.7569,
@@ -1635,7 +1635,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 9,
    "dias": 90,
    "llegadas_ocio_media_dia": 2027.3433,
@@ -1649,7 +1649,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 10,
    "dias": 86,
    "llegadas_ocio_media_dia": 1881.0616,
@@ -1663,7 +1663,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 11,
    "dias": 83,
    "llegadas_ocio_media_dia": 1468.6694,
@@ -1677,7 +1677,7 @@
   },
   {
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "mes": 12,
    "dias": 93,
    "llegadas_ocio_media_dia": 1480.8502,
@@ -6059,7 +6059,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 1,
    "dias": 124,
    "llegadas_ocio_media_dia": 3435.5212,
@@ -6073,7 +6073,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 2,
    "dias": 113,
    "llegadas_ocio_media_dia": 3499.6979,
@@ -6087,7 +6087,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 3,
    "dias": 124,
    "llegadas_ocio_media_dia": 3595.5525,
@@ -6101,7 +6101,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 4,
    "dias": 115,
    "llegadas_ocio_media_dia": 3775.1599,
@@ -6115,7 +6115,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 5,
    "dias": 124,
    "llegadas_ocio_media_dia": 3812.635,
@@ -6129,7 +6129,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 6,
    "dias": 120,
    "llegadas_ocio_media_dia": 3784.5727,
@@ -6143,7 +6143,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 7,
    "dias": 93,
    "llegadas_ocio_media_dia": 3949.8608,
@@ -6157,7 +6157,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 8,
    "dias": 93,
    "llegadas_ocio_media_dia": 3910.0357,
@@ -6171,7 +6171,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 9,
    "dias": 90,
    "llegadas_ocio_media_dia": 3890.8202,
@@ -6185,7 +6185,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 10,
    "dias": 86,
    "llegadas_ocio_media_dia": 3655.4165,
@@ -6199,7 +6199,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 11,
    "dias": 83,
    "llegadas_ocio_media_dia": 3261.7831,
@@ -6213,7 +6213,7 @@
   },
   {
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "mes": 12,
    "dias": 93,
    "llegadas_ocio_media_dia": 3168.5008,
@@ -7067,7 +7067,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 1,
    "dias": 124,
    "llegadas_ocio_media_dia": 2285.4167,
@@ -7081,7 +7081,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 2,
    "dias": 113,
    "llegadas_ocio_media_dia": 2567.2828,
@@ -7095,7 +7095,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 3,
    "dias": 124,
    "llegadas_ocio_media_dia": 2778.0878,
@@ -7109,7 +7109,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 4,
    "dias": 115,
    "llegadas_ocio_media_dia": 3304.0521,
@@ -7123,7 +7123,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 5,
    "dias": 124,
    "llegadas_ocio_media_dia": 2960.5198,
@@ -7137,7 +7137,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 6,
    "dias": 120,
    "llegadas_ocio_media_dia": 3048.4058,
@@ -7151,7 +7151,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 7,
    "dias": 93,
    "llegadas_ocio_media_dia": 3855.8636,
@@ -7165,7 +7165,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 8,
    "dias": 93,
    "llegadas_ocio_media_dia": 4913.989,
@@ -7179,7 +7179,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 9,
    "dias": 90,
    "llegadas_ocio_media_dia": 3506.3418,
@@ -7193,7 +7193,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 10,
    "dias": 86,
    "llegadas_ocio_media_dia": 3281.9879,
@@ -7207,7 +7207,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 11,
    "dias": 83,
    "llegadas_ocio_media_dia": 2890.6322,
@@ -7221,7 +7221,7 @@
   },
   {
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "mes": 12,
    "dias": 93,
    "llegadas_ocio_media_dia": 2768.4455,
@@ -7403,7 +7403,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 1,
    "dias": 124,
    "llegadas_ocio_media_dia": 2140.4875,
@@ -7417,7 +7417,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 2,
    "dias": 113,
    "llegadas_ocio_media_dia": 2372.3349,
@@ -7431,7 +7431,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 3,
    "dias": 124,
    "llegadas_ocio_media_dia": 2522.199,
@@ -7445,7 +7445,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 4,
    "dias": 115,
    "llegadas_ocio_media_dia": 2874.3005,
@@ -7459,7 +7459,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 5,
    "dias": 124,
    "llegadas_ocio_media_dia": 2573.4034,
@@ -7473,7 +7473,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 6,
    "dias": 120,
    "llegadas_ocio_media_dia": 3033.3132,
@@ -7487,7 +7487,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 7,
    "dias": 93,
    "llegadas_ocio_media_dia": 3386.0176,
@@ -7501,7 +7501,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 8,
    "dias": 93,
    "llegadas_ocio_media_dia": 4688.773,
@@ -7515,7 +7515,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 9,
    "dias": 90,
    "llegadas_ocio_media_dia": 2687.8091,
@@ -7529,7 +7529,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 10,
    "dias": 86,
    "llegadas_ocio_media_dia": 2497.6927,
@@ -7543,7 +7543,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 11,
    "dias": 83,
    "llegadas_ocio_media_dia": 2303.0729,
@@ -7557,7 +7557,7 @@
   },
   {
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "mes": 12,
    "dias": 93,
    "llegadas_ocio_media_dia": 2439.2155,

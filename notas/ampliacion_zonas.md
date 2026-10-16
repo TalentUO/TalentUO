@@ -35,8 +35,52 @@ Comprobaciones antes de subir:
 - La columna `calidad` marca los mismos días sin dato que antes (16 `sin_dato_mitma` y 3 `anomalia_mitma` por zona).
 - `llegadas_por_hora.parquet` con 46 zonas.
 
-## Después (yo)
-1. Volver a ejecutar `unir_B.py` y `ejecutar.py --objetivo real --algoritmo ambos`.
-2. Validar con `validar_salidas.py` y los tests.
-3. Regenerar la web y repetir las comprobaciones de `notas/integracion_web.md`.
-4. Revisar qué cifras de `notas/resultados_reales.md` cambian.
+## Hecho por Adrián
+`80828e1`: `objetivo_diario.parquet` (58 742 filas = 46 zonas × 1 277 días; 736 `sin_dato_mitma` y 138 `anomalia_mitma`, 16 y 3 por zona) y `llegadas_por_hora.parquet` (26 496 filas). Las 5 zonas antiguas son idénticas a las de `main`.
+
+## Resultado: el modelo de 46 zonas y un fallo de la parada temprana
+
+**1.ª ejecución (configuración de `main`): muy mala en las zonas turísticas.**
+
+| Largo plazo | 5 zonas (`main`) | 46 zonas, parada a 90 días |
+|---|---|---|
+| Rojos de los Picos detectados | 65 de 87 (75 %) | 29 de 87 (33 %) |
+| Árboles del modelo final | 158 | 86 |
+
+- Demo del 15-08-2024: Picos en ámbar. Ninguna zona en rojo (hubo 20 de verdad).
+- Entrenar solo las zonas con temporada daba lo mismo (32 %), así que el problema no era mezclar zonas urbanas y turísticas.
+
+**Causa: la parada temprana.**
+- El número de árboles se elegía con los **últimos 90 días** del entrenamiento: en el modelo final, de abril a junio de 2025, sin verano.
+- Con 46 zonas, el error de primavera deja de mejorar antes. El modelo paraba a unos 80 árboles y no aprendía los picos de agosto.
+
+**Arreglo (`config/modelo.yaml` + `src/modelo/modelo.py`):**
+- La ventana de parada temprana pasa a **365 días**, con un verano dentro.
+- Tope del 40 % del periodo, para que el experimento «desde el corte», con menos de un año de datos, siga teniendo con qué entrenar.
+- Tests: 92 pasan.
+
+**Con el arreglo, la regla de elección da XGBoost** (`salidas/comparacion_algoritmos.json`):
+- recall de rojos en verano: 64,2 % frente a 53,9 %;
+- precisión: 87,2 % frente a 88,6 %;
+- WAPE medio: 9,8 % frente a 10,2 %.
+
+| Largo plazo, todos los bloques | 5 zonas (`main`) | **46 zonas (XGBoost)** |
+|---|---|---|
+| WAPE modelo / día normal (B0) | 9,3 % / 13,2 % | 9,9 % / 12,9 % |
+| Rojos detectados / precisión, todas las zonas | 79,9 % / 96,0 % | 68,7 % / 85,2 % |
+| Picos: rojos detectados (precisión) | 65 de 87 (94 %) | **71 de 87 (93 %)** |
+| Llanes / Ribadesella | — | 80 % / 81 % |
+| Colunga / Cudillero / Cabrales y 4 más / Tapia | — | 86 % / 80 % / 83 % / 86 % |
+| Demo 15-08-2024, Picos (h=8) | rojo, ×3,00 (+200 %) | **rojo, ×3,27 (+227 %)**; observado ×3,90 |
+| Zonas en rojo el 15-08-2024 (previstas / reales) | — | 16 / 20 |
+| Días rojos previstos en los Picos, 2026 / 2027 | 36 (29–66) / 34 (28–61) | 40 (27–72) / 30 (24–62) |
+
+**Siguen flojas** (detectan menos del 10 % de sus días rojos):
+- Villaviciosa (4 de 39);
+- Vegadeo y 4 más (los Oscos: 0 de 29);
+- Somiedo y 5 más (4 de 29).
+
+Son zonas con poco volumen y con el tiempo de un punto lejano.
+
+## Nombres cortos
+Las zonas de 3 o más concejos se llaman «<concejo de más superficie> y N más» (p. ej. «Cabrales y 4 más», «Somiedo y 5 más»). Con la lista completa, las etiquetas del mapa ocupaban hasta 7 líneas. La lista sigue en `concejos_ine` y en el panel de cada zona.

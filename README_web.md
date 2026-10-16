@@ -4,8 +4,8 @@ La web vive en `Afluencia Asturias/`: HTML, CSS y JavaScript sin compilación ni
 
 ## Estado de los datos
 
-- **Datos reales** (`sintetico: false`): modelo LightGBM entrenado con el MITMA (2022-01-01 → 2025-06-30). Salidas generadas el **2026-10-16 01:36**, con `fecha_hoy` 2026-10-16 y la previsión de Open-Meteo emitida ese día.
-- Predicciones del 2026-10-17 al 2026-12-15 (60 días; con el tiempo a 1-3 días), 5 zonas del mapeo real (`config/mapeo_zonas.csv`).
+- **Datos reales** (`sintetico: false`): modelo XGBoost (elegido por regla frente a LightGBM) entrenado con el MITMA (2022-01-01 → 2025-06-30). Salidas generadas el **2026-10-16 09:41**, con `fecha_hoy` 2026-10-16 y la previsión de Open-Meteo emitida ese día.
+- **Toda Asturias:** 46 zonas MITMA (los 78 concejos) de `config/mapeo_zonas.csv`. Predicciones del 2026-10-17 al 2026-12-15 (60 días; con el tiempo a 1-3 días). Ampliación y sus decisiones: `notas/ampliacion_zonas.md`.
 - Comprobación de cada pestaña y cotejo con `notas/resultados_reales.md`: `notas/integracion_web.md`. Capturas del recorrido de la demo (plan B): `notas/capturas_demo/`.
 
 ## Arrancar (una orden)
@@ -19,7 +19,7 @@ Solo necesita Python 3 (biblioteca estándar). También se puede abrir `Afluenci
 
 ## Modo demo (`?demo=1`)
 
-Abre **agosto de 2024**, en el día del puente con más presión en la zona principal (Picos de Europa: Cangas de Onís, Covadonga y Lagos), con su panel abierto: **jueves 15 de agosto de 2024 (Asunción), Saturación, +200 %** sobre un día normal (observado: +290 %). Son predicciones fuera de muestra de la validación (conjunto `historico`, modelo de largo plazo con 8 días de antelación), con el valor observado al lado («Lo que pasó de verdad»). El mes se fija en `DEMO_MES` (`datos/fuente-modelo.js`).
+Abre **agosto de 2024**, en el día del puente con más presión en la zona principal (Picos de Europa: Cangas de Onís, Covadonga y Lagos), con su panel abierto: **jueves 15 de agosto de 2024 (Asunción), Saturación, +227 %** sobre un día normal (observado: +290 %). Ese día el modelo pinta 16 zonas en saturación (fueron 20). Son predicciones fuera de muestra de la validación (conjunto `historico`, modelo de largo plazo con 8 días de antelación), con el valor observado al lado («Lo que pasó de verdad»). El mes se fija en `DEMO_MES` (`datos/fuente-modelo.js`).
 
 Con los datos reales, el puente de diciembre de 2024 (la demo anterior) sale en verde en los Picos (observado: ámbar), así que se cambió a agosto.
 
@@ -27,8 +27,8 @@ Recorrido de la presentación:
 
 1. **Mapa**: los Picos en rojo, con icono, trama y porcentaje sobre un día normal.
 2. **¿Por qué?**: los 3 factores que más pesan, con su efecto en %.
-3. **Alternativa**: la zona cercana con menos presión (Oviedo, −25 %; de `alternativas.json`). El mejor día a ±3 días (sábado 17) también está en saturación.
-4. **Gestión**: días por encima del umbral (Picos: 39 en 2023 y 48 en 2024 con +100 %) y comparación con los Lagos.
+3. **Alternativa**: la zona cercana con menos presión (Mieres, −35 %, a 58 km; de `alternativas.json`). El mejor día a ±3 días (domingo 18) también está en saturación, con un 9 % menos de gente.
+4. **Gestión**: días por encima del umbral (Picos: 39 en 2023 y 48 en 2024 con +100 %; 8 zonas superan los 30 días en 2026) y comparación con los Lagos.
 
 ## Actualizar los datos
 

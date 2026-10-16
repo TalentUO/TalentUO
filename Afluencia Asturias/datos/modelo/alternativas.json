@@ -1,7 +1,7 @@
 {
  "sintetico": false,
  "aviso": null,
- "generado": "2026-10-16 09:26",
+ "generado": "2026-10-16 09:41",
  "objetivo": "llegadas_ocio",
  "umbrales": {
   "ambar": 1.5,
@@ -16,7 +16,7 @@
   {
    "fecha": "2026-11-02",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "futuro_largo",
    "modelo": "largo",
    "horizonte": 17,
@@ -41,7 +41,7 @@
   {
    "fecha": "2026-11-02",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "futuro_largo",
    "modelo": "largo",
    "horizonte": 17,
@@ -116,7 +116,7 @@
   {
    "fecha": "2026-11-02",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "futuro_largo",
    "modelo": "largo",
    "horizonte": 17,
@@ -141,7 +141,7 @@
   {
    "fecha": "2024-08-01",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -166,7 +166,7 @@
   {
    "fecha": "2024-08-02",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -191,7 +191,7 @@
   {
    "fecha": "2024-08-03",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -210,7 +210,7 @@
   {
    "fecha": "2024-08-04",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -235,7 +235,7 @@
   {
    "fecha": "2024-08-05",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -260,7 +260,7 @@
   {
    "fecha": "2024-08-06",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -285,7 +285,7 @@
   {
    "fecha": "2024-08-07",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -310,7 +310,7 @@
   {
    "fecha": "2024-08-08",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -335,7 +335,7 @@
   {
    "fecha": "2024-08-09",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -360,7 +360,7 @@
   {
    "fecha": "2024-08-10",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -379,7 +379,7 @@
   {
    "fecha": "2024-08-11",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -404,7 +404,7 @@
   {
    "fecha": "2024-08-12",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -429,7 +429,7 @@
   {
    "fecha": "2024-08-13",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -454,7 +454,7 @@
   {
    "fecha": "2024-08-14",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -479,7 +479,7 @@
   {
    "fecha": "2024-08-15",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -504,7 +504,7 @@
   {
    "fecha": "2024-08-16",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -529,7 +529,7 @@
   {
    "fecha": "2024-08-17",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -548,7 +548,7 @@
   {
    "fecha": "2024-08-18",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -573,7 +573,7 @@
   {
    "fecha": "2024-08-19",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -598,7 +598,7 @@
   {
    "fecha": "2024-08-20",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -623,7 +623,7 @@
   {
    "fecha": "2024-08-21",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -648,7 +648,7 @@
   {
    "fecha": "2024-08-22",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -673,7 +673,7 @@
   {
    "fecha": "2024-08-23",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -698,7 +698,7 @@
   {
    "fecha": "2024-08-26",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -713,7 +713,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33001_AM",
-    "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+    "nombre_zona": "Allande y 3 más",
     "distancia_km": 28.4,
     "cociente": 1.0318,
     "color": "verde"
@@ -723,7 +723,7 @@
   {
    "fecha": "2024-08-27",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -738,7 +738,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33001_AM",
-    "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+    "nombre_zona": "Allande y 3 más",
     "distancia_km": 28.4,
     "cociente": 1.0004,
     "color": "verde"
@@ -748,7 +748,7 @@
   {
    "fecha": "2024-08-28",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -773,7 +773,7 @@
   {
    "fecha": "2024-08-30",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -798,7 +798,7 @@
   {
    "fecha": "2024-08-01",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -823,7 +823,7 @@
   {
    "fecha": "2024-08-02",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -842,7 +842,7 @@
   {
    "fecha": "2024-08-03",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -867,7 +867,7 @@
   {
    "fecha": "2024-08-04",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -892,7 +892,7 @@
   {
    "fecha": "2024-08-05",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -917,7 +917,7 @@
   {
    "fecha": "2024-08-06",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -942,7 +942,7 @@
   {
    "fecha": "2024-08-07",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -967,7 +967,7 @@
   {
    "fecha": "2024-08-08",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -992,7 +992,7 @@
   {
    "fecha": "2024-08-09",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1017,7 +1017,7 @@
   {
    "fecha": "2024-08-10",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1042,7 +1042,7 @@
   {
    "fecha": "2024-08-11",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1061,7 +1061,7 @@
   {
    "fecha": "2024-08-12",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1086,7 +1086,7 @@
   {
    "fecha": "2024-08-13",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1111,7 +1111,7 @@
   {
    "fecha": "2024-08-14",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1136,7 +1136,7 @@
   {
    "fecha": "2024-08-15",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1161,7 +1161,7 @@
   {
    "fecha": "2024-08-16",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1186,7 +1186,7 @@
   {
    "fecha": "2024-08-17",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1211,7 +1211,7 @@
   {
    "fecha": "2024-08-18",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1230,7 +1230,7 @@
   {
    "fecha": "2024-08-19",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1255,7 +1255,7 @@
   {
    "fecha": "2024-08-20",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1280,7 +1280,7 @@
   {
    "fecha": "2024-08-21",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1305,7 +1305,7 @@
   {
    "fecha": "2024-08-22",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1330,7 +1330,7 @@
   {
    "fecha": "2024-08-23",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1355,7 +1355,7 @@
   {
    "fecha": "2024-08-24",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1380,7 +1380,7 @@
   {
    "fecha": "2024-08-25",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1399,7 +1399,7 @@
   {
    "fecha": "2024-08-26",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1424,7 +1424,7 @@
   {
    "fecha": "2024-08-27",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1439,7 +1439,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33006_AM",
-    "nombre_zona": "Bimenes, Cabranes y Sariego",
+    "nombre_zona": "Cabranes y 2 más",
     "distancia_km": 59.9,
     "cociente": 1.0834,
     "color": "verde"
@@ -1449,7 +1449,7 @@
   {
    "fecha": "2024-08-28",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1474,7 +1474,7 @@
   {
    "fecha": "2024-08-29",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1489,7 +1489,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33006_AM",
-    "nombre_zona": "Bimenes, Cabranes y Sariego",
+    "nombre_zona": "Cabranes y 2 más",
     "distancia_km": 59.9,
     "cociente": 1.0734,
     "color": "verde"
@@ -1499,7 +1499,7 @@
   {
    "fecha": "2024-08-30",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -1518,7 +1518,7 @@
   {
    "fecha": "2024-08-31",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2288,7 +2288,7 @@
   {
    "fecha": "2024-08-01",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2313,7 +2313,7 @@
   {
    "fecha": "2024-08-02",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2338,7 +2338,7 @@
   {
    "fecha": "2024-08-03",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2363,7 +2363,7 @@
   {
    "fecha": "2024-08-04",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2388,7 +2388,7 @@
   {
    "fecha": "2024-08-05",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2407,7 +2407,7 @@
   {
    "fecha": "2024-08-06",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2432,7 +2432,7 @@
   {
    "fecha": "2024-08-07",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2457,7 +2457,7 @@
   {
    "fecha": "2024-08-08",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2482,7 +2482,7 @@
   {
    "fecha": "2024-08-09",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2507,7 +2507,7 @@
   {
    "fecha": "2024-08-10",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2526,7 +2526,7 @@
   {
    "fecha": "2024-08-11",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2551,7 +2551,7 @@
   {
    "fecha": "2024-08-12",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2576,7 +2576,7 @@
   {
    "fecha": "2024-08-13",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2601,7 +2601,7 @@
   {
    "fecha": "2024-08-14",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2626,7 +2626,7 @@
   {
    "fecha": "2024-08-15",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2651,7 +2651,7 @@
   {
    "fecha": "2024-08-16",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2676,7 +2676,7 @@
   {
    "fecha": "2024-08-17",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2695,7 +2695,7 @@
   {
    "fecha": "2024-08-18",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2720,7 +2720,7 @@
   {
    "fecha": "2024-08-19",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2745,7 +2745,7 @@
   {
    "fecha": "2024-08-20",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2770,7 +2770,7 @@
   {
    "fecha": "2024-08-21",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2795,7 +2795,7 @@
   {
    "fecha": "2024-08-22",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2820,7 +2820,7 @@
   {
    "fecha": "2024-08-23",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2845,7 +2845,7 @@
   {
    "fecha": "2024-08-25",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2870,7 +2870,7 @@
   {
    "fecha": "2024-08-27",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -2895,7 +2895,7 @@
   {
    "fecha": "2024-08-28",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -3536,7 +3536,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33001_AM",
-    "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+    "nombre_zona": "Allande y 3 más",
     "distancia_km": 43.5,
     "cociente": 1.0318,
     "color": "verde"
@@ -3561,7 +3561,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33001_AM",
-    "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+    "nombre_zona": "Allande y 3 más",
     "distancia_km": 43.5,
     "cociente": 1.0004,
     "color": "verde"
@@ -3611,7 +3611,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33001_AM",
-    "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+    "nombre_zona": "Allande y 3 más",
     "distancia_km": 43.5,
     "cociente": 0.9898,
     "color": "verde"
@@ -7154,7 +7154,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33006_AM",
-    "nombre_zona": "Bimenes, Cabranes y Sariego",
+    "nombre_zona": "Cabranes y 2 más",
     "distancia_km": 54.3,
     "cociente": 1.0834,
     "color": "verde"
@@ -7204,7 +7204,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33006_AM",
-    "nombre_zona": "Bimenes, Cabranes y Sariego",
+    "nombre_zona": "Cabranes y 2 más",
     "distancia_km": 54.3,
     "cociente": 1.0734,
     "color": "verde"
@@ -9871,7 +9871,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33001_AM",
-    "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+    "nombre_zona": "Allande y 3 más",
     "distancia_km": 47.6,
     "cociente": 1.0318,
     "color": "verde"
@@ -9896,7 +9896,7 @@
    },
    "zona_alternativa": {
     "zona_mitma_id": "33001_AM",
-    "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+    "nombre_zona": "Allande y 3 más",
     "distancia_km": 47.6,
     "cociente": 1.0004,
     "color": "verde"
@@ -9940,7 +9940,7 @@
    "mejor_dia": null,
    "zona_alternativa": {
     "zona_mitma_id": "33001_AM",
-    "nombre_zona": "Allande, Degaña, Grandas de Salime y Ibias",
+    "nombre_zona": "Allande y 3 más",
     "distancia_km": 47.6,
     "cociente": 0.9898,
     "color": "verde"
@@ -10000,7 +10000,7 @@
   {
    "fecha": "2024-08-06",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10025,7 +10025,7 @@
   {
    "fecha": "2024-08-07",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10050,7 +10050,7 @@
   {
    "fecha": "2024-08-08",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10075,7 +10075,7 @@
   {
    "fecha": "2024-08-09",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10100,7 +10100,7 @@
   {
    "fecha": "2024-08-10",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10125,7 +10125,7 @@
   {
    "fecha": "2024-08-12",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10150,7 +10150,7 @@
   {
    "fecha": "2024-08-13",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10175,7 +10175,7 @@
   {
    "fecha": "2024-08-14",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10200,7 +10200,7 @@
   {
    "fecha": "2024-08-15",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10225,7 +10225,7 @@
   {
    "fecha": "2024-08-16",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10250,7 +10250,7 @@
   {
    "fecha": "2024-08-19",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10275,7 +10275,7 @@
   {
    "fecha": "2024-08-20",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10300,7 +10300,7 @@
   {
    "fecha": "2024-08-21",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10325,7 +10325,7 @@
   {
    "fecha": "2024-08-22",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10350,7 +10350,7 @@
   {
    "fecha": "2024-08-23",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "corto",
    "horizonte": 1,
@@ -10951,7 +10951,7 @@
   {
    "fecha": "2024-08-01",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -10976,7 +10976,7 @@
   {
    "fecha": "2024-08-02",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11001,7 +11001,7 @@
   {
    "fecha": "2024-08-03",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11020,7 +11020,7 @@
   {
    "fecha": "2024-08-04",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11045,7 +11045,7 @@
   {
    "fecha": "2024-08-05",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11070,7 +11070,7 @@
   {
    "fecha": "2024-08-06",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11095,7 +11095,7 @@
   {
    "fecha": "2024-08-07",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11120,7 +11120,7 @@
   {
    "fecha": "2024-08-08",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11145,7 +11145,7 @@
   {
    "fecha": "2024-08-09",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11170,7 +11170,7 @@
   {
    "fecha": "2024-08-10",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11189,7 +11189,7 @@
   {
    "fecha": "2024-08-11",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11214,7 +11214,7 @@
   {
    "fecha": "2024-08-12",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11239,7 +11239,7 @@
   {
    "fecha": "2024-08-13",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11264,7 +11264,7 @@
   {
    "fecha": "2024-08-14",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11289,7 +11289,7 @@
   {
    "fecha": "2024-08-15",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11314,7 +11314,7 @@
   {
    "fecha": "2024-08-16",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11339,7 +11339,7 @@
   {
    "fecha": "2024-08-17",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11358,7 +11358,7 @@
   {
    "fecha": "2024-08-18",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11383,7 +11383,7 @@
   {
    "fecha": "2024-08-19",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11408,7 +11408,7 @@
   {
    "fecha": "2024-08-20",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11433,7 +11433,7 @@
   {
    "fecha": "2024-08-21",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11458,7 +11458,7 @@
   {
    "fecha": "2024-08-22",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11483,7 +11483,7 @@
   {
    "fecha": "2024-08-23",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11508,7 +11508,7 @@
   {
    "fecha": "2024-08-25",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11533,7 +11533,7 @@
   {
    "fecha": "2024-08-26",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11558,7 +11558,7 @@
   {
    "fecha": "2024-08-27",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11583,7 +11583,7 @@
   {
    "fecha": "2024-08-28",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11608,7 +11608,7 @@
   {
    "fecha": "2024-08-29",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11633,7 +11633,7 @@
   {
    "fecha": "2024-08-30",
    "zona_mitma_id": "33007_AM",
-   "nombre_zona": "Boal, Illano, Pesoz, San Martín de Oscos y Villayón",
+   "nombre_zona": "Villayón y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11658,7 +11658,7 @@
   {
    "fecha": "2024-08-01",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11683,7 +11683,7 @@
   {
    "fecha": "2024-08-02",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11702,7 +11702,7 @@
   {
    "fecha": "2024-08-03",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11727,7 +11727,7 @@
   {
    "fecha": "2024-08-04",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11752,7 +11752,7 @@
   {
    "fecha": "2024-08-05",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11777,7 +11777,7 @@
   {
    "fecha": "2024-08-06",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11802,7 +11802,7 @@
   {
    "fecha": "2024-08-07",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11827,7 +11827,7 @@
   {
    "fecha": "2024-08-08",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11852,7 +11852,7 @@
   {
    "fecha": "2024-08-09",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11877,7 +11877,7 @@
   {
    "fecha": "2024-08-10",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11896,7 +11896,7 @@
   {
    "fecha": "2024-08-11",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11921,7 +11921,7 @@
   {
    "fecha": "2024-08-12",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11946,7 +11946,7 @@
   {
    "fecha": "2024-08-13",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11971,7 +11971,7 @@
   {
    "fecha": "2024-08-14",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -11996,7 +11996,7 @@
   {
    "fecha": "2024-08-15",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12021,7 +12021,7 @@
   {
    "fecha": "2024-08-16",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12046,7 +12046,7 @@
   {
    "fecha": "2024-08-17",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12071,7 +12071,7 @@
   {
    "fecha": "2024-08-18",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12090,7 +12090,7 @@
   {
    "fecha": "2024-08-19",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12115,7 +12115,7 @@
   {
    "fecha": "2024-08-20",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12140,7 +12140,7 @@
   {
    "fecha": "2024-08-21",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12165,7 +12165,7 @@
   {
    "fecha": "2024-08-22",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12190,7 +12190,7 @@
   {
    "fecha": "2024-08-23",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12215,7 +12215,7 @@
   {
    "fecha": "2024-08-24",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12240,7 +12240,7 @@
   {
    "fecha": "2024-08-25",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12259,7 +12259,7 @@
   {
    "fecha": "2024-08-26",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12284,7 +12284,7 @@
   {
    "fecha": "2024-08-27",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12309,7 +12309,7 @@
   {
    "fecha": "2024-08-28",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12334,7 +12334,7 @@
   {
    "fecha": "2024-08-29",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12359,7 +12359,7 @@
   {
    "fecha": "2024-08-30",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -12384,7 +12384,7 @@
   {
    "fecha": "2024-08-31",
    "zona_mitma_id": "33008_AM",
-   "nombre_zona": "Cabrales, Onís, Peñamellera Alta, Peñamellera Baja y Ribadedeva",
+   "nombre_zona": "Cabrales y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13148,7 +13148,7 @@
   {
    "fecha": "2024-08-01",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13173,7 +13173,7 @@
   {
    "fecha": "2024-08-02",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13198,7 +13198,7 @@
   {
    "fecha": "2024-08-03",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13217,7 +13217,7 @@
   {
    "fecha": "2024-08-04",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13242,7 +13242,7 @@
   {
    "fecha": "2024-08-05",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13267,7 +13267,7 @@
   {
    "fecha": "2024-08-06",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13292,7 +13292,7 @@
   {
    "fecha": "2024-08-07",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13317,7 +13317,7 @@
   {
    "fecha": "2024-08-08",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13342,7 +13342,7 @@
   {
    "fecha": "2024-08-09",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13367,7 +13367,7 @@
   {
    "fecha": "2024-08-10",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13386,7 +13386,7 @@
   {
    "fecha": "2024-08-11",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13411,7 +13411,7 @@
   {
    "fecha": "2024-08-12",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13436,7 +13436,7 @@
   {
    "fecha": "2024-08-13",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13461,7 +13461,7 @@
   {
    "fecha": "2024-08-14",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13486,7 +13486,7 @@
   {
    "fecha": "2024-08-15",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13511,7 +13511,7 @@
   {
    "fecha": "2024-08-16",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13536,7 +13536,7 @@
   {
    "fecha": "2024-08-17",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13561,7 +13561,7 @@
   {
    "fecha": "2024-08-18",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13580,7 +13580,7 @@
   {
    "fecha": "2024-08-19",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13605,7 +13605,7 @@
   {
    "fecha": "2024-08-20",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13630,7 +13630,7 @@
   {
    "fecha": "2024-08-21",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13655,7 +13655,7 @@
   {
    "fecha": "2024-08-22",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13680,7 +13680,7 @@
   {
    "fecha": "2024-08-23",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13705,7 +13705,7 @@
   {
    "fecha": "2024-08-25",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13730,7 +13730,7 @@
   {
    "fecha": "2024-08-26",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13755,7 +13755,7 @@
   {
    "fecha": "2024-08-27",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13780,7 +13780,7 @@
   {
    "fecha": "2024-08-28",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13805,7 +13805,7 @@
   {
    "fecha": "2024-08-29",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13830,7 +13830,7 @@
   {
    "fecha": "2024-08-30",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -13855,7 +13855,7 @@
   {
    "fecha": "2024-12-06",
    "zona_mitma_id": "33015_AM",
-   "nombre_zona": "Amieva, Caso, Ponga y Sobrescobio",
+   "nombre_zona": "Caso y 3 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -20270,7 +20270,7 @@
   {
    "fecha": "2024-08-07",
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -20295,7 +20295,7 @@
   {
    "fecha": "2024-08-12",
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -20320,7 +20320,7 @@
   {
    "fecha": "2024-08-14",
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -20345,7 +20345,7 @@
   {
    "fecha": "2024-08-15",
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -20370,7 +20370,7 @@
   {
    "fecha": "2024-08-19",
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -20395,7 +20395,7 @@
   {
    "fecha": "2024-08-21",
    "zona_mitma_id": "33057_AM",
-   "nombre_zona": "Ribera de Arriba, Riosa y Santo Adriano",
+   "nombre_zona": "Riosa y 2 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -21953,7 +21953,7 @@
   {
    "fecha": "2024-08-01",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -21978,7 +21978,7 @@
   {
    "fecha": "2024-08-05",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22003,7 +22003,7 @@
   {
    "fecha": "2024-08-06",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22028,7 +22028,7 @@
   {
    "fecha": "2024-08-07",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22053,7 +22053,7 @@
   {
    "fecha": "2024-08-08",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22078,7 +22078,7 @@
   {
    "fecha": "2024-08-09",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22103,7 +22103,7 @@
   {
    "fecha": "2024-08-12",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22128,7 +22128,7 @@
   {
    "fecha": "2024-08-13",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22153,7 +22153,7 @@
   {
    "fecha": "2024-08-14",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22178,7 +22178,7 @@
   {
    "fecha": "2024-08-15",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22203,7 +22203,7 @@
   {
    "fecha": "2024-08-16",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22228,7 +22228,7 @@
   {
    "fecha": "2024-08-17",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22253,7 +22253,7 @@
   {
    "fecha": "2024-08-18",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22272,7 +22272,7 @@
   {
    "fecha": "2024-08-19",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22297,7 +22297,7 @@
   {
    "fecha": "2024-08-20",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22322,7 +22322,7 @@
   {
    "fecha": "2024-08-21",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22347,7 +22347,7 @@
   {
    "fecha": "2024-08-22",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22372,7 +22372,7 @@
   {
    "fecha": "2024-08-23",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22397,7 +22397,7 @@
   {
    "fecha": "2024-08-26",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22422,7 +22422,7 @@
   {
    "fecha": "2024-08-27",
    "zona_mitma_id": "33072_AM",
-   "nombre_zona": "Belmonte de Miranda, Proaza, Quirós, Somiedo, Teverga y Yernes y Tameza",
+   "nombre_zona": "Somiedo y 5 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22447,7 +22447,7 @@
   {
    "fecha": "2024-08-07",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22472,7 +22472,7 @@
   {
    "fecha": "2024-08-08",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22497,7 +22497,7 @@
   {
    "fecha": "2024-08-09",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22522,7 +22522,7 @@
   {
    "fecha": "2024-08-12",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22547,7 +22547,7 @@
   {
    "fecha": "2024-08-13",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22572,7 +22572,7 @@
   {
    "fecha": "2024-08-14",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22597,7 +22597,7 @@
   {
    "fecha": "2024-08-15",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22622,7 +22622,7 @@
   {
    "fecha": "2024-08-16",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22647,7 +22647,7 @@
   {
    "fecha": "2024-08-17",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22672,7 +22672,7 @@
   {
    "fecha": "2024-08-18",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22697,7 +22697,7 @@
   {
    "fecha": "2024-08-19",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22722,7 +22722,7 @@
   {
    "fecha": "2024-08-20",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22747,7 +22747,7 @@
   {
    "fecha": "2024-08-21",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22772,7 +22772,7 @@
   {
    "fecha": "2024-08-22",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
@@ -22797,7 +22797,7 @@
   {
    "fecha": "2024-08-23",
    "zona_mitma_id": "33074_AM",
-   "nombre_zona": "Santa Eulalia de Oscos, San Tirso de Abres, Taramundi, Vegadeo y Villanueva de Oscos",
+   "nombre_zona": "Vegadeo y 4 más",
    "conjunto": "historico",
    "modelo": "largo",
    "horizonte": 8,
