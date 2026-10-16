@@ -2,6 +2,12 @@
 
 La web vive en `Afluencia Asturias/`: HTML, CSS y JavaScript sin compilación ni dependencias externas obligatorias. El mapa, las librerías y los datos van dentro del repositorio, así que **funciona sin internet**. Solo las tipografías se piden a Google Fonts; sin conexión se usan las de reserva.
 
+## Estado de los datos
+
+- **Datos reales** (`sintetico: false`): modelo LightGBM entrenado con el MITMA (2022-01-01 → 2025-06-30). Salidas generadas el **2026-10-16 01:36**, con `fecha_hoy` 2026-10-16 y la previsión de Open-Meteo emitida ese día.
+- Predicciones del 2026-10-17 al 2026-12-15 (60 días; con el tiempo a 1-3 días), 5 zonas del mapeo real (`config/mapeo_zonas.csv`).
+- Comprobación de cada pestaña y cotejo con `notas/resultados_reales.md`: `notas/integracion_web.md`. Capturas del recorrido de la demo (plan B): `notas/capturas_demo/`.
+
 ## Arrancar (una orden)
 
 ```bash
@@ -13,16 +19,18 @@ Solo necesita Python 3 (biblioteca estándar). También se puede abrir `Afluenci
 
 ## Modo demo (`?demo=1`)
 
-Abre el **puente de diciembre de 2024**: el día del puente con más presión en la zona principal (Picos de Europa: Cangas de Onís, Covadonga y Lagos), con su panel abierto. Son predicciones fuera de muestra de la validación (conjunto `historico`, modelo de largo plazo con 8 días de antelación), con el valor observado al lado («Lo que pasó de verdad»).
+Abre **agosto de 2024**, en el día del puente con más presión en la zona principal (Picos de Europa: Cangas de Onís, Covadonga y Lagos), con su panel abierto: **jueves 15 de agosto de 2024 (Asunción), Saturación, +200 %** sobre un día normal (observado: +290 %). Son predicciones fuera de muestra de la validación (conjunto `historico`, modelo de largo plazo con 8 días de antelación), con el valor observado al lado («Lo que pasó de verdad»). El mes se fija en `DEMO_MES` (`datos/fuente-modelo.js`).
+
+Con los datos reales, el puente de diciembre de 2024 (la demo anterior) sale en verde en los Picos (observado: ámbar), así que se cambió a agosto.
 
 Recorrido de la presentación:
 
 1. **Mapa**: los Picos en rojo, con icono, trama y porcentaje sobre un día normal.
 2. **¿Por qué?**: los 3 factores que más pesan, con su efecto en %.
-3. **Alternativa**: el mejor día a ±3 días y la zona cercana con menos presión (de `alternativas.json`).
-4. **Gestión** (pestaña de la persona 2).
+3. **Alternativa**: la zona cercana con menos presión (Oviedo, −25 %; de `alternativas.json`). El mejor día a ±3 días (sábado 17) también está en saturación.
+4. **Gestión**: días por encima del umbral (Picos: 39 en 2023 y 48 en 2024 con +100 %) y comparación con los Lagos.
 
-## Actualizar los datos (mañana, con datos reales)
+## Actualizar los datos
 
 ```bash
 python -X utf8 src/modelo/ejecutar.py --objetivo real --algoritmo ambos   # el modelo regenera salidas/
@@ -34,10 +42,17 @@ Después basta con recargar la página. El script:
 - valida `salidas/` con el validador del modelo y no copia nada si algo falla;
 - copia los cinco JSON a `Afluencia Asturias/datos/modelo/`;
 - elige `config/mapeo_zonas.csv` si cubre las zonas de las predicciones (si no, el de ejemplo);
-- exporta el calendario oficial (puentes y festivos);
+- exporta el calendario oficial (puentes y festivos) y las llegadas por hora (`data/clean/llegadas_por_hora.parquet`, para el patrón horario de Gestión);
 - genera `salidas.js` (todo) y `salidas-inicio.js` (lo que usa Inicio, para que la página cargue antes).
 
-Mientras los datos sean sintéticos, la web muestra arriba y en todas las pestañas el aviso **«DATOS SINTÉTICOS – solo para pruebas»**. Con datos reales (`sintetico: false`) el aviso desaparece solo.
+Si los datos fueran sintéticos, la web mostraría arriba y en todas las pestañas el aviso **«DATOS SINTÉTICOS – solo para pruebas»**. Con los datos reales actuales (`sintetico: false`) no sale.
+
+Para traer unas salidas nuevas de la rama del modelo sin su código:
+
+```bash
+git checkout origin/resultados-reales -- salidas/predicciones.json salidas/alternativas.json salidas/regulacion.json salidas/perfil.json salidas/metricas.json config/mapeo_zonas.csv data/clean/llegadas_por_hora.parquet
+python -X utf8 scripts/actualizar_datos_web.py
+```
 
 ## Estructura
 
@@ -57,4 +72,4 @@ Contrato de las salidas: `notas/contrato_web.md`. Coordinación entre las dos pe
 node --check "Afluencia Asturias/interfaz/app.js" "Afluencia Asturias/interfaz/mapa.js" "Afluencia Asturias/datos/"*.js
 ```
 
-Revisado a 1366×768 y 1920×1080, sin errores en la consola, en modo normal y en modo demo.
+Revisado con datos reales el 2026-10-16 a 1366×768 y 1920×1080, sin internet y sin errores en la consola, en modo normal y en modo demo.
