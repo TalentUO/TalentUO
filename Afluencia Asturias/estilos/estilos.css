@@ -199,7 +199,7 @@ button.cal-dia:hover { background: var(--superficie-2); }
 .cal-pie { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; }
 
 /* ---------- Filtros ---------- */
-.filtros { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem 1.5rem; margin-block: 1rem; }
+.filtros { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem 1.5rem; margin-block: 1rem; position: relative; z-index: 1100; } /* por encima del mapa (Leaflet llega a 1000): la lista del buscador no queda debajo */
 .buscador { flex: 1 1 18rem; min-width: 0; max-width: 30rem; }
 .filtros-btn { display: none; }
 .filtros-mas { display: contents; }
@@ -326,6 +326,9 @@ button.cal-dia:hover { background: var(--superficie-2); }
   background: var(--superficie); color: var(--tinta); border: 1px solid var(--linea-fuerte); border-radius: 10px; box-shadow: var(--sombra);
 }
 .leaflet-tooltip-top.tip-mapa::before { border-top-color: var(--linea-fuerte); }
+.leaflet-tooltip-bottom.tip-mapa::before { border-bottom-color: var(--linea-fuerte); }
+.leaflet-tooltip-left.tip-mapa::before { border-left-color: var(--linea-fuerte); }
+.leaflet-tooltip-right.tip-mapa::before { border-right-color: var(--linea-fuerte); }
 .tip-in { display: flex; flex-direction: column; align-items: flex-start; gap: .3rem; }
 .tip-nombre { font-family: var(--f-titulo); font-size: 1.02rem; }
 .tip-sub { font-size: .82rem; color: var(--tinta-2); margin-top: -.2rem; }

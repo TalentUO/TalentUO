@@ -193,11 +193,30 @@ window.MapaAsturias = (function () {
 
     /* ---------- Polígonos ---------- */
     const capas = { zona: {}, concejo: {} };
+    // El recuadro del ratón se coloca donde quepa dentro del mapa (el mapa recorta lo que sale de sus bordes):
+    // encima del cursor; debajo si no cabe arriba; a un lado cerca de los bordes izquierdo y derecho.
+    const DESPLAZA = { top: [0, -14], bottom: [0, 14], right: [14, 0], left: [-14, 0] };
+    function colocarRecuadro(capa, e) {
+      const t = capa.getTooltip(), el = t && t.getElement();
+      if (!t || !el) return;
+      const p = e.containerPoint, tam = map.getSize(), w = el.offsetWidth, h = el.offsetHeight, m = 8;
+      let dir = p.y - h - 20 < m ? 'bottom' : 'top';
+      if (p.x - w / 2 < m) dir = 'right';
+      else if (p.x + w / 2 > tam.x - m) dir = 'left';
+      if (t.options.direction !== dir) {
+        t.options.direction = dir;
+        t.options.offset = DESPLAZA[dir];
+        t.setLatLng(e.latlng);
+      }
+    }
     function preparar(tipo) {
       return {
         style: f => ({ className: 'area area-' + tipo + (f.properties.sinZona ? ' sin-zona' : ' nivel-gris'), weight: tipo === 'zona' ? 2 : 1 }),
         onEachFeature: (f, capa) => {
           capas[tipo][f.properties.id] = capa;
+          capa.on('mousemove', e => colocarRecuadro(capa, e));
+          capa.on('tooltipopen', () => { const e = capa._ultimoRaton; if (e) colocarRecuadro(capa, e); });
+          capa.on('mouseover mousemove', e => { capa._ultimoRaton = e; });
           if (f.properties.sinZona) {
             // Fuera de las zonas del modelo: solo un recuadro informativo, sin elegirlo
             capa.bindTooltip(() => op.tooltip(tipo, f.properties.id), { sticky: true, direction: 'top', offset: [0, -14], opacity: 1, className: 'tip-mapa' });
