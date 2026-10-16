@@ -153,6 +153,18 @@ def leer_agenda(mapeo: list[dict]) -> dict | None:
             "eventos": out}
 
 
+def leer_comarcas() -> dict | None:
+    """Comarcas de Asturias (config/comarcas_asturias.csv; las líneas con # son la fuente)."""
+    ruta = CONFIG / "comarcas_asturias.csv"
+    if not ruta.exists():
+        print("AVISO: sin config/comarcas_asturias.csv; los filtros por comarca no estarán")
+        return None
+    with ruta.open(encoding="utf-8", newline="") as f:
+        lineas = [l for l in f if not l.startswith("#")]
+    filas = [{k: (v or "").strip() for k, v in r.items()} for r in csv.DictReader(lineas)]
+    return {"origen": "config/comarcas_asturias.csv (Decreto 11/1991, de 24 de enero)", "concejos": filas}
+
+
 def leer_horas() -> dict | None:
     """Llegadas de ocio por hora (zona × mes × tipo de día), para el patrón horario de Gestión."""
     ruta = RAIZ / "data" / "clean" / "llegadas_por_hora.parquet"
@@ -205,6 +217,10 @@ def main() -> None:
     if calendario:
         paquete["calendario"] = calendario
         (DESTINO / "calendario.json").write_text(json.dumps(calendario, ensure_ascii=False), encoding="utf-8")
+    comarcas = leer_comarcas()
+    if comarcas:
+        paquete["comarcas"] = comarcas
+        (DESTINO / "comarcas.json").write_text(json.dumps(comarcas, ensure_ascii=False), encoding="utf-8")
     agenda = leer_agenda(mapeo)
     if agenda:
         paquete["agenda"] = agenda

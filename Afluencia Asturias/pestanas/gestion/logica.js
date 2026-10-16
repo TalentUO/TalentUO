@@ -273,6 +273,67 @@
     return aCSV([cab].concat(cuerpo));
   }
 
+  /* ---------- Previsión del año siguiente (futuro_corto si existe; si no, futuro_largo) ---------- */
+
+  /** Una predicción por fecha y zona desde el día siguiente a fecha_hoy, ordenadas por fecha. */
+  function prevision(datos) {
+    const rango = { futuro_corto: 2, futuro_largo: 1 };
+    const m = new Map();
+    datos.predicciones.predicciones.forEach(p => {
+      const r = rango[p.conjunto];
+      if (!r) return;
+      const k = p.fecha + '|' + p.zona_mitma_id, prev = m.get(k);
+      if (!prev || r > prev.r || (r === prev.r && p.horizonte < prev.p.horizonte)) m.set(k, { p, r });
+    });
+    return Array.from(m.values(), x => x.p).sort((a, b) => a.fecha.localeCompare(b.fecha) || a.zona_mitma_id.localeCompare(b.zona_mitma_id));
+  }
+
+  /**
+   * Días previstos por encima de `umbral` (veces el día normal) en las zonas `ids`.
+   * Por zona: los días (cociente >= umbral) y el intervalo probable: mínimo = días con p10 por encima,
+   * máximo = días con p90 por encima (p10 y p90 sobre el mismo día normal).
+   */
+  function saturacionPrevista(prev, ids, umbral) {
+    const set = new Set(ids), por = {};
+    ids.forEach(id => { por[id] = { zona_mitma_id: id, dias: [], min: 0, max: 0, n: 0 }; });
+    prev.forEach(p => {
+      if (!set.has(p.zona_mitma_id) || p.cociente == null) return;
+      const z = por[p.zona_mitma_id];
+      z.n++;
+      if (p.cociente >= umbral - EPS) z.dias.push(p);
+      if (p.normal > 0 && p.p10 != null && p.p10 / p.normal >= umbral - EPS) z.min++;
+      if (p.normal > 0 && p.p90 != null && p.p90 / p.normal >= umbral - EPS) z.max++;
+    });
+    return ids.map(id => por[id]);
+  }
+
+  /* ---------- Concejos y comarcas ---------- */
+
+  /** Concejos con su zona del modelo y su comarca: [{ ine, nombre, comarca, zona_mitma_id }]. */
+  function concejos(datos) {
+    const zonaDe = {};
+    datos.mapeo.zonas.forEach(z => z.concejos_ine.forEach(c => { zonaDe[c] = z.zona_mitma_id; }));
+    return ((datos.comarcas && datos.comarcas.concejos) || [])
+      .map(c => ({ ine: c.concejo_ine, nombre: c.concejo, comarca: c.comarca, zona_mitma_id: zonaDe[c.concejo_ine] || null }))
+      .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+  }
+  const comarcas = datos => Array.from(new Set(concejos(datos).map(c => c.comarca))).sort((a, b) => a.localeCompare(b, 'es'));
+
+  /** CSV de los días previstos por encima del umbral (salida de saturacionPrevista). */
+  function csvSaturacion(datos, filas, umbral, sintetico) {
+    const cab = ['fecha', 'zona', 'umbral_veces_dia_normal', 'veces_dia_normal', 'visitantes_previstos', 'dia_normal', 'minimo_p10', 'maximo_p90', 'color'];
+    if (sintetico) cab.push('aviso');
+    const cuerpo = [];
+    filas.forEach(z => z.dias.forEach(p => {
+      const r = [p.fecha, nombreZona(datos, z.zona_mitma_id), umbral, p.cociente, p.prediccion, p.normal, p.p10, p.p90, NOMBRE_COLOR[p.color] || p.color];
+      if (sintetico) r.push(AVISO_CSV);
+      cuerpo.push(r);
+    }));
+    cuerpo.sort((a, b) => a[0].localeCompare(b[0]) || String(a[1]).localeCompare(String(b[1]), 'es'));
+    return aCSV([cab].concat(cuerpo));
+  }
+
   return { zonas, zonaPrincipal, nombreZona, umbralesDisponibles, aniosDisponibles, diasSobreUmbral, veredicto, tablaRegulacion,
-    compararLagos, accionPara, alertasProximas, fiabilidad, aCSV, csvPrevision, csvRegulacion, sumarDias };
+    compararLagos, accionPara, alertasProximas, fiabilidad, aCSV, csvPrevision, csvRegulacion, sumarDias,
+    prevision, saturacionPrevista, concejos, comarcas, csvSaturacion };
 });

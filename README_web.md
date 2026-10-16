@@ -32,7 +32,7 @@ Recorrido de la presentación:
 1. **Mapa**: los Picos en rojo, con icono, trama y porcentaje sobre un día normal.
 2. **¿Por qué?**: los 3 factores que más pesan, con su efecto en %.
 3. **Alternativa**: la zona cercana con menos presión (Mieres, −35 %, a 58 km; de `alternativas.json`). El mejor día a ±3 días (domingo 18) también está en saturación, con un 9 % menos de gente.
-4. **Gestión**: días por encima del umbral (Picos: 39 en 2023 y 48 en 2024 con +100 %; 8 zonas superan los 30 días en 2026) y comparación con los Lagos.
+4. **Funciones avanzadas** (antes «Gestión»): «Previsión de saturación» con el buscador de concejos y comarcas (p. ej. «Cangas de Onís» u «Oriente»: los días previstos por encima del umbral en los próximos 12 meses) y «Alertas» por comarca y concejo.
 
 ## Actualizar los datos
 
@@ -46,7 +46,7 @@ Después basta con recargar la página. El script:
 - valida `salidas/` con el validador del modelo y no copia nada si algo falla;
 - copia los cinco JSON a `Afluencia Asturias/datos/modelo/`;
 - elige `config/mapeo_zonas.csv` si cubre las zonas de las predicciones (si no, el de ejemplo);
-- exporta el calendario oficial (puentes y festivos) y las llegadas por hora (`data/clean/llegadas_por_hora.parquet`, para el patrón horario de Gestión);
+- exporta el calendario oficial (puentes y festivos) las llegadas por hora (`data/clean/llegadas_por_hora.parquet`, para el patrón horario), los festivos y partidos de la sección de eventos y las comarcas (`config/comarcas_asturias.csv`, Decreto 11/1991) de Funciones avanzadas;
 - genera `salidas.js` (todo) y `salidas-inicio.js` (lo que usa Inicio, para que la página cargue antes).
 
 Si los datos fueran sintéticos, la web mostraría arriba y en todas las pestañas el aviso **«DATOS SINTÉTICOS – solo para pruebas»**. Con los datos reales actuales (`sintetico: false`) no sale.
@@ -66,7 +66,7 @@ python -X utf8 scripts/actualizar_datos_web.py
 | `datos/datos.js` | Módulo «datos»: carga y valida las salidas del modelo (`window.DatosModelo`) | Persona 1 |
 | `datos/fuente-modelo.js` | Traduce las salidas al contrato de la interfaz (`window.Datos`) | Persona 1 |
 | `datos/modelo/` | Copia de las salidas (generada por el script; no editar) | Script |
-| `pestanas/gestion/`, `pestanas/sobre/` | Pestañas Gestión y Sobre los datos | Persona 2 |
+| `pestanas/gestion/`, `pestanas/sobre/` | Pestañas Funciones avanzadas (antes Gestión) y Sobre los datos | Persona 2 |
 
 Contrato de las salidas: `notas/contrato_web.md`. Coordinación entre las dos personas, fuente del mapa y huecos del contrato: `notas/coordinacion_web.md`.
 

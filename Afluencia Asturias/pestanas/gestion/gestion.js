@@ -1,5 +1,5 @@
 /* ==========================================================================
- * PESTAÑA «Gestión» — PROPIEDAD DE LA PERSONA 2 (rama web-gestion)
+ * PESTAÑA «Funciones avanzadas» (antes «Gestión») — PROPIEDAD DE LA PERSONA 2 (rama web-gestion)
  * --------------------------------------------------------------------------
  * interfaz/app.js llama a montar() la primera vez que se abre la pestaña, y a
  * mostrar() cada vez que se vuelve a ella.
@@ -34,7 +34,7 @@ window.Pestanas = window.Pestanas || {};
     montar(contenedor, datos, util) {
       return cargarScripts(SCRIPTS).then(() => pintar(contenedor, datos, util)).catch(err => {
         console.error(err);
-        contenedor.innerHTML = '<div class="tarjeta"><p><strong>No se ha podido montar la pestaña Gestión.</strong></p><p class="error-datos">' + util.esc(err.message) + '</p></div>';
+        contenedor.innerHTML = '<div class="tarjeta"><p><strong>No se ha podido montar la pestaña Funciones avanzadas.</strong></p><p class="error-datos">' + util.esc(err.message) + '</p></div>';
       });
     },
     mostrar() {},
@@ -46,47 +46,61 @@ window.Pestanas = window.Pestanas || {};
     const pc100 = x => (x == null ? '—' : Math.round(x * 100) + NBSP + '%');
     const zonas = L.zonas(datos);
     const principal = zonas[0];
-    const nombreZ = id => esc(L.nombreZona(datos, id));
     const umbrales = L.umbralesDisponibles(datos);
     const umb = datos.regulacion.umbrales || datos.predicciones.umbrales;
-    const aniosInfo = L.aniosDisponibles(datos);
-    const etiquetaAnio = a => a.anio + (a.tipo === 'previsto' ? ' (previsto)' : ' (observado)');
-    const estado = { umbralIdx: Math.max(0, umbrales.indexOf(umb.ambar)), anio: aniosInfo.filter(a => a.tipo === 'previsto')[0] || aniosInfo[0], filtro: 'rojo', csv: null, csvOrigen: null };
+    const estado = { umbralIdx: Math.max(0, umbrales.indexOf(umb.rojo)), sel: null, filtro: 'rojo', csv: null, csvOrigen: null,
+      al: { modo: 'comarcas', comarca: null, elegidos: new Set() } };
     const opcionesZona = zonas.map(z => `<option value="${esc(z.zona_mitma_id)}">${esc(z.nombre_zona)}</option>`).join('');
     const alertas = L.alertasProximas(datos);
     const mesHoy = +datos.predicciones.fecha_hoy.slice(5, 7);
+    const prev = L.prevision(datos);
+    const desdeP = prev.length ? prev[0].fecha : null, hastaP = prev.length ? prev[prev.length - 1].fecha : null;
+    const concejos = L.concejos(datos);
+    const comarcas = L.comarcas(datos);
+    estado.al.comarca = comarcas.indexOf('Oriente') !== -1 ? 'Oriente' : comarcas[0];
+    const concejoPorIne = {};
+    concejos.forEach(c => { concejoPorIne[c.ine] = c; });
+    const concejosDeZona = id => concejos.filter(c => c.zona_mitma_id === id);
+    const zonasDeComarca = nombre => Array.from(new Set(concejos.filter(c => c.comarca === nombre && c.zona_mitma_id).map(c => c.zona_mitma_id)));
+    const periodo = desdeP ? `del ${util.fechaLarga(desdeP).toLowerCase()} al ${util.fechaLarga(hastaP).toLowerCase()}` : '';
 
     cont.innerHTML = `
     <div class="g-intro">
-      <h1 class="titulo-pagina">Gestión</h1>
-      <p class="g-lead">Herramientas para ayuntamientos, el Principado y el Parque Nacional: cuántos días al año hay presión, qué viene en las próximas semanas y cuánto podemos fiarnos del modelo.</p>
-      <nav aria-label="Apartados de gestión" class="g-indice">
-        <a href="#g-regular">¿Hace falta regular?</a>
-        <a href="#g-lagos">Regulación actual</a>
-        <a href="#g-alertas">Alertas</a>
-        <a href="#g-fiabilidad">Fiabilidad</a>
-        <a href="#g-perfil">Perfil del visitante</a>
-        <a href="#g-exportar">Exportar</a>
+      <h1 class="titulo-pagina">Funciones avanzadas</h1>
+      <p class="g-lead">Herramientas para ayuntamientos, el Principado y el Parque Nacional: qué días se espera saturación, qué viene en las próximas semanas y cuánto podemos fiarnos del modelo.</p>
+      <nav aria-label="Apartados de funciones avanzadas" class="g-indice">
+        <button type="button" class="chip-btn" data-panel="g-saturacion" aria-controls="g-saturacion">Previsión de saturación</button>
+        <button type="button" class="chip-btn" data-panel="g-lagos" aria-controls="g-lagos">Regulación actual</button>
+        <button type="button" class="chip-btn" data-panel="g-alertas" aria-controls="g-alertas">Alertas</button>
+        <button type="button" class="chip-btn" data-panel="g-fiabilidad" aria-controls="g-fiabilidad">Fiabilidad</button>
+        <button type="button" class="chip-btn" data-panel="g-perfil" aria-controls="g-perfil">Perfil del visitante</button>
+        <button type="button" class="chip-btn" data-panel="g-exportar" aria-controls="g-exportar">Exportar datos</button>
       </nav>
     </div>
 
-    <section class="tarjeta g-sec" id="g-regular" aria-labelledby="g-regular-t">
-      <h2 id="g-regular-t">¿Hace falta regular?</h2>
-      <p class="g-desc">Días al año en los que cada zona supera el umbral que elijas, comparados con un día normal. Si una zona lo supera muchos días, conviene estudiar medidas. Los años 2023 y 2024 son observados; 2026 y 2027, previstos por el modelo.</p>
+    <section class="tarjeta g-sec" id="g-saturacion" aria-labelledby="g-saturacion-t">
+      <h2 id="g-saturacion-t">Previsión de saturación</h2>
+      <p class="g-desc">Días de los próximos 12 meses (${esc(periodo)}) en los que el modelo prevé más visitantes que el umbral que elijas, comparados con un día normal. Busca un concejo o una comarca para ver qué días son.</p>
       <div class="g-dos">
+        <div class="buscador">
+          <label for="sat-buscar" class="filtro-et">Buscar un concejo o una comarca</label>
+          <div class="buscador-caja">
+            <svg class="ico lupa" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.8" class="ico-trazo"/><path d="M10.6 10.6 14 14" class="ico-trazo"/></svg>
+            <input id="sat-buscar" type="text" role="combobox" autocomplete="off" spellcheck="false" aria-autocomplete="list" aria-expanded="false" aria-controls="sat-lista" placeholder="Llanes, Cabrales, Oriente…">
+            <ul id="sat-lista" role="listbox" aria-label="Concejos y comarcas encontrados" hidden></ul>
+          </div>
+          <button type="button" class="btn-mini" id="sat-todas" hidden>Ver todas las zonas</button>
+        </div>
         <div class="umbral">
           <label for="umbral" class="umbral-et">Contar los días con más de <strong id="umbral-valor"></strong> de visitantes sobre un día normal</label>
           <input type="range" id="umbral" min="0" max="${umbrales.length - 1}" step="1" value="${estado.umbralIdx}">
           <div class="umbral-escala" aria-hidden="true"><span>${esc(pct(umbrales[0]))}</span><span>${esc(pct(umbrales[umbrales.length - 1]))}</span></div>
         </div>
-        <div>
-          <label for="reg-anio" class="filtro-et">Año de referencia para el veredicto</label>
-          <select id="reg-anio" class="select">${aniosInfo.map(a => `<option value="${a.anio}"${a.anio === estado.anio.anio ? ' selected' : ''}>${etiquetaAnio(a)}</option>`).join('')}</select>
-        </div>
       </div>
-      <p class="g-resumen" id="reg-resumen" aria-live="polite"></p>
+      <p class="g-resumen" id="sat-resumen" aria-live="polite"></p>
       <ul class="rg-lista" id="reg-lista"></ul>
-      <p class="g-nota">Criterio orientativo del equipo, no un dato oficial: <strong>${C.criterio.estudiar} días o más</strong>, estudiar regulación; <strong>entre ${C.criterio.vigilar} y ${C.criterio.estudiar - 1}</strong>, vigilar. Las líneas finas de cada barra marcan ${C.criterio.vigilar} y ${C.criterio.estudiar} días. Los umbrales del semáforo son ${esc(pct(umb.ambar))} (alta) y ${esc(pct(umb.rojo))} (saturación). Los años observados solo admiten los valores de la barra deslizante. En los años previstos, el intervalo probable va entre paréntesis.</p>
+      <div id="sat-dias" class="al-lista"></div>
+      <p class="g-nota">Previsión del modelo, no datos medidos: a 1-7 días, el de corto plazo (con el tiempo a 1-3 días); después, el de largo plazo (calendario y eventos). Entre paréntesis, el intervalo probable: días que superan el umbral incluso en el escenario bajo y en el alto. Criterio orientativo del equipo, no un dato oficial: <strong>${C.criterio.estudiar} días o más</strong>, estudiar regulación; <strong>entre ${C.criterio.vigilar} y ${C.criterio.estudiar - 1}</strong>, vigilar. Los umbrales del semáforo son ${esc(pct(umb.ambar))} (alta) y ${esc(pct(umb.rojo))} (saturación). Cada concejo usa la previsión de su zona del modelo (zonas del MITMA, algunas con varios concejos).</p>
     </section>
 
     <section class="tarjeta g-sec" id="g-lagos" aria-labelledby="g-lagos-t">
@@ -98,7 +112,27 @@ window.Pestanas = window.Pestanas || {};
 
     <section class="tarjeta g-sec" id="g-alertas" aria-labelledby="g-alertas-t">
       <h2 id="g-alertas-t">Alertas de las próximas ${Math.round(C.diasAlertas / 7)} semanas</h2>
-      <p class="g-desc">Nivel previsto por zona y día. Debajo, las acciones sugeridas por nivel. A 1-3 días la previsión incluye el tiempo; a partir de 8 días usa solo calendario y eventos y es más incierta.</p>
+      <p class="g-desc">Nivel previsto por día. Elige una comarca y añade sus concejos a la tabla, o mira todas las comarcas a la vez (cada comarca muestra el peor nivel de sus concejos). A 1-3 días la previsión incluye el tiempo; a partir de 8 días usa solo calendario y eventos y es más incierta. Comarcas: las 8 del Decreto 11/1991 del Principado de Asturias.</p>
+      <div class="g-dos">
+        <div>
+          <label for="al-comarca" class="filtro-et">Comarca</label>
+          <select id="al-comarca" class="select">${comarcas.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select>
+        </div>
+        <div>
+          <p class="filtro-et" id="al-concejos-et">Concejos</p>
+          <details class="g-multi" id="al-concejos">
+            <summary class="select" aria-describedby="al-concejos-et"><span id="al-concejos-txt"></span></summary>
+            <div class="g-multi-panel">
+              <button type="button" class="btn-mini" id="al-todos-comarca"></button>
+              <div class="g-multi-ops" id="al-concejos-ops" role="group" aria-labelledby="al-concejos-et"></div>
+            </div>
+          </details>
+        </div>
+      </div>
+      <div class="exp-botones">
+        <button type="button" class="btn" id="al-todas">Ver todas las comarcas</button>
+        <button type="button" class="btn btn-sec" id="al-quitar">Quitar los concejos</button>
+      </div>
       <div class="tabla-marco"><table class="matriz" id="matriz"></table></div>
       <fieldset class="segmentado g-filtro">
         <legend class="filtro-et">Mostrar</legend>
@@ -110,37 +144,35 @@ window.Pestanas = window.Pestanas || {};
       <div id="alertas-lista" class="al-lista"></div>
     </section>
 
-    <div class="g-dos">
-      <section class="tarjeta g-sec" id="g-fiabilidad" aria-labelledby="g-fiabilidad-t">
-        <h2 id="g-fiabilidad-t">Fiabilidad del modelo</h2>
-        <p class="g-desc">Cuánto acierta el modelo en días que no ha visto al entrenar, según con cuánta antelación se hace la previsión.</p>
-        <label for="fiab-zona" class="filtro-et">Zona</label>
-        <select id="fiab-zona" class="select">${opcionesZona}</select>
-        <div class="metricas" id="fiab-metricas"></div>
-        <p class="g-nota" id="fiab-nota"></p>
-        <details class="detalles"><summary>Ver el detalle por días de antelación</summary><div class="tabla-marco" id="fiab-tabla"></div></details>
-      </section>
+    <section class="tarjeta g-sec" id="g-fiabilidad" aria-labelledby="g-fiabilidad-t">
+      <h2 id="g-fiabilidad-t">Fiabilidad del modelo</h2>
+      <p class="g-desc">Cuánto acierta el modelo en días que no ha visto al entrenar, según con cuánta antelación se hace la previsión.</p>
+      <label for="fiab-zona" class="filtro-et">Zona</label>
+      <select id="fiab-zona" class="select">${opcionesZona}</select>
+      <div class="metricas" id="fiab-metricas"></div>
+      <p class="g-nota" id="fiab-nota"></p>
+      <details class="detalles"><summary>Ver el detalle por días de antelación</summary><div class="tabla-marco" id="fiab-tabla"></div></details>
+    </section>
 
-      <section class="tarjeta g-sec" id="g-perfil" aria-labelledby="g-perfil-t">
-        <h2 id="g-perfil-t">Perfil del visitante</h2>
-        <p class="g-desc">De dónde llega quien viene a la zona por ocio y cuánto se queda. Media histórica del mes elegido.</p>
-        <div class="sim-form">
-          <div><label for="perfil-zona" class="filtro-et">Zona</label><select id="perfil-zona" class="select">${opcionesZona}</select></div>
-          <div><label for="perfil-mes" class="filtro-et">Mes</label><select id="perfil-mes" class="select">${MESES.map((m, i) => `<option value="${i + 1}"${i + 1 === mesHoy ? ' selected' : ''}>${m.charAt(0).toUpperCase() + m.slice(1)}</option>`).join('')}</select></div>
-        </div>
-        <div class="metricas" id="perfil-metricas"></div>
-        <p class="g-nota" id="perfil-nota"></p>
-        <h3 class="filtro-et" style="margin-top:1rem">Patrón horario</h3>
-        <p class="g-desc" id="perfil-horas">Pendiente de datos: aún no hay llegadas por hora (data/clean/llegadas_por_hora.parquet). Cuando lleguen, aquí saldrá la hora a la que suele llegar la gente.</p>
-      </section>
-    </div>
+    <section class="tarjeta g-sec" id="g-perfil" aria-labelledby="g-perfil-t">
+      <h2 id="g-perfil-t">Perfil del visitante</h2>
+      <p class="g-desc">De dónde llega quien viene a la zona por ocio y cuánto se queda. Media histórica del mes elegido.</p>
+      <div class="sim-form">
+        <div><label for="perfil-zona" class="filtro-et">Zona</label><select id="perfil-zona" class="select">${opcionesZona}</select></div>
+        <div><label for="perfil-mes" class="filtro-et">Mes</label><select id="perfil-mes" class="select">${MESES.map((m, i) => `<option value="${i + 1}"${i + 1 === mesHoy ? ' selected' : ''}>${m.charAt(0).toUpperCase() + m.slice(1)}</option>`).join('')}</select></div>
+      </div>
+      <div class="metricas" id="perfil-metricas"></div>
+      <p class="g-nota" id="perfil-nota"></p>
+      <h3 class="filtro-et" style="margin-top:1rem">Patrón horario</h3>
+      <p class="g-desc" id="perfil-horas">Pendiente de datos: aún no hay llegadas por hora (data/clean/llegadas_por_hora.parquet). Cuando lleguen, aquí saldrá la hora a la que suele llegar la gente.</p>
+    </section>
 
     <section class="tarjeta g-sec" id="g-exportar" aria-labelledby="g-exportar-t">
       <h2 id="g-exportar-t">Exportar datos</h2>
       <p class="g-desc">Tablas en CSV (separadas por punto y coma, decimales con coma) para abrir en Excel o LibreOffice.</p>
       <div class="exp-botones">
-        <button type="button" class="btn" data-exportar="prevision">Previsión mostrada (alertas)</button>
-        <button type="button" class="btn" data-exportar="umbral">Días sobre el umbral</button>
+        <button type="button" class="btn" data-exportar="prevision">Previsión de las próximas semanas (alertas)</button>
+        <button type="button" class="btn" data-exportar="umbral">Días previstos sobre el umbral</button>
       </div>
     </section>
 
@@ -164,37 +196,119 @@ window.Pestanas = window.Pestanas || {};
     q('#fiab-zona').value = principal.zona_mitma_id;
     q('#perfil-zona').value = principal.zona_mitma_id;
 
-    /* ---------- ¿Hace falta regular? ---------- */
+    /* ---------- Previsión de saturación ---------- */
     const VER = { estudiar: { t: 'Estudiar regulación', n: 'rojo' }, vigilar: { t: 'Vigilar', n: 'ambar' }, ok: { t: 'Sin presión', n: 'verde' } };
     const umbralActual = () => umbrales[+q('#umbral').value];
-    const textoDias = d => (d.dias == null ? '—' : d.dias + (d.tipo === 'previsto' && d.min != null ? ` (${d.min}–${d.max})` : ''));
+    const veredicto = d => (d >= C.criterio.estudiar ? 'estudiar' : d >= C.criterio.vigilar ? 'vigilar' : 'ok');
+    const diasTxt = n => n + NBSP + (n === 1 ? 'día' : 'días');
+    const idsSeleccion = () => {
+      const s = estado.sel;
+      if (!s) return zonas.map(z => z.zona_mitma_id);
+      if (s.tipo === 'concejo') return concejoPorIne[s.id] && concejoPorIne[s.id].zona_mitma_id ? [concejoPorIne[s.id].zona_mitma_id] : [];
+      return zonasDeComarca(s.id);
+    };
+    const filasSaturacion = u => L.saturacionPrevista(prev, idsSeleccion(), u)
+      .sort((a, b) => b.dias.length - a.dias.length || L.nombreZona(datos, a.zona_mitma_id).localeCompare(L.nombreZona(datos, b.zona_mitma_id), 'es'));
 
     function pintarRegulacion() {
       const u = umbralActual();
       q('#umbral-valor').textContent = pct(u);
       q('#umbral').setAttribute('aria-valuetext', `Más de ${Math.round((u - 1) * 100)} por ciento sobre un día normal`);
-      const tabla = L.tablaRegulacion(datos, u, { anioReferencia: estado.anio.anio });
-      const maxD = Math.max(40, ...tabla.map(t => t.dias || 0));
-      const estudiar = tabla.filter(t => t.veredicto === 'estudiar').map(t => t.nombre_zona);
-      q('#reg-resumen').textContent = estudiar.length
-        ? `Con este umbral, en ${estudiar.length === 1 ? 'una zona' : estudiar.length + ' zonas'} se superan ${C.criterio.estudiar} días en ${estado.anio.anio}: ${estudiar.join(', ')}.`
-        : `Con este umbral, ninguna zona llega a ${C.criterio.estudiar} días en ${estado.anio.anio}.`;
-      q('#reg-lista').innerHTML = tabla.map(t => {
-        if (t.dias == null) return `<li class="rg"><span class="rg-zona">${esc(t.nombre_zona)}</span><span class="rg-sin">Sin datos suficientes</span></li>`;
-        const v = VER[t.veredicto];
-        const otros = t.anios.map(a => `${a.anio}: ${textoDias(a)}`).join(' · ');
+      const filas = filasSaturacion(u);
+      const s = estado.sel;
+      const maxD = Math.max(40, ...filas.map(f => f.max));
+      // Resumen
+      if (!s) {
+        const con = filas.filter(f => f.dias.length);
+        const est = filas.filter(f => veredicto(f.dias.length) === 'estudiar').map(f => L.nombreZona(datos, f.zona_mitma_id));
+        q('#sat-resumen').textContent = `Con este umbral, ${con.length} de ${filas.length} zonas tienen algún día por encima en los próximos 12 meses`
+          + (est.length ? `; en ${est.length === 1 ? 'una' : est.length} se superan ${C.criterio.estudiar} días: ${est.join(', ')}.` : '.')
+          + ' Busca un concejo o una comarca para ver qué días son.';
+      } else if (s.tipo === 'concejo') {
+        const c = concejoPorIne[s.id], f = filas[0];
+        const otros = c && c.zona_mitma_id ? concejosDeZona(c.zona_mitma_id).filter(x => x.ine !== c.ine).map(x => x.nombre) : [];
+        q('#sat-resumen').textContent = !f ? `${s.nombre}: sin previsión.`
+          : `${s.nombre} (comarca de ${c.comarca}): ${diasTxt(f.dias.length)} con más de ${pct(u)} en los próximos 12 meses (entre ${f.min} y ${f.max} según el rango probable).`
+            + (otros.length ? ` Las cifras son de su zona del modelo, «${L.nombreZona(datos, c.zona_mitma_id)}», que también incluye ${otros.join(', ')}.` : '');
+      } else {
+        const fechas = new Set();
+        filas.forEach(f => f.dias.forEach(p => fechas.add(p.fecha)));
+        const nC = concejos.filter(c => c.comarca === s.id).length;
+        q('#sat-resumen').textContent = `Comarca de ${s.id} (${nC} concejos, ${filas.length} ${filas.length === 1 ? 'zona' : 'zonas'} del modelo): ${diasTxt(fechas.size)} en los próximos 12 meses con al menos una zona por encima de ${pct(u)}.`;
+      }
+      // Barras por zona
+      q('#reg-lista').innerHTML = filas.map(f => {
+        const n = f.dias.length, v = VER[veredicto(n)], z = zonas.find(x => x.zona_mitma_id === f.zona_mitma_id);
         return `<li class="rg">
-          <span class="rg-zona">${esc(t.nombre_zona)}${t.es_principal ? ' · zona principal' : ''}</span>
-          <span class="rg-barra" aria-hidden="true"><span class="rg-val v-${t.veredicto}" style="width:${(t.dias / maxD * 100).toFixed(1)}%"></span>
+          <span class="rg-zona">${esc(L.nombreZona(datos, f.zona_mitma_id))}${z && z.es_principal ? ' · zona principal' : ''}</span>
+          <span class="rg-barra" aria-hidden="true"><span class="rg-val v-${veredicto(n)}" style="width:${(n / maxD * 100).toFixed(1)}%"></span>
             <span class="rg-ref" style="left:${(C.criterio.vigilar / maxD * 100).toFixed(1)}%"></span><span class="rg-ref" style="left:${(C.criterio.estudiar / maxD * 100).toFixed(1)}%"></span></span>
-          <span class="rg-num">${t.dias} ${t.dias === 1 ? 'día' : 'días'}</span>
+          <span class="rg-num">${diasTxt(n)}</span>
           <span class="rg-ver"><span class="pill pill-${v.n}">${ICONO[v.n]}<span>${v.t}</span></span></span>
-          <span class="rg-pico">${esc(otros)}</span>
+          <span class="rg-pico">(${f.min}–${f.max})</span>
         </li>`;
+      }).join('');
+      // Detalle de los días (solo al buscar)
+      if (!s) { q('#sat-dias').innerHTML = ''; return; }
+      const porFecha = {};
+      filas.forEach(f => f.dias.forEach(p => { (porFecha[p.fecha] = porFecha[p.fecha] || []).push(p); }));
+      const fechas = Object.keys(porFecha).sort();
+      if (!fechas.length) { q('#sat-dias').innerHTML = `<p class="pz-ayuda">Ningún día previsto por encima de ${esc(pct(u))} en los próximos 12 meses.</p>`; return; }
+      const porMes = {};
+      fechas.forEach(f => { (porMes[f.slice(0, 7)] = porMes[f.slice(0, 7)] || []).push(f); });
+      const varias = filas.length > 1;
+      q('#sat-dias').innerHTML = Object.keys(porMes).map(m => {
+        const d0 = util.deISO(porMes[m][0]);
+        return `<div class="al-dia">
+          <h3>${esc(MESES[d0.getMonth()].charAt(0).toUpperCase() + MESES[d0.getMonth()].slice(1))} de ${d0.getFullYear()} · ${diasTxt(porMes[m].length)}</h3>
+          <ul>${porMes[m].map(f => {
+            const ps = porFecha[f].sort((a, b) => b.cociente - a.cociente), peor = ps[0];
+            const quien = varias ? ps.map(p => `${esc(L.nombreZona(datos, p.zona_mitma_id))} ${esc(pct(p.cociente))}`).join(', ') : esc(util.delta(peor.cociente)) + (peor.incierto ? ' · previsión incierta' : '');
+            return `<li class="al"><span>${pill(peor.color)}</span><div><p class="al-zona"><strong>${esc(util.fechaLarga(f))}</strong> · ${quien}</p></div></li>`;
+          }).join('')}</ul></div>`;
       }).join('');
     }
     q('#umbral').addEventListener('input', pintarRegulacion);
-    q('#reg-anio').addEventListener('change', () => { estado.anio = aniosInfo.find(a => a.anio === +q('#reg-anio').value); pintarRegulacion(); });
+
+    // Buscador de concejos y comarcas
+    const normT = t => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+    const opcionesSat = comarcas.map(c => ({ tipo: 'comarca', id: c, nombre: 'Comarca de ' + c, sub: concejos.filter(x => x.comarca === c).length + ' concejos', clave: normT(c + ' comarca') }))
+      .concat(concejos.map(c => ({ tipo: 'concejo', id: c.ine, nombre: c.nombre, sub: 'Concejo · comarca de ' + c.comarca, clave: normT(c.nombre) })));
+    const inp = q('#sat-buscar'), lst = q('#sat-lista');
+    let encontrados = [], activo = -1;
+    function cerrarLista() { lst.hidden = true; inp.setAttribute('aria-expanded', 'false'); inp.removeAttribute('aria-activedescendant'); activo = -1; }
+    function pintarLista() {
+      const t = normT(inp.value);
+      encontrados = t ? opcionesSat.filter(o => o.clave.includes(t)).slice(0, 12) : opcionesSat.slice(0, comarcas.length);
+      lst.innerHTML = encontrados.length
+        ? encontrados.map((o, i) => `<li role="option" id="sat-op-${i}" data-i="${i}" aria-selected="${i === activo}"><span>${esc(o.nombre)}</span><span class="op-zona">${esc(o.sub)}</span></li>`).join('')
+        : '<li class="sin-res">Ningún concejo ni comarca con ese nombre.</li>';
+      lst.hidden = false; inp.setAttribute('aria-expanded', 'true');
+      if (activo >= 0) inp.setAttribute('aria-activedescendant', 'sat-op-' + activo); else inp.removeAttribute('aria-activedescendant');
+    }
+    function elegir(o) {
+      estado.sel = { tipo: o.tipo, id: o.id, nombre: o.nombre };
+      inp.value = o.nombre; cerrarLista();
+      q('#sat-todas').hidden = false;
+      pintarRegulacion();
+      util.anunciar(q('#sat-resumen').textContent);
+    }
+    inp.addEventListener('input', () => { activo = -1; pintarLista(); });
+    inp.addEventListener('focus', pintarLista);
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (lst.hidden) pintarLista();
+        if (!encontrados.length) return;
+        activo = (activo + (e.key === 'ArrowDown' ? 1 : -1) + encontrados.length) % encontrados.length;
+        pintarLista();
+      } else if (e.key === 'Enter') {
+        if (encontrados.length) { e.preventDefault(); elegir(encontrados[Math.max(activo, 0)]); }
+      } else if (e.key === 'Escape') cerrarLista();
+    });
+    lst.addEventListener('mousedown', e => { const li = e.target.closest('[data-i]'); if (li) { e.preventDefault(); elegir(encontrados[+li.dataset.i]); } });
+    inp.addEventListener('blur', () => setTimeout(cerrarLista, 100));
+    q('#sat-todas').addEventListener('click', () => { estado.sel = null; inp.value = ''; q('#sat-todas').hidden = true; pintarRegulacion(); inp.focus(); });
 
     /* ---------- Lagos ---------- */
     (function pintarLagos() {
@@ -210,21 +324,75 @@ window.Pestanas = window.Pestanas || {};
         (l.nota ? esc(l.nota) + ' ' : '') + 'En 2027 aún no se ha publicado la regulación de los Lagos: se supone igual que 364 días antes.';
     })();
 
-    /* ---------- Alertas ---------- */
-    (function pintarMatriz() {
-      const fechas = Array.from(new Set(alertas.map(a => a.fecha))).sort();
-      const porClave = new Map(alertas.map(a => [a.fecha + '|' + a.zona_mitma_id, a]));
-      const cabecera = '<thead><tr><th scope="col"><span class="sr">Zona</span></th>' + fechas.map(f => {
+    /* ---------- Alertas: tabla dinámica por comarca y concejos ---------- */
+    const ORDEN = { gris: 0, verde: 1, ambar: 2, rojo: 3 };
+    const fechasAl = Array.from(new Set(alertas.map(a => a.fecha))).sort();
+    const alPorClave = new Map(alertas.map(a => [a.fecha + '|' + a.zona_mitma_id, a]));
+    const celda = (n, t) => `<td class="cel cel-${n}" title="${esc(t)}">${ICONO[n]}<span class="sr">${esc(t)}</span></td>`;
+
+    function pintarMatriz() {
+      const al = estado.al;
+      const cabecera = '<thead><tr><th scope="col"><span class="sr">' + (al.modo === 'comarcas' ? 'Comarca' : 'Concejo') + '</span></th>' + fechasAl.map(f => {
         const d = util.deISO(f), finde = d.getDay() === 0 || d.getDay() === 6;
         return `<th scope="col" class="${finde ? 'finde' : ''}" title="${esc(util.fechaLarga(f))}"><span aria-hidden="true">${LETRA[d.getDay()]}<br>${d.getDate()}</span><span class="sr">${esc(util.fechaLarga(f))}</span></th>`;
       }).join('') + '</tr></thead>';
-      const cuerpo = '<tbody>' + zonas.map(z => '<tr><th scope="row">' + esc(z.nombre_zona) + '</th>' + fechas.map(f => {
-        const a = porClave.get(f + '|' + z.zona_mitma_id), n = a ? a.color : 'gris';
-        const t = NIVEL[n].nombre + (a && a.cociente != null ? ', ' + pct(a.cociente) : '');
-        return `<td class="cel cel-${n}" title="${esc(t)}">${ICONO[n]}<span class="sr">${esc(t)}</span></td>`;
-      }).join('') + '</tr>').join('') + '</tbody>';
-      q('#matriz').innerHTML = `<caption class="sr">Nivel previsto por zona para los próximos ${fechas.length} días</caption>` + cabecera + cuerpo;
-    })();
+      let filas;
+      if (al.modo === 'comarcas') {
+        filas = comarcas.map(cm => {
+          const ids = zonasDeComarca(cm);
+          return '<tr><th scope="row">' + esc(cm) + '</th>' + fechasAl.map(f => {
+            const as = ids.map(id => alPorClave.get(f + '|' + id)).filter(Boolean);
+            const peor = as.reduce((x, a) => (ORDEN[a.color] > ORDEN[x] ? a.color : x), 'gris');
+            const en = as.filter(a => a.color === peor).map(a => a.nombre_zona);
+            const t = `${cm}, ${util.fechaLarga(f).toLowerCase()}: ${NIVEL[peor].nombre}` + (peor === 'ambar' || peor === 'rojo' ? ` en ${en.join(', ')}` : '');
+            return celda(peor, t);
+          }).join('') + '</tr>';
+        });
+      } else {
+        const elegidos = Array.from(al.elegidos).map(i => concejoPorIne[i]).filter(Boolean)
+          .sort((a, b) => a.comarca.localeCompare(b.comarca, 'es') || a.nombre.localeCompare(b.nombre, 'es'));
+        filas = elegidos.map(c => {
+          const zn = c.zona_mitma_id ? L.nombreZona(datos, c.zona_mitma_id) : null;
+          const varios = c.zona_mitma_id && concejosDeZona(c.zona_mitma_id).length > 1;
+          return `<tr><th scope="row">${esc(c.nombre)}${varios ? ` <span class="rg-pico">(zona ${esc(zn)})</span>` : ''}</th>` + fechasAl.map(f => {
+            const a = c.zona_mitma_id && alPorClave.get(f + '|' + c.zona_mitma_id), n = a ? a.color : 'gris';
+            return celda(n, `${c.nombre}, ${util.fechaLarga(f).toLowerCase()}: ${NIVEL[n].nombre}` + (a && a.cociente != null ? ', ' + pct(a.cociente) : ''));
+          }).join('') + '</tr>';
+        });
+      }
+      q('#matriz').innerHTML = filas.length
+        ? `<caption class="sr">Nivel previsto por ${al.modo === 'comarcas' ? 'comarca' : 'concejo'} para los próximos ${fechasAl.length} días</caption>` + cabecera + '<tbody>' + filas.join('') + '</tbody>'
+        : '<caption class="pz-ayuda">Elige una comarca y marca sus concejos para añadirlos a la tabla, o pulsa «Ver todas las comarcas».</caption>';
+      q('#al-todas').setAttribute('aria-pressed', String(al.modo === 'comarcas'));
+      q('#al-quitar').hidden = al.modo === 'comarcas' || !al.elegidos.size;
+    }
+
+    function pintarConcejosComarca() {
+      const al = estado.al, lista = concejos.filter(c => c.comarca === al.comarca);
+      const marcados = lista.filter(c => al.elegidos.has(c.ine)).length;
+      q('#al-concejos-txt').textContent = marcados ? `${marcados} de ${lista.length} concejos de ${al.comarca} en la tabla` : `Elegir concejos de ${al.comarca} (${lista.length})`;
+      q('#al-todos-comarca').textContent = marcados === lista.length ? `Quitar todos los de ${al.comarca}` : `Todos los concejos de ${al.comarca}`;
+      q('#al-concejos-ops').innerHTML = lista.map(c => `<button type="button" class="chip-btn" data-ine="${esc(c.ine)}" aria-pressed="${al.elegidos.has(c.ine)}">${esc(c.nombre)}</button>`).join('');
+    }
+    const cambiarConcejos = (ines, poner) => {
+      const al = estado.al;
+      ines.forEach(i => (poner ? al.elegidos.add(i) : al.elegidos.delete(i)));
+      al.modo = 'concejos';
+      pintarConcejosComarca(); pintarMatriz();
+    };
+    q('#al-comarca').value = estado.al.comarca;
+    q('#al-comarca').addEventListener('change', e => { estado.al.comarca = e.target.value; pintarConcejosComarca(); q('#al-concejos').open = true; });
+    q('#al-concejos-ops').addEventListener('click', e => {
+      const b = e.target.closest('[data-ine]');
+      if (b) cambiarConcejos([b.dataset.ine], !estado.al.elegidos.has(b.dataset.ine));
+    });
+    q('#al-todos-comarca').addEventListener('click', () => {
+      const ines = concejos.filter(c => c.comarca === estado.al.comarca).map(c => c.ine);
+      cambiarConcejos(ines, !ines.every(i => estado.al.elegidos.has(i)));
+    });
+    q('#al-todas').addEventListener('click', () => { estado.al.modo = 'comarcas'; q('#al-concejos').open = false; pintarMatriz(); });
+    q('#al-quitar').addEventListener('click', () => { estado.al.elegidos.clear(); pintarConcejosComarca(); pintarMatriz(); });
+    document.addEventListener('click', e => { const d = q('#al-concejos'); if (d && d.open && !d.contains(e.target)) d.open = false; });
 
     function pintarListaAlertas() {
       const todas = estado.filtro === 'todas';
@@ -300,10 +468,10 @@ window.Pestanas = window.Pestanas || {};
         nombre = `prevision_${datos.predicciones.fecha_hoy}.csv`;
         desc = `Previsión de las ${zonas.length} zonas para los próximos ${C.diasAlertas} días, con el color, el rango probable y la acción sugerida.`;
       } else {
-        const u = umbralActual();
-        csv = L.csvRegulacion(L.tablaRegulacion(datos, u, { anioReferencia: estado.anio.anio }), u, sint);
-        nombre = `dias_sobre_umbral_${String(u).replace('.', '_')}.csv`;
-        desc = `Días por año que cada zona supera ${pct(u)} sobre un día normal (en los años previstos, con el mínimo y el máximo probables).`;
+        const u = umbralActual(), s = estado.sel;
+        csv = L.csvSaturacion(datos, filasSaturacion(u), u, sint);
+        nombre = `dias_previstos_sobre_${String(u).replace('.', '_')}${s ? '_' + s.nombre.replace(/\s+/g, '_') : ''}.csv`;
+        desc = `Días de los próximos 12 meses en los que el modelo prevé más de ${pct(u)} sobre un día normal, ${s ? 'en ' + s.nombre : 'en todas las zonas'} (el umbral y la búsqueda de «Previsión de saturación»), con el rango probable.`;
       }
       estado.csv = { nombre, csv }; estado.csvOrigen = boton;
       q('#dlg-nombre').textContent = nombre;
@@ -335,16 +503,23 @@ window.Pestanas = window.Pestanas || {};
       } catch (e) { est.textContent = 'No se ha podido descargar. Usa «Copiar».'; }
     });
 
-    /* ---------- Índice: desplaza sin tocar el hash (lo usa la navegación) ---------- */
-    qa('.g-indice a').forEach(a => a.addEventListener('click', ev => {
-      ev.preventDefault();
-      const destino = q(a.getAttribute('href'));
-      if (destino) { destino.scrollIntoView({ behavior: 'smooth', block: 'start' }); destino.setAttribute('tabindex', '-1'); destino.focus({ preventScroll: true }); }
-    }));
+    /* ---------- Índice: un panel a la vista, el del botón pulsado ---------- */
+    function mostrarPanel(id, foco) {
+      qa('.g-indice [data-panel]').forEach(b => {
+        const on = b.dataset.panel === id;
+        b.setAttribute('aria-pressed', String(on));
+        q('#' + b.dataset.panel).hidden = !on;
+      });
+      if (foco) { const t = q('#' + id + ' h2'); if (t) { t.tabIndex = -1; t.focus(); } }
+    }
+    qa('.g-indice [data-panel]').forEach(b => b.addEventListener('click', () => mostrarPanel(b.dataset.panel, false)));
 
     pintarRegulacion();
+    pintarConcejosComarca();
+    pintarMatriz();
     pintarListaAlertas();
     pintarFiabilidad();
     pintarPerfil();
+    mostrarPanel('g-saturacion', false);
   }
 })();

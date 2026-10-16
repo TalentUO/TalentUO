@@ -1,4 +1,4 @@
-# NTT Turism · piloto de interfaz
+# NTT Tourism · piloto de interfaz
 
 Contexto para seguir trabajando en este proyecto (también con Claude Code en VS Code). Léelo entero antes de tocar código.
 

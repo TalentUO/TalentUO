@@ -1,1 +1,35 @@
-/* Estilos de la pestaña Gestión (persona 2). Usa solo las variables de color de index.html. */
+/* Estilos de la pestaña Funciones avanzadas (persona 2). Usa solo las variables de color de index.html.
+ * El buscador y el desplegable copian el aspecto del buscador de Inicio (#buscar, #buscar-lista en estilos.css). */
+
+/* Buscador de concejos y comarcas (Previsión de saturación) */
+#sat-buscar {
+  width: 100%; min-height: 48px; padding: .6rem .9rem .6rem 2.6rem;
+  border: 1.5px solid var(--linea-fuerte); border-radius: 10px; background: var(--superficie);
+}
+#sat-buscar::placeholder { color: var(--tinta-2); opacity: .85; }
+#sat-buscar:focus-visible { outline-offset: 0; }
+#sat-lista {
+  position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 4px);
+  list-style: none; margin: 0; padding: .3rem; max-height: 20rem; overflow-y: auto;
+  background: var(--superficie); border: 1px solid var(--linea-fuerte); border-radius: 10px; box-shadow: var(--sombra);
+}
+#sat-lista [role="option"] { padding: .55rem .7rem; border-radius: 7px; cursor: pointer; display: flex; flex-direction: column; }
+#sat-lista [role="option"] .op-zona { font-size: .85rem; color: var(--tinta-2); }
+#sat-lista [role="option"][aria-selected="true"], #sat-lista [role="option"]:hover { background: var(--acento-suave); }
+#sat-lista .sin-res { color: var(--tinta-2); cursor: default; padding: .55rem .7rem; }
+#sat-todas { margin-top: .5rem; }
+#sat-dias { margin-top: 1rem; }
+
+/* Desplegable de concejos con selección múltiple (Alertas) */
+.g-multi { position: relative; }
+.g-multi > summary { list-style: none; cursor: pointer; display: flex; align-items: center; }
+.g-multi > summary::-webkit-details-marker { display: none; }
+.g-multi-panel {
+  position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 4px);
+  padding: .6rem; max-height: 22rem; overflow-y: auto;
+  background: var(--superficie); border: 1px solid var(--linea-fuerte); border-radius: 10px; box-shadow: var(--sombra);
+}
+.g-multi-ops { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+.g-multi-ops .chip-btn { min-height: 38px; padding: .3rem .8rem; font-size: .92rem; }
+#g-alertas .exp-botones { margin-top: .8rem; }
+caption.pz-ayuda { caption-side: top; text-align: left; padding: .6rem 0; }

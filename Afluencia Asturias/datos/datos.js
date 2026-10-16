@@ -15,6 +15,7 @@
  *     calendario,   // { origen, dias:[{ fecha, finde, festivo|null, puente, vacaciones|null, lagos_regulado }] } | null
  *     horas,        // { origen, filas:[{ zona_mitma_id, mes, tipo_dia, hora, llegadas_ocio_media, n_dias }] } | null
  *     agenda,       // { origen, eventos:[{ id, titulo, categoria, inicio, fin, hora, lugar, concejo|null }] } | null (festivos y partidos)
+ *     comarcas,     // { origen, concejos:[{ concejo_ine, concejo, comarca }] } | null (solo en cargar())
  *     sintetico,    // true si alguno de los cinco lo es
  *     aviso         // texto del aviso del modelo, o null
  *   }>
@@ -104,13 +105,14 @@ window.DatosModelo = (function () {
       return r.json();
     });
     const opcional = n => json(n).catch(() => null);
-    return Promise.all(FICHEROS.concat('mapeo_zonas').map(json).concat(opcional('calendario'), opcional('horas'), opcional('agenda'))).then(v => {
+    return Promise.all(FICHEROS.concat('mapeo_zonas').map(json).concat(opcional('calendario'), opcional('horas'), opcional('agenda'), opcional('comarcas'))).then(v => {
       const d = {};
       FICHEROS.forEach((n, i) => { d[n] = v[i]; });
       d.mapeo = v[FICHEROS.length];
       d.calendario = v[FICHEROS.length + 1];
       d.horas = v[FICHEROS.length + 2];
       d.agenda = v[FICHEROS.length + 3];
+      d.comarcas = v[FICHEROS.length + 4];
       return d;
     });
   }
@@ -157,6 +159,7 @@ window.DatosModelo = (function () {
       d.calendario = bruto.calendario || null;
       d.horas = bruto.horas || null;
       d.agenda = bruto.agenda || null;
+      d.comarcas = bruto.comarcas || null;
       d.sintetico = FICHEROS.some(n => bruto[n].sintetico === true);
       d.aviso = (FICHEROS.map(n => bruto[n].aviso).filter(Boolean)[0]) || null;
       return Object.freeze(d);
