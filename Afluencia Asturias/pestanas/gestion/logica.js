@@ -381,7 +381,40 @@
     return aCSV([cab].concat(cuerpo));
   }
 
+  /**
+   * CSV del perfil del visitante: todas las zonas y meses de perfil.json y, si hay datos.horas,
+   * la hora con más llegadas de ocio en laborables y en fines de semana o festivos.
+   */
+  function csvPerfil(datos, sintetico) {
+    const MES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const horas = datos.horas && datos.horas.filas;
+    const pico = (zona, mes, tipo) => {
+      if (!horas) return [null, null];
+      const f = horas.filter(x => x.zona_mitma_id === zona && x.mes === mes && x.tipo_dia === tipo);
+      if (!f.length) return [null, null];
+      const m = f.reduce((x, y) => (y.llegadas_ocio_media > x.llegadas_ocio_media ? y : x));
+      return [`${m.hora}-${m.hora + 1} h`, Math.round(m.llegadas_ocio_media)];
+    };
+    const cab = ['zona', 'mes', 'dias_de_muestra', 'llegadas_ocio_media_dia', 'pct_ocio_desde_asturias', 'pct_ocio_resto_espana',
+      'pct_todas_desde_asturias', 'pct_todas_resto_espana', 'pernoctaciones_por_100_llegadas', 'pct_de_un_dia_aprox',
+      'hora_punta_laborable', 'llegadas_hora_punta_laborable', 'hora_punta_finde_o_festivo', 'llegadas_hora_punta_finde_o_festivo'];
+    if (sintetico) cab.push('aviso');
+    const r1 = v => (v == null ? null : Math.round(v * 10) / 10);
+    const orden = new Map(zonas(datos).map((z, i) => [z.zona_mitma_id, i]));
+    const cuerpo = datos.perfil.perfil.slice()
+      .sort((a, b) => (orden.get(a.zona_mitma_id) ?? 999) - (orden.get(b.zona_mitma_id) ?? 999) || a.mes - b.mes)
+      .map(f => {
+        const lab = pico(f.zona_mitma_id, f.mes, 'laborable'), fin = pico(f.zona_mitma_id, f.mes, 'fin_de_semana_o_festivo');
+        const r = [f.nombre_zona, MES[f.mes - 1], f.dias, Math.round(f.llegadas_ocio_media_dia), r1(f.pct_desde_asturias), r1(f.pct_resto_espana),
+          r1(f.pct_total_desde_asturias), r1(f.pct_total_resto_espana), r1(f.pernoctaciones_por_100_llegadas), r1(f.pct_excursionistas_aprox),
+          lab[0], lab[1], fin[0], fin[1]];
+        if (sintetico) r.push(AVISO_CSV);
+        return r;
+      });
+    return aCSV([cab].concat(cuerpo));
+  }
+
   return { zonas, zonaPrincipal, nombreZona, umbralesDisponibles, aniosDisponibles, diasSobreUmbral, veredicto, tablaRegulacion,
-    compararLagos, accionPara, alertasProximas, fiabilidad, aCSV, csvPrevision, csvRegulacion, sumarDias,
+    compararLagos, accionPara, alertasProximas, fiabilidad, aCSV, csvPrevision, csvRegulacion, csvPerfil, sumarDias,
     finPrevision, superaUmbral, rachas, previsionSaturacion, concejosDeZona, zonasDeConcejo, normalizar, buscar, csvSaturacion };
 });
