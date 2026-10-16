@@ -219,12 +219,28 @@ window.Pestanas = window.Pestanas || {};
     <section class="tarjeta g-sec" id="g-exportar" role="tabpanel" aria-labelledby="gt-exportar" tabindex="-1" hidden>
       <h2>Exportar datos</h2>
       <p class="g-desc">Tablas en CSV (separadas por punto y coma, decimales con coma) para abrir en Excel o LibreOffice.</p>
-      <div class="exp-botones">
-        <button type="button" class="btn" data-exportar="saturacion">Días con saturación prevista</button>
-        <button type="button" class="btn" data-exportar="prevision">Alertas de las próximas ${Math.round(C.diasAlertas / 7)} semanas</button>
-        <button type="button" class="btn" data-exportar="umbral">Días al año sobre el umbral</button>
+      <h3 class="sat-sub">Días con saturación prevista</h3>
+      <p class="g-desc">Todas las zonas, día a día: los días en que el modelo prevé más visitantes que el porcentaje elegido, con el rango probable y la acción sugerida.</p>
+      <div class="sat-controles">
+        <div class="umbral">
+          <label for="exp-umbral" class="umbral-et">Contar como saturación los días con más de <strong id="exp-umbral-valor"></strong> de visitantes sobre un día normal</label>
+          <input type="range" id="exp-umbral" min="0" max="${umbrales.length - 1}" step="1" value="${estado.umbralIdx}">
+          <div class="umbral-escala" aria-hidden="true"><span>${esc(pct(umbrales[0]))}</span><span>${esc(pct(umbrales[umbrales.length - 1]))}</span></div>
+        </div>
+        <div>
+          <label for="exp-periodo" class="filtro-et">Periodo</label>
+          <select id="exp-periodo" class="select">${periodos.map(p => `<option value="${p.v}"${p.v === estado.periodo ? ' selected' : ''}>${esc(p.t)}</option>`).join('')}</select>
+        </div>
       </div>
-      <p class="g-nota">«Días con saturación prevista» usa el periodo y el umbral elegidos en «Previsión de saturación» (ahora: <span id="exp-sat-txt"></span>) e incluye todas las zonas.</p>
+      <div class="exp-botones"><button type="button" class="btn btn-prim" data-exportar="saturacion">Exportar los días con saturación prevista</button></div>
+      <p class="g-nota" id="exp-sat-txt" aria-live="polite"></p>
+
+      <h3 class="sat-sub">Otras tablas</h3>
+      <div class="exp-botones">
+        <button type="button" class="btn" data-exportar="prevision">Alertas de las próximas ${Math.round(C.diasAlertas / 7)} semanas</button>
+        <button type="button" class="btn" data-exportar="perfil">Perfil del visitante</button>
+      </div>
+      <p class="g-nota">«Perfil del visitante»: todas las zonas y los 12 meses (media de los años con datos): de dónde vienen, cuántos vienen solo por el día, pernoctaciones y la hora con más llegadas.</p>
     </section>
 
     <dialog id="dlg-csv" aria-labelledby="dlg-titulo" aria-describedby="dlg-desc">
@@ -257,7 +273,7 @@ window.Pestanas = window.Pestanas || {};
         b.tabIndex = on ? 0 : -1;
         q('#' + b.getAttribute('aria-controls')).hidden = !on;
       });
-      if (id === 'exportar') q('#exp-sat-txt').textContent = textoSatActual();
+      if (id === 'exportar') pintarExportar();
       if (id === 'fiabilidad') pintarGrafica();
       if (enfocar) q('#gt-' + id).focus();
     }
@@ -281,7 +297,6 @@ window.Pestanas = window.Pestanas || {};
     const conAnio = f => (/\d{4}$/.test(sinDia(f)) ? sinDia(f) : sinDia(f) + ' de ' + f.slice(0, 4));
     const rangoTxt = p => (p.desde.slice(0, 4) !== p.hasta.slice(0, 4)
       ? `del ${conAnio(p.desde)} al ${conAnio(p.hasta)}` : `del ${sinDia(p.desde)} al ${sinDia(p.hasta)}`);
-    const textoSatActual = () => `${periodoActual().t.toLowerCase()}, más de ${pct(umbralActual())}`;
     const diaMes = f => { const d = util.deISO(f); return d.getDate() + ' de ' + MESES[d.getMonth()]; };
     const textoRacha = r => (r.dias === 1 ? diaMes(r.desde) : `del ${diaMes(r.desde)} al ${diaMes(r.hasta)} (${r.dias} días)`);
 
@@ -753,20 +768,19 @@ window.Pestanas = window.Pestanas || {};
     function exportar(tipo, boton) {
       let nombre, desc, csv;
       const sint = !!datos.sintetico;
-      const u = umbralActual();
       if (tipo === 'saturacion') {
-        const p = periodoActual();
-        csv = L.csvSaturacion(resultadoSat, u, sint);
+        const u = umbralExp(), p = periodoExp();
+        csv = L.csvSaturacion(L.previsionSaturacion(datos, { desde: p.desde, hasta: p.hasta, umbral: u }), u, sint);
         nombre = `saturacion_prevista_${p.desde}_${p.hasta}.csv`;
         desc = `Días con más de ${pct(u)} sobre un día normal ${rangoTxt(p)}, por zona, con el rango probable y la acción sugerida.`;
       } else if (tipo === 'prevision') {
         csv = L.csvPrevision(alertas, sint);
         nombre = `prevision_${hoy}.csv`;
         desc = `Previsión de las ${zonas.length} zonas para los próximos ${C.diasAlertas} días, con el color, el rango probable y la acción sugerida.`;
-      } else {
-        csv = L.csvRegulacion(L.tablaRegulacion(datos, u), u, sint);
-        nombre = `dias_sobre_umbral_${String(u).replace('.', '_')}.csv`;
-        desc = `Días por año que cada zona supera ${pct(u)} sobre un día normal (en los años previstos, con el mínimo y el máximo probables).`;
+      } else if (tipo === 'perfil') {
+        csv = L.csvPerfil(datos, sint);
+        nombre = 'perfil_del_visitante.csv';
+        desc = `Perfil del visitante de las ${zonas.length} zonas por mes: procedencia, visitas de un día, pernoctaciones y hora con más llegadas. Media de los años con datos; sin visitantes extranjeros.`;
       }
       estado.csv = { nombre, csv }; estado.csvOrigen = boton;
       q('#dlg-nombre').textContent = nombre;
@@ -777,6 +791,18 @@ window.Pestanas = window.Pestanas || {};
       if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
       q('#dlg-copiar').focus();
     }
+    // Controles propios del panel Exportar (periodo y porcentaje de saturación)
+    const umbralExp = () => umbrales[+q('#exp-umbral').value];
+    const periodoExp = () => periodos.find(p => p.v === q('#exp-periodo').value) || periodos[0];
+    function pintarExportar() {
+      const u = umbralExp(), p = periodoExp();
+      q('#exp-umbral-valor').textContent = pct(u);
+      q('#exp-umbral').setAttribute('aria-valuetext', `Más de ${Math.round((u - 1) * 100)} por ciento sobre un día normal`);
+      const n = L.previsionSaturacion(datos, { desde: p.desde, hasta: p.hasta, umbral: u }).reduce((a, z) => a + z.dias.length, 0);
+      q('#exp-sat-txt').textContent = `Con estos filtros, el archivo tendrá ${num(n)} ${n === 1 ? 'fila' : 'filas'} (un día y una zona por fila) ${rangoTxt(p)}.`;
+    }
+    q('#exp-umbral').addEventListener('input', pintarExportar);
+    q('#exp-periodo').addEventListener('change', pintarExportar);
     qa('[data-exportar]').forEach(b => b.addEventListener('click', () => exportar(b.dataset.exportar, b)));
     const dlg = q('#dlg-csv');
     q('#dlg-cerrar').addEventListener('click', () => dlg.close());
