@@ -1,0 +1,6 @@
+# Despliegue en Vercel: la web solo necesita estos ficheros estáticos.
+# Copias en JSON de datos que ya van en datos/modelo/salidas.js y salidas-inicio.js (solo son respaldo con fetch)
+datos/modelo/*.json
+# Herramientas de Python para generar datos (no forman parte de la web)
+herramientas/
+README.md

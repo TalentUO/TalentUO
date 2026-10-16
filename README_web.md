@@ -8,6 +8,15 @@ La web vive en `Afluencia Asturias/`: HTML, CSS y JavaScript sin compilación ni
 - **Toda Asturias:** 46 zonas MITMA (los 78 concejos) de `config/mapeo_zonas.csv`. Predicciones del 2026-10-17 al 2027-10-16 (un año; con el tiempo a 1-3 días). Ampliación y sus decisiones: `notas/ampliacion_zonas.md`.
 - Comprobación de cada pestaña y cotejo con `notas/resultados_reales.md`: `notas/integracion_web.md`. Capturas del recorrido de la demo (plan B): `notas/capturas_demo/`.
 
+## En internet (Vercel)
+
+Publicada en **https://ntt-tourism.vercel.app** (proyecto `ntt-tourism` de Vercel, cuenta hugoomez). Es la carpeta `Afluencia Asturias/` tal cual, como sitio estático (sin compilación); `.vercelignore` deja fuera las copias en JSON de los datos (ya van en `salidas.js`) y las herramientas de Python. Para publicar una versión nueva, desde `Afluencia Asturias/`:
+
+```bash
+vercel link --yes --project ntt-tourism   # solo la primera vez en cada ordenador
+vercel deploy --prod
+```
+
 ## Arrancar (una orden)
 
 ```bash

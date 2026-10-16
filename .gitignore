@@ -37,3 +37,6 @@ data/raw/mitma_pernoctaciones/
 data/raw/mitma_*
 !data/raw/mitma_zonificacion_v2/
 !data/raw/mitma_estadisticos_dia_normal_2024/
+
+# Enlace local con el proyecto de Vercel (lo crea «vercel link»)
+.vercel/
