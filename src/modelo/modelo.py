@@ -50,7 +50,10 @@ def algoritmo_por_defecto() -> str:
 
 def _particion(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
     fechas = df["fecha"]
-    corte = fechas.max() - pd.Timedelta(days=int(cfg()["dias_validacion_interna"]))
+    # Ventana de parada temprana: los últimos `dias_validacion_interna` días (365: incluye un verano),
+    # pero nunca más del 40 % del periodo, para que siempre quede con qué entrenar.
+    dias = min(int(cfg()["dias_validacion_interna"]), int(0.4 * (fechas.max() - fechas.min()).days))
+    corte = fechas.max() - pd.Timedelta(days=dias)
     return (fechas <= corte).to_numpy(), (fechas > corte).to_numpy()
 
 
