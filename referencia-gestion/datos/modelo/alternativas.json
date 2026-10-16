@@ -1,0 +1,4417 @@
+{
+ "sintetico": true,
+ "aviso": "DATOS SINTÉTICOS — NO SON REALES",
+ "generado": "2026-10-15 23:13",
+ "objetivo": "llegadas_ocio",
+ "umbrales": {
+  "ambar": 1.5,
+  "rojo": 2.0,
+  "por_zona": {}
+ },
+ "parametros": {
+  "dias_margen": 3,
+  "km_zona_cercana": 60
+ },
+ "alternativas": [
+  {
+   "fecha": "2026-11-02",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 17,
+   "cociente": 2.4057,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2026-10-30",
+    "cociente": 0.8809,
+    "color": "verde",
+    "prediccion": 2021,
+    "diferencia_pct": -59.0616
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 47.2,
+    "cociente": 1.8593,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-12-07",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 52,
+   "cociente": 2.0891,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2026-12-04",
+    "cociente": 0.7883,
+    "color": "verde",
+    "prediccion": 1808,
+    "diferencia_pct": -57.8172
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.6608,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-12-08",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 53,
+   "cociente": 1.9807,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2026-12-11",
+    "cociente": 0.7851,
+    "color": "verde",
+    "prediccion": 1801,
+    "diferencia_pct": -46.9901
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.6002,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-11-02",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 17,
+   "cociente": 1.8593,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2026-10-30",
+    "cociente": 0.9591,
+    "color": "verde",
+    "prediccion": 8878,
+    "diferencia_pct": -40.2151
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-12-07",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 52,
+   "cociente": 1.7159,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2026-12-09",
+    "cociente": 0.9014,
+    "color": "verde",
+    "prediccion": 7019,
+    "diferencia_pct": -48.7852
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.6608,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-12-08",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 53,
+   "cociente": 1.6524,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2026-12-09",
+    "cociente": 0.9014,
+    "color": "verde",
+    "prediccion": 7019,
+    "diferencia_pct": -45.5547
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.6002,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-11-02",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 17,
+   "cociente": 2.2918,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2026-10-30",
+    "cociente": 0.9461,
+    "color": "verde",
+    "prediccion": 2827,
+    "diferencia_pct": -49.9044
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 2.1378,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-12-07",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 52,
+   "cociente": 2.1075,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2026-12-10",
+    "cociente": 0.8762,
+    "color": "verde",
+    "prediccion": 2312,
+    "diferencia_pct": -55.4523
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9993,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-12-08",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 53,
+   "cociente": 1.9304,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2026-12-10",
+    "cociente": 0.8762,
+    "color": "verde",
+    "prediccion": 2312,
+    "diferencia_pct": -52.2766
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.8469,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-11-02",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 17,
+   "cociente": 2.1378,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2026-10-30",
+    "cociente": 0.9277,
+    "color": "verde",
+    "prediccion": 3722,
+    "diferencia_pct": -45.5429
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.8593,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-12-07",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 52,
+   "cociente": 1.9993,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2026-12-10",
+    "cociente": 0.8509,
+    "color": "verde",
+    "prediccion": 2905,
+    "diferencia_pct": -54.5571
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.7159,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-12-08",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 53,
+   "cociente": 1.8469,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2026-12-10",
+    "cociente": 0.8509,
+    "color": "verde",
+    "prediccion": 2905,
+    "diferencia_pct": -48.1438
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.6524,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-11-02",
+   "zona_mitma_id": "EJEMPLO_oviedo",
+   "nombre_zona": "Oviedo (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 17,
+   "cociente": 1.9025,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2026-10-30",
+    "cociente": 0.9457,
+    "color": "verde",
+    "prediccion": 9940,
+    "diferencia_pct": -42.5466
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.8593,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-12-07",
+   "zona_mitma_id": "EJEMPLO_oviedo",
+   "nombre_zona": "Oviedo (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 52,
+   "cociente": 1.6608,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2026-12-10",
+    "cociente": 0.902,
+    "color": "verde",
+    "prediccion": 8610,
+    "diferencia_pct": -42.9907
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2026-12-08",
+   "zona_mitma_id": "EJEMPLO_oviedo",
+   "nombre_zona": "Oviedo (EJEMPLO)",
+   "conjunto": "futuro_largo",
+   "modelo": "largo",
+   "horizonte": 53,
+   "cociente": 1.6002,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2026-12-10",
+    "cociente": 0.902,
+    "color": "verde",
+    "prediccion": 8610,
+    "diferencia_pct": -38.5772
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-01",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.427,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.3733,
+    "color": "rojo",
+    "prediccion": 8349,
+    "diferencia_pct": 73.8049
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1074,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-02",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.456,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.3733,
+    "color": "rojo",
+    "prediccion": 8349,
+    "diferencia_pct": 48.1795
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1334,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-03",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.3733,
+   "color": "rojo",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.083,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-04",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.6412,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.3733,
+    "color": "rojo",
+    "prediccion": 8349,
+    "diferencia_pct": 12.977
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0927,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-05",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.4952,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.3733,
+    "color": "rojo",
+    "prediccion": 8349,
+    "diferencia_pct": 63.0512
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1189,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-06",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.6175,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.3733,
+    "color": "rojo",
+    "prediccion": 8349,
+    "diferencia_pct": 85.9378
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1241,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-07",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.519,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.1717,
+    "color": "rojo",
+    "prediccion": 7640,
+    "diferencia_pct": 65.7812
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1245,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-08",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.4507,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.1717,
+    "color": "rojo",
+    "prediccion": 7640,
+    "diferencia_pct": 57.5005
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1222,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-09",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.4877,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.1717,
+    "color": "rojo",
+    "prediccion": 7640,
+    "diferencia_pct": 33.8588
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1493,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-10",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.1717,
+   "color": "rojo",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0925,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-11",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.5681,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.1717,
+    "color": "rojo",
+    "prediccion": 7640,
+    "diferencia_pct": 6.3206
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0819,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-12",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.4416,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.1717,
+    "color": "rojo",
+    "prediccion": 7640,
+    "diferencia_pct": 52.4788
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1381,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-13",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.4275,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.1717,
+    "color": "rojo",
+    "prediccion": 7640,
+    "diferencia_pct": 83.462
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1003,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-14",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.5193,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-17",
+    "cociente": 2.0049,
+    "color": "rojo",
+    "prediccion": 7053,
+    "diferencia_pct": 53.0314
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1438,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-15",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 4.3519,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-18",
+    "cociente": 1.9938,
+    "color": "ambar",
+    "prediccion": 5578,
+    "diferencia_pct": -35.2349
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.6804,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-16",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 3.2993,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.8099,
+    "color": "ambar",
+    "prediccion": 3714,
+    "diferencia_pct": -50.9305
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.5369,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-17",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0049,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-20",
+    "cociente": 1.7464,
+    "color": "ambar",
+    "prediccion": 2996,
+    "diferencia_pct": -57.523
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.241,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-18",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9938,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-20",
+    "cociente": 1.7464,
+    "color": "ambar",
+    "prediccion": 2996,
+    "diferencia_pct": -46.2957
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.2362,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-19",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.8099,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-20",
+    "cociente": 1.7464,
+    "color": "ambar",
+    "prediccion": 2996,
+    "diferencia_pct": -19.3384
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1318,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-20",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.7464,
+   "color": "ambar",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1211,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-21",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.839,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1852,
+    "color": "verde",
+    "prediccion": 4169,
+    "diferencia_pct": 23.9371
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0934,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-22",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.8757,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1852,
+    "color": "verde",
+    "prediccion": 4169,
+    "diferencia_pct": 12.3103
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1133,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-23",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.8734,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1852,
+    "color": "verde",
+    "prediccion": 4169,
+    "diferencia_pct": -2.9885
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1446,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-06",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.2929,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-12-07",
+    "cociente": 0.8556,
+    "color": "verde",
+    "prediccion": 3010,
+    "diferencia_pct": -42.7835
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.656,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-06",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5257,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 1.4125,
+    "color": "verde",
+    "prediccion": 18111,
+    "diferencia_pct": 52.1529
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.1241,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-07",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5442,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.4277,
+    "color": "verde",
+    "prediccion": 18306,
+    "diferencia_pct": 52.2473
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.1245,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-08",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.503,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.4277,
+    "color": "verde",
+    "prediccion": 18306,
+    "diferencia_pct": 45.6797
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.1222,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-09",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.524,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.4277,
+    "color": "verde",
+    "prediccion": 18306,
+    "diferencia_pct": 29.7543
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.1493,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-12",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5402,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.4277,
+    "color": "verde",
+    "prediccion": 18306,
+    "diferencia_pct": 48.8134
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.1381,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-13",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5279,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.4277,
+    "color": "verde",
+    "prediccion": 18306,
+    "diferencia_pct": 53.5697
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.1003,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-14",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5929,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-11",
+    "cociente": 1.4456,
+    "color": "verde",
+    "prediccion": 16288,
+    "diferencia_pct": 31.3203
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.1438,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-15",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9948,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-17",
+    "cociente": 1.457,
+    "color": "verde",
+    "prediccion": 18681,
+    "diferencia_pct": 12.0179
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.6804,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-16",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.7995,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.2037,
+    "color": "verde",
+    "prediccion": 9614,
+    "diferencia_pct": -42.2869
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.5369,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-18",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5781,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.2037,
+    "color": "verde",
+    "prediccion": 9614,
+    "diferencia_pct": -45.9326
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.2362,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-06",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.7174,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-12-05",
+    "cociente": 0.9392,
+    "color": "verde",
+    "prediccion": 7852,
+    "diferencia_pct": -50.6095
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.656,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-01",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.1567,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.0744,
+    "color": "rojo",
+    "prediccion": 8679,
+    "diferencia_pct": 52.5032
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 2.019,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-02",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.1034,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.0744,
+    "color": "rojo",
+    "prediccion": 8679,
+    "diferencia_pct": 38.067
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 2.015,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-03",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0744,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-06",
+    "cociente": 2.0616,
+    "color": "rojo",
+    "prediccion": 5174,
+    "diferencia_pct": -40.3826
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9657,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-04",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.1119,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-06",
+    "cociente": 2.0616,
+    "color": "rojo",
+    "prediccion": 5174,
+    "diferencia_pct": -30.9403
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 2.0034,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-05",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.1965,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-06",
+    "cociente": 2.0616,
+    "color": "rojo",
+    "prediccion": 5174,
+    "diferencia_pct": -4.3489
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9838,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-06",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0616,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-09",
+    "cociente": 2.0311,
+    "color": "rojo",
+    "prediccion": 6070,
+    "diferencia_pct": 17.3114
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 2.0238,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-07",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0645,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.0017,
+    "color": "rojo",
+    "prediccion": 8375,
+    "diferencia_pct": 63.2713
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.8938,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-08",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.1031,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.0017,
+    "color": "rojo",
+    "prediccion": 8375,
+    "diferencia_pct": 50.9096
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9697,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-09",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0311,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.0017,
+    "color": "rojo",
+    "prediccion": 8375,
+    "diferencia_pct": 37.9726
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9682,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-10",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0017,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.9846,
+    "color": "ambar",
+    "prediccion": 4981,
+    "diferencia_pct": -40.5242
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9056,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-11",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0263,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.9846,
+    "color": "ambar",
+    "prediccion": 4981,
+    "diferencia_pct": -30.7104
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9843,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-12",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.118,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.9846,
+    "color": "ambar",
+    "prediccion": 4981,
+    "diferencia_pct": -4.5097
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9742,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-13",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9846,
+   "color": "ambar",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9445,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-14",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0139,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-17",
+    "cociente": 1.8143,
+    "color": "ambar",
+    "prediccion": 7591,
+    "diferencia_pct": 51.7008
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9502,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-15",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 3.4776,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-18",
+    "cociente": 1.7393,
+    "color": "ambar",
+    "prediccion": 6170,
+    "diferencia_pct": -32.758
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 3.3023,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-16",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 3.1032,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.6169,
+    "color": "ambar",
+    "prediccion": 3982,
+    "diferencia_pct": -57.0607
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 3.0338,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-17",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.8143,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-20",
+    "cociente": 1.5242,
+    "color": "ambar",
+    "prediccion": 3825,
+    "diferencia_pct": -49.604
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.7771,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-18",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.7393,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.514,
+    "color": "ambar",
+    "prediccion": 3762,
+    "diferencia_pct": -39.0364
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-19",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.6169,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.514,
+    "color": "ambar",
+    "prediccion": 3762,
+    "diferencia_pct": -5.5346
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.5384,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-20",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5242,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.514,
+    "color": "ambar",
+    "prediccion": 3762,
+    "diferencia_pct": -1.6653
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-21",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.514,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1983,
+    "color": "verde",
+    "prediccion": 5014,
+    "diferencia_pct": 33.28
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.4785,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-22",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5837,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1983,
+    "color": "verde",
+    "prediccion": 5014,
+    "diferencia_pct": 19.9757
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.5341,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-23",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5581,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1983,
+    "color": "verde",
+    "prediccion": 5014,
+    "diferencia_pct": 7.6706
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.5434,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-06",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.1231,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-12-05",
+    "cociente": 0.9831,
+    "color": "verde",
+    "prediccion": 2594,
+    "diferencia_pct": -59.1157
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 2.0137,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-01",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.019,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 1.9657,
+    "color": "ambar",
+    "prediccion": 10568,
+    "diferencia_pct": 53.3179
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.2198,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-02",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.015,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 1.9657,
+    "color": "ambar",
+    "prediccion": 10568,
+    "diferencia_pct": 30.7226
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.2439,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-03",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9657,
+   "color": "ambar",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4125,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-04",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0034,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-07",
+    "cociente": 1.8938,
+    "color": "ambar",
+    "prediccion": 6200,
+    "diferencia_pct": -32.4117
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4619,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-05",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9838,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-07",
+    "cociente": 1.8938,
+    "color": "ambar",
+    "prediccion": 6200,
+    "diferencia_pct": -2.2493
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4991,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-06",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0238,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-07",
+    "cociente": 1.8938,
+    "color": "ambar",
+    "prediccion": 6200,
+    "diferencia_pct": 1.0052
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.5257,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-07",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.8938,
+   "color": "ambar",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.5442,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-08",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9697,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-07",
+    "cociente": 1.8938,
+    "color": "ambar",
+    "prediccion": 6200,
+    "diferencia_pct": -7.8039
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.503,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-09",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9682,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-07",
+    "cociente": 1.8938,
+    "color": "ambar",
+    "prediccion": 6200,
+    "diferencia_pct": -21.4906
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.524,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-10",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9056,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-07",
+    "cociente": 1.8938,
+    "color": "ambar",
+    "prediccion": 6200,
+    "diferencia_pct": -39.4864
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4277,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-11",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9843,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.9056,
+    "color": "ambar",
+    "prediccion": 10246,
+    "diferencia_pct": 12.7613
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4456,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-12",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9742,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.9056,
+    "color": "ambar",
+    "prediccion": 10246,
+    "diferencia_pct": 62.3126
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.5402,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-13",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9445,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.9056,
+    "color": "ambar",
+    "prediccion": 10246,
+    "diferencia_pct": 73.72
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.5279,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-14",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.9502,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-17",
+    "cociente": 1.7771,
+    "color": "ambar",
+    "prediccion": 9554,
+    "diferencia_pct": 49.6424
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.5929,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-15",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 3.3023,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-17",
+    "cociente": 1.7771,
+    "color": "ambar",
+    "prediccion": 9554,
+    "diferencia_pct": -15.2548
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.9948,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-16",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 3.0338,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.5384,
+    "color": "ambar",
+    "prediccion": 4919,
+    "diferencia_pct": -59.5917
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.7995,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-17",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.7771,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.5384,
+    "color": "ambar",
+    "prediccion": 4919,
+    "diferencia_pct": -48.5191
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.457,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-18",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.8322,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.4785,
+    "color": "verde",
+    "prediccion": 4841,
+    "diferencia_pct": -42.3019
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.5781,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-19",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5384,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.4785,
+    "color": "verde",
+    "prediccion": 4841,
+    "diferencia_pct": -1.5872
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.2037,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-20",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5586,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.4785,
+    "color": "verde",
+    "prediccion": 4841,
+    "diferencia_pct": 2.3985
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.2136,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-22",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5341,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1598,
+    "color": "verde",
+    "prediccion": 6236,
+    "diferencia_pct": 19.0581
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.1878,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-23",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5434,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1598,
+    "color": "verde",
+    "prediccion": 6236,
+    "diferencia_pct": 0.6946
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.2097,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-06",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 2.0137,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-12-05",
+    "cociente": 0.9358,
+    "color": "verde",
+    "prediccion": 3195,
+    "diferencia_pct": -60.4586
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.7174,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-15",
+   "zona_mitma_id": "EJEMPLO_oviedo",
+   "nombre_zona": "Oviedo (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.6804,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.1003,
+    "color": "verde",
+    "prediccion": 9638,
+    "diferencia_pct": -39.9076
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-16",
+   "zona_mitma_id": "EJEMPLO_oviedo",
+   "nombre_zona": "Oviedo (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.5369,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.1003,
+    "color": "verde",
+    "prediccion": 9638,
+    "diferencia_pct": -40.3287
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-06",
+   "zona_mitma_id": "EJEMPLO_oviedo",
+   "nombre_zona": "Oviedo (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "corto",
+   "horizonte": 1,
+   "cociente": 1.656,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-12-05",
+    "cociente": 0.9437,
+    "color": "verde",
+    "prediccion": 9007,
+    "diferencia_pct": -48.2469
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-01",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.2837,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.1737,
+    "color": "rojo",
+    "prediccion": 7647,
+    "diferencia_pct": 69.1756
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0876,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-02",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.2469,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.1737,
+    "color": "rojo",
+    "prediccion": 7647,
+    "diferencia_pct": 48.3416
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1102,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-03",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.1737,
+   "color": "rojo",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0799,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-04",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.398,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.1737,
+    "color": "rojo",
+    "prediccion": 7647,
+    "diferencia_pct": 13.9698
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0759,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-05",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.2014,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 2.1737,
+    "color": "rojo",
+    "prediccion": 7647,
+    "diferencia_pct": 69.2682
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1111,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-06",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.3169,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-09",
+    "cociente": 2.1727,
+    "color": "rojo",
+    "prediccion": 4984,
+    "diferencia_pct": 25.4124
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1048,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-07",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.3901,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.1186,
+    "color": "rojo",
+    "prediccion": 7453,
+    "diferencia_pct": 70.4555
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1069,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-08",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.2564,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 2.1186,
+    "color": "rojo",
+    "prediccion": 7453,
+    "diferencia_pct": 66.8833
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0993,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-09",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.1727,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-12",
+    "cociente": 2.0906,
+    "color": "rojo",
+    "prediccion": 4290,
+    "diferencia_pct": -13.9293
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1206,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-10",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.1186,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-12",
+    "cociente": 2.0906,
+    "color": "rojo",
+    "prediccion": 4290,
+    "diferencia_pct": -42.4362
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0836,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-11",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.3398,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-12",
+    "cociente": 2.0906,
+    "color": "rojo",
+    "prediccion": 4290,
+    "diferencia_pct": -34.4683
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0771,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-12",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0906,
+   "color": "rojo",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1104,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-13",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.1964,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-12",
+    "cociente": 2.0906,
+    "color": "rojo",
+    "prediccion": 4290,
+    "diferencia_pct": 13.8658
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1036,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-14",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.2569,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-17",
+    "cociente": 2.0761,
+    "color": "rojo",
+    "prediccion": 7303,
+    "diferencia_pct": 76.8944
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.1094,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-15",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 3.2958,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-17",
+    "cociente": 2.0761,
+    "color": "rojo",
+    "prediccion": 7303,
+    "diferencia_pct": 11.9625
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.9954,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-16",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.5418,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.638,
+    "color": "ambar",
+    "prediccion": 3361,
+    "diferencia_pct": -42.3544
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.4732,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-17",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0761,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.638,
+    "color": "ambar",
+    "prediccion": 3361,
+    "diferencia_pct": -53.9755
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.2912,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-18",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.2479,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.638,
+    "color": "ambar",
+    "prediccion": 3361,
+    "diferencia_pct": -46.5554
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.2829,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-19",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.638,
+   "color": "ambar",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0983,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-20",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.7312,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-23",
+    "cociente": 1.6344,
+    "color": "ambar",
+    "prediccion": 3749,
+    "diferencia_pct": 26.2554
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0916,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-21",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.7605,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.21,
+    "color": "verde",
+    "prediccion": 4257,
+    "diferencia_pct": 32.1703
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0726,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-22",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.6513,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.21,
+    "color": "verde",
+    "prediccion": 4257,
+    "diferencia_pct": 30.2374
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0578,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-23",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.6344,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.21,
+    "color": "verde",
+    "prediccion": 4257,
+    "diferencia_pct": 13.5268
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 59.0,
+    "cociente": 1.0834,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-06",
+   "zona_mitma_id": "EJEMPLO_cangas",
+   "nombre_zona": "Cangas de Onís (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0327,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-12-05",
+    "cociente": 0.8227,
+    "color": "verde",
+    "prediccion": 1628,
+    "diferencia_pct": -65.0812
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 47.2,
+    "cociente": 1.7587,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-07",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.5025,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.4363,
+    "color": "verde",
+    "prediccion": 18416,
+    "diferencia_pct": 57.4066
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.1069,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-14",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.507,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-12",
+    "cociente": 1.468,
+    "color": "verde",
+    "prediccion": 11725,
+    "diferencia_pct": -0.0839
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.1094,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-15",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.25,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-12",
+    "cociente": 1.468,
+    "color": "verde",
+    "prediccion": 11725,
+    "diferencia_pct": -37.6711
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.9954,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-16",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.7606,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.2432,
+    "color": "verde",
+    "prediccion": 9929,
+    "diferencia_pct": -39.0753
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.4732,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-17",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.6008,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.2432,
+    "color": "verde",
+    "prediccion": 9929,
+    "diferencia_pct": -51.6226
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.2912,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-18",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.6426,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.2142,
+    "color": "verde",
+    "prediccion": 9454,
+    "diferencia_pct": -48.9189
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oviedo",
+    "nombre_zona": "Oviedo (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.2829,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-06",
+   "zona_mitma_id": "EJEMPLO_gijon",
+   "nombre_zona": "Gijón (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.7587,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-12-05",
+    "cociente": 0.9196,
+    "color": "verde",
+    "prediccion": 7688,
+    "diferencia_pct": -52.7767
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-01",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.1191,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 1.9947,
+    "color": "ambar",
+    "prediccion": 8345,
+    "diferencia_pct": 49.2455
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-02",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0603,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 1.9947,
+    "color": "ambar",
+    "prediccion": 8345,
+    "diferencia_pct": 35.5403
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-03",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9947,
+   "color": "ambar",
+   "mejor_dia": null,
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-04",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0471,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 1.9947,
+    "color": "ambar",
+    "prediccion": 8345,
+    "diferencia_pct": 14.9133
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 2.0118,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-05",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.1229,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 1.9947,
+    "color": "ambar",
+    "prediccion": 8345,
+    "diferencia_pct": 59.6261
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9679,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-06",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.019,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-03",
+    "cociente": 1.9947,
+    "color": "ambar",
+    "prediccion": 8345,
+    "diferencia_pct": 64.6954
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9938,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-07",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.056,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.9574,
+    "color": "ambar",
+    "prediccion": 8190,
+    "diferencia_pct": 60.3201
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9725,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-08",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0895,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.9574,
+    "color": "ambar",
+    "prediccion": 8190,
+    "diferencia_pct": 48.534
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9664,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-09",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0139,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.9574,
+    "color": "ambar",
+    "prediccion": 8190,
+    "diferencia_pct": 36.0735
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9396,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-10",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9574,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.9325,
+    "color": "ambar",
+    "prediccion": 4850,
+    "diferencia_pct": -40.7769
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.8806,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-11",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9892,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.9325,
+    "color": "ambar",
+    "prediccion": 4850,
+    "diferencia_pct": -31.269
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9635,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-12",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0412,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.9325,
+    "color": "ambar",
+    "prediccion": 4850,
+    "diferencia_pct": -3.5187
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.8885,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-13",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9325,
+   "color": "ambar",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.91,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-14",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9666,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.9325,
+    "color": "ambar",
+    "prediccion": 4850,
+    "diferencia_pct": -0.7353
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.8915,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-15",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 3.409,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.9325,
+    "color": "ambar",
+    "prediccion": 4850,
+    "diferencia_pct": -46.0811
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 3.1229,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-16",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.8641,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.6698,
+    "color": "ambar",
+    "prediccion": 4112,
+    "diferencia_pct": -51.9544
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_cangas",
+    "nombre_zona": "Cangas de Onís (EJEMPLO)",
+    "distancia_km": 31.7,
+    "cociente": 2.5418,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-17",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0508,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-20",
+    "cociente": 1.5871,
+    "color": "ambar",
+    "prediccion": 3983,
+    "diferencia_pct": -53.5756
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9777,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-18",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.08,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.58,
+    "color": "ambar",
+    "prediccion": 3926,
+    "diferencia_pct": -46.8006
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 2.0614,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-19",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.6698,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.58,
+    "color": "ambar",
+    "prediccion": 3926,
+    "diferencia_pct": -4.541
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.5582,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-20",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.5871,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-23",
+    "cociente": 1.5666,
+    "color": "ambar",
+    "prediccion": 4682,
+    "diferencia_pct": 17.5384
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.5854,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-21",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.58,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1993,
+    "color": "verde",
+    "prediccion": 5018,
+    "diferencia_pct": 27.8232
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.5352,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-22",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.603,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1993,
+    "color": "verde",
+    "prediccion": 5018,
+    "diferencia_pct": 18.6276
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.5355,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-23",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.5666,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.1993,
+    "color": "verde",
+    "prediccion": 5018,
+    "diferencia_pct": 7.1765
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.5345,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-06",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0931,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-12-05",
+    "cociente": 0.9327,
+    "color": "verde",
+    "prediccion": 2461,
+    "diferencia_pct": -60.6544
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_oriente",
+    "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+    "distancia_km": 25.4,
+    "cociente": 1.9914,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-09",
+   "zona_mitma_id": "EJEMPLO_llanes",
+   "nombre_zona": "Llanes (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.5389,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-12-07",
+    "cociente": 1.1147,
+    "color": "verde",
+    "prediccion": 4664,
+    "diferencia_pct": 23.0641
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_cangas",
+    "nombre_zona": "Cangas de Onís (EJEMPLO)",
+    "distancia_km": 31.7,
+    "cociente": 1.3476,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-01",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.1707,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-04",
+    "cociente": 2.0118,
+    "color": "rojo",
+    "prediccion": 9212,
+    "diferencia_pct": 24.3007
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.2395,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-02",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.1683,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-05",
+    "cociente": 1.9679,
+    "color": "ambar",
+    "prediccion": 6292,
+    "diferencia_pct": -27.6752
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.2535,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-03",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.1095,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-05",
+    "cociente": 1.9679,
+    "color": "ambar",
+    "prediccion": 6292,
+    "diferencia_pct": -44.5215
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4294,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-04",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0118,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-05",
+    "cociente": 1.9679,
+    "color": "ambar",
+    "prediccion": 6292,
+    "diferencia_pct": -31.6957
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4613,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-05",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9679,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-08",
+    "cociente": 1.9664,
+    "color": "ambar",
+    "prediccion": 6714,
+    "diferencia_pct": 6.6998
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4646,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-06",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9938,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-09",
+    "cociente": 1.9396,
+    "color": "ambar",
+    "prediccion": 7782,
+    "diferencia_pct": 28.6865
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4727,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-07",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9725,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.8806,
+    "color": "ambar",
+    "prediccion": 10111,
+    "diferencia_pct": 56.564
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.5025,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-08",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9664,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.8806,
+    "color": "ambar",
+    "prediccion": 10111,
+    "diferencia_pct": 50.6009
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4575,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-09",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9396,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.8806,
+    "color": "ambar",
+    "prediccion": 10111,
+    "diferencia_pct": 29.9185
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4778,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-10",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.8806,
+   "color": "ambar",
+   "mejor_dia": null,
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4363,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-11",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9635,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.8806,
+    "color": "ambar",
+    "prediccion": 10111,
+    "diferencia_pct": 12.4559
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4691,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-12",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.8885,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.8806,
+    "color": "ambar",
+    "prediccion": 10111,
+    "diferencia_pct": 67.4468
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.468,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-13",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.91,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-10",
+    "cociente": 1.8806,
+    "color": "ambar",
+    "prediccion": 10111,
+    "diferencia_pct": 74.5278
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.4753,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-14",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.8915,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-12",
+    "cociente": 1.8885,
+    "color": "ambar",
+    "prediccion": 6038,
+    "diferencia_pct": -2.4938
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.507,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-15",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 3.1229,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-12",
+    "cociente": 1.8885,
+    "color": "ambar",
+    "prediccion": 6038,
+    "diferencia_pct": -43.3674
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 2.25,
+    "color": "rojo"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-16",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.6944,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.5582,
+    "color": "ambar",
+    "prediccion": 4982,
+    "diferencia_pct": -53.9138
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.7606,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-17",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9777,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-19",
+    "cociente": 1.5582,
+    "color": "ambar",
+    "prediccion": 4982,
+    "diferencia_pct": -53.145
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.6008,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-18",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 2.0614,
+   "color": "rojo",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.5352,
+    "color": "ambar",
+    "prediccion": 5026,
+    "diferencia_pct": -46.7527
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.6426,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-19",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.5582,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-21",
+    "cociente": 1.5352,
+    "color": "ambar",
+    "prediccion": 5026,
+    "diferencia_pct": 0.8812
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.2432,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-20",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.5854,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-23",
+    "cociente": 1.5345,
+    "color": "ambar",
+    "prediccion": 6157,
+    "diferencia_pct": 28.0365
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.2494,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-21",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.5352,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.169,
+    "color": "verde",
+    "prediccion": 6285,
+    "diferencia_pct": 25.0484
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.2142,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-22",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.5355,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.169,
+    "color": "verde",
+    "prediccion": 6285,
+    "diferencia_pct": 19.8923
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.1708,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-23",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.5345,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-24",
+    "cociente": 1.169,
+    "color": "verde",
+    "prediccion": 6285,
+    "diferencia_pct": 2.0817
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.1877,
+    "color": "verde"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-06",
+   "zona_mitma_id": "EJEMPLO_oriente",
+   "nombre_zona": "Ribadesella+Llanes (EJEMPLO de zona con varios concejos)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9914,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-12-05",
+    "cociente": 0.9114,
+    "color": "verde",
+    "prediccion": 3112,
+    "diferencia_pct": -61.0562
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 49.0,
+    "cociente": 1.7587,
+    "color": "ambar"
+   },
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-08-15",
+   "zona_mitma_id": "EJEMPLO_oviedo",
+   "nombre_zona": "Oviedo (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.9954,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-08-13",
+    "cociente": 1.1036,
+    "color": "verde",
+    "prediccion": 9668,
+    "diferencia_pct": -49.2412
+   },
+   "zona_alternativa": null,
+   "sintetico": true
+  },
+  {
+   "fecha": "2024-12-06",
+   "zona_mitma_id": "EJEMPLO_oviedo",
+   "nombre_zona": "Oviedo (EJEMPLO)",
+   "conjunto": "historico",
+   "modelo": "largo",
+   "horizonte": 8,
+   "cociente": 1.7672,
+   "color": "ambar",
+   "mejor_dia": {
+    "fecha": "2024-12-05",
+    "cociente": 0.9271,
+    "color": "verde",
+    "prediccion": 8849,
+    "diferencia_pct": -52.356
+   },
+   "zona_alternativa": {
+    "zona_mitma_id": "EJEMPLO_gijon",
+    "nombre_zona": "Gijón (EJEMPLO)",
+    "distancia_km": 24.9,
+    "cociente": 1.7587,
+    "color": "ambar"
+   },
+   "sintetico": true
+  }
+ ]
+}
