@@ -113,3 +113,14 @@ Valida `salidas/` con `src/modelo/validar_salidas.py`, copia los cinco JSON a `A
 ## Integración
 
 - `web-gestion` (`fc6ebb5`) integrada en `web` por avance rápido, sin conflictos. Probado: demo de Inicio → Gestión → Sobre los datos, 20/20 pruebas de `pestanas/gestion/pruebas.html`, sin errores propios en la consola.
+
+## Datos reales (rama `web-datos-reales`, 2026-10-16)
+
+Detalle en `notas/integracion_web.md`. Cambios en ficheros de la persona 2 (solo datos y textos; sin tocar estilos ni maquetación):
+- `pestanas/gestion/gestion.js`:
+  - **patrón horario conectado**: `pintarHoras()` rellena el mismo `#perfil-horas` desde `datos.horas` (nuevo en el módulo «datos», sale de `data/clean/llegadas_por_hora.parquet`); sin datos, queda el «Pendiente de datos»;
+  - texto de Alertas: el tiempo entra a 1-3 días, no hasta una semana.
+- `pestanas/sobre/contenido.js`:
+  - INE como «Validación prevista» (aún no se ha hecho);
+  - el tiempo, solo a 1-3 días.
+- Demo: `DEMO_MES = '2024-08'`. Con datos reales, el puente de diciembre de 2024 sale en verde.

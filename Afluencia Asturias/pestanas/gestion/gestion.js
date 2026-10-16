@@ -98,7 +98,7 @@ window.Pestanas = window.Pestanas || {};
 
     <section class="tarjeta g-sec" id="g-alertas" aria-labelledby="g-alertas-t">
       <h2 id="g-alertas-t">Alertas de las próximas ${Math.round(C.diasAlertas / 7)} semanas</h2>
-      <p class="g-desc">Nivel previsto por zona y día. Debajo, las acciones sugeridas por nivel. Hasta una semana vista la previsión incluye el tiempo; después usa solo calendario y eventos y es más incierta.</p>
+      <p class="g-desc">Nivel previsto por zona y día. Debajo, las acciones sugeridas por nivel. A 1-3 días la previsión incluye el tiempo; a partir de 8 días usa solo calendario y eventos y es más incierta.</p>
       <div class="tabla-marco"><table class="matriz" id="matriz"></table></div>
       <fieldset class="segmentado g-filtro">
         <legend class="filtro-et">Mostrar</legend>

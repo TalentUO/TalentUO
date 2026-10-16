@@ -174,7 +174,7 @@
   }
 
   /* ---------- Modo demo (?demo=1) ----------
-   * La fuente fija «hoy» en el histórico de diciembre de 2024 (validación fuera de muestra).
+   * La fuente fija «hoy» en el histórico de agosto de 2024 (validación fuera de muestra).
    * Se abre el día del puente con más presión en la zona principal (Picos de Europa) y su panel.
    * Recorrido: mapa → Picos en rojo → ¿Por qué? → alternativa → Gestión. */
   async function arrancarDemo() {

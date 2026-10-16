@@ -15,7 +15,8 @@
  *   la demo), del modelo de largo plazo con 8 días de antelación.
  *
  * Modo demo (?demo=1): «hoy» pasa a ser el primer día del histórico de
- * diciembre de 2024 (validación fuera de muestra, con el valor observado).
+ * agosto de 2024 (validación fuera de muestra, con el valor observado). Con los
+ * datos reales, el puente de diciembre de 2024 no sale rojo en ninguna zona.
  * ========================================================================== */
 (function () {
   'use strict';
@@ -24,7 +25,7 @@
   const DM = window.DatosModelo;
 
   const DEMO = /[?&]demo=1\b/.test(location.search);
-  const DEMO_MES = '2024-12';
+  const DEMO_MES = '2024-08';
   const HISTORICO = { modelo: 'largo', horizonte: 8 }; // aviso con una semana de antelación
   const PRIORIDAD = { futuro_corto: 3, futuro_largo: 2, historico: 1 };
 
