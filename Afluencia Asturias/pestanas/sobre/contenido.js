@@ -47,6 +47,7 @@ window.SobreContenido = {
     { titulo: 'El umbral lo fijamos nosotros.', texto: 'El semáforo y los umbrales (ámbar, rojo) son una decisión del equipo, no un dato oficial de capacidad de ninguna zona.' },
     { titulo: 'Medimos presión relativa, no personas.', texto: 'La cifra es la presión frente a un día normal en la zona. No cuenta cuánta gente hay en los Lagos ni en un punto concreto: la unidad mínima es la zona.' },
     { titulo: 'Los cruceros quedan fuera.', texto: 'No tenemos las escalas realizadas por fecha, así que la llegada de cruceristas no entra en el modelo.' },
+    { titulo: 'El tiempo de algunas zonas es aproximado.', texto: 'Tenemos previsión del tiempo para 5 puntos de Asturias; cada zona usa el más cercano, que en el occidente queda lejos. En Villaviciosa, los Oscos y el entorno de Somiedo el modelo detecta pocos de los días de más presión.' },
   ],
 
   // Mapa: fuente y licencia (datos de la persona 1, notas/coordinacion_web.md)

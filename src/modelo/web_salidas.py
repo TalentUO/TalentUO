@@ -31,11 +31,15 @@ def _cabecera(D: Datos) -> dict:
 
 
 def zonas_info(D: Datos) -> list[dict]:
+    """Posición de cada zona: lat/lon del mapeo (centro de sus concejos) si está; si no, la de su punto del tiempo."""
     zm = pd.read_csv(CONFIG / "zonas_meteo.csv").set_index("zona")
     out = []
-    for z, nombre, punto in zip(D.mapeo["zona_mitma_id"], D.mapeo["nombre"], D.mapeo["zona_meteo"]):
-        out.append({"zona_mitma_id": z, "nombre_zona": nombre, "lat": float(zm.loc[punto, "lat"]),
-                    "lon": float(zm.loc[punto, "lon"]), "es_principal": z == D.zona_principal})
+    for _, f in D.mapeo.iterrows():
+        z, punto = f["zona_mitma_id"], f["zona_meteo"]
+        propia = "lat" in f and "lon" in f and pd.notna(f["lat"]) and pd.notna(f["lon"]) and str(f["lat"]).strip() != ""
+        lat, lon = (float(f["lat"]), float(f["lon"])) if propia else (float(zm.loc[punto, "lat"]), float(zm.loc[punto, "lon"]))
+        out.append({"zona_mitma_id": z, "nombre_zona": f["nombre"], "lat": lat, "lon": lon,
+                    "es_principal": z == D.zona_principal})
     return out
 
 

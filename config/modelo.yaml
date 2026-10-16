@@ -109,7 +109,7 @@ lightgbm:
   num_threads: 4
 max_iteraciones: 2000
 parada_temprana: 100
-dias_validacion_interna: 90     # últimos días del entrenamiento para la parada temprana
+dias_validacion_interna: 365    # últimos días del entrenamiento para la parada temprana (máx. 40 % del periodo); 365 = incluye un verano (antes 90: con más zonas paraba sin aprender los picos de agosto)
 
 interes:
   # Artículos de Wikipedia que forman la señal "Picos" (suma de visitas).

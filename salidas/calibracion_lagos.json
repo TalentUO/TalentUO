@@ -993,27 +993,27 @@
  "previsto_fuera_de_muestra": {
   "relativo": {
    "mejor_umbral": 1.05,
-   "f1": 0.9112,
-   "precision": 0.9485,
-   "recall": 0.8768,
+   "f1": 0.9304,
+   "precision": 0.964,
+   "recall": 0.8992,
    "dias_regulados": 357,
-   "dias_alerta_con_mejor_umbral": 330,
+   "dias_alerta_con_mejor_umbral": 333,
    "mejor_en_borde_de_rejilla": false,
    "con_umbral_ambar": {
     "umbral": 1.5,
-    "f1": 0.5961,
-    "precision": 0.9935,
-    "recall": 0.4258,
-    "dias_alerta": 153.0,
+    "f1": 0.5771,
+    "precision": 0.9799,
+    "recall": 0.409,
+    "dias_alerta": 149.0,
     "dias_regulados": 357.0,
-    "coinciden": 152.0
+    "coinciden": 146.0
    },
    "con_umbral_rojo": {
     "umbral": 2.0,
-    "f1": 0.3239,
-    "precision": 1.0,
+    "f1": 0.3224,
+    "precision": 0.9718,
     "recall": 0.1933,
-    "dias_alerta": 69.0,
+    "dias_alerta": 71.0,
     "dias_regulados": 357.0,
     "coinciden": 69.0
    },
@@ -1038,132 +1038,123 @@
     },
     {
      "umbral": 0.6,
-     "f1": 0.6685,
-     "precision": 0.5021,
+     "f1": 0.6679,
+     "precision": 0.5014,
      "recall": 1.0,
-     "dias_alerta": 711,
+     "dias_alerta": 712,
      "dias_regulados": 357,
      "coinciden": 357
     },
     {
      "umbral": 0.65,
-     "f1": 0.6774,
-     "precision": 0.5122,
+     "f1": 0.6736,
+     "precision": 0.5078,
      "recall": 1.0,
-     "dias_alerta": 697,
+     "dias_alerta": 703,
      "dias_regulados": 357,
      "coinciden": 357
     },
     {
      "umbral": 0.7,
-     "f1": 0.7169,
-     "precision": 0.5587,
+     "f1": 0.7028,
+     "precision": 0.5417,
      "recall": 1.0,
-     "dias_alerta": 639,
+     "dias_alerta": 659,
      "dias_regulados": 357,
      "coinciden": 357
     },
     {
      "umbral": 0.75,
-     "f1": 0.7524,
-     "precision": 0.603,
+     "f1": 0.7453,
+     "precision": 0.594,
      "recall": 1.0,
-     "dias_alerta": 592,
+     "dias_alerta": 601,
      "dias_regulados": 357,
      "coinciden": 357
     },
     {
      "umbral": 0.8,
-     "f1": 0.7859,
-     "precision": 0.6485,
-     "recall": 0.9972,
-     "dias_alerta": 549,
+     "f1": 0.7819,
+     "precision": 0.6443,
+     "recall": 0.9944,
+     "dias_alerta": 551,
      "dias_regulados": 357,
-     "coinciden": 356
+     "coinciden": 355
     },
     {
      "umbral": 0.85,
-     "f1": 0.8244,
-     "precision": 0.7082,
-     "recall": 0.986,
-     "dias_alerta": 497,
+     "f1": 0.8249,
+     "precision": 0.7105,
+     "recall": 0.9832,
+     "dias_alerta": 494,
      "dias_regulados": 357,
-     "coinciden": 352
+     "coinciden": 351
     },
     {
      "umbral": 0.9,
-     "f1": 0.8547,
-     "precision": 0.7576,
-     "recall": 0.9804,
-     "dias_alerta": 462,
+     "f1": 0.8607,
+     "precision": 0.7687,
+     "recall": 0.9776,
+     "dias_alerta": 454,
      "dias_regulados": 357,
-     "coinciden": 350
+     "coinciden": 349
     },
     {
      "umbral": 0.95,
-     "f1": 0.8724,
-     "precision": 0.8009,
-     "recall": 0.958,
-     "dias_alerta": 427,
+     "f1": 0.8978,
+     "precision": 0.8341,
+     "recall": 0.972,
+     "dias_alerta": 416,
      "dias_regulados": 357,
-     "coinciden": 342
+     "coinciden": 347
     },
     {
      "umbral": 1.0,
-     "f1": 0.8997,
-     "precision": 0.8714,
-     "recall": 0.93,
-     "dias_alerta": 381,
+     "f1": 0.9237,
+     "precision": 0.8992,
+     "recall": 0.9496,
+     "dias_alerta": 377,
      "dias_regulados": 357,
-     "coinciden": 332
+     "coinciden": 339
     },
     {
      "umbral": 1.05,
-     "f1": 0.9112,
-     "precision": 0.9485,
-     "recall": 0.8768,
-     "dias_alerta": 330,
+     "f1": 0.9304,
+     "precision": 0.964,
+     "recall": 0.8992,
+     "dias_alerta": 333,
      "dias_regulados": 357,
-     "coinciden": 313
+     "coinciden": 321
     },
     {
      "umbral": 1.1,
-     "f1": 0.87,
-     "precision": 0.9723,
-     "recall": 0.7871,
-     "dias_alerta": 289,
+     "f1": 0.8705,
+     "precision": 0.9824,
+     "recall": 0.7815,
+     "dias_alerta": 284,
      "dias_regulados": 357,
-     "coinciden": 281
+     "coinciden": 279
     },
     {
      "umbral": 1.15,
-     "f1": 0.8118,
-     "precision": 0.9764,
-     "recall": 0.6947,
-     "dias_alerta": 254,
+     "f1": 0.7953,
+     "precision": 0.9795,
+     "recall": 0.6695,
+     "dias_alerta": 244,
      "dias_regulados": 357,
-     "coinciden": 248
+     "coinciden": 239
     },
     {
      "umbral": 1.2,
-     "f1": 0.7666,
-     "precision": 0.9783,
-     "recall": 0.6303,
-     "dias_alerta": 230,
+     "f1": 0.7365,
+     "precision": 0.9769,
+     "recall": 0.591,
+     "dias_alerta": 216,
      "dias_regulados": 357,
-     "coinciden": 225
+     "coinciden": 211
     },
     {
      "umbral": 1.25,
-     "f1": 0.7387,
-     "precision": 0.977,
-     "recall": 0.5938,
-     "dias_alerta": 217,
-     "dias_regulados": 357,
-     "coinciden": 212
-    },
-    {
-     "umbral": 1.3,
      "f1": 0.6908,
      "precision": 0.9745,
      "recall": 0.535,
@@ -1172,94 +1163,591 @@
      "coinciden": 191
     },
     {
-     "umbral": 1.35,
-     "f1": 0.6479,
-     "precision": 0.9774,
-     "recall": 0.4846,
-     "dias_alerta": 177,
+     "umbral": 1.3,
+     "f1": 0.653,
+     "precision": 0.9777,
+     "recall": 0.4902,
+     "dias_alerta": 179,
      "dias_regulados": 357,
-     "coinciden": 173
+     "coinciden": 175
+    },
+    {
+     "umbral": 1.35,
+     "f1": 0.6377,
+     "precision": 0.9769,
+     "recall": 0.4734,
+     "dias_alerta": 173,
+     "dias_regulados": 357,
+     "coinciden": 169
     },
     {
      "umbral": 1.4,
-     "f1": 0.6324,
-     "precision": 0.9881,
-     "recall": 0.465,
-     "dias_alerta": 168,
+     "f1": 0.6169,
+     "precision": 0.9758,
+     "recall": 0.451,
+     "dias_alerta": 165,
      "dias_regulados": 357,
-     "coinciden": 166
+     "coinciden": 161
     },
     {
      "umbral": 1.45,
-     "f1": 0.6166,
-     "precision": 0.9877,
-     "recall": 0.4482,
-     "dias_alerta": 162,
+     "f1": 0.5981,
+     "precision": 0.9747,
+     "recall": 0.4314,
+     "dias_alerta": 158,
      "dias_regulados": 357,
-     "coinciden": 160
+     "coinciden": 154
     },
     {
      "umbral": 1.5,
-     "f1": 0.5961,
-     "precision": 0.9935,
-     "recall": 0.4258,
-     "dias_alerta": 153,
+     "f1": 0.5771,
+     "precision": 0.9799,
+     "recall": 0.409,
+     "dias_alerta": 149,
      "dias_regulados": 357,
-     "coinciden": 152
+     "coinciden": 146
     },
     {
      "umbral": 1.55,
-     "f1": 0.5622,
-     "precision": 0.9929,
-     "recall": 0.3922,
-     "dias_alerta": 141,
+     "f1": 0.5484,
+     "precision": 0.9784,
+     "recall": 0.381,
+     "dias_alerta": 139,
      "dias_regulados": 357,
-     "coinciden": 140
+     "coinciden": 136
     },
     {
      "umbral": 1.6,
-     "f1": 0.5267,
-     "precision": 0.9922,
+     "f1": 0.5377,
+     "precision": 0.9851,
+     "recall": 0.3697,
+     "dias_alerta": 134,
+     "dias_regulados": 357,
+     "coinciden": 132
+    },
+    {
+     "umbral": 1.65,
+     "f1": 0.5257,
+     "precision": 0.9846,
      "recall": 0.3585,
-     "dias_alerta": 129,
+     "dias_alerta": 130,
      "dias_regulados": 357,
      "coinciden": 128
     },
     {
-     "umbral": 1.65,
-     "f1": 0.5021,
-     "precision": 0.9917,
-     "recall": 0.3361,
-     "dias_alerta": 121,
-     "dias_regulados": 357,
-     "coinciden": 120
-    },
-    {
      "umbral": 1.7,
-     "f1": 0.4863,
-     "precision": 0.9914,
-     "recall": 0.3221,
-     "dias_alerta": 116,
+     "f1": 0.5073,
+     "precision": 0.9839,
+     "recall": 0.3417,
+     "dias_alerta": 124,
      "dias_regulados": 357,
-     "coinciden": 115
+     "coinciden": 122
     },
     {
      "umbral": 1.75,
-     "f1": 0.4569,
-     "precision": 0.9907,
-     "recall": 0.2969,
-     "dias_alerta": 107,
+     "f1": 0.4916,
+     "precision": 0.9832,
+     "recall": 0.3277,
+     "dias_alerta": 119,
      "dias_regulados": 357,
-     "coinciden": 106
+     "coinciden": 117
     },
     {
      "umbral": 1.8,
-     "f1": 0.4229,
-     "precision": 0.9897,
-     "recall": 0.2689,
-     "dias_alerta": 97,
+     "f1": 0.4526,
+     "precision": 0.9813,
+     "recall": 0.2941,
+     "dias_alerta": 107,
      "dias_regulados": 357,
-     "coinciden": 96
+     "coinciden": 105
+    },
+    {
+     "umbral": 1.85,
+     "f1": 0.4254,
+     "precision": 0.9798,
+     "recall": 0.2717,
+     "dias_alerta": 99,
+     "dias_regulados": 357,
+     "coinciden": 97
+    },
+    {
+     "umbral": 1.9,
+     "f1": 0.3829,
+     "precision": 0.977,
+     "recall": 0.2381,
+     "dias_alerta": 87,
+     "dias_regulados": 357,
+     "coinciden": 85
+    },
+    {
+     "umbral": 1.95,
+     "f1": 0.3494,
+     "precision": 0.9744,
+     "recall": 0.2129,
+     "dias_alerta": 78,
+     "dias_regulados": 357,
+     "coinciden": 76
+    },
+    {
+     "umbral": 2.0,
+     "f1": 0.3224,
+     "precision": 0.9718,
+     "recall": 0.1933,
+     "dias_alerta": 71,
+     "dias_regulados": 357,
+     "coinciden": 69
+    },
+    {
+     "umbral": 2.05,
+     "f1": 0.2993,
+     "precision": 0.9844,
+     "recall": 0.1765,
+     "dias_alerta": 64,
+     "dias_regulados": 357,
+     "coinciden": 63
+    },
+    {
+     "umbral": 2.1,
+     "f1": 0.2912,
+     "precision": 0.9839,
+     "recall": 0.1709,
+     "dias_alerta": 62,
+     "dias_regulados": 357,
+     "coinciden": 61
+    },
+    {
+     "umbral": 2.15,
+     "f1": 0.2788,
+     "precision": 0.9831,
+     "recall": 0.1625,
+     "dias_alerta": 59,
+     "dias_regulados": 357,
+     "coinciden": 58
+    },
+    {
+     "umbral": 2.2,
+     "f1": 0.2663,
+     "precision": 0.9821,
+     "recall": 0.1541,
+     "dias_alerta": 56,
+     "dias_regulados": 357,
+     "coinciden": 55
+    },
+    {
+     "umbral": 2.25,
+     "f1": 0.2408,
+     "precision": 0.98,
+     "recall": 0.1373,
+     "dias_alerta": 50,
+     "dias_regulados": 357,
+     "coinciden": 49
+    },
+    {
+     "umbral": 2.3,
+     "f1": 0.21,
+     "precision": 0.9767,
+     "recall": 0.1176,
+     "dias_alerta": 43,
+     "dias_regulados": 357,
+     "coinciden": 42
+    },
+    {
+     "umbral": 2.35,
+     "f1": 0.2055,
+     "precision": 0.9762,
+     "recall": 0.1148,
+     "dias_alerta": 42,
+     "dias_regulados": 357,
+     "coinciden": 41
+    },
+    {
+     "umbral": 2.4,
+     "f1": 0.1919,
+     "precision": 0.9744,
+     "recall": 0.1064,
+     "dias_alerta": 39,
+     "dias_regulados": 357,
+     "coinciden": 38
+    },
+    {
+     "umbral": 2.45,
+     "f1": 0.1641,
+     "precision": 0.9697,
+     "recall": 0.0896,
+     "dias_alerta": 33,
+     "dias_regulados": 357,
+     "coinciden": 32
+    },
+    {
+     "umbral": 2.5,
+     "f1": 0.1406,
+     "precision": 1.0,
+     "recall": 0.0756,
+     "dias_alerta": 27,
+     "dias_regulados": 357,
+     "coinciden": 27
+    },
+    {
+     "umbral": 2.55,
+     "f1": 0.1161,
+     "precision": 1.0,
+     "recall": 0.0616,
+     "dias_alerta": 22,
+     "dias_regulados": 357,
+     "coinciden": 22
+    },
+    {
+     "umbral": 2.6,
+     "f1": 0.096,
+     "precision": 1.0,
+     "recall": 0.0504,
+     "dias_alerta": 18,
+     "dias_regulados": 357,
+     "coinciden": 18
+    },
+    {
+     "umbral": 2.65,
+     "f1": 0.0806,
+     "precision": 1.0,
+     "recall": 0.042,
+     "dias_alerta": 15,
+     "dias_regulados": 357,
+     "coinciden": 15
+    },
+    {
+     "umbral": 2.7,
+     "f1": 0.0545,
+     "precision": 1.0,
+     "recall": 0.028,
+     "dias_alerta": 10,
+     "dias_regulados": 357,
+     "coinciden": 10
+    },
+    {
+     "umbral": 2.75,
+     "f1": 0.0385,
+     "precision": 1.0,
+     "recall": 0.0196,
+     "dias_alerta": 7,
+     "dias_regulados": 357,
+     "coinciden": 7
+    },
+    {
+     "umbral": 2.8,
+     "f1": 0.0222,
+     "precision": 1.0,
+     "recall": 0.0112,
+     "dias_alerta": 4,
+     "dias_regulados": 357,
+     "coinciden": 4
+    },
+    {
+     "umbral": 2.85,
+     "f1": 0.0111,
+     "precision": 1.0,
+     "recall": 0.0056,
+     "dias_alerta": 2,
+     "dias_regulados": 357,
+     "coinciden": 2
+    },
+    {
+     "umbral": 2.9,
+     "f1": 0.0111,
+     "precision": 1.0,
+     "recall": 0.0056,
+     "dias_alerta": 2,
+     "dias_regulados": 357,
+     "coinciden": 2
+    },
+    {
+     "umbral": 2.95,
+     "f1": 0.0111,
+     "precision": 1.0,
+     "recall": 0.0056,
+     "dias_alerta": 2,
+     "dias_regulados": 357,
+     "coinciden": 2
+    },
+    {
+     "umbral": 3.0,
+     "f1": 0.0111,
+     "precision": 1.0,
+     "recall": 0.0056,
+     "dias_alerta": 2,
+     "dias_regulados": 357,
+     "coinciden": 2
+    }
+   ]
+  },
+  "absoluto": {
+   "mejor_umbral": 0.95,
+   "f1": 0.9055,
+   "precision": 0.8629,
+   "recall": 0.9524,
+   "dias_regulados": 357,
+   "dias_alerta_con_mejor_umbral": 394,
+   "mejor_en_borde_de_rejilla": false,
+   "con_umbral_ambar": {
+    "umbral": 1.5,
+    "f1": 0.5843,
+    "precision": 0.9739,
+    "recall": 0.4174,
+    "dias_alerta": 153.0,
+    "dias_regulados": 357.0,
+    "coinciden": 149.0
+   },
+   "con_umbral_rojo": {
+    "umbral": 2.0,
+    "f1": 0.3616,
+    "precision": 0.9875,
+    "recall": 0.2213,
+    "dias_alerta": 80.0,
+    "dias_regulados": 357.0,
+    "coinciden": 79.0
+   },
+   "curva": [
+    {
+     "umbral": 0.5,
+     "f1": 0.6679,
+     "precision": 0.5014,
+     "recall": 1.0,
+     "dias_alerta": 712,
+     "dias_regulados": 357,
+     "coinciden": 357
+    },
+    {
+     "umbral": 0.55,
+     "f1": 0.6698,
+     "precision": 0.5035,
+     "recall": 1.0,
+     "dias_alerta": 709,
+     "dias_regulados": 357,
+     "coinciden": 357
+    },
+    {
+     "umbral": 0.6,
+     "f1": 0.6768,
+     "precision": 0.5115,
+     "recall": 1.0,
+     "dias_alerta": 698,
+     "dias_regulados": 357,
+     "coinciden": 357
+    },
+    {
+     "umbral": 0.65,
+     "f1": 0.6966,
+     "precision": 0.5344,
+     "recall": 1.0,
+     "dias_alerta": 668,
+     "dias_regulados": 357,
+     "coinciden": 357
+    },
+    {
+     "umbral": 0.7,
+     "f1": 0.7243,
+     "precision": 0.5687,
+     "recall": 0.9972,
+     "dias_alerta": 626,
+     "dias_regulados": 357,
+     "coinciden": 356
+    },
+    {
+     "umbral": 0.75,
+     "f1": 0.7583,
+     "precision": 0.6117,
+     "recall": 0.9972,
+     "dias_alerta": 582,
+     "dias_regulados": 357,
+     "coinciden": 356
+    },
+    {
+     "umbral": 0.8,
+     "f1": 0.7987,
+     "precision": 0.6673,
+     "recall": 0.9944,
+     "dias_alerta": 532,
+     "dias_regulados": 357,
+     "coinciden": 355
+    },
+    {
+     "umbral": 0.85,
+     "f1": 0.8316,
+     "precision": 0.7175,
+     "recall": 0.9888,
+     "dias_alerta": 492,
+     "dias_regulados": 357,
+     "coinciden": 353
+    },
+    {
+     "umbral": 0.9,
+     "f1": 0.8682,
+     "precision": 0.7808,
+     "recall": 0.9776,
+     "dias_alerta": 447,
+     "dias_regulados": 357,
+     "coinciden": 349
+    },
+    {
+     "umbral": 0.95,
+     "f1": 0.9055,
+     "precision": 0.8629,
+     "recall": 0.9524,
+     "dias_alerta": 394,
+     "dias_regulados": 357,
+     "coinciden": 340
+    },
+    {
+     "umbral": 1.0,
+     "f1": 0.9004,
+     "precision": 0.9017,
+     "recall": 0.8992,
+     "dias_alerta": 356,
+     "dias_regulados": 357,
+     "coinciden": 321
+    },
+    {
+     "umbral": 1.05,
+     "f1": 0.8912,
+     "precision": 0.9381,
+     "recall": 0.8487,
+     "dias_alerta": 323,
+     "dias_regulados": 357,
+     "coinciden": 303
+    },
+    {
+     "umbral": 1.1,
+     "f1": 0.8729,
+     "precision": 0.9628,
+     "recall": 0.7983,
+     "dias_alerta": 296,
+     "dias_regulados": 357,
+     "coinciden": 285
+    },
+    {
+     "umbral": 1.15,
+     "f1": 0.8471,
+     "precision": 0.9815,
+     "recall": 0.7451,
+     "dias_alerta": 271,
+     "dias_regulados": 357,
+     "coinciden": 266
+    },
+    {
+     "umbral": 1.2,
+     "f1": 0.8131,
+     "precision": 0.9802,
+     "recall": 0.6947,
+     "dias_alerta": 253,
+     "dias_regulados": 357,
+     "coinciden": 248
+    },
+    {
+     "umbral": 1.25,
+     "f1": 0.7708,
+     "precision": 0.9784,
+     "recall": 0.6359,
+     "dias_alerta": 232,
+     "dias_regulados": 357,
+     "coinciden": 227
+    },
+    {
+     "umbral": 1.3,
+     "f1": 0.7254,
+     "precision": 0.9763,
+     "recall": 0.577,
+     "dias_alerta": 211,
+     "dias_regulados": 357,
+     "coinciden": 206
+    },
+    {
+     "umbral": 1.35,
+     "f1": 0.6716,
+     "precision": 0.9734,
+     "recall": 0.5126,
+     "dias_alerta": 188,
+     "dias_regulados": 357,
+     "coinciden": 183
+    },
+    {
+     "umbral": 1.4,
+     "f1": 0.6403,
+     "precision": 0.977,
+     "recall": 0.4762,
+     "dias_alerta": 174,
+     "dias_regulados": 357,
+     "coinciden": 170
+    },
+    {
+     "umbral": 1.45,
+     "f1": 0.6062,
+     "precision": 0.9752,
+     "recall": 0.4398,
+     "dias_alerta": 161,
+     "dias_regulados": 357,
+     "coinciden": 157
+    },
+    {
+     "umbral": 1.5,
+     "f1": 0.5843,
+     "precision": 0.9739,
+     "recall": 0.4174,
+     "dias_alerta": 153,
+     "dias_regulados": 357,
+     "coinciden": 149
+    },
+    {
+     "umbral": 1.55,
+     "f1": 0.5675,
+     "precision": 0.9728,
+     "recall": 0.4006,
+     "dias_alerta": 147,
+     "dias_regulados": 357,
+     "coinciden": 143
+    },
+    {
+     "umbral": 1.6,
+     "f1": 0.5444,
+     "precision": 0.9712,
+     "recall": 0.3782,
+     "dias_alerta": 139,
+     "dias_regulados": 357,
+     "coinciden": 135
+    },
+    {
+     "umbral": 1.65,
+     "f1": 0.5113,
+     "precision": 0.9688,
+     "recall": 0.3473,
+     "dias_alerta": 128,
+     "dias_regulados": 357,
+     "coinciden": 124
+    },
+    {
+     "umbral": 1.7,
+     "f1": 0.4864,
+     "precision": 0.9667,
+     "recall": 0.3249,
+     "dias_alerta": 120,
+     "dias_regulados": 357,
+     "coinciden": 116
+    },
+    {
+     "umbral": 1.75,
+     "f1": 0.4625,
+     "precision": 0.9818,
+     "recall": 0.3025,
+     "dias_alerta": 110,
+     "dias_regulados": 357,
+     "coinciden": 108
+    },
+    {
+     "umbral": 1.8,
+     "f1": 0.4323,
+     "precision": 0.9802,
+     "recall": 0.2773,
+     "dias_alerta": 101,
+     "dias_regulados": 357,
+     "coinciden": 99
     },
     {
      "umbral": 1.85,
@@ -1272,6 +1760,24 @@
     },
     {
      "umbral": 1.9,
+     "f1": 0.3837,
+     "precision": 0.9884,
+     "recall": 0.2381,
+     "dias_alerta": 86,
+     "dias_regulados": 357,
+     "coinciden": 85
+    },
+    {
+     "umbral": 1.95,
+     "f1": 0.3764,
+     "precision": 0.9881,
+     "recall": 0.2325,
+     "dias_alerta": 84,
+     "dias_regulados": 357,
+     "coinciden": 83
+    },
+    {
+     "umbral": 2.0,
      "f1": 0.3616,
      "precision": 0.9875,
      "recall": 0.2213,
@@ -1280,67 +1786,49 @@
      "coinciden": 79
     },
     {
-     "umbral": 1.95,
-     "f1": 0.3502,
-     "precision": 0.987,
-     "recall": 0.2129,
-     "dias_alerta": 77,
-     "dias_regulados": 357,
-     "coinciden": 76
-    },
-    {
-     "umbral": 2.0,
-     "f1": 0.3239,
-     "precision": 1.0,
-     "recall": 0.1933,
-     "dias_alerta": 69,
-     "dias_regulados": 357,
-     "coinciden": 69
-    },
-    {
      "umbral": 2.05,
-     "f1": 0.3081,
-     "precision": 1.0,
-     "recall": 0.1821,
-     "dias_alerta": 65,
+     "f1": 0.3426,
+     "precision": 0.9867,
+     "recall": 0.2073,
+     "dias_alerta": 75,
      "dias_regulados": 357,
-     "coinciden": 65
+     "coinciden": 74
     },
     {
      "umbral": 2.1,
-     "f1": 0.2837,
-     "precision": 1.0,
+     "f1": 0.3192,
+     "precision": 0.9855,
+     "recall": 0.1905,
+     "dias_alerta": 69,
+     "dias_regulados": 357,
+     "coinciden": 68
+    },
+    {
+     "umbral": 2.15,
+     "f1": 0.2993,
+     "precision": 0.9844,
+     "recall": 0.1765,
+     "dias_alerta": 64,
+     "dias_regulados": 357,
+     "coinciden": 63
+    },
+    {
+     "umbral": 2.2,
+     "f1": 0.283,
+     "precision": 0.9833,
      "recall": 0.1653,
-     "dias_alerta": 59,
+     "dias_alerta": 60,
      "dias_regulados": 357,
      "coinciden": 59
     },
     {
-     "umbral": 2.15,
-     "f1": 0.2628,
-     "precision": 1.0,
-     "recall": 0.1513,
-     "dias_alerta": 54,
-     "dias_regulados": 357,
-     "coinciden": 54
-    },
-    {
-     "umbral": 2.2,
-     "f1": 0.2543,
-     "precision": 1.0,
-     "recall": 0.1457,
-     "dias_alerta": 52,
-     "dias_regulados": 357,
-     "coinciden": 52
-    },
-    {
      "umbral": 2.25,
-     "f1": 0.25,
+     "f1": 0.2457,
      "precision": 1.0,
-     "recall": 0.1429,
-     "dias_alerta": 51,
+     "recall": 0.1401,
+     "dias_alerta": 50,
      "dias_regulados": 357,
-     "coinciden": 51
+     "coinciden": 50
     },
     {
      "umbral": 2.3,
@@ -1353,12 +1841,12 @@
     },
     {
      "umbral": 2.35,
-     "f1": 0.1924,
+     "f1": 0.197,
      "precision": 1.0,
-     "recall": 0.1064,
-     "dias_alerta": 38,
+     "recall": 0.1092,
+     "dias_alerta": 39,
      "dias_regulados": 357,
-     "coinciden": 38
+     "coinciden": 39
     },
     {
      "umbral": 2.4,
@@ -1380,15 +1868,6 @@
     },
     {
      "umbral": 2.5,
-     "f1": 0.155,
-     "precision": 1.0,
-     "recall": 0.084,
-     "dias_alerta": 30,
-     "dias_regulados": 357,
-     "coinciden": 30
-    },
-    {
-     "umbral": 2.55,
      "f1": 0.1358,
      "precision": 1.0,
      "recall": 0.0728,
@@ -1397,25 +1876,16 @@
      "coinciden": 26
     },
     {
+     "umbral": 2.55,
+     "f1": 0.1161,
+     "precision": 1.0,
+     "recall": 0.0616,
+     "dias_alerta": 22,
+     "dias_regulados": 357,
+     "coinciden": 22
+    },
+    {
      "umbral": 2.6,
-     "f1": 0.1111,
-     "precision": 1.0,
-     "recall": 0.0588,
-     "dias_alerta": 21,
-     "dias_regulados": 357,
-     "coinciden": 21
-    },
-    {
-     "umbral": 2.65,
-     "f1": 0.1011,
-     "precision": 1.0,
-     "recall": 0.0532,
-     "dias_alerta": 19,
-     "dias_regulados": 357,
-     "coinciden": 19
-    },
-    {
-     "umbral": 2.7,
      "f1": 0.0909,
      "precision": 1.0,
      "recall": 0.0476,
@@ -1424,13 +1894,31 @@
      "coinciden": 17
     },
     {
-     "umbral": 2.75,
-     "f1": 0.065,
+     "umbral": 2.65,
+     "f1": 0.0806,
      "precision": 1.0,
-     "recall": 0.0336,
-     "dias_alerta": 12,
+     "recall": 0.042,
+     "dias_alerta": 15,
      "dias_regulados": 357,
-     "coinciden": 12
+     "coinciden": 15
+    },
+    {
+     "umbral": 2.7,
+     "f1": 0.0598,
+     "precision": 1.0,
+     "recall": 0.0308,
+     "dias_alerta": 11,
+     "dias_regulados": 357,
+     "coinciden": 11
+    },
+    {
+     "umbral": 2.75,
+     "f1": 0.0545,
+     "precision": 1.0,
+     "recall": 0.028,
+     "dias_alerta": 10,
+     "dias_regulados": 357,
+     "coinciden": 10
     },
     {
      "umbral": 2.8,
@@ -1443,6 +1931,24 @@
     },
     {
      "umbral": 2.85,
+     "f1": 0.0331,
+     "precision": 1.0,
+     "recall": 0.0168,
+     "dias_alerta": 6,
+     "dias_regulados": 357,
+     "coinciden": 6
+    },
+    {
+     "umbral": 2.9,
+     "f1": 0.0276,
+     "precision": 1.0,
+     "recall": 0.014,
+     "dias_alerta": 5,
+     "dias_regulados": 357,
+     "coinciden": 5
+    },
+    {
+     "umbral": 2.95,
      "f1": 0.0167,
      "precision": 1.0,
      "recall": 0.0084,
@@ -1451,519 +1957,13 @@
      "coinciden": 3
     },
     {
-     "umbral": 2.9,
+     "umbral": 3.0,
      "f1": 0.0111,
      "precision": 1.0,
      "recall": 0.0056,
      "dias_alerta": 2,
      "dias_regulados": 357,
      "coinciden": 2
-    },
-    {
-     "umbral": 2.95,
-     "f1": 0.0111,
-     "precision": 1.0,
-     "recall": 0.0056,
-     "dias_alerta": 2,
-     "dias_regulados": 357,
-     "coinciden": 2
-    },
-    {
-     "umbral": 3.0,
-     "f1": 0.0056,
-     "precision": 1.0,
-     "recall": 0.0028,
-     "dias_alerta": 1,
-     "dias_regulados": 357,
-     "coinciden": 1
-    }
-   ]
-  },
-  "absoluto": {
-   "mejor_umbral": 1.0,
-   "f1": 0.8966,
-   "precision": 0.8832,
-   "recall": 0.9104,
-   "dias_regulados": 357,
-   "dias_alerta_con_mejor_umbral": 368,
-   "mejor_en_borde_de_rejilla": false,
-   "con_umbral_ambar": {
-    "umbral": 1.5,
-    "f1": 0.5866,
-    "precision": 0.9868,
-    "recall": 0.4174,
-    "dias_alerta": 151.0,
-    "dias_regulados": 357.0,
-    "coinciden": 149.0
-   },
-   "con_umbral_rojo": {
-    "umbral": 2.0,
-    "f1": 0.3357,
-    "precision": 1.0,
-    "recall": 0.2017,
-    "dias_alerta": 72.0,
-    "dias_regulados": 357.0,
-    "coinciden": 72.0
-   },
-   "curva": [
-    {
-     "umbral": 0.5,
-     "f1": 0.6679,
-     "precision": 0.5014,
-     "recall": 1.0,
-     "dias_alerta": 712,
-     "dias_regulados": 357,
-     "coinciden": 357
-    },
-    {
-     "umbral": 0.55,
-     "f1": 0.6711,
-     "precision": 0.505,
-     "recall": 1.0,
-     "dias_alerta": 707,
-     "dias_regulados": 357,
-     "coinciden": 357
-    },
-    {
-     "umbral": 0.6,
-     "f1": 0.6852,
-     "precision": 0.5212,
-     "recall": 1.0,
-     "dias_alerta": 685,
-     "dias_regulados": 357,
-     "coinciden": 357
-    },
-    {
-     "umbral": 0.65,
-     "f1": 0.7076,
-     "precision": 0.5475,
-     "recall": 1.0,
-     "dias_alerta": 652,
-     "dias_regulados": 357,
-     "coinciden": 357
-    },
-    {
-     "umbral": 0.7,
-     "f1": 0.7353,
-     "precision": 0.5814,
-     "recall": 1.0,
-     "dias_alerta": 614,
-     "dias_regulados": 357,
-     "coinciden": 357
-    },
-    {
-     "umbral": 0.75,
-     "f1": 0.7639,
-     "precision": 0.6191,
-     "recall": 0.9972,
-     "dias_alerta": 575,
-     "dias_regulados": 357,
-     "coinciden": 356
-    },
-    {
-     "umbral": 0.8,
-     "f1": 0.8014,
-     "precision": 0.6711,
-     "recall": 0.9944,
-     "dias_alerta": 529,
-     "dias_regulados": 357,
-     "coinciden": 355
-    },
-    {
-     "umbral": 0.85,
-     "f1": 0.831,
-     "precision": 0.7152,
-     "recall": 0.9916,
-     "dias_alerta": 495,
-     "dias_regulados": 357,
-     "coinciden": 354
-    },
-    {
-     "umbral": 0.9,
-     "f1": 0.8621,
-     "precision": 0.7746,
-     "recall": 0.972,
-     "dias_alerta": 448,
-     "dias_regulados": 357,
-     "coinciden": 347
-    },
-    {
-     "umbral": 0.95,
-     "f1": 0.8927,
-     "precision": 0.8467,
-     "recall": 0.944,
-     "dias_alerta": 398,
-     "dias_regulados": 357,
-     "coinciden": 337
-    },
-    {
-     "umbral": 1.0,
-     "f1": 0.8966,
-     "precision": 0.8832,
-     "recall": 0.9104,
-     "dias_alerta": 368,
-     "dias_regulados": 357,
-     "coinciden": 325
-    },
-    {
-     "umbral": 1.05,
-     "f1": 0.878,
-     "precision": 0.9,
-     "recall": 0.8571,
-     "dias_alerta": 340,
-     "dias_regulados": 357,
-     "coinciden": 306
-    },
-    {
-     "umbral": 1.1,
-     "f1": 0.8789,
-     "precision": 0.9423,
-     "recall": 0.8235,
-     "dias_alerta": 312,
-     "dias_regulados": 357,
-     "coinciden": 294
-    },
-    {
-     "umbral": 1.15,
-     "f1": 0.8612,
-     "precision": 0.9718,
-     "recall": 0.7731,
-     "dias_alerta": 284,
-     "dias_regulados": 357,
-     "coinciden": 276
-    },
-    {
-     "umbral": 1.2,
-     "f1": 0.8247,
-     "precision": 0.9807,
-     "recall": 0.7115,
-     "dias_alerta": 259,
-     "dias_regulados": 357,
-     "coinciden": 254
-    },
-    {
-     "umbral": 1.25,
-     "f1": 0.7866,
-     "precision": 0.9832,
-     "recall": 0.6555,
-     "dias_alerta": 238,
-     "dias_regulados": 357,
-     "coinciden": 234
-    },
-    {
-     "umbral": 1.3,
-     "f1": 0.7422,
-     "precision": 0.9816,
-     "recall": 0.5966,
-     "dias_alerta": 217,
-     "dias_regulados": 357,
-     "coinciden": 213
-    },
-    {
-     "umbral": 1.35,
-     "f1": 0.6944,
-     "precision": 0.9796,
-     "recall": 0.5378,
-     "dias_alerta": 196,
-     "dias_regulados": 357,
-     "coinciden": 192
-    },
-    {
-     "umbral": 1.4,
-     "f1": 0.6454,
-     "precision": 0.9773,
-     "recall": 0.4818,
-     "dias_alerta": 176,
-     "dias_regulados": 357,
-     "coinciden": 172
-    },
-    {
-     "umbral": 1.45,
-     "f1": 0.6142,
-     "precision": 0.9756,
-     "recall": 0.4482,
-     "dias_alerta": 164,
-     "dias_regulados": 357,
-     "coinciden": 160
-    },
-    {
-     "umbral": 1.5,
-     "f1": 0.5866,
-     "precision": 0.9868,
-     "recall": 0.4174,
-     "dias_alerta": 151,
-     "dias_regulados": 357,
-     "coinciden": 149
-    },
-    {
-     "umbral": 1.55,
-     "f1": 0.5754,
-     "precision": 0.9864,
-     "recall": 0.4062,
-     "dias_alerta": 147,
-     "dias_regulados": 357,
-     "coinciden": 145
-    },
-    {
-     "umbral": 1.6,
-     "f1": 0.5436,
-     "precision": 0.9853,
-     "recall": 0.3754,
-     "dias_alerta": 136,
-     "dias_regulados": 357,
-     "coinciden": 134
-    },
-    {
-     "umbral": 1.65,
-     "f1": 0.5196,
-     "precision": 0.9844,
-     "recall": 0.3529,
-     "dias_alerta": 128,
-     "dias_regulados": 357,
-     "coinciden": 126
-    },
-    {
-     "umbral": 1.7,
-     "f1": 0.501,
-     "precision": 0.9836,
-     "recall": 0.3361,
-     "dias_alerta": 122,
-     "dias_regulados": 357,
-     "coinciden": 120
-    },
-    {
-     "umbral": 1.75,
-     "f1": 0.4635,
-     "precision": 0.9908,
-     "recall": 0.3025,
-     "dias_alerta": 109,
-     "dias_regulados": 357,
-     "coinciden": 108
-    },
-    {
-     "umbral": 1.8,
-     "f1": 0.4333,
-     "precision": 0.99,
-     "recall": 0.2773,
-     "dias_alerta": 100,
-     "dias_regulados": 357,
-     "coinciden": 99
-    },
-    {
-     "umbral": 1.85,
-     "f1": 0.3991,
-     "precision": 1.0,
-     "recall": 0.2493,
-     "dias_alerta": 89,
-     "dias_regulados": 357,
-     "coinciden": 89
-    },
-    {
-     "umbral": 1.9,
-     "f1": 0.3736,
-     "precision": 1.0,
-     "recall": 0.2297,
-     "dias_alerta": 82,
-     "dias_regulados": 357,
-     "coinciden": 82
-    },
-    {
-     "umbral": 1.95,
-     "f1": 0.351,
-     "precision": 1.0,
-     "recall": 0.2129,
-     "dias_alerta": 76,
-     "dias_regulados": 357,
-     "coinciden": 76
-    },
-    {
-     "umbral": 2.0,
-     "f1": 0.3357,
-     "precision": 1.0,
-     "recall": 0.2017,
-     "dias_alerta": 72,
-     "dias_regulados": 357,
-     "coinciden": 72
-    },
-    {
-     "umbral": 2.05,
-     "f1": 0.32,
-     "precision": 1.0,
-     "recall": 0.1905,
-     "dias_alerta": 68,
-     "dias_regulados": 357,
-     "coinciden": 68
-    },
-    {
-     "umbral": 2.1,
-     "f1": 0.3081,
-     "precision": 1.0,
-     "recall": 0.1821,
-     "dias_alerta": 65,
-     "dias_regulados": 357,
-     "coinciden": 65
-    },
-    {
-     "umbral": 2.15,
-     "f1": 0.2837,
-     "precision": 1.0,
-     "recall": 0.1653,
-     "dias_alerta": 59,
-     "dias_regulados": 357,
-     "coinciden": 59
-    },
-    {
-     "umbral": 2.2,
-     "f1": 0.267,
-     "precision": 1.0,
-     "recall": 0.1541,
-     "dias_alerta": 55,
-     "dias_regulados": 357,
-     "coinciden": 55
-    },
-    {
-     "umbral": 2.25,
-     "f1": 0.2543,
-     "precision": 1.0,
-     "recall": 0.1457,
-     "dias_alerta": 52,
-     "dias_regulados": 357,
-     "coinciden": 52
-    },
-    {
-     "umbral": 2.3,
-     "f1": 0.237,
-     "precision": 1.0,
-     "recall": 0.1345,
-     "dias_alerta": 48,
-     "dias_regulados": 357,
-     "coinciden": 48
-    },
-    {
-     "umbral": 2.35,
-     "f1": 0.206,
-     "precision": 1.0,
-     "recall": 0.1148,
-     "dias_alerta": 41,
-     "dias_regulados": 357,
-     "coinciden": 41
-    },
-    {
-     "umbral": 2.4,
-     "f1": 0.1878,
-     "precision": 1.0,
-     "recall": 0.1036,
-     "dias_alerta": 37,
-     "dias_regulados": 357,
-     "coinciden": 37
-    },
-    {
-     "umbral": 2.45,
-     "f1": 0.1739,
-     "precision": 1.0,
-     "recall": 0.0952,
-     "dias_alerta": 34,
-     "dias_regulados": 357,
-     "coinciden": 34
-    },
-    {
-     "umbral": 2.5,
-     "f1": 0.126,
-     "precision": 1.0,
-     "recall": 0.0672,
-     "dias_alerta": 24,
-     "dias_regulados": 357,
-     "coinciden": 24
-    },
-    {
-     "umbral": 2.55,
-     "f1": 0.1011,
-     "precision": 1.0,
-     "recall": 0.0532,
-     "dias_alerta": 19,
-     "dias_regulados": 357,
-     "coinciden": 19
-    },
-    {
-     "umbral": 2.6,
-     "f1": 0.0703,
-     "precision": 1.0,
-     "recall": 0.0364,
-     "dias_alerta": 13,
-     "dias_regulados": 357,
-     "coinciden": 13
-    },
-    {
-     "umbral": 2.65,
-     "f1": 0.0492,
-     "precision": 1.0,
-     "recall": 0.0252,
-     "dias_alerta": 9,
-     "dias_regulados": 357,
-     "coinciden": 9
-    },
-    {
-     "umbral": 2.7,
-     "f1": 0.0385,
-     "precision": 1.0,
-     "recall": 0.0196,
-     "dias_alerta": 7,
-     "dias_regulados": 357,
-     "coinciden": 7
-    },
-    {
-     "umbral": 2.75,
-     "f1": 0.0222,
-     "precision": 1.0,
-     "recall": 0.0112,
-     "dias_alerta": 4,
-     "dias_regulados": 357,
-     "coinciden": 4
-    },
-    {
-     "umbral": 2.8,
-     "f1": 0.0167,
-     "precision": 1.0,
-     "recall": 0.0084,
-     "dias_alerta": 3,
-     "dias_regulados": 357,
-     "coinciden": 3
-    },
-    {
-     "umbral": 2.85,
-     "f1": 0.0056,
-     "precision": 1.0,
-     "recall": 0.0028,
-     "dias_alerta": 1,
-     "dias_regulados": 357,
-     "coinciden": 1
-    },
-    {
-     "umbral": 2.9,
-     "f1": 0.0056,
-     "precision": 1.0,
-     "recall": 0.0028,
-     "dias_alerta": 1,
-     "dias_regulados": 357,
-     "coinciden": 1
-    },
-    {
-     "umbral": 2.95,
-     "f1": 0.0056,
-     "precision": 1.0,
-     "recall": 0.0028,
-     "dias_alerta": 1,
-     "dias_regulados": 357,
-     "coinciden": 1
-    },
-    {
-     "umbral": 3.0,
-     "f1": 0.0,
-     "precision": null,
-     "recall": 0.0,
-     "dias_alerta": 0,
-     "dias_regulados": 357,
-     "coinciden": 0
     }
    ]
   },

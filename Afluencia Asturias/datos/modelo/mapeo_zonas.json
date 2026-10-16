@@ -35,6 +35,325 @@
    "concejos_ine": [
     "33044"
    ]
+  },
+  {
+   "zona_mitma_id": "33001_AM",
+   "nombre": "Allande y 3 más",
+   "concejos_ine": [
+    "33001",
+    "33022",
+    "33027",
+    "33028"
+   ]
+  },
+  {
+   "zona_mitma_id": "33002",
+   "nombre": "Aller",
+   "concejos_ine": [
+    "33002"
+   ]
+  },
+  {
+   "zona_mitma_id": "33004",
+   "nombre": "Avilés",
+   "concejos_ine": [
+    "33004"
+   ]
+  },
+  {
+   "zona_mitma_id": "33006_AM",
+   "nombre": "Cabranes y 2 más",
+   "concejos_ine": [
+    "33006",
+    "33009",
+    "33065"
+   ]
+  },
+  {
+   "zona_mitma_id": "33007_AM",
+   "nombre": "Villayón y 4 más",
+   "concejos_ine": [
+    "33007",
+    "33029",
+    "33048",
+    "33061",
+    "33077"
+   ]
+  },
+  {
+   "zona_mitma_id": "33008_AM",
+   "nombre": "Cabrales y 4 más",
+   "concejos_ine": [
+    "33008",
+    "33043",
+    "33046",
+    "33047",
+    "33055"
+   ]
+  },
+  {
+   "zona_mitma_id": "33011",
+   "nombre": "Cangas del Narcea",
+   "concejos_ine": [
+    "33011"
+   ]
+  },
+  {
+   "zona_mitma_id": "33014",
+   "nombre": "Carreño",
+   "concejos_ine": [
+    "33014"
+   ]
+  },
+  {
+   "zona_mitma_id": "33015_AM",
+   "nombre": "Caso y 3 más",
+   "concejos_ine": [
+    "33003",
+    "33015",
+    "33050",
+    "33067"
+   ]
+  },
+  {
+   "zona_mitma_id": "33016",
+   "nombre": "Castrillón",
+   "concejos_ine": [
+    "33016"
+   ]
+  },
+  {
+   "zona_mitma_id": "33017",
+   "nombre": "Castropol",
+   "concejos_ine": [
+    "33017"
+   ]
+  },
+  {
+   "zona_mitma_id": "33018",
+   "nombre": "Coaña",
+   "concejos_ine": [
+    "33018"
+   ]
+  },
+  {
+   "zona_mitma_id": "33019_AM",
+   "nombre": "Caravia y Colunga",
+   "concejos_ine": [
+    "33013",
+    "33019"
+   ]
+  },
+  {
+   "zona_mitma_id": "33020_AM",
+   "nombre": "Corvera de Asturias y Illas",
+   "concejos_ine": [
+    "33020",
+    "33030"
+   ]
+  },
+  {
+   "zona_mitma_id": "33021",
+   "nombre": "Cudillero",
+   "concejos_ine": [
+    "33021"
+   ]
+  },
+  {
+   "zona_mitma_id": "33023",
+   "nombre": "El Franco",
+   "concejos_ine": [
+    "33023"
+   ]
+  },
+  {
+   "zona_mitma_id": "33025",
+   "nombre": "Gozón",
+   "concejos_ine": [
+    "33025"
+   ]
+  },
+  {
+   "zona_mitma_id": "33026_AM",
+   "nombre": "Grado y Las Regueras",
+   "concejos_ine": [
+    "33026",
+    "33054"
+   ]
+  },
+  {
+   "zona_mitma_id": "33031",
+   "nombre": "Langreo",
+   "concejos_ine": [
+    "33031"
+   ]
+  },
+  {
+   "zona_mitma_id": "33032",
+   "nombre": "Laviana",
+   "concejos_ine": [
+    "33032"
+   ]
+  },
+  {
+   "zona_mitma_id": "33033",
+   "nombre": "Lena",
+   "concejos_ine": [
+    "33033"
+   ]
+  },
+  {
+   "zona_mitma_id": "33034",
+   "nombre": "Valdés",
+   "concejos_ine": [
+    "33034"
+   ]
+  },
+  {
+   "zona_mitma_id": "33035",
+   "nombre": "Llanera",
+   "concejos_ine": [
+    "33035"
+   ]
+  },
+  {
+   "zona_mitma_id": "33037",
+   "nombre": "Mieres",
+   "concejos_ine": [
+    "33037"
+   ]
+  },
+  {
+   "zona_mitma_id": "33038",
+   "nombre": "Morcín",
+   "concejos_ine": [
+    "33038"
+   ]
+  },
+  {
+   "zona_mitma_id": "33040",
+   "nombre": "Nava",
+   "concejos_ine": [
+    "33040"
+   ]
+  },
+  {
+   "zona_mitma_id": "33041",
+   "nombre": "Navia",
+   "concejos_ine": [
+    "33041"
+   ]
+  },
+  {
+   "zona_mitma_id": "33042",
+   "nombre": "Noreña",
+   "concejos_ine": [
+    "33042"
+   ]
+  },
+  {
+   "zona_mitma_id": "33045",
+   "nombre": "Parres",
+   "concejos_ine": [
+    "33045"
+   ]
+  },
+  {
+   "zona_mitma_id": "33049",
+   "nombre": "Piloña",
+   "concejos_ine": [
+    "33049"
+   ]
+  },
+  {
+   "zona_mitma_id": "33051_AM",
+   "nombre": "Candamo y Pravia",
+   "concejos_ine": [
+    "33010",
+    "33051"
+   ]
+  },
+  {
+   "zona_mitma_id": "33057_AM",
+   "nombre": "Riosa y 2 más",
+   "concejos_ine": [
+    "33057",
+    "33058",
+    "33064"
+   ]
+  },
+  {
+   "zona_mitma_id": "33059",
+   "nombre": "Salas",
+   "concejos_ine": [
+    "33059"
+   ]
+  },
+  {
+   "zona_mitma_id": "33060",
+   "nombre": "San Martín del Rey Aurelio",
+   "concejos_ine": [
+    "33060"
+   ]
+  },
+  {
+   "zona_mitma_id": "33066",
+   "nombre": "Siero",
+   "concejos_ine": [
+    "33066"
+   ]
+  },
+  {
+   "zona_mitma_id": "33069_AM",
+   "nombre": "Muros de Nalón y Soto del Barco",
+   "concejos_ine": [
+    "33039",
+    "33069"
+   ]
+  },
+  {
+   "zona_mitma_id": "33070",
+   "nombre": "Tapia de Casariego",
+   "concejos_ine": [
+    "33070"
+   ]
+  },
+  {
+   "zona_mitma_id": "33072_AM",
+   "nombre": "Somiedo y 5 más",
+   "concejos_ine": [
+    "33005",
+    "33052",
+    "33053",
+    "33068",
+    "33072",
+    "33078"
+   ]
+  },
+  {
+   "zona_mitma_id": "33073",
+   "nombre": "Tineo",
+   "concejos_ine": [
+    "33073"
+   ]
+  },
+  {
+   "zona_mitma_id": "33074_AM",
+   "nombre": "Vegadeo y 4 más",
+   "concejos_ine": [
+    "33062",
+    "33063",
+    "33071",
+    "33074",
+    "33075"
+   ]
+  },
+  {
+   "zona_mitma_id": "33076",
+   "nombre": "Villaviciosa",
+   "concejos_ine": [
+    "33076"
+   ]
   }
  ]
 }

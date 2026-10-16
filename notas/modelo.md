@@ -208,38 +208,38 @@ La prueba anti-fuga de variables (`test_antifuga.py`) no depende del algoritmo.
 La tabla siguiente la regenera cada ejecución con `--algoritmo ambos`.
 
 <!-- comparacion_algoritmos:inicio (generado por src/modelo/comparacion.py) -->
-Objetivo: `llegadas_ocio`. Experimento base. Generado el 2026-10-16 01:35.
+Objetivo: `llegadas_ocio`. Experimento base. Generado el 2026-10-16 09:34.
 
 | Criterio de la regla | LightGBM | XGBoost |
 |---|---|---|
-| Recall de días rojos en verano (%) | 82,7 | 81,2 |
-| Precisión de días rojos en verano (%) | 95,5 | 96,0 |
-| F1 de días rojos en verano (%) | 88,6 | 88,0 |
-| WAPE medio (%) | 9,0 | 8,9 |
-| Tiempo total de entrenamiento (s) | 10,8 | 21,9 |
+| Recall de días rojos en verano (%) | 53,9 | 64,2 |
+| Precisión de días rojos en verano (%) | 88,6 | 87,2 |
+| F1 de días rojos en verano (%) | 66,7 | 73,6 |
+| WAPE medio (%) | 10,1 | 9,8 |
+| Tiempo total de entrenamiento (s) | 18,7 | 97,9 |
 
-**Resultado de la regla:** lightgbm (paso 3: la precisión del de mayor recall (lightgbm) no es más de 5 puntos inferior (0.5): decide el recall; recall de días rojos en verano a 1.5 puntos (< 3) y WAPE medio a 0.1 puntos (< 1) -> LightGBM por regla).
+**Resultado de la regla:** xgboost (paso 1: la precisión del de mayor recall (xgboost) no es más de 5 puntos inferior (1.4): decide el recall; recall de días rojos en verano 10.3 puntos mayor (≥ 3)).
 
 Detalle por bloque y horizonte (WAPE, acierto de color, recall y precisión de rojos en %; MAE en visitantes; tiempo = entrenamiento del modelo que produce ese horizonte, en segundos). Corto plazo: media de h = 1-7.
 
 | Bloque | Horizonte | Algoritmo | WAPE | MAE | Acierto color | Recall rojo | Precisión rojo | Rojos obs. | Tiempo (s) |
 |---|---|---|---|---|---|---|---|---|---|
-| 2023-S2 (verano 2023) | 1-7 (corto) | lightgbm | 7,7 | 2318 | 90,3 | 79,9 | 90,1 | 167 | 1,41 |
-| 2023-S2 (verano 2023) | 1-7 (corto) | xgboost | 7,6 | 2295 | 89,7 | 75,5 | 94,3 | 167 | 3,71 |
-| 2023-S2 (verano 2023) | 8+ (largo) | lightgbm | 7,1 | 2150 | 91,2 | 84,4 | 94,0 | 167 | 0,67 |
-| 2023-S2 (verano 2023) | 8+ (largo) | xgboost | 7,3 | 2212 | 91,6 | 85,6 | 93,5 | 167 | 0,55 |
-| 2024-S1 | 1-7 (corto) | lightgbm | 7,5 | 2112 | 96,8 | 58,8 | 93,5 | 17 | 1,58 |
-| 2024-S1 | 1-7 (corto) | xgboost | 7,6 | 2114 | 97,2 | 64,7 | 94,3 | 17 | 3,57 |
-| 2024-S1 | 8+ (largo) | lightgbm | 8,4 | 2365 | 96,8 | 52,9 | 100,0 | 17 | 0,93 |
-| 2024-S1 | 8+ (largo) | xgboost | 8,9 | 2503 | 95,5 | 5,9 | 100,0 | 17 | 1,27 |
-| 2024-S2 (verano 2024) | 1-7 (corto) | lightgbm | 10,4 | 3386 | 91,9 | 81,1 | 99,3 | 177 | 2,55 |
-| 2024-S2 (verano 2024) | 1-7 (corto) | xgboost | 10,0 | 3237 | 91,7 | 79,6 | 98,3 | 177 | 5,82 |
-| 2024-S2 (verano 2024) | 8+ (largo) | lightgbm | 9,9 | 3203 | 92,5 | 85,3 | 98,7 | 177 | 0,25 |
-| 2024-S2 (verano 2024) | 8+ (largo) | xgboost | 9,9 | 3221 | 91,9 | 84,2 | 98,0 | 177 | 1,16 |
-| 2025-S1 (bloque final) | 1-7 (corto) | lightgbm | 9,5 | 2812 | 94,1 | 57,6 | 87,5 | 32 | 1,82 |
-| 2025-S1 (bloque final) | 1-7 (corto) | xgboost | 8,2 | 2438 | 93,6 | 29,9 | 92,7 | 32 | 1,00 |
-| 2025-S1 (bloque final) | 8+ (largo) | lightgbm | 11,7 | 3494 | 93,6 | 40,6 | 86,7 | 32 | 1,57 |
-| 2025-S1 (bloque final) | 8+ (largo) | xgboost | 11,9 | 3542 | 93,3 | 43,8 | 77,8 | 32 | 4,77 |
+| 2023-S2 (verano 2023) | 1-7 (corto) | lightgbm | 10,0 | 1197 | 91,2 | 64,1 | 84,8 | 521 | 1,50 |
+| 2023-S2 (verano 2023) | 1-7 (corto) | xgboost | 9,4 | 1127 | 91,4 | 70,0 | 83,0 | 521 | 23,82 |
+| 2023-S2 (verano 2023) | 8+ (largo) | lightgbm | 9,8 | 1176 | 91,6 | 72,4 | 80,9 | 521 | 0,62 |
+| 2023-S2 (verano 2023) | 8+ (largo) | xgboost | 9,4 | 1132 | 91,7 | 74,3 | 79,0 | 521 | 2,64 |
+| 2024-S1 | 1-7 (corto) | lightgbm | 9,1 | 1009 | 98,1 | 57,5 | 62,0 | 36 | 7,95 |
+| 2024-S1 | 1-7 (corto) | xgboost | 9,2 | 1016 | 98,1 | 49,2 | 70,5 | 36 | 39,57 |
+| 2024-S1 | 8+ (largo) | lightgbm | 9,2 | 1023 | 98,3 | 50,0 | 69,2 | 36 | 0,97 |
+| 2024-S1 | 8+ (largo) | xgboost | 9,3 | 1034 | 98,2 | 22,2 | 88,9 | 36 | 3,41 |
+| 2024-S2 (verano 2024) | 1-7 (corto) | lightgbm | 12,0 | 1514 | 88,7 | 33,2 | 99,1 | 611 | 1,45 |
+| 2024-S2 (verano 2024) | 1-7 (corto) | xgboost | 11,3 | 1433 | 89,8 | 45,4 | 98,5 | 611 | 9,10 |
+| 2024-S2 (verano 2024) | 8+ (largo) | lightgbm | 11,8 | 1489 | 90,0 | 50,2 | 97,2 | 611 | 0,23 |
+| 2024-S2 (verano 2024) | 8+ (largo) | xgboost | 10,2 | 1292 | 91,7 | 69,4 | 92,2 | 611 | 4,39 |
+| 2025-S1 (bloque final) | 1-7 (corto) | lightgbm | 8,9 | 1036 | 96,7 | 42,9 | 72,1 | 68 | 5,22 |
+| 2025-S1 (bloque final) | 1-7 (corto) | xgboost | 8,9 | 1045 | 96,7 | 23,9 | 95,0 | 68 | 10,66 |
+| 2025-S1 (bloque final) | 8+ (largo) | lightgbm | 10,5 | 1224 | 96,5 | 35,3 | 72,7 | 68 | 0,78 |
+| 2025-S1 (bloque final) | 8+ (largo) | xgboost | 10,8 | 1260 | 96,5 | 44,1 | 78,9 | 68 | 4,35 |
 
 El detalle por cada horizonte (1, 2, … 7, 8+) está en `salidas/comparacion_algoritmos.json → tabla`.
 <!-- comparacion_algoritmos:fin -->
