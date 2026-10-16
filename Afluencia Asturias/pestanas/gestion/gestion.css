@@ -1,35 +1,92 @@
-/* Estilos de la pestaña Funciones avanzadas (persona 2). Usa solo las variables de color de index.html.
- * El buscador y el desplegable copian el aspecto del buscador de Inicio (#buscar, #buscar-lista en estilos.css). */
+/* Estilos de la pestaña Funciones avanzadas (persona 2). Usa solo las variables de color de index.html. */
 
-/* Buscador de concejos y comarcas (Previsión de saturación) */
-#sat-buscar {
+/* ---------- Botones de paneles: solo se ve la sección elegida ---------- */
+.g-paneles { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.g-paneles [role="tab"] {
+  display: inline-flex; align-items: center; min-height: 44px; padding: .45rem 1rem; border-radius: 999px;
+  border: 1.5px solid var(--linea-fuerte); background: var(--superficie); color: var(--tinta); font-weight: 700;
+}
+.g-paneles [role="tab"]:hover { background: var(--superficie-2); }
+.g-paneles [role="tab"][aria-selected="true"] { background: var(--acento); color: var(--acento-tinta); border-color: var(--acento); }
+.g-sec[role="tabpanel"]:focus { outline: none; }
+.g-sec .btn[aria-pressed="true"] { background: var(--acento); color: var(--acento-tinta); border-color: var(--acento); }
+.sat-sub { font-size: 1.05rem; font-weight: 800; margin-top: 1.5rem; }
+
+/* ---------- Previsión de saturación ---------- */
+.sat-controles { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); gap: .9rem 1.25rem; margin-top: 1rem; align-items: end; }
+.g-buscador { min-width: 0; }
+.g-buscar-in {
   width: 100%; min-height: 48px; padding: .6rem .9rem .6rem 2.6rem;
   border: 1.5px solid var(--linea-fuerte); border-radius: 10px; background: var(--superficie);
 }
-#sat-buscar::placeholder { color: var(--tinta-2); opacity: .85; }
-#sat-buscar:focus-visible { outline-offset: 0; }
-#sat-lista {
+.g-buscar-in::placeholder { color: var(--tinta-2); opacity: .85; }
+.g-buscar-in:focus-visible { outline-offset: 0; }
+.g-buscar-lista {
   position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 4px);
   list-style: none; margin: 0; padding: .3rem; max-height: 20rem; overflow-y: auto;
   background: var(--superficie); border: 1px solid var(--linea-fuerte); border-radius: 10px; box-shadow: var(--sombra);
 }
-#sat-lista [role="option"] { padding: .55rem .7rem; border-radius: 7px; cursor: pointer; display: flex; flex-direction: column; }
-#sat-lista [role="option"] .op-zona { font-size: .85rem; color: var(--tinta-2); }
-#sat-lista [role="option"][aria-selected="true"], #sat-lista [role="option"]:hover { background: var(--acento-suave); }
-#sat-lista .sin-res { color: var(--tinta-2); cursor: default; padding: .55rem .7rem; }
-#sat-todas { margin-top: .5rem; }
-#sat-dias { margin-top: 1rem; }
+.g-buscar-lista [role="option"] { padding: .55rem .7rem; border-radius: 7px; cursor: pointer; display: flex; flex-direction: column; }
+.g-buscar-lista [role="option"] .op-zona { font-size: .85rem; color: var(--tinta-2); }
+.g-buscar-lista [role="option"][aria-selected="true"], .g-buscar-lista [role="option"]:hover { background: var(--acento-suave); }
+.g-buscar-lista .sin-res { color: var(--tinta-2); cursor: default; }
 
-/* Desplegable de concejos con selección múltiple (Alertas) */
-.g-multi { position: relative; }
-.g-multi > summary { list-style: none; cursor: pointer; display: flex; align-items: center; }
-.g-multi > summary::-webkit-details-marker { display: none; }
-.g-multi-panel {
-  position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 4px);
-  padding: .6rem; max-height: 22rem; overflow-y: auto;
+.sat-detalle { margin-top: 1.25rem; }
+.sat-sel { display: flex; justify-content: flex-end; }
+.sat-bloque { border-top: 1px solid var(--linea); margin-top: .75rem; padding-top: 1rem; }
+.sat-cab h3 { font-size: 1.2rem; font-weight: 800; }
+.sat-meses { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.1rem; }
+.sat-mes h4 { font-size: 1rem; font-weight: 800; margin-bottom: .4rem; }
+.sat-mes-n { font-weight: 400; color: var(--tinta-2); }
+.sat-dias { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .35rem; }
+.sat-dia {
+  display: grid; grid-template-columns: 7rem 8.5rem minmax(0, 1fr); gap: .3rem .9rem; align-items: center;
+  padding: .5rem .7rem; border-radius: 10px; background: var(--superficie-2);
+}
+.sat-fecha { font-weight: 700; font-variant-numeric: tabular-nums; position: relative; }
+.sat-val { min-width: 0; }
+.sat-zonas .rg-ver .btn-mini { white-space: nowrap; }
+
+/* ---------- Alertas: tabla dinámica ---------- */
+.al-controles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem 1.25rem; margin-top: 1rem; }
+.al-fila { display: flex; flex-wrap: wrap; gap: .5rem; }
+.al-fila > .select, .al-fila > .multi { flex: 1 1 12rem; min-width: 0; width: auto; }
+.multi { position: relative; }
+.multi-btn { text-align: left; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.multi-btn:disabled { cursor: not-allowed; }
+.multi-pop {
+  position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 4px); min-width: 14rem;
+  max-height: 20rem; overflow-y: auto; padding: .3rem;
   background: var(--superficie); border: 1px solid var(--linea-fuerte); border-radius: 10px; box-shadow: var(--sombra);
 }
-.g-multi-ops { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
-.g-multi-ops .chip-btn { min-height: 38px; padding: .3rem .8rem; font-size: .92rem; }
-#g-alertas .exp-botones { margin-top: .8rem; }
-caption.pz-ayuda { caption-side: top; text-align: left; padding: .6rem 0; }
+.multi-campo { border: 0; margin: 0; padding: 0; min-width: 0; }
+.multi-op { display: flex; align-items: center; gap: .6rem; min-height: 44px; padding: .3rem .6rem; border-radius: 7px; cursor: pointer; }
+.multi-op:hover { background: var(--acento-suave); }
+.multi-op input { width: 1.15rem; height: 1.15rem; accent-color: var(--acento); flex: none; }
+.al-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .9rem; }
+.al-chips:empty { display: none; }
+.al-chip {
+  display: inline-flex; align-items: center; gap: .45rem; min-height: 44px; padding: .3rem .8rem;
+  border-radius: 999px; border: 1.5px solid var(--acento); background: var(--acento-suave); color: var(--tinta); font-weight: 700;
+}
+.al-chip:hover { background: var(--superficie-2); }
+.al-chip .ico { font-size: .9rem; }
+.al-vacia { margin-top: .9rem; }
+.mz-zona { display: block; font-weight: 400; font-size: .76rem; color: var(--tinta-2); }
+/* Primera columna fija al desplazar la tabla en horizontal; los nombres largos saltan de línea */
+#matriz tbody th {
+  position: sticky; left: 0; z-index: 1; background: var(--superficie);
+  white-space: normal; min-width: 9rem; max-width: 15rem; line-height: 1.25;
+}
+#matriz thead th:first-child { position: sticky; left: 0; z-index: 1; background: var(--superficie); }
+
+@media (max-width: 900px) {
+  .al-controles, .sat-controles { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .g-paneles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g-paneles [role="tab"] { justify-content: center; text-align: center; padding-inline: .6rem; }
+  #matriz tbody th { min-width: 7rem; max-width: 8.5rem; font-size: .82rem; }
+  .sat-dia { grid-template-columns: minmax(0, 1fr) auto; }
+  .sat-val { grid-column: 1 / -1; }
+}
