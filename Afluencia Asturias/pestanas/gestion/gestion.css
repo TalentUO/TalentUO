@@ -90,3 +90,43 @@
   .sat-dia { grid-template-columns: minmax(0, 1fr) auto; }
   .sat-val { grid-column: 1 / -1; }
 }
+
+/* ---------- Fiabilidad: gráfica de lo real frente a lo previsto ----------
+ * Dos series (validadas con el comprobador de paletas de dataviz: contraste, separación
+ * para daltonismo y para visión normal, en claro y en oscuro). El día normal es referencia neutra. */
+:root { --g-real: #eb6834; --g-prev: #1B5C8F; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --g-real: #d95926; --g-prev: #3987e5; } }
+:root[data-theme="dark"] { --g-real: #d95926; --g-prev: #3987e5; }
+
+.g-graf-cab { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .8rem 1.5rem; margin-top: .8rem; }
+.g-graf-cab .select { min-width: 15rem; }
+.g-ley { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; font-size: .88rem; color: var(--tinta-2); }
+.g-ley li { display: inline-flex; align-items: center; gap: .45rem; }
+.g-ley-l { display: inline-block; width: 1.4rem; height: 0; border-top: 2px solid; vertical-align: middle; }
+.g-ley-real { border-color: var(--g-real); }
+.g-ley-prev { border-color: var(--g-prev); }
+.g-ley-normal { border-top: 2px dashed var(--tinta-2); opacity: .8; }
+.g-graf { position: relative; margin-top: .6rem; }
+.g-graf svg { display: block; max-width: 100%; height: auto; }
+.g-graf .rejilla line { stroke: var(--linea); stroke-width: 1; }
+.g-graf .eje text { fill: var(--tinta-2); font-size: 11px; font-variant-numeric: tabular-nums; }
+.g-graf .eje .marca { stroke: var(--linea-fuerte); }
+.g-graf path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.g-graf .l-real { stroke: var(--g-real); stroke-width: 2; }
+.g-graf .l-prev { stroke: var(--g-prev); stroke-width: 2; }
+.g-graf .l-normal { stroke: var(--tinta-2); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: .7; }
+.g-graf .etq-dir { font-size: 12px; font-weight: 700; fill: var(--tinta); }
+.g-graf .g-raton { fill: transparent; cursor: crosshair; }
+.g-graf .g-cruz line { stroke: var(--linea-fuerte); stroke-width: 1; }
+.g-graf .g-cruz circle { stroke: var(--superficie); stroke-width: 2; }
+.g-graf .g-cruz .p-real { fill: var(--g-real); }
+.g-graf .g-cruz .p-prev { fill: var(--g-prev); }
+.g-tip {
+  position: absolute; z-index: 5; pointer-events: none; min-width: 13rem; max-width: 18rem;
+  padding: .55rem .7rem; font-size: .85rem; background: var(--superficie); color: var(--tinta);
+  border: 1px solid var(--linea-fuerte); border-radius: 10px; box-shadow: var(--sombra);
+}
+.g-tip p { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; margin: .15rem 0; }
+.g-tip .g-tip-f { font-weight: 700; }
+.g-tip .g-tip-n { color: var(--tinta-2); font-size: .8rem; }
+.g-tip .pill { font-size: .75rem; }
