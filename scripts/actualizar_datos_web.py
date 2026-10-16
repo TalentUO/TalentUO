@@ -165,6 +165,30 @@ def leer_comarcas() -> dict | None:
     return {"origen": "config/comarcas_asturias.csv (Decreto 11/1991, de 24 de enero)", "concejos": filas}
 
 
+def leer_validacion(algoritmo: str) -> dict | None:
+    """Real frente a previsto en la validación fuera de muestra (salidas/backtest.parquet), para la gráfica de
+    Fiabilidad: experimento base, modelo de largo plazo (8 días de antelación), el algoritmo de las salidas.
+    Por zona: [fecha, llegadas observadas, previstas, día normal del semáforo, bloque]."""
+    try:
+        import pandas as pd
+        b = pd.read_parquet(SALIDAS / "backtest.parquet",
+                            columns=["fecha", "zona_mitma_id", "experimento", "modelo", "algoritmo", "horizonte", "bloque",
+                                     "visitas_obs", "visitas_pred", "normal_ref"])
+    except Exception as e:
+        print(f"AVISO: sin validación para la gráfica de Fiabilidad ({e})")
+        return None
+    b = b[(b["experimento"] == "base") & (b["modelo"] == "largo") & (b["algoritmo"] == algoritmo)].dropna(subset=["visitas_obs", "visitas_pred"])
+    if b.empty:
+        return None
+    b = b.sort_values(["zona_mitma_id", "fecha"])
+    bloques = sorted(b["bloque"].unique())
+    filas = {z: [[f.strftime("%Y-%m-%d"), round(float(o)), round(float(p)), round(float(n)), bloques.index(bl)]
+                 for f, o, p, n, bl in zip(g["fecha"], g["visitas_obs"], g["visitas_pred"], g["normal_ref"], g["bloque"])]
+             for z, g in b.groupby("zona_mitma_id")}
+    return {"origen": "salidas/backtest.parquet (experimento base, largo plazo)", "algoritmo": algoritmo,
+            "horizonte": int(b["horizonte"].min()), "bloques": bloques, "filas": filas}
+
+
 def leer_horas() -> dict | None:
     """Llegadas de ocio por hora (zona × mes × tipo de día), para el patrón horario de Gestión."""
     ruta = RAIZ / "data" / "clean" / "llegadas_por_hora.parquet"
@@ -217,6 +241,10 @@ def main() -> None:
     if calendario:
         paquete["calendario"] = calendario
         (DESTINO / "calendario.json").write_text(json.dumps(calendario, ensure_ascii=False), encoding="utf-8")
+    validacion = leer_validacion(datos["metricas"].get("algoritmo", "lightgbm"))
+    if validacion:
+        paquete["validacion"] = validacion
+        (DESTINO / "validacion.json").write_text(json.dumps(validacion, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     comarcas = leer_comarcas()
     if comarcas:
         paquete["comarcas"] = comarcas

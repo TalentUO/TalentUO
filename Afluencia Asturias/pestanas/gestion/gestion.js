@@ -25,7 +25,6 @@ window.Pestanas = window.Pestanas || {};
   const PANELES = [
     { id: 'saturacion', t: 'Previsión de saturación' },
     { id: 'alertas', t: 'Alertas' },
-    { id: 'lagos', t: 'Regulación actual' },
     { id: 'fiabilidad', t: 'Fiabilidad del modelo' },
     { id: 'perfil', t: 'Perfil del visitante' },
     { id: 'exportar', t: 'Exportar datos' },
@@ -98,7 +97,7 @@ window.Pestanas = window.Pestanas || {};
     const estado = {
       panel: paneles[0].id,
       umbralIdx: Math.max(0, umbrales.indexOf(umb.rojo)),
-      periodo: 'p91', sel: null, satActiva: -1, satOpciones: [],
+      periodo: periodos.some(p => p.v === 'a' + (anioHoy + 1)) ? 'a' + (anioHoy + 1) : 'p91', sel: null, satActiva: -1, satOpciones: [],
       alZona: '', todasZonas: false, concejos: [], // concejos = [{ ine, zona }] en el orden en que se eligen
       filtro: 'rojo', csv: null, csvOrigen: null,
     };
@@ -179,13 +178,6 @@ window.Pestanas = window.Pestanas || {};
       <div id="alertas-lista" class="al-lista"></div>
     </section>
 
-    <section class="tarjeta g-sec" id="g-lagos" role="tabpanel" aria-labelledby="gt-lagos" tabindex="-1" hidden>
-      <h2>Comparación con el acceso regulado a los Lagos</h2>
-      <p class="g-desc" id="lagos-desc"></p>
-      <div class="tabla-marco" id="lagos-tabla"></div>
-      <p class="g-nota" id="lagos-nota"></p>
-    </section>
-
     <section class="tarjeta g-sec" id="g-fiabilidad" role="tabpanel" aria-labelledby="gt-fiabilidad" tabindex="-1" hidden>
       <h2>Fiabilidad del modelo</h2>
       <p class="g-desc">Cuánto acierta el modelo en días que no ha visto al entrenar, según con cuánta antelación se hace la previsión.</p>
@@ -193,6 +185,21 @@ window.Pestanas = window.Pestanas || {};
       <select id="fiab-zona" class="select">${opcionesZona}</select>
       <div class="metricas" id="fiab-metricas"></div>
       <p class="g-nota" id="fiab-nota"></p>
+      <div id="fiab-graf-sec" hidden>
+        <h3 class="sat-sub">Lo que predijo frente a lo que pasó</h3>
+        <p class="g-desc">Llegadas de ocio por día en días que el modelo no vio al entrenar, previstas con <span id="fiab-h"></span> días de antelación. Pasa el ratón por la gráfica para ver cada día.</p>
+        <div class="g-graf-cab">
+          <div><label for="fiab-bloque" class="filtro-et">Periodo</label><select id="fiab-bloque" class="select"></select></div>
+          <ul class="g-ley" aria-label="Leyenda">
+            <li><span class="g-ley-l g-ley-real" aria-hidden="true"></span>Real (MITMA)</li>
+            <li><span class="g-ley-l g-ley-prev" aria-hidden="true"></span>Predicción</li>
+            <li><span class="g-ley-l g-ley-normal" aria-hidden="true"></span>Día normal</li>
+          </ul>
+        </div>
+        <div class="g-graf" id="fiab-graf"></div>
+        <p class="g-resumen" id="fiab-graf-res" aria-live="polite"></p>
+        <details class="detalles"><summary>Ver los datos de la gráfica por meses</summary><div class="tabla-marco" id="fiab-graf-tabla"></div></details>
+      </div>
       <details class="detalles"><summary>Ver el detalle por días de antelación</summary><div class="tabla-marco" id="fiab-tabla"></div></details>
     </section>
 
@@ -251,6 +258,7 @@ window.Pestanas = window.Pestanas || {};
         q('#' + b.getAttribute('aria-controls')).hidden = !on;
       });
       if (id === 'exportar') q('#exp-sat-txt').textContent = textoSatActual();
+      if (id === 'fiabilidad') pintarGrafica();
       if (enfocar) q('#gt-' + id).focus();
     }
     botonesPanel.forEach((b, i) => {
@@ -440,20 +448,6 @@ window.Pestanas = window.Pestanas || {};
     });
     entrada.addEventListener('blur', () => setTimeout(cerrarLista, 120));
 
-    /* ---------- Lagos ---------- */
-    (function pintarLagos() {
-      const l = lagos;
-      if (!l) return;
-      q('#lagos-desc').textContent = `${l.nombre_zona}: cuántos días de alerta (alta o saturación, con los umbrales del semáforo) caen en días con acceso regulado a los Lagos y cuántos fuera.`;
-      q('#lagos-tabla').innerHTML = `<table class="tabla"><caption class="sr">Días de alerta dentro y fuera de los días con acceso regulado</caption>
-        <thead><tr><th scope="col">Año</th><th scope="col" class="num">Días regulados</th><th scope="col" class="num">Alertas en días regulados</th><th scope="col" class="num">Alertas fuera</th><th scope="col" class="num">Saturación en días regulados</th><th scope="col" class="num">Saturación fuera</th></tr></thead>
-        <tbody>${l.anios.map(a => `<tr><th scope="row">${a.anio} <span class="rg-pico">${a.tipo === 'previsto' ? 'previsto' : 'observado'}${a.supuesta ? ', calendario supuesto' : ''}</span></th>
-          <td class="num">${num(a.dias_regulados)}</td><td class="num">${num(a.alerta_en_regulados)}</td><td class="num">${num(a.alerta_fuera)}</td><td class="num">${num(a.rojos_en_regulados)}</td><td class="num">${num(a.rojos_fuera)}</td></tr>`).join('')}</tbody></table>`;
-      const cal = l.calibracion;
-      q('#lagos-nota').innerHTML = (cal ? `El umbral que mejor reproduce los días regulados en 2023 y 2024 es <strong>${esc(pct(cal.mejor_umbral))}</strong> sobre un día normal (precisión ${pc100(cal.precision)}, cobertura ${pc100(cal.recall)}). ` : '') +
-        (l.nota ? esc(l.nota) + ' ' : '') + 'En 2027 aún no se ha publicado la regulación de los Lagos: se supone igual que 364 días antes.';
-    })();
-
     /* ---------- Alertas: tabla dinámica (zona → concejos) ---------- */
     const fechasAl = Array.from(new Set(alertas.map(a => a.fecha))).sort();
     const alPorClave = new Map(alertas.map(a => [a.fecha + '|' + a.zona_mitma_id, a]));
@@ -604,7 +598,126 @@ window.Pestanas = window.Pestanas || {};
         <thead><tr><th scope="col">Antelación</th><th scope="col">Qué significa</th></tr></thead>
         <tbody>${f.filas.map(x => `<tr><td>${x.horizonte_txt === '8+' ? '8 días o más' : x.horizonte_txt + (x.horizonte_txt === '1' ? ' día' : ' días')}</td><td>${esc(x.nota)}</td></tr>`).join('')}</tbody></table>`;
     }
-    q('#fiab-zona').addEventListener('change', pintarFiabilidad);
+    q('#fiab-zona').addEventListener('change', () => { pintarFiabilidad(); pintarGrafica(); });
+    q('#fiab-bloque').addEventListener('change', pintarGrafica);
+    let tRedim = null;
+    window.addEventListener('resize', () => { clearTimeout(tRedim); tRedim = setTimeout(() => { if (estado.panel === 'fiabilidad') pintarGrafica(); }, 150); });
+
+    /* ---------- Fiabilidad: gráfica de lo real frente a lo previsto (validación fuera de muestra) ---------- */
+    const VAL = datos.validacion;
+    const NS = 'http://www.w3.org/2000/svg';
+    if (VAL) {
+      q('#fiab-graf-sec').hidden = false;
+      q('#fiab-h').textContent = VAL.horizonte;
+      const nombreBloque = b => b.replace(/\s*\(bloque final\)/, '').replace(/^(\d{4})-S1$/, 'Primer semestre de $1').replace(/^(\d{4})-S2 \(verano \d{4}\)$/, 'Verano y otoño de $1').replace(/^(\d{4})-S1 /, 'Primer semestre de $1 ');
+      const iVerano = VAL.bloques.findIndex(b => /verano 2024/.test(b));
+      q('#fiab-bloque').innerHTML = VAL.bloques.map((b, i) => `<option value="${i}"${i === iVerano ? ' selected' : ''}>${esc(nombreBloque(b))}</option>`).join('')
+        + '<option value="todo">Todo el periodo validado</option>';
+    }
+    const colorDe = c => (c >= umb.rojo ? 'rojo' : c >= umb.ambar ? 'ambar' : 'verde');
+    const fechaCortaG = f => { const d = util.deISO(f); return d.getDate() + ' ' + MESES[d.getMonth()].slice(0, 3); };
+
+    function pintarGrafica() {
+      if (!VAL) return;
+      const cont = q('#fiab-graf'), ancho = cont.clientWidth;
+      if (!ancho) return; // panel oculto: se pinta al abrirlo
+      const zona = q('#fiab-zona').value, b = q('#fiab-bloque').value;
+      const filas = (VAL.filas[zona] || []).filter(r => b === 'todo' || r[4] === +b);
+      cont.innerHTML = '';
+      if (!filas.length) { cont.innerHTML = '<p class="pz-ayuda">Sin días validados para esta zona en este periodo.</p>'; q('#fiab-graf-res').textContent = ''; q('#fiab-graf-tabla').innerHTML = ''; return; }
+      const alto = 280, m = { izq: 58, der: 86, arr: 14, aba: 30 };
+      const w = ancho - m.izq - m.der, h = alto - m.arr - m.aba;
+      const t0 = util.deISO(filas[0][0]).getTime(), t1 = util.deISO(filas[filas.length - 1][0]).getTime();
+      const x = f => m.izq + (t1 === t0 ? 0 : (util.deISO(f).getTime() - t0) / (t1 - t0) * w);
+      const maxV = Math.max(...filas.map(r => Math.max(r[1], r[2], r[3])));
+      const paso = (() => { const bruto = maxV / 4, p10 = Math.pow(10, Math.floor(Math.log10(bruto))); return [1, 2, 2.5, 5, 10].map(k => k * p10).find(k => k >= bruto); })();
+      const techo = Math.ceil(maxV / paso) * paso;
+      const y = v => m.arr + h - v / techo * h;
+      const el = (tag, at, padre) => { const e = document.createElementNS(NS, tag); Object.keys(at).forEach(k => e.setAttribute(k, at[k])); if (padre) padre.appendChild(e); return e; };
+      const svg = el('svg', { viewBox: `0 0 ${ancho} ${alto}`, width: ancho, height: alto, role: 'img',
+        'aria-label': `Llegadas de ocio reales y previstas en ${L.nombreZona(datos, zona)}` });
+      // Rejilla y eje Y
+      const rej = el('g', { class: 'rejilla' }, svg), ejes = el('g', { class: 'eje' }, svg);
+      for (let v = 0; v <= techo + 1e-6; v += paso) {
+        el('line', { x1: m.izq, x2: m.izq + w, y1: y(v), y2: y(v) }, rej);
+        el('text', { x: m.izq - 8, y: y(v) + 4, 'text-anchor': 'end' }, ejes).textContent = num(v);
+      }
+      // Eje X: el primer día de cada mes (si hay muchos, uno de cada dos)
+      const meses = filas.filter(r => r[0].endsWith('-01'));
+      const salto = meses.length > 12 ? 3 : meses.length > 7 ? 2 : 1;
+      let anioEt = null; // el año va en la primera etiqueta de cada año
+      meses.forEach((r, i) => {
+        if (i % salto) return;
+        const d = util.deISO(r[0]);
+        el('line', { x1: x(r[0]), x2: x(r[0]), y1: m.arr + h, y2: m.arr + h + 4, class: 'marca' }, ejes);
+        el('text', { x: x(r[0]), y: alto - 8, 'text-anchor': 'middle' }, ejes).textContent = MESES[d.getMonth()].slice(0, 3) + (d.getFullYear() !== anioEt ? ' ' + d.getFullYear() : '');
+        anioEt = d.getFullYear();
+      });
+      // Líneas: día normal (referencia), real y predicción. Huecos donde faltan días.
+      const camino = k => {
+        let dd = '', prev = null;
+        filas.forEach(r => {
+          const salto = prev && (util.deISO(r[0]) - util.deISO(prev[0])) > 1.5 * 86400000;
+          dd += (dd && !salto ? 'L' : 'M') + x(r[0]).toFixed(1) + ' ' + y(r[k]).toFixed(1);
+          prev = r;
+        });
+        return dd;
+      };
+      el('path', { d: camino(3), class: 'l-normal' }, svg);
+      el('path', { d: camino(1), class: 'l-real' }, svg);
+      el('path', { d: camino(2), class: 'l-prev' }, svg);
+      // Etiquetas directas al final de cada línea
+      const ult = filas[filas.length - 1];
+      const etq = [[1, 'Real', 't-real'], [2, 'Predicción', 't-prev']].map(([k, t, c]) => ({ y: y(ult[k]), t, c }));
+      if (Math.abs(etq[0].y - etq[1].y) < 14) { const mid = (etq[0].y + etq[1].y) / 2, arriba = etq[0].y <= etq[1].y ? 0 : 1; etq[arriba].y = mid - 7; etq[1 - arriba].y = mid + 7; }
+      etq.forEach(e => { el('text', { x: m.izq + w + 8, y: e.y + 4, class: 'etq-dir ' + e.c }, svg).textContent = e.t; });
+      // Capa de interacción: línea vertical, puntos y recuadro
+      const cruz = el('g', { class: 'g-cruz', visibility: 'hidden' }, svg);
+      const vl = el('line', { y1: m.arr, y2: m.arr + h }, cruz);
+      const pR = el('circle', { r: 4.5, class: 'p-real' }, cruz), pP = el('circle', { r: 4.5, class: 'p-prev' }, cruz);
+      const zonaRaton = el('rect', { x: m.izq, y: m.arr, width: w, height: h, class: 'g-raton' }, svg);
+      cont.appendChild(svg);
+      const tip = document.createElement('div');
+      tip.className = 'g-tip'; tip.hidden = true;
+      cont.appendChild(tip);
+      const xs = filas.map(r => x(r[0]));
+      function mostrar(px) {
+        let i = 0, lo = 0, hi = xs.length - 1;
+        while (lo <= hi) { const mid = (lo + hi) >> 1; if (xs[mid] < px) lo = mid + 1; else hi = mid - 1; }
+        i = lo >= xs.length ? xs.length - 1 : lo > 0 && px - xs[lo - 1] < xs[lo] - px ? lo - 1 : lo;
+        const r = filas[i], cx = xs[i];
+        cruz.setAttribute('visibility', 'visible');
+        vl.setAttribute('x1', cx); vl.setAttribute('x2', cx);
+        pR.setAttribute('cx', cx); pR.setAttribute('cy', y(r[1]));
+        pP.setAttribute('cx', cx); pP.setAttribute('cy', y(r[2]));
+        const dif = Math.round((r[2] / r[1] - 1) * 100);
+        tip.innerHTML = `<p class="g-tip-f">${esc(util.fechaLarga(r[0]))}</p>
+          <p><span class="g-ley-l g-ley-real" aria-hidden="true"></span>Real: <strong>${num(r[1])}</strong> ${pill(colorDe(r[1] / r[3]))}</p>
+          <p><span class="g-ley-l g-ley-prev" aria-hidden="true"></span>Predicción: <strong>${num(r[2])}</strong> ${pill(colorDe(r[2] / r[3]))}</p>
+          <p class="g-tip-n">${dif === 0 ? 'Acertó la cifra' : `${dif > 0 ? 'Previó un ' + dif : 'Previó un ' + (-dif)}${NBSP}% ${dif > 0 ? 'más' : 'menos'} de lo real`} · día normal: ${num(r[3])}</p>`;
+        tip.hidden = false;
+        const tw = tip.offsetWidth, izq = cx + 14 + tw > ancho ? cx - 14 - tw : cx + 14;
+        tip.style.left = Math.max(0, izq) + 'px';
+        tip.style.top = Math.max(0, Math.min(y(Math.max(r[1], r[2])) - 20, alto - tip.offsetHeight)) + 'px';
+      }
+      zonaRaton.addEventListener('mousemove', e => { const r = svg.getBoundingClientRect(); mostrar((e.clientX - r.left) * ancho / r.width); });
+      zonaRaton.addEventListener('mouseleave', () => { cruz.setAttribute('visibility', 'hidden'); tip.hidden = true; });
+      // Resumen y tabla por meses (vista sin gráfica)
+      const sumO = filas.reduce((a, r) => a + r[1], 0), err = filas.reduce((a, r) => a + Math.abs(r[2] - r[1]), 0);
+      const acierto = filas.filter(r => colorDe(r[1] / r[3]) === colorDe(r[2] / r[3])).length / filas.length;
+      const rojosR = filas.filter(r => colorDe(r[1] / r[3]) === 'rojo').length, rojosOk = filas.filter(r => colorDe(r[1] / r[3]) === 'rojo' && colorDe(r[2] / r[3]) === 'rojo').length;
+      q('#fiab-graf-res').textContent = `En estos ${filas.length} días, la predicción se desvió de media un ${Math.round(err / sumO * 100)}${NBSP}% de las llegadas reales y acertó el color del semáforo el ${Math.round(acierto * 100)}${NBSP}% de los días`
+        + (rojosR ? `; de ${rojosR} ${rojosR === 1 ? 'día' : 'días'} de saturación real, anticipó ${rojosOk}.` : '.');
+      const porMes = {};
+      filas.forEach(r => { const k = r[0].slice(0, 7); (porMes[k] = porMes[k] || []).push(r); });
+      const media = (a, k) => Math.round(a.reduce((s, r) => s + r[k], 0) / a.length);
+      q('#fiab-graf-tabla').innerHTML = `<table class="tabla"><caption class="sr">Llegadas de ocio reales y previstas por mes</caption>
+        <thead><tr><th scope="col">Mes</th><th scope="col" class="num">Real (media al día)</th><th scope="col" class="num">Predicción (media al día)</th><th scope="col" class="num">Días de saturación reales</th><th scope="col" class="num">Previstos</th></tr></thead>
+        <tbody>${Object.keys(porMes).map(k => { const a = porMes[k], d = util.deISO(k + '-01');
+          return `<tr><th scope="row">${esc(MESES[d.getMonth()].charAt(0).toUpperCase() + MESES[d.getMonth()].slice(1))} de ${d.getFullYear()}</th><td class="num">${num(media(a, 1))}</td><td class="num">${num(media(a, 2))}</td>
+            <td class="num">${a.filter(r => colorDe(r[1] / r[3]) === 'rojo').length}</td><td class="num">${a.filter(r => colorDe(r[2] / r[3]) === 'rojo').length}</td></tr>`; }).join('')}</tbody></table>`;
+    }
+
 
     /* ---------- Perfil del visitante ---------- */
     function pintarPerfil() {
