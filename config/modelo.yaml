@@ -9,7 +9,7 @@ objetivo: llegadas_ocio
 
 # "Hoy" para la demo de la web (predicciones futuras de largo plazo).
 fecha_hoy_demo: "2026-10-16"
-dias_futuro_demo: 60
+dias_futuro_demo: 365   # un año desde fecha_hoy (antes 60)
 
 fuentes:
   sintetico:

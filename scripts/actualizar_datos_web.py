@@ -82,6 +82,89 @@ def leer_calendario() -> dict | None:
     return {"origen": "data/clean/calendario_diario.parquet", "dias": dias}
 
 
+def _norm_concejo(s) -> str:
+    """Misma clave que src/limpieza_B/unir_B.py: sin tildes, minúsculas, parte castellana."""
+    import unicodedata
+    s = str(s).split("/")[0].strip()
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
+    return " ".join(s.lower().replace("-", " ").split())
+
+
+def leer_agenda(mapeo: list[dict]) -> dict | None:
+    """Festivos (de Asturias y locales) y partidos de fútbol en casa, para la sección de eventos.
+
+    Fuentes: data/clean/calendario_diario.parquet (festivos de Asturias), festivos_locales.parquet
+    (BOPA, un festivo por concejo) y eventos_diario.parquet (partidos del Real Oviedo y del Sporting
+    en su estadio). Mismo formato que los eventos de PredictHQ (datos/eventos.js); concejo = código INE
+    o null si es de toda Asturias.
+    """
+    try:
+        import pandas as pd
+        cal = pd.read_parquet(RAIZ / "data" / "clean" / "calendario_diario.parquet")
+        loc = pd.read_parquet(RAIZ / "data" / "clean" / "festivos_locales.parquet")
+        ev = pd.read_parquet(RAIZ / "data" / "clean" / "eventos_diario.parquet")
+    except Exception as e:
+        print(f"AVISO: sin festivos ni partidos ({e}); los eventos serán solo los de PredictHQ")
+        return None
+    # Nombre de concejo -> INE, con los concejos del mapeo (concejo_eventos e INE en el mismo orden)
+    ine = {}
+    with (CONFIG / "mapeo_zonas.csv").open(encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            for n, c in zip((r.get("concejo_eventos") or "").split(";"), (r.get("concejos_ine") or "").split(";")):
+                if n.strip() and c.strip():
+                    ine[_norm_concejo(n)] = c.strip()
+    texto = lambda v: None if pd.isna(v) or str(v).strip() == "" else str(v).strip()
+    dia = lambda v: pd.Timestamp(v).strftime("%Y-%m-%d")
+    out, sin = [], set()
+
+    for r in cal[cal["festivo_ast"].fillna(False).astype(bool)].itertuples():
+        out.append({"id": f"fa-{dia(r.fecha)}", "titulo": texto(r.nombre_festivo_ast) or "Festivo",
+                    "categoria": "Festivo en Asturias", "inicio": dia(r.fecha), "fin": dia(r.fecha), "hora": None,
+                    "lugar": "Toda Asturias", "concejo": None, "asistencia": None})
+    for r in loc.itertuples():
+        c = ine.get(_norm_concejo(r.concejo))
+        if not c:
+            sin.add(r.concejo)
+            continue
+        ambito = texto(r.ambito)
+        # ambito (notas/diccionario_B.md): concejo | parcial | dudoso_villa_o_concejo | sin_nombre
+        lugar = {"parcial": "Solo en parte del concejo",
+                 "dudoso_villa_o_concejo": "En la villa o en todo el concejo"}.get(ambito, "")
+        out.append({"id": f"fl-{dia(r.fecha)}-{c}", "titulo": texto(r.nombre) or "Festivo local",
+                    "categoria": "Festivo local", "inicio": dia(r.fecha), "fin": dia(r.fecha), "hora": None,
+                    "lugar": lugar, "concejo": c, "asistencia": None})
+    fut = ev[ev["tipo"] == "partido_futbol"]
+    for r in fut.itertuples():
+        c = ine.get(_norm_concejo(r.concejo))
+        if not c:
+            sin.add(r.concejo)
+            continue
+        confirmado = False if pd.isna(r.calendario_confirmado) else bool(r.calendario_confirmado)
+        lugar = texto(r.lugar) or ""
+        if not confirmado:
+            lugar = (lugar + " · " if lugar else "") + "fecha provisional"
+        out.append({"id": f"pf-{dia(r.fecha)}-{c}", "titulo": texto(r.evento) or "Partido de fútbol",
+                    "categoria": "Fútbol", "inicio": dia(r.fecha), "fin": dia(r.fecha), "hora": texto(r.hora_ini),
+                    "lugar": lugar, "concejo": c, "asistencia": None})
+    if sin:
+        print(f"AVISO: concejos sin código INE en el mapeo (se omiten): {sorted(sin)}")
+    out.sort(key=lambda e: (e["inicio"], e["categoria"], e["titulo"]))
+    return {"origen": "data/clean/calendario_diario.parquet, festivos_locales.parquet, eventos_diario.parquet",
+            "eventos": out}
+
+
+def leer_comarcas() -> dict | None:
+    """Comarcas de Asturias (config/comarcas_asturias.csv; las líneas con # son la fuente)."""
+    ruta = CONFIG / "comarcas_asturias.csv"
+    if not ruta.exists():
+        print("AVISO: sin config/comarcas_asturias.csv; los filtros por comarca no estarán")
+        return None
+    with ruta.open(encoding="utf-8", newline="") as f:
+        lineas = [l for l in f if not l.startswith("#")]
+    filas = [{k: (v or "").strip() for k, v in r.items()} for r in csv.DictReader(lineas)]
+    return {"origen": "config/comarcas_asturias.csv (Decreto 11/1991, de 24 de enero)", "concejos": filas}
+
+
 def leer_horas() -> dict | None:
     """Llegadas de ocio por hora (zona × mes × tipo de día), para el patrón horario de Gestión."""
     ruta = RAIZ / "data" / "clean" / "llegadas_por_hora.parquet"
@@ -134,6 +217,14 @@ def main() -> None:
     if calendario:
         paquete["calendario"] = calendario
         (DESTINO / "calendario.json").write_text(json.dumps(calendario, ensure_ascii=False), encoding="utf-8")
+    comarcas = leer_comarcas()
+    if comarcas:
+        paquete["comarcas"] = comarcas
+        (DESTINO / "comarcas.json").write_text(json.dumps(comarcas, ensure_ascii=False), encoding="utf-8")
+    agenda = leer_agenda(mapeo)
+    if agenda:
+        paquete["agenda"] = agenda
+        (DESTINO / "agenda.json").write_text(json.dumps(agenda, ensure_ascii=False), encoding="utf-8")
     horas = leer_horas()
     if horas:
         paquete["horas"] = horas
@@ -154,6 +245,8 @@ def main() -> None:
         "metricas": {k: metricas[k] for k in ("sintetico", "aviso", "generado", "objetivo", "umbrales", "algoritmo", "fiabilidad") if k in metricas},
         "mapeo": paquete["mapeo"],
     }
+    if agenda:
+        inicio["agenda"] = agenda
     if calendario:
         fechas = sorted(r["fecha"] for r in datos["predicciones"]["predicciones"])
         desde = (date.fromisoformat(fechas[0]) - timedelta(days=31)).isoformat()

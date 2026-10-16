@@ -124,3 +124,13 @@ Detalle en `notas/integracion_web.md`. Cambios en ficheros de la persona 2 (solo
   - INE como «Validación prevista» (aún no se ha hecho);
   - el tiempo, solo a 1-3 días.
 - Demo: `DEMO_MES = '2024-08'`. Con datos reales, el puente de diciembre de 2024 sale en verde.
+
+## Funciones avanzadas (antes Gestión), 2026-10-16
+
+Cambios en `pestanas/gestion/` pedidos por el equipo (rama `interfaz-refinado`):
+- La pestaña se llama **Funciones avanzadas** y la web, **NTT Tourism**. Cada apartado es un panel: el índice (`chip-btn` con `aria-pressed`) enseña uno cada vez.
+- **Previsión de saturación** (antes «¿Hace falta regular?»): se basa solo en la predicción de los próximos 12 meses. El buscador encuentra concejos y comarcas y detalla los días previstos por encima del umbral, agrupados por mes. La barra deslizante se mantiene.
+- **Alertas**: la matriz de 46 zonas pasa a ser dinámica. Desplegable de comarca y selección múltiple de sus concejos; «Todos los concejos de la comarca» y «Ver todas las comarcas» (por defecto: el peor nivel de cada comarca). La lista resumen no cambia.
+- Comarcas: `config/comarcas_asturias.csv` (las 8 del Decreto 11/1991), exportadas por `actualizar_datos_web.py` como `datos.comarcas`.
+- `gestion.css` copia el aspecto del buscador de Inicio para el buscador y el desplegable; no hay estilos nuevos de color ni tipografía.
+- No había «simulador de escenarios» en la web (se quitó al conectar los datos reales). «Exportar datos» se mantiene, ahora con los días previstos sobre el umbral.
