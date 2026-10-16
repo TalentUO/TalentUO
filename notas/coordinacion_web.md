@@ -134,3 +134,20 @@ Cambios en `pestanas/gestion/` pedidos por el equipo (rama `interfaz-refinado`):
 - Comarcas: `config/comarcas_asturias.csv` (las 8 del Decreto 11/1991), exportadas por `actualizar_datos_web.py` como `datos.comarcas`.
 - `gestion.css` copia el aspecto del buscador de Inicio para el buscador y el desplegable; no hay estilos nuevos de color ni tipografía.
 - No había «simulador de escenarios» en la web (se quitó al conectar los datos reales). «Exportar datos» se mantiene, ahora con los días previstos sobre el umbral.
+
+## Funciones avanzadas copiada de `referencia-gestion` (2026-10-16)
+
+A petición del equipo, la pestaña es ahora la de la rama `referencia-gestion` (carpeta `referencia-gestion/`, commit `0fb737d`). Se copian tal cual sus `pestanas/gestion/{gestion.js, gestion.css, logica.js, config-gestion.js, pruebas.html}` (rama `funciones-referencia`). El resto de la carpeta de referencia es una versión anterior de la web y no se trae.
+
+Qué incluye:
+- paneles con pestañas;
+- Previsión de saturación: buscador de zonas y concejos, periodo y umbral; detalle con rachas y días por mes;
+- Alertas: zona, concejos con casillas, fichas, «Todas las zonas» y «Todos los concejos»;
+- Exportar: 3 CSV.
+
+Tres ajustes sobre la copia:
+- el panel «Lagos de Covadonga» se llama «Regulación actual» (lo pidió el equipo);
+- el patrón horario sigue con datos reales (`datos.horas`), porque la copia aún decía «Pendiente de datos»;
+- los textos dicen que el tiempo entra a 1-3 días, no «hasta 7 días».
+
+Pruebas: 28/28 de `pruebas.html` con los datos de 46 zonas. Las comarcas (`datos.comarcas`) dejan de usarse en esta pestaña.

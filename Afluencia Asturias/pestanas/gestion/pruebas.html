@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>Pruebas de Gestión</title>
+<html lang="es"><head><meta charset="utf-8"><title>Pruebas de Funciones avanzadas</title>
 <style>body{font:14px/1.5 system-ui,sans-serif;margin:1rem}.ok{color:#1a7f37}.fallo{color:#b3261e;font-weight:700}</style>
 </head><body>
-<h1>Pruebas de la lógica de Gestión</h1>
+<h1>Pruebas de la lógica de Funciones avanzadas</h1>
 <p>Se ejecutan al abrir la página (doble clic). Usan las salidas reales del modelo en <code>datos/modelo/salidas.js</code>.</p>
 <ul id="res"></ul>
 <script src="../../datos/modelo/salidas.js"></script>
@@ -163,6 +163,67 @@
   prueba('CSV de regulación: una línea por zona', () => {
     const t = L.tablaRegulacion(D, 1.5);
     igual(L.csvRegulacion(t, 1.5, false).split('\r\n').length, t.length + 1);
+  });
+
+  /* ---------- Previsión de saturación ---------- */
+
+  prueba('saturación: con el umbral rojo cuadra con los días rojos de 2027 previstos (año completo)', () => {
+    const r = L.previsionSaturacion(D, { desde: '2027-01-01', hasta: '2027-12-31', umbral: D.regulacion.umbrales.rojo });
+    D.regulacion.por_zona.forEach(z => {
+      const a = z.anios.find(x => x.anio === 2027);
+      igual(r.find(x => x.zona_mitma_id === z.zona_mitma_id).dias.length, a.dias_rojos, z.zona_mitma_id);
+    });
+  });
+
+  prueba('saturación: solo días previstos (desde hoy), ordenados y por encima del umbral', () => {
+    const u = 1.8;
+    L.previsionSaturacion(D, { umbral: u }).forEach(z => {
+      z.dias.forEach((d, i) => {
+        cierto(d.fecha >= D.predicciones.fecha_hoy, 'pasado ' + d.fecha);
+        cierto(d.cociente >= u - 1e-9, d.fecha + ' ' + d.cociente);
+        if (i) cierto(z.dias[i - 1].fecha < d.fecha, 'orden');
+      });
+      igual(z.rachas.reduce((s, r) => s + r.dias, 0), z.dias.length, 'rachas');
+      if (z.dias.length) igual(z.pico.cociente, Math.max(...z.dias.map(d => d.cociente)));
+    });
+  });
+
+  prueba('saturación: subir el umbral nunca aumenta los días', () => {
+    let previo = null;
+    L.umbralesDisponibles(D).forEach(u => {
+      const n = L.previsionSaturacion(D, { umbral: u }).map(z => z.dias.length);
+      if (previo) n.forEach((x, i) => cierto(x <= previo[i], u + ' zona ' + i));
+      previo = n;
+    });
+  });
+
+  prueba('saturación: más allá del modelo de largo plazo se marca como «solo calendario»', () => {
+    const r = L.previsionSaturacion(D, { umbral: 1.2 });
+    const dias = [].concat(...r.map(z => z.dias));
+    cierto(dias.some(d => d.lejana) && dias.some(d => !d.lejana));
+    dias.forEach(d => igual(d.lejana, d.horizonte == null, d.fecha));
+  });
+
+  prueba('rachas: agrupa días seguidos, también entre meses', () => {
+    const r = L.rachas(['2026-11-30', '2026-12-01', '2026-12-02', '2026-12-05']);
+    igual(r.length, 2); igual(r[0].dias, 3); igual(r[0].hasta, '2026-12-02'); igual(r[1].desde, '2026-12-05');
+  });
+
+  prueba('concejos: concejosDeZona y zonasDeConcejo siguen el mapeo', () => {
+    D.mapeo.zonas.forEach(z => z.concejos_ine.forEach(i => cierto(L.zonasDeConcejo(D, i).includes(z.zona_mitma_id))));
+    igual(L.concejosDeZona(D, 'no-existe').length, 0);
+  });
+
+  prueba('buscar: sin tildes ni mayúsculas, primero lo que empieza por el texto', () => {
+    const ind = [{ nombre: 'Villaviciosa' }, { nombre: 'Llanes' }, { nombre: 'Cangas de Onís' }, { nombre: 'Llanera' }];
+    igual(L.buscar(ind, 'onis')[0].nombre, 'Cangas de Onís');
+    igual(L.buscar(ind, 'LLAN').map(x => x.nombre).join(','), 'Llanera,Llanes');
+    igual(L.buscar(ind, 'zzz').length, 0);
+  });
+
+  prueba('CSV de saturación: una línea por día con saturación + cabecera', () => {
+    const r = L.previsionSaturacion(D, { umbral: 2 });
+    igual(L.csvSaturacion(r, 2, false).split('\r\n').length, r.reduce((s, z) => s + z.dias.length, 0) + 1);
   });
 
   const resumen = document.createElement('h2');

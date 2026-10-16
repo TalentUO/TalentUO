@@ -1,5 +1,5 @@
 /* ==========================================================================
- * CONFIGURACIÓN EDITABLE de la pestaña Gestión (persona 2).
+ * CONFIGURACIÓN EDITABLE de la pestaña Funciones avanzadas (antes Gestión; persona 2).
  * Aquí se cambian, sin tocar la lógica ni la interfaz:
  *   - la acción sugerida por color del semáforo,
  *   - el criterio orientativo «estudiar regulación / vigilar» (días al año),

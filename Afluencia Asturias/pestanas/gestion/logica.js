@@ -1,5 +1,5 @@
 /* ==========================================================================
- * LÓGICA de la pestaña Gestión (persona 2). Funciones puras, sin DOM.
+ * LÓGICA de la pestaña Funciones avanzadas (antes Gestión; persona 2). Funciones puras, sin DOM.
  * Entrada: el objeto `datos` de window.DatosModelo (formato en
  * notas/contrato_web.md). Salida: estructuras listas para pintar.
  * Pruebas: pestanas/gestion/pruebas.html (se abre en el navegador).
@@ -200,6 +200,98 @@
       (b.cociente ?? -1) - (a.cociente ?? -1));
   }
 
+  /* ---------- Previsión de saturación (solo predicción, nunca años observados) ---------- */
+
+  /** Último día con previsión: el final de calendario_alertas o de las predicciones futuras. */
+  function finPrevision(datos) {
+    let fin = datos.predicciones.fecha_hoy;
+    datos.regulacion.calendario_alertas.forEach(c => { if (c.fecha > fin) fin = c.fecha; });
+    datos.predicciones.predicciones.forEach(p => { if (p.conjunto !== 'historico' && p.fecha > fin) fin = p.fecha; });
+    return fin;
+  }
+
+  const diasEntreISO = (a, b) => Math.round((Date.parse(b + 'T12:00:00Z') - Date.parse(a + 'T12:00:00Z')) / 86400000);
+
+  /**
+   * ¿La fila (de alertasProximas) supera el umbral? Con los umbrales de la cabecera
+   * se usa el color del modelo (exacto); con otro, el cociente redondeado del JSON.
+   */
+  function superaUmbral(fila, umbral, umbrales) {
+    if (!fila || fila.color === 'gris' || fila.cociente == null) return false;
+    const um = umbrales || {};
+    if (um.rojo != null && Math.abs(umbral - um.rojo) < 1e-6) return fila.color === 'rojo';
+    if (um.ambar != null && Math.abs(umbral - um.ambar) < 1e-6) return fila.color === 'rojo' || fila.color === 'ambar';
+    return fila.cociente >= umbral - EPS;
+  }
+
+  /** Agrupa fechas ISO ordenadas en rachas de días seguidos: [{ desde, hasta, dias }]. */
+  function rachas(fechas) {
+    const out = [];
+    fechas.forEach(f => {
+      const u = out[out.length - 1];
+      if (u && sumarDias(u.hasta, 1) === f) { u.hasta = f; u.dias++; } else out.push({ desde: f, hasta: f, dias: 1 });
+    });
+    return out;
+  }
+
+  /**
+   * Días con saturación prevista entre `desde` y `hasta` (incluidos) para cada zona.
+   * Usa la misma predicción que las alertas: futuro_corto, si no futuro_largo y, más
+   * allá, la previsión de calendario_alertas. Cada día lleva `lejana` = true cuando
+   * solo hay previsión de calendario (sin modelo de corto ni de largo plazo).
+   * Devuelve [{ zona_mitma_id, nombre_zona, es_principal, dias:[fila], rachas, pico }].
+   */
+  function previsionSaturacion(datos, opciones) {
+    const o = opciones || {};
+    const desde = o.desde || datos.predicciones.fecha_hoy;
+    const hasta = o.hasta || finPrevision(datos);
+    const umbrales = datos.regulacion.umbrales || datos.predicciones.umbrales;
+    const umbral = o.umbral ?? umbrales.rojo;
+    const filas = alertasProximas(datos, { desde, dias: diasEntreISO(desde, hasta) + 1, config: o.config });
+    return zonas(datos).map(z => {
+      const dias = filas.filter(f => f.zona_mitma_id === z.zona_mitma_id && superaUmbral(f, umbral, umbrales))
+        .map(f => Object.assign({}, f, { lejana: f.horizonte == null }))
+        .sort((a, b) => a.fecha.localeCompare(b.fecha));
+      const pico = dias.reduce((m, d) => (!m || d.cociente > m.cociente ? d : m), null);
+      return { zona_mitma_id: z.zona_mitma_id, nombre_zona: z.nombre_zona, es_principal: !!z.es_principal,
+        dias, rachas: rachas(dias.map(d => d.fecha)), pico };
+    });
+  }
+
+  /* ---------- Concejos de cada zona (mapeo del modelo) ---------- */
+
+  /** Códigos INE de los concejos de una zona, tal cual el mapeo. */
+  function concejosDeZona(datos, zonaId) {
+    const z = ((datos.mapeo && datos.mapeo.zonas) || []).find(x => x.zona_mitma_id === zonaId);
+    return z ? z.concejos_ine.slice() : [];
+  }
+
+  /** Zonas (ids) que incluyen un concejo; puede ser más de una si el mapeo lo repite. */
+  function zonasDeConcejo(datos, ine) {
+    return ((datos.mapeo && datos.mapeo.zonas) || []).filter(z => z.concejos_ine.indexOf(ine) !== -1).map(z => z.zona_mitma_id);
+  }
+
+  /** Texto sin tildes y en minúsculas, para buscar. */
+  const normalizar = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+
+  /**
+   * Busca en un índice [{ nombre, ... }]: primero los que empiezan por el texto,
+   * luego los que lo contienen en alguna palabra o en cualquier parte.
+   */
+  function buscar(indice, texto, max) {
+    const t = normalizar(texto);
+    if (!t) return indice.slice(0, max || indice.length);
+    const puntua = x => {
+      const n = normalizar(x.nombre);
+      if (n.startsWith(t)) return 0;
+      if (n.split(/[\s()+\-/]+/).some(p => p.startsWith(t))) return 1;
+      return n.indexOf(t) !== -1 ? 2 : -1;
+    };
+    return indice.map(x => ({ x, p: puntua(x) })).filter(r => r.p >= 0)
+      .sort((a, b) => a.p - b.p || a.x.nombre.localeCompare(b.x.nombre, 'es'))
+      .slice(0, max || indice.length).map(r => r.x);
+  }
+
   /* ---------- Fiabilidad ---------- */
 
   const ordenHorizonte = h => (h === '8+' ? 99 : parseInt(h, 10));
@@ -273,59 +365,15 @@
     return aCSV([cab].concat(cuerpo));
   }
 
-  /* ---------- Previsión del año siguiente (futuro_corto si existe; si no, futuro_largo) ---------- */
-
-  /** Una predicción por fecha y zona desde el día siguiente a fecha_hoy, ordenadas por fecha. */
-  function prevision(datos) {
-    const rango = { futuro_corto: 2, futuro_largo: 1 };
-    const m = new Map();
-    datos.predicciones.predicciones.forEach(p => {
-      const r = rango[p.conjunto];
-      if (!r) return;
-      const k = p.fecha + '|' + p.zona_mitma_id, prev = m.get(k);
-      if (!prev || r > prev.r || (r === prev.r && p.horizonte < prev.p.horizonte)) m.set(k, { p, r });
-    });
-    return Array.from(m.values(), x => x.p).sort((a, b) => a.fecha.localeCompare(b.fecha) || a.zona_mitma_id.localeCompare(b.zona_mitma_id));
-  }
-
-  /**
-   * Días previstos por encima de `umbral` (veces el día normal) en las zonas `ids`.
-   * Por zona: los días (cociente >= umbral) y el intervalo probable: mínimo = días con p10 por encima,
-   * máximo = días con p90 por encima (p10 y p90 sobre el mismo día normal).
-   */
-  function saturacionPrevista(prev, ids, umbral) {
-    const set = new Set(ids), por = {};
-    ids.forEach(id => { por[id] = { zona_mitma_id: id, dias: [], min: 0, max: 0, n: 0 }; });
-    prev.forEach(p => {
-      if (!set.has(p.zona_mitma_id) || p.cociente == null) return;
-      const z = por[p.zona_mitma_id];
-      z.n++;
-      if (p.cociente >= umbral - EPS) z.dias.push(p);
-      if (p.normal > 0 && p.p10 != null && p.p10 / p.normal >= umbral - EPS) z.min++;
-      if (p.normal > 0 && p.p90 != null && p.p90 / p.normal >= umbral - EPS) z.max++;
-    });
-    return ids.map(id => por[id]);
-  }
-
-  /* ---------- Concejos y comarcas ---------- */
-
-  /** Concejos con su zona del modelo y su comarca: [{ ine, nombre, comarca, zona_mitma_id }]. */
-  function concejos(datos) {
-    const zonaDe = {};
-    datos.mapeo.zonas.forEach(z => z.concejos_ine.forEach(c => { zonaDe[c] = z.zona_mitma_id; }));
-    return ((datos.comarcas && datos.comarcas.concejos) || [])
-      .map(c => ({ ine: c.concejo_ine, nombre: c.concejo, comarca: c.comarca, zona_mitma_id: zonaDe[c.concejo_ine] || null }))
-      .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
-  }
-  const comarcas = datos => Array.from(new Set(concejos(datos).map(c => c.comarca))).sort((a, b) => a.localeCompare(b, 'es'));
-
-  /** CSV de los días previstos por encima del umbral (salida de saturacionPrevista). */
-  function csvSaturacion(datos, filas, umbral, sintetico) {
-    const cab = ['fecha', 'zona', 'umbral_veces_dia_normal', 'veces_dia_normal', 'visitantes_previstos', 'dia_normal', 'minimo_p10', 'maximo_p90', 'color'];
+  /** CSV de los días con saturación prevista (salida de previsionSaturacion). */
+  function csvSaturacion(resultado, umbral, sintetico) {
+    const cab = ['fecha', 'zona', 'umbral_veces_dia_normal', 'color', 'veces_dia_normal', 'visitantes_previstos', 'dia_normal',
+      'minimo_p10', 'maximo_p90', 'incierto', 'solo_calendario', 'lagos_regulado', 'accion_sugerida'];
     if (sintetico) cab.push('aviso');
     const cuerpo = [];
-    filas.forEach(z => z.dias.forEach(p => {
-      const r = [p.fecha, nombreZona(datos, z.zona_mitma_id), umbral, p.cociente, p.prediccion, p.normal, p.p10, p.p90, NOMBRE_COLOR[p.color] || p.color];
+    resultado.forEach(z => z.dias.forEach(f => {
+      const r = [f.fecha, z.nombre_zona, umbral, NOMBRE_COLOR[f.color] || f.color, f.cociente, f.prediccion, f.normal, f.p10, f.p90,
+        f.incierto ? 'sí' : 'no', f.lejana ? 'sí' : 'no', f.lagos_regulado == null ? '' : (f.lagos_regulado ? 'sí' : 'no'), f.accion.texto];
       if (sintetico) r.push(AVISO_CSV);
       cuerpo.push(r);
     }));
@@ -335,5 +383,5 @@
 
   return { zonas, zonaPrincipal, nombreZona, umbralesDisponibles, aniosDisponibles, diasSobreUmbral, veredicto, tablaRegulacion,
     compararLagos, accionPara, alertasProximas, fiabilidad, aCSV, csvPrevision, csvRegulacion, sumarDias,
-    prevision, saturacionPrevista, concejos, comarcas, csvSaturacion };
+    finPrevision, superaUmbral, rachas, previsionSaturacion, concejosDeZona, zonasDeConcejo, normalizar, buscar, csvSaturacion };
 });
