@@ -29,7 +29,13 @@ function pintarSobre(cont, datos, util) {
   const { esc, pct, ICONO, NIVEL, NBSP } = util;
   const u = datos.predicciones.umbrales;
   const algoritmo = { lightgbm: 'LightGBM', xgboost: 'XGBoost' }[datos.metricas.algoritmo] || datos.metricas.algoritmo;
-  const textos = {
+  const porZona = u.por_zona && Object.keys(u.por_zona).length;
+  const textos = porZona ? {
+    verde: 'Lo habitual en esa zona',
+    ambar: 'De los días más concurridos del año en esa zona',
+    rojo: 'Un día excepcional para esa zona',
+    gris: 'No hay muestra suficiente',
+  } : {
     verde: `Menos de ${pct(u.ambar)} sobre un día normal`,
     ambar: `Entre ${pct(u.ambar)} y ${pct(u.rojo)}`,
     rojo: `${pct(u.rojo)} o más`,
@@ -46,6 +52,7 @@ function pintarSobre(cont, datos, util) {
       <h2>Cómo leer el semáforo</h2>
       <ul class="leyenda leyenda-grande">${leyenda}</ul>
       <p>Cada color va siempre acompañado de un icono, una trama en el mapa y su nombre, para que se entienda sin distinguir colores.</p>
+      ${porZona ? `<p>${esc(T.umbralesPorZona)}</p>` : ''}
 
       <h2>Qué es un «día normal»</h2>
       <p>${esc(T.diaNormal)}</p>

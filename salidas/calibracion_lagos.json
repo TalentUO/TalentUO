@@ -2,8 +2,8 @@
  "zona_mitma_id": "33012",
  "sintetico": false,
  "umbral_por_defecto": {
-  "ambar": 1.5,
-  "rojo": 2.0
+  "ambar": 2.09,
+  "rojo": 2.88
  },
  "normal_medio_zona": 5882.4266,
  "variantes": {
@@ -21,22 +21,22 @@
    "dias_alerta_con_mejor_umbral": 333,
    "mejor_en_borde_de_rejilla": false,
    "con_umbral_ambar": {
-    "umbral": 1.5,
-    "f1": 0.6374,
-    "precision": 0.9709,
-    "recall": 0.4744,
-    "dias_alerta": 172.0,
+    "umbral": 2.1,
+    "f1": 0.3427,
+    "precision": 0.9865,
+    "recall": 0.2074,
+    "dias_alerta": 74.0,
     "dias_regulados": 352.0,
-    "coinciden": 167.0
+    "coinciden": 73.0
    },
    "con_umbral_rojo": {
-    "umbral": 2.0,
-    "f1": 0.3872,
-    "precision": 0.977,
-    "recall": 0.2415,
-    "dias_alerta": 87.0,
+    "umbral": 2.9,
+    "f1": 0.1277,
+    "precision": 1.0,
+    "recall": 0.0682,
+    "dias_alerta": 24.0,
     "dias_regulados": 352.0,
-    "coinciden": 85.0
+    "coinciden": 24.0
    },
    "curva": [
     {
@@ -509,22 +509,22 @@
    "dias_alerta_con_mejor_umbral": 363,
    "mejor_en_borde_de_rejilla": false,
    "con_umbral_ambar": {
-    "umbral": 1.5,
-    "f1": 0.6777,
-    "precision": 0.9634,
-    "recall": 0.5227,
-    "dias_alerta": 191.0,
+    "umbral": 2.1,
+    "f1": 0.3466,
+    "precision": 0.9867,
+    "recall": 0.2102,
+    "dias_alerta": 75.0,
     "dias_regulados": 352.0,
-    "coinciden": 184.0
+    "coinciden": 74.0
    },
    "con_umbral_rojo": {
-    "umbral": 2.0,
-    "f1": 0.3881,
-    "precision": 0.9884,
-    "recall": 0.2415,
-    "dias_alerta": 86.0,
+    "umbral": 2.9,
+    "f1": 0.0712,
+    "precision": 1.0,
+    "recall": 0.0369,
+    "dias_alerta": 13.0,
     "dias_regulados": 352.0,
-    "coinciden": 85.0
+    "coinciden": 13.0
    },
    "curva": [
     {
@@ -1000,22 +1000,22 @@
    "dias_alerta_con_mejor_umbral": 333,
    "mejor_en_borde_de_rejilla": false,
    "con_umbral_ambar": {
-    "umbral": 1.5,
-    "f1": 0.5771,
-    "precision": 0.9799,
-    "recall": 0.409,
-    "dias_alerta": 149.0,
+    "umbral": 2.1,
+    "f1": 0.2912,
+    "precision": 0.9839,
+    "recall": 0.1709,
+    "dias_alerta": 62.0,
     "dias_regulados": 357.0,
-    "coinciden": 146.0
+    "coinciden": 61.0
    },
    "con_umbral_rojo": {
-    "umbral": 2.0,
-    "f1": 0.3224,
-    "precision": 0.9718,
-    "recall": 0.1933,
-    "dias_alerta": 71.0,
+    "umbral": 2.9,
+    "f1": 0.0111,
+    "precision": 1.0,
+    "recall": 0.0056,
+    "dias_alerta": 2.0,
     "dias_regulados": 357.0,
-    "coinciden": 69.0
+    "coinciden": 2.0
    },
    "curva": [
     {
@@ -1488,22 +1488,22 @@
    "dias_alerta_con_mejor_umbral": 394,
    "mejor_en_borde_de_rejilla": false,
    "con_umbral_ambar": {
-    "umbral": 1.5,
-    "f1": 0.5843,
-    "precision": 0.9739,
-    "recall": 0.4174,
-    "dias_alerta": 153.0,
+    "umbral": 2.1,
+    "f1": 0.3192,
+    "precision": 0.9855,
+    "recall": 0.1905,
+    "dias_alerta": 69.0,
     "dias_regulados": 357.0,
-    "coinciden": 149.0
+    "coinciden": 68.0
    },
    "con_umbral_rojo": {
-    "umbral": 2.0,
-    "f1": 0.3616,
-    "precision": 0.9875,
-    "recall": 0.2213,
-    "dias_alerta": 80.0,
+    "umbral": 2.9,
+    "f1": 0.0276,
+    "precision": 1.0,
+    "recall": 0.014,
+    "dias_alerta": 5.0,
     "dias_regulados": 357.0,
-    "coinciden": 79.0
+    "coinciden": 5.0
    },
    "curva": [
     {

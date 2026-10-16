@@ -48,7 +48,8 @@ window.Pestanas = window.Pestanas || {};
     const principal = zonas[0];
     const umbrales = L.umbralesDisponibles(datos);
     const umb = datos.regulacion.umbrales || datos.predicciones.umbrales;
-    const estado = { umbralIdx: Math.max(0, umbrales.indexOf(umb.rojo)), sel: null, filtro: 'rojo', csv: null, csvOrigen: null,
+    const porZona = L.hayUmbralesPorZona(datos);
+    const estado = { umbralIdx: Math.max(0, umbrales.indexOf(umb.rojo)), modoU: porZona ? 'zona' : 'manual', sel: null, filtro: 'rojo', csv: null, csvOrigen: null,
       al: { modo: 'comarcas', comarca: null, elegidos: new Set() } };
     const opcionesZona = zonas.map(z => `<option value="${esc(z.zona_mitma_id)}">${esc(z.nombre_zona)}</option>`).join('');
     const alertas = L.alertasProximas(datos);
@@ -92,6 +93,7 @@ window.Pestanas = window.Pestanas || {};
           <button type="button" class="btn-mini" id="sat-todas" hidden>Ver todas las zonas</button>
         </div>
         <div class="umbral">
+          ${porZona ? `<fieldset class="segmentado" style="margin-bottom:.7rem"><legend class="filtro-et">Umbral</legend><div class="seg-opciones"><label><input type="radio" name="sat-modo" value="zona" checked><span>El de saturación de cada zona</span></label><label><input type="radio" name="sat-modo" value="manual"><span>Elegir un umbral</span></label></div></fieldset>` : ''}
           <label for="umbral" class="umbral-et">Contar los días con más de <strong id="umbral-valor"></strong> de visitantes sobre un día normal</label>
           <input type="range" id="umbral" min="0" max="${umbrales.length - 1}" step="1" value="${estado.umbralIdx}">
           <div class="umbral-escala" aria-hidden="true"><span>${esc(pct(umbrales[0]))}</span><span>${esc(pct(umbrales[umbrales.length - 1]))}</span></div>
@@ -100,7 +102,7 @@ window.Pestanas = window.Pestanas || {};
       <p class="g-resumen" id="sat-resumen" aria-live="polite"></p>
       <ul class="rg-lista" id="reg-lista"></ul>
       <div id="sat-dias" class="al-lista"></div>
-      <p class="g-nota">Previsión del modelo, no datos medidos: a 1-7 días, el de corto plazo (con el tiempo a 1-3 días); después, el de largo plazo (calendario y eventos). Entre paréntesis, el intervalo probable: días que superan el umbral incluso en el escenario bajo y en el alto. Criterio orientativo del equipo, no un dato oficial: <strong>${C.criterio.estudiar} días o más</strong>, estudiar regulación; <strong>entre ${C.criterio.vigilar} y ${C.criterio.estudiar - 1}</strong>, vigilar. Los umbrales del semáforo son ${esc(pct(umb.ambar))} (alta) y ${esc(pct(umb.rojo))} (saturación). Cada concejo usa la previsión de su zona del modelo (zonas del MITMA, algunas con varios concejos).</p>
+      <p class="g-nota">Previsión del modelo, no datos medidos: a 1-7 días, el de corto plazo (con el tiempo a 1-3 días); después, el de largo plazo (calendario y eventos). Entre paréntesis, el intervalo probable: días que superan el umbral incluso en el escenario bajo y en el alto. Criterio orientativo del equipo, no un dato oficial: <strong>${C.criterio.estudiar} días o más</strong>, estudiar regulación; <strong>entre ${C.criterio.vigilar} y ${C.criterio.estudiar - 1}</strong>, vigilar. ${porZona ? 'Cada zona tiene sus umbrales de alta y saturación, calculados con su propia historia (ver «Sobre los datos»).' : `Los umbrales del semáforo son ${esc(pct(umb.ambar))} (alta) y ${esc(pct(umb.rojo))} (saturación).`} Cada concejo usa la previsión de su zona del modelo (zonas del MITMA, algunas con varios concejos).</p>
     </section>
 
     <section class="tarjeta g-sec" id="g-lagos" aria-labelledby="g-lagos-t">
@@ -199,6 +201,9 @@ window.Pestanas = window.Pestanas || {};
     /* ---------- Previsión de saturación ---------- */
     const VER = { estudiar: { t: 'Estudiar regulación', n: 'rojo' }, vigilar: { t: 'Vigilar', n: 'ambar' }, ok: { t: 'Sin presión', n: 'verde' } };
     const umbralActual = () => umbrales[+q('#umbral').value];
+    const umbralUso = () => (estado.modoU === 'zona' ? (id => L.umbralesZona(datos, id).rojo) : umbralActual());
+    // «más de +100 %» o «su umbral de saturación (+188 %)»
+    const txtU = id => (estado.modoU === 'zona' ? `su umbral de saturación (${pct(L.umbralesZona(datos, id).rojo)})` : `más de ${pct(umbralActual())}`);
     const veredicto = d => (d >= C.criterio.estudiar ? 'estudiar' : d >= C.criterio.vigilar ? 'vigilar' : 'ok');
     const diasTxt = n => n + NBSP + (n === 1 ? 'día' : 'días');
     const idsSeleccion = () => {
@@ -211,9 +216,11 @@ window.Pestanas = window.Pestanas || {};
       .sort((a, b) => b.dias.length - a.dias.length || L.nombreZona(datos, a.zona_mitma_id).localeCompare(L.nombreZona(datos, b.zona_mitma_id), 'es'));
 
     function pintarRegulacion() {
-      const u = umbralActual();
-      q('#umbral-valor').textContent = pct(u);
-      q('#umbral').setAttribute('aria-valuetext', `Más de ${Math.round((u - 1) * 100)} por ciento sobre un día normal`);
+      const um = umbralActual(), u = umbralUso(), zonaM = estado.modoU === 'zona';
+      q('#umbral-valor').textContent = pct(um);
+      q('#umbral').setAttribute('aria-valuetext', `Más de ${Math.round((um - 1) * 100)} por ciento sobre un día normal`);
+      q('#umbral').disabled = zonaM;
+      q('.umbral-et').style.opacity = zonaM ? '.55' : '';
       const filas = filasSaturacion(u);
       const s = estado.sel;
       const maxD = Math.max(40, ...filas.map(f => f.max));
@@ -221,20 +228,20 @@ window.Pestanas = window.Pestanas || {};
       if (!s) {
         const con = filas.filter(f => f.dias.length);
         const est = filas.filter(f => veredicto(f.dias.length) === 'estudiar').map(f => L.nombreZona(datos, f.zona_mitma_id));
-        q('#sat-resumen').textContent = `Con este umbral, ${con.length} de ${filas.length} zonas tienen algún día por encima en los próximos 12 meses`
+        q('#sat-resumen').textContent = `${zonaM ? 'Con el umbral de saturación de cada zona' : 'Con este umbral'}, ${con.length} de ${filas.length} zonas tienen algún día por encima en los próximos 12 meses`
           + (est.length ? `; en ${est.length === 1 ? 'una' : est.length} se superan ${C.criterio.estudiar} días: ${est.join(', ')}.` : '.')
           + ' Busca un concejo o una comarca para ver qué días son.';
       } else if (s.tipo === 'concejo') {
         const c = concejoPorIne[s.id], f = filas[0];
         const otros = c && c.zona_mitma_id ? concejosDeZona(c.zona_mitma_id).filter(x => x.ine !== c.ine).map(x => x.nombre) : [];
         q('#sat-resumen').textContent = !f ? `${s.nombre}: sin previsión.`
-          : `${s.nombre} (comarca de ${c.comarca}): ${diasTxt(f.dias.length)} con más de ${pct(u)} en los próximos 12 meses (entre ${f.min} y ${f.max} según el rango probable).`
+          : `${s.nombre} (comarca de ${c.comarca}): ${diasTxt(f.dias.length)} por encima de ${txtU(f.zona_mitma_id)} en los próximos 12 meses (entre ${f.min} y ${f.max} según el rango probable).`
             + (otros.length ? ` Las cifras son de su zona del modelo, «${L.nombreZona(datos, c.zona_mitma_id)}», que también incluye ${otros.join(', ')}.` : '');
       } else {
         const fechas = new Set();
         filas.forEach(f => f.dias.forEach(p => fechas.add(p.fecha)));
         const nC = concejos.filter(c => c.comarca === s.id).length;
-        q('#sat-resumen').textContent = `Comarca de ${s.id} (${nC} concejos, ${filas.length} ${filas.length === 1 ? 'zona' : 'zonas'} del modelo): ${diasTxt(fechas.size)} en los próximos 12 meses con al menos una zona por encima de ${pct(u)}.`;
+        q('#sat-resumen').textContent = `Comarca de ${s.id} (${nC} concejos, ${filas.length} ${filas.length === 1 ? 'zona' : 'zonas'} del modelo): ${diasTxt(fechas.size)} en los próximos 12 meses con al menos una zona por encima de ${zonaM ? 'su umbral de saturación' : pct(um)}.`;
       }
       // Barras por zona
       q('#reg-lista').innerHTML = filas.map(f => {
@@ -253,7 +260,7 @@ window.Pestanas = window.Pestanas || {};
       const porFecha = {};
       filas.forEach(f => f.dias.forEach(p => { (porFecha[p.fecha] = porFecha[p.fecha] || []).push(p); }));
       const fechas = Object.keys(porFecha).sort();
-      if (!fechas.length) { q('#sat-dias').innerHTML = `<p class="pz-ayuda">Ningún día previsto por encima de ${esc(pct(u))} en los próximos 12 meses.</p>`; return; }
+      if (!fechas.length) { q('#sat-dias').innerHTML = `<p class="pz-ayuda">Ningún día previsto por encima de ${esc(zonaM ? 'su umbral de saturación' : pct(um))} en los próximos 12 meses.</p>`; return; }
       const porMes = {};
       fechas.forEach(f => { (porMes[f.slice(0, 7)] = porMes[f.slice(0, 7)] || []).push(f); });
       const varias = filas.length > 1;
@@ -269,6 +276,7 @@ window.Pestanas = window.Pestanas || {};
       }).join('');
     }
     q('#umbral').addEventListener('input', pintarRegulacion);
+    qa('input[name="sat-modo"]').forEach(r => r.addEventListener('change', () => { estado.modoU = r.value; pintarRegulacion(); }));
 
     // Buscador de concejos y comarcas
     const normT = t => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
@@ -468,10 +476,10 @@ window.Pestanas = window.Pestanas || {};
         nombre = `prevision_${datos.predicciones.fecha_hoy}.csv`;
         desc = `Previsión de las ${zonas.length} zonas para los próximos ${C.diasAlertas} días, con el color, el rango probable y la acción sugerida.`;
       } else {
-        const u = umbralActual(), s = estado.sel;
+        const u = umbralUso(), s = estado.sel, zonaM = estado.modoU === 'zona';
         csv = L.csvSaturacion(datos, filasSaturacion(u), u, sint);
-        nombre = `dias_previstos_sobre_${String(u).replace('.', '_')}${s ? '_' + s.nombre.replace(/\s+/g, '_') : ''}.csv`;
-        desc = `Días de los próximos 12 meses en los que el modelo prevé más de ${pct(u)} sobre un día normal, ${s ? 'en ' + s.nombre : 'en todas las zonas'} (el umbral y la búsqueda de «Previsión de saturación»), con el rango probable.`;
+        nombre = `dias_previstos_${zonaM ? 'saturacion' : 'sobre_' + String(umbralActual()).replace('.', '_')}${s ? '_' + s.nombre.replace(/\s+/g, '_') : ''}.csv`;
+        desc = `Días de los próximos 12 meses en los que el modelo prevé ${zonaM ? 'saturación (el umbral de cada zona)' : 'más de ' + pct(umbralActual()) + ' sobre un día normal'}, ${s ? 'en ' + s.nombre : 'en todas las zonas'} (lo que muestra «Previsión de saturación»), con el rango probable.`;
       }
       estado.csv = { nombre, csv }; estado.csvOrigen = boton;
       q('#dlg-nombre').textContent = nombre;

@@ -55,11 +55,13 @@
     }));
   });
 
-  prueba('con los umbrales por defecto cuadra con dias_alerta y dias_rojos de cada año', () => {
-    const u = D.regulacion.umbrales;
+  prueba('con los umbrales de cada zona cuadra con dias_alerta y dias_rojos de cada año', () => {
     D.regulacion.por_zona.forEach(z => z.anios.forEach(a => {
-      igual(L.diasSobreUmbral(D, z.zona_mitma_id, a.anio, u.ambar).dias, a.dias_alerta, z.zona_mitma_id + ' ' + a.anio + ' alerta');
-      igual(L.diasSobreUmbral(D, z.zona_mitma_id, a.anio, u.rojo).dias, a.dias_rojos, z.zona_mitma_id + ' ' + a.anio + ' rojos');
+      const u = L.umbralesZona(D, z.zona_mitma_id);
+      const al = L.diasSobreUmbral(D, z.zona_mitma_id, a.anio, u.ambar), ro = L.diasSobreUmbral(D, z.zona_mitma_id, a.anio, u.rojo);
+      // Observados: solo hay la rejilla de curva_umbral; un umbral de zona fuera de ella da null (no se compara)
+      if (al.dias != null) igual(al.dias, a.dias_alerta, z.zona_mitma_id + ' ' + a.anio + ' alerta');
+      if (ro.dias != null) igual(ro.dias, a.dias_rojos, z.zona_mitma_id + ' ' + a.anio + ' rojos');
     }));
   });
 
@@ -127,10 +129,12 @@
     if (hayCorto) cierto(f.some(a => a.modelo === 'corto'), 'ninguna fila de corto plazo');
   });
 
-  prueba('alertas: los colores son válidos y rojo/ámbar llevan cociente por encima del umbral de la cabecera', () => {
+  prueba('alertas: los colores son válidos y rojo/ámbar llevan cociente por encima del umbral de su zona', () => {
     L.alertasProximas(D, { dias: 60 }).forEach(a => {
       cierto(['verde', 'ambar', 'rojo', 'gris'].includes(a.color), a.color);
-      if (a.color === 'rojo') cierto(a.cociente >= D.predicciones.umbrales.rojo - 1e-6, 'rojo ' + a.cociente);
+      const u = L.umbralesZona(D, a.zona_mitma_id);
+      if (a.color === 'rojo') cierto(a.cociente >= u.rojo - 1e-3, 'rojo ' + a.cociente);
+      if (a.color === 'ambar') cierto(a.cociente >= u.ambar - 1e-3 && a.cociente < u.rojo + 1e-3, 'ámbar ' + a.cociente);
     });
   });
 

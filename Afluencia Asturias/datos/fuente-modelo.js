@@ -48,7 +48,12 @@
   let M = null;
   function preparar(d) {
     const pred = d.predicciones;
-    const umbrales = { ambar: pred.umbrales.ambar, rojo: pred.umbrales.rojo };
+    // Umbrales generales y, si el modelo los trae, los de cada zona (config/semaforo.yaml → por_zona)
+    const umbrales = { ambar: pred.umbrales.ambar, rojo: pred.umbrales.rojo, porZona: {} };
+    Object.keys(pred.umbrales.por_zona || {}).forEach(z => {
+      const u = pred.umbrales.por_zona[z];
+      umbrales.porZona[z] = { ambar: u.umbral_ambar != null ? u.umbral_ambar : umbrales.ambar, rojo: u.umbral_rojo != null ? u.umbral_rojo : umbrales.rojo };
+    });
 
     // Una predicción por fecha y zona, según la prioridad del contrato
     const elegida = {};
@@ -127,9 +132,11 @@
 
   /* ---------- Traducción al contrato de la interfaz ---------- */
   const MOTIVO_SIN_PRED = 'El modelo no tiene predicción para este día en esta zona.';
-  function nivelDe(ratio) {
+  const umbralesDe = zonaId => M.umbrales.porZona[zonaId] || M.umbrales;
+  function nivelDe(ratio, zonaId) {
     if (ratio == null) return 'gris';
-    return ratio >= M.umbrales.rojo ? 'rojo' : ratio >= M.umbrales.ambar ? 'ambar' : 'verde';
+    const u = umbralesDe(zonaId);
+    return ratio >= u.rojo ? 'rojo' : ratio >= u.ambar ? 'ambar' : 'verde';
   }
   function prevision(zonaId, fecha) {
     const r = M.elegida[fecha + '|' + zonaId];
@@ -160,7 +167,7 @@
     con.forEach(p => { if (diasPorNivel[p.nivel] != null) diasPorNivel[p.nivel]++; });
     const m = k => (con.every(p => p[k] != null) ? redondea(media(con.map(p => p[k]))) : null);
     return Object.assign(base, {
-      fecha: desde, nivel: nivelDe(ratio), ratio,
+      fecha: desde, nivel: nivelDe(ratio, zonaId), ratio,
       visitantes: m('visitantes'), min: m('min'), max: m('max'), normal: m('normal'),
       esPrediccion: true, conMeteo: con.every(p => p.conMeteo), pico, diasPorNivel,
     });
@@ -199,7 +206,7 @@
         hoy: M.hoy,
         horizonteDias: Math.round((deISO(M.ultimo) - deISO(M.hoy)) / 86400000) + 1,
         diasConMeteo: M.diasConMeteo,
-        umbrales: Object.assign({}, M.umbrales),
+        umbrales: { ambar: M.umbrales.ambar, rojo: M.umbrales.rojo, porZona: Object.assign({}, M.umbrales.porZona) },
         ficticio: false, sintetico: M.d.sintetico, demo: DEMO,
       }));
     },

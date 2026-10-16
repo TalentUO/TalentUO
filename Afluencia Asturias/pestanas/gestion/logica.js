@@ -68,7 +68,7 @@
     if (info.tipo === 'previsto') {
       // Con los umbrales de la cabecera se cuenta por el color del modelo (exacto): el JSON
       // redondea el cociente a 3 decimales y en el umbral justo bailaría algún día.
-      const um = datos.regulacion.umbrales || {};
+      const um = umbralesZona(datos, zonaId); // los de la zona (por_zona) o, si no hay, los de la cabecera
       const esRojo = Math.abs(umbral - um.rojo) < 1e-6, esAmbar = Math.abs(umbral - um.ambar) < 1e-6;
       let dias = 0, min = 0, max = 0;
       filasCalendario(datos, zonaId, anio).forEach(f => {
@@ -289,23 +289,32 @@
   }
 
   /**
-   * Días previstos por encima de `umbral` (veces el día normal) en las zonas `ids`.
+   * Días previstos por encima de `umbral` (veces el día normal) en las zonas `ids`. `umbral` puede ser un
+   * número (el mismo para todas) o una función zona -> número (p. ej. el umbral de saturación de cada zona).
    * Por zona: los días (cociente >= umbral) y el intervalo probable: mínimo = días con p10 por encima,
    * máximo = días con p90 por encima (p10 y p90 sobre el mismo día normal).
    */
   function saturacionPrevista(prev, ids, umbral) {
-    const set = new Set(ids), por = {};
+    const set = new Set(ids), por = {}, uDe = typeof umbral === 'function' ? umbral : () => umbral;
     ids.forEach(id => { por[id] = { zona_mitma_id: id, dias: [], min: 0, max: 0, n: 0 }; });
     prev.forEach(p => {
       if (!set.has(p.zona_mitma_id) || p.cociente == null) return;
       const z = por[p.zona_mitma_id];
+      const u = uDe(p.zona_mitma_id);
       z.n++;
-      if (p.cociente >= umbral - EPS) z.dias.push(p);
-      if (p.normal > 0 && p.p10 != null && p.p10 / p.normal >= umbral - EPS) z.min++;
-      if (p.normal > 0 && p.p90 != null && p.p90 / p.normal >= umbral - EPS) z.max++;
+      if (p.cociente >= u - EPS) z.dias.push(p);
+      if (p.normal > 0 && p.p10 != null && p.p10 / p.normal >= u - EPS) z.min++;
+      if (p.normal > 0 && p.p90 != null && p.p90 / p.normal >= u - EPS) z.max++;
     });
     return ids.map(id => por[id]);
   }
+
+  /** Umbrales del semáforo de una zona: { ambar, rojo } (los de la zona si los hay; si no, los generales). */
+  function umbralesZona(datos, id) {
+    const u = datos.predicciones.umbrales, z = (u.por_zona || {})[id] || {};
+    return { ambar: z.umbral_ambar != null ? z.umbral_ambar : u.ambar, rojo: z.umbral_rojo != null ? z.umbral_rojo : u.rojo };
+  }
+  const hayUmbralesPorZona = datos => !!Object.keys(datos.predicciones.umbrales.por_zona || {}).length;
 
   /* ---------- Concejos y comarcas ---------- */
 
@@ -324,8 +333,9 @@
     const cab = ['fecha', 'zona', 'umbral_veces_dia_normal', 'veces_dia_normal', 'visitantes_previstos', 'dia_normal', 'minimo_p10', 'maximo_p90', 'color'];
     if (sintetico) cab.push('aviso');
     const cuerpo = [];
+    const uDe = typeof umbral === 'function' ? umbral : () => umbral;
     filas.forEach(z => z.dias.forEach(p => {
-      const r = [p.fecha, nombreZona(datos, z.zona_mitma_id), umbral, p.cociente, p.prediccion, p.normal, p.p10, p.p90, NOMBRE_COLOR[p.color] || p.color];
+      const r = [p.fecha, nombreZona(datos, z.zona_mitma_id), uDe(z.zona_mitma_id), p.cociente, p.prediccion, p.normal, p.p10, p.p90, NOMBRE_COLOR[p.color] || p.color];
       if (sintetico) r.push(AVISO_CSV);
       cuerpo.push(r);
     }));
@@ -335,5 +345,5 @@
 
   return { zonas, zonaPrincipal, nombreZona, umbralesDisponibles, aniosDisponibles, diasSobreUmbral, veredicto, tablaRegulacion,
     compararLagos, accionPara, alertasProximas, fiabilidad, aCSV, csvPrevision, csvRegulacion, sumarDias,
-    prevision, saturacionPrevista, concejos, comarcas, csvSaturacion };
+    prevision, saturacionPrevista, concejos, comarcas, csvSaturacion, umbralesZona, hayUmbralesPorZona };
 });

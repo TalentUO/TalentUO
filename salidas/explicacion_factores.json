@@ -158,15 +158,17 @@
   }
  ],
  "ejemplo_dia_rojo": {
-  "fecha": "2024-08-19",
+  "fecha": "2024-08-15",
   "zona_mitma_id": "33012",
-  "cociente_pred": 2.6442,
-  "cociente_obs": 3.7013,
+  "cociente_pred": 3.2737,
+  "cociente_obs": 3.8972,
   "factores_pct": {
-   "Fin de semana": 4.2,
-   "Acceso regulado a los Lagos": 9.4,
-   "Vacaciones escolares": 28.8,
-   "Época del año": 37.4
+   "Fin de semana": 3.7,
+   "Festivo en origen (Madrid o Castilla y León)": 4.6,
+   "Acceso regulado a los Lagos": 9.9,
+   "Puente o festivo en Asturias": 10.5,
+   "Vacaciones escolares": 22.4,
+   "Época del año": 34.7
   }
  },
  "comprobacion_treeexplainer": {

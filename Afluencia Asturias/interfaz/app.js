@@ -89,10 +89,19 @@
   const ICONO_INFO = '<svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" class="ico-info-c"/><rect x="7.1" y="6.6" width="1.8" height="5.4" rx=".9" class="ico-info-t"/><circle cx="8" cy="4.4" r="1.05" class="ico-info-t"/></svg>';
   const ICONO_CERRAR = '<svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" class="ico-trazo"/></svg>';
 
+  const pctU = u => '+' + Math.round((u - 1) * 100) + NBSP + '%';
   function pill(n, extra) {
     return `<span class="pill pill-${n}${extra ? ' ' + extra : ''}">${ICONO[n]}<span>${NIVEL[n].nombre}</span></span>`;
   }
+  const umbralesZona = id => (E.info.umbrales.porZona && E.info.umbrales.porZona[id]) || E.info.umbrales;
+  const hayUmbralesPorZona = () => !!(E.info.umbrales.porZona && Object.keys(E.info.umbrales.porZona).length);
   function textosNivel() {
+    if (hayUmbralesPorZona()) return {
+      verde: 'Lo habitual en esa zona',
+      ambar: 'De los días más concurridos del año en esa zona',
+      rojo: 'Un día excepcional para esa zona',
+      gris: 'No hay muestra suficiente',
+    };
     const a = Math.round((E.info.umbrales.ambar - 1) * 100);
     const r = Math.round((E.info.umbrales.rojo - 1) * 100);
     return {
@@ -722,7 +731,10 @@
    * ==================================================================== */
   function renderRanking() {
     const visibles = E.prevDia.filter(p => p.nivel !== 'gris' && coincideTipo(E.zonasPorId[p.zonaId]));
-    const top = visibles.slice().sort((a, b) => b.ratio - a.ratio).slice(0, 5);
+    // Primero el nivel; dentro de cada nivel, lo cerca que está cada zona de su umbral de saturación
+    const ORDEN_N = { rojo: 3, ambar: 2, verde: 1, gris: 0 };
+    const relativo = p => p.ratio / umbralesZona(p.zonaId).rojo;
+    const top = visibles.slice().sort((a, b) => (ORDEN_N[b.nivel] || 0) - (ORDEN_N[a.nivel] || 0) || relativo(b) - relativo(a)).slice(0, 5);
     const enTop = new Set(top.map(p => p.zonaId));
     const tranquilas = visibles.filter(p => p.nivel === 'verde' && !enTop.has(p.zonaId)).sort((a, b) => a.ratio - b.ratio).slice(0, 3);
     const filtro = E.tipo === 'todos' ? '' : ' · Solo ' + TIPO_NOMBRE[E.tipo].toLowerCase();
@@ -903,6 +915,7 @@
         <p class="pz-fecha">${c ? 'Toda la zona · ' : ''}${esc(textoSel())}</p>
         <div class="pz-estado-fila">${pill(p.nivel, 'pill-grande')}<p class="pz-delta">${p.ratio != null ? delta(p.ratio, periodo) : 'Sin datos suficientes'}</p></div>
         ${p.visitantes != null ? `<p class="pz-cifra">Unos <strong>${num(p.visitantes)}</strong> visitantes${periodo ? ' al día de media' : ''}, probablemente entre ${num(p.min)} y ${num(p.max)}. Un día normal vienen unos ${num(p.normal)}.</p>` : ''}
+        ${hayUmbralesPorZona() ? `<p class="pz-cifra">En esta zona, ${NIVEL.ambar.nombre.toLowerCase()} desde ${esc(pctU(umbralesZona(z.id).ambar))} y ${NIVEL.rojo.nombre.toLowerCase()} desde ${esc(pctU(umbralesZona(z.id).rojo))} sobre un día normal (sus días más concurridos del año).</p>` : ''}
         ${!periodo && p.incierto ? '<p class="pz-cifra"><span class="etq etq-aviso">Incierto</span> El rango probable cae en colores distintos del semáforo.</p>' : ''}
         ${!periodo && p.nivelObservado ? `<p class="pz-cifra">Lo que pasó de verdad: ${pill(p.nivelObservado)} ${esc(delta(p.ratioObservado))} (unos ${num(p.observado)} visitantes).</p>` : ''}
         ${periodo && p.pico ? resumenPeriodo(p) : ''}

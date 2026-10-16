@@ -6,6 +6,9 @@
 window.SobreContenido = {
   intro: 'Predecimos cuántos visitantes recibirá cada zona de Asturias cada día, lo comparamos con un día normal y lo traducimos en un semáforo. Aquí explicamos de dónde salen las cifras, cómo funciona el modelo y qué no podemos saber.',
 
+  // Umbrales por zona (si config/semaforo.yaml los trae)
+  umbralesPorZona: 'Cada zona tiene sus propios umbrales, calculados con su historia (2022-2024): «Alta» son sus días más concurridos del año (el 10 % más alto) y «Saturación», los excepcionales (el 3 % más alto). Así, en la costa oriental solo se marcan los días fuera de lo común incluso en verano (Llanes: saturación desde 4 veces un día normal), y en las ciudades se ven sus picos aunque sean pequeños (Gijón u Oviedo, desde +30 %). Para que el ruido de los datos no dispare avisos, la alerta exige al menos +15 % y la saturación, al menos +30 %. Son umbrales del equipo, no capacidades oficiales.',
+
   // «Qué es un día normal»
   diaNormal: 'Es un día típico en esa zona: la mediana de visitantes del mismo día de la semana en 2024, sin julio ni agosto, sin festivos y sin días con problemas de datos. Si el semáforo dice «+45 %», esperamos casi la mitad más de visitantes que en un día típico. Comparar con la propia zona permite tratar igual a Gijón, con muchos visitantes diarios, y a una zona pequeña.',
 
