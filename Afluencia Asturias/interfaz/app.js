@@ -257,10 +257,6 @@
       bp.disabled = true;
       bp.querySelector('.sub').textContent = 'ninguno a la vista';
     }
-    $('#dias-barra').addEventListener('click', e => {
-      const b = e.target.closest('[data-dia]');
-      if (b) cambiarSeleccion(b.dataset.dia, b.dataset.dia);
-    });
     $('#btn-antes').addEventListener('click', () => desplazarSeleccion(-1));
     $('#btn-despues').addEventListener('click', () => desplazarSeleccion(1));
     configurarCalendario();
@@ -300,7 +296,6 @@
     E.calSel = cal;
 
     renderFecha();
-    renderBarraDias();
     if (!$('#calendario').hidden) {
       CAL.inicio = null;
       CAL.foco = desde;
@@ -357,28 +352,6 @@
     };
     paso('btn-antes', -1, periodo ? `${n} días antes` : 'Día anterior');
     paso('btn-despues', 1, periodo ? `${n} días después` : 'Día siguiente');
-  }
-
-  /* ---------- Barra de los próximos días ---------- */
-  const DIAS_BARRA = 14;
-  const ORDEN_NIVEL = { gris: 0, verde: 1, ambar: 2, rojo: 3 };
-  let seqBarra = 0;
-  async function renderBarraDias() {
-    const s = ++seqBarra;
-    const n = Math.min(DIAS_BARRA, diasEntre(E.info.hoy, E.maxFecha) + 1);
-    const fechas = [];
-    for (let i = 0; i < n; i++) fechas.push(sumar(E.info.hoy, i));
-    const prevs = await Promise.all(fechas.map(f => D.getPrevisionDia(f)));
-    if (s !== seqBarra) return;
-    $('#dias-barra').innerHTML = fechas.map((f, i) => {
-      const ps = prevs[i];
-      const peor = ps.reduce((a, p) => (ORDEN_NIVEL[p.nivel] > ORDEN_NIVEL[a] ? p.nivel : a), 'gris');
-      const rojos = ps.filter(p => p.nivel === 'rojo').length, ambar = ps.filter(p => p.nivel === 'ambar').length;
-      const d = deISO(f), sel = E.desde === f && E.hasta === f;
-      const resumen = peor === 'gris' ? 'sin datos' : `${rojos} ${rojos === 1 ? 'zona' : 'zonas'} en saturación, ${ambar} con afluencia alta`;
-      return `<li><button type="button" class="dia-b nivel-${peor}" data-dia="${f}" aria-pressed="${sel}" aria-label="${esc(fechaLarga(f))}: ${resumen}">
-        <span aria-hidden="true">${LETRA[d.getDay()]}</span><span class="dia-num" aria-hidden="true">${d.getDate()}</span>${ICONO[peor]}</button></li>`;
-    }).join('');
   }
 
   /* ---------- Calendario: un día o un periodo, de hoy a dentro de un año ---------- */
@@ -1249,10 +1222,10 @@
       <div class="ev-txt">
         <p class="ev-titulo">${esc(e.titulo)}</p>
         <p class="ev-meta"><span class="sr">${esc(fechaLarga(e.inicio))}. </span><span class="ev-cat">${esc(e.categoria)}</span>
-          ${esc(fechaEvento(e))}${e.lugar ? ' · ' + esc(e.lugar) : ''}${conConcejo ? ' · ' + esc(nombreC(e.concejo)) : ''}</p>
+          ${esc(fechaEvento(e))}${e.lugar ? ' · ' + esc(e.lugar) : ''}${conConcejo && e.concejo ? ' · ' + esc(nombreC(e.concejo)) : ''}</p>
         ${e.asistencia ? `<p class="ev-asis">Unos ${num(e.asistencia)} asistentes previstos${e.impacto ? `<span class="ev-imp">: ${e.impacto >= 1 ? `${String(Math.round(e.impacto * 10) / 10).replace('.', ',')} veces` : `el ${Math.round(e.impacto * 100)}${NBSP}% de`} los visitantes de un día normal en ${esc(nombreC(e.concejo))}</span>` : ''}</p>` : ''}
       </div>
-      ${conConcejo ? `<button type="button" class="btn-mini" data-concejo="${e.concejo}">Ver el concejo<span class="sr"> de ${esc(nombreC(e.concejo))}</span></button>` : ''}
+      ${conConcejo && e.concejo ? `<button type="button" class="btn-mini" data-concejo="${e.concejo}">Ver el concejo<span class="sr"> de ${esc(nombreC(e.concejo))}</span></button>` : ''}
     </li>`;
   }
 
@@ -1279,17 +1252,16 @@
     opts = opts || {};
     if (opts.reiniciar || !E.eventosVisibles) E.eventosVisibles = PASO_EVENTOS;
     const d = E.eventos, cat = E.eventosCat;
-    const lista = d.eventos.filter(e => (cat === 'todas' || e.categoria === cat) && coincideTipo(E.zonasPorId[zonaDeConcejo(e.concejo)]));
+    const lista = d.eventos.filter(e => (cat === 'todas' || e.categoria === cat) && (!e.concejo || coincideTipo(E.zonasPorId[zonaDeConcejo(e.concejo)])));
     const vis = lista.slice(0, E.eventosVisibles);
     $('#eventos-sub').textContent = textoSel() + (E.tipo === 'todos' ? '' : ' · Solo ' + TIPO_NOMBRE[E.tipo].toLowerCase());
-    $('#eventos-nota').textContent = d.hastaDatos
-      ? `Solo los eventos grandes, los que pueden notarse en la afluencia: al menos ${num(d.criterio.asistenciaMin)} asistentes y la mitad de los visitantes de un día normal en su concejo, o más de ${num(d.criterio.asistenciaSiempre)} asistentes en cualquier caso. Datos de PredictHQ, publicados hasta el ${fechaLarga(d.hastaDatos).toLowerCase()}.`
-      : 'No hay datos de eventos cargados.';
+    $('#eventos-nota').textContent = 'Festivos de Asturias y de cada concejo (BOE y BOPA), partidos del Real Oviedo y del Sporting en su estadio, y conciertos, ferias y otros eventos con mucho público (PredictHQ'
+      + (d.hastaDatos ? `, publicados hasta el ${fechaLarga(d.hastaDatos).toLowerCase()}` : '') + '). Son días en los que puede venir más gente de lo normal.';
     let vacio = '';
     if (!lista.length) {
       vacio = d.hastaDatos && E.desde > d.hastaDatos
         ? 'Todavía no hay eventos publicados para estas fechas.'
-        : `No hay eventos grandes ${esPeriodo() ? 'en estas fechas' : 'este día'}${cat === 'todas' ? '' : ' de este tipo'}.`;
+        : `No hay eventos ni festivos ${esPeriodo() ? 'en estas fechas' : 'este día'}${cat === 'todas' ? '' : ' de este tipo'}.`;
     }
     // Agrupados por día de inicio
     const grupos = [];
@@ -1313,7 +1285,7 @@
     const max = 6;
     return `<section class="pz-sec" aria-labelledby="pz-s-i">
       <h3 id="pz-s-i">Eventos ${esPeriodo() ? 'en estas fechas' : 'ese día'}</h3>
-      <p class="pz-ayuda">Eventos grandes ${c ? 'en el concejo' : 'en la zona'}, según PredictHQ. Pueden atraer más gente de lo normal.</p>
+      <p class="pz-ayuda">Eventos, partidos y festivos locales ${c ? 'en el concejo' : 'en la zona'}. Pueden atraer más gente de lo normal.</p>
       <ul class="ev-panel">${lista.slice(0, max).map(e => htmlEvento(e, false)).join('')}</ul>
       ${lista.length > max ? `<p class="pz-nota">Y ${lista.length - max} más en la sección «Eventos».</p>` : ''}
     </section>`;

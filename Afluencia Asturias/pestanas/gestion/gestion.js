@@ -62,7 +62,7 @@ window.Pestanas = window.Pestanas || {};
       <p class="g-lead">Herramientas para ayuntamientos, el Principado y el Parque Nacional: cuántos días al año hay presión, qué viene en las próximas semanas y cuánto podemos fiarnos del modelo.</p>
       <nav aria-label="Apartados de gestión" class="g-indice">
         <a href="#g-regular">¿Hace falta regular?</a>
-        <a href="#g-lagos">Lagos de Covadonga</a>
+        <a href="#g-lagos">Regulación actual</a>
         <a href="#g-alertas">Alertas</a>
         <a href="#g-fiabilidad">Fiabilidad</a>
         <a href="#g-perfil">Perfil del visitante</a>

@@ -218,11 +218,26 @@
         const d = piloto.getEventos(desde, hasta); // ya filtrados por fechas con el criterio del piloto…
         const todos = (window.EventosAsturias || { eventos: [] }).eventos.filter(e => e.inicio <= (hasta || desde) && e.fin >= desde);
         const crit = d.criterio || { minimo: 0.5, asistenciaMin: 3500, asistenciaSiempre: 10000 };
-        const eventos = todos.map(e => {
+        let eventos = todos.map(e => {
           const c = M.concejoPorId[e.concejo], z = c && c.zonaId && M.zonaPorId[c.zonaId];
           const normal = z && z.concejos.length === 1 ? z.normalTipico : null;
           return Object.assign({}, e, { impacto: normal && e.asistencia ? e.asistencia / normal : null, normalConcejo: normal ? Math.round(normal) : null });
-        }).filter(e => e.asistencia >= crit.asistenciaSiempre || (e.impacto != null && e.impacto >= crit.minimo && e.asistencia >= crit.asistenciaMin))
+        }).filter(e => e.asistencia >= crit.asistenciaSiempre || (e.impacto != null && e.impacto >= crit.minimo && e.asistencia >= crit.asistenciaMin));
+        // Festivos y partidos de fútbol de nuestros calendarios (datos.agenda): todos, sin criterio de tamaño.
+        // Si PredictHQ tiene el mismo partido (mismo día y concejo, con el club en el título), se queda el
+        // nuestro con la asistencia estimada de PredictHQ.
+        const club = { '33024': /sporting/i, '33044': /oviedo/i };
+        const agenda = ((M.d.agenda && M.d.agenda.eventos) || [])
+          .filter(e => e.inicio <= (hasta || desde) && e.fin >= desde)
+          .map(e => {
+            const out = Object.assign({}, e, { impacto: null, normalConcejo: null });
+            if (e.categoria !== 'Fútbol') return out;
+            const i = eventos.findIndex(p => p.inicio === e.inicio && p.concejo === e.concejo && club[e.concejo] && club[e.concejo].test(p.titulo));
+            if (i === -1) return out;
+            const p = eventos.splice(i, 1)[0];
+            return Object.assign(out, { asistencia: p.asistencia, impacto: p.impacto, normalConcejo: p.normalConcejo });
+          });
+        eventos = eventos.concat(agenda)
           .sort((a, b) => (a.inicio < b.inicio ? -1 : a.inicio > b.inicio ? 1 : (b.asistencia || 0) - (a.asistencia || 0)));
         return Object.assign({}, d, { eventos });
       });

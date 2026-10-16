@@ -1,7 +1,7 @@
 {
  "sintetico": false,
  "aviso": null,
- "generado": "2026-10-16 09:34",
+ "generado": "2026-10-16 10:22",
  "objetivo": "llegadas_ocio",
  "regla": {
   "version": 2,
@@ -25,7 +25,7 @@
    "precision_rojo_verano": 0.8858,
    "f1_rojo_verano": 0.6674,
    "wape_medio": 0.1015,
-   "segundos_entrenamiento_total": 18.724
+   "segundos_entrenamiento_total": 23.04
   },
   {
    "algoritmo": "xgboost",
@@ -33,7 +33,7 @@
    "precision_rojo_verano": 0.8722,
    "f1_rojo_verano": 0.7361,
    "wape_medio": 0.0982,
-   "segundos_entrenamiento_total": 97.932
+   "segundos_entrenamiento_total": 145.719
   }
  ],
  "eleccion": {
@@ -59,7 +59,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.6737,
    "precision_rojo": 0.8417,
-   "segundos_entrenamiento": 1.501
+   "segundos_entrenamiento": 1.964
   },
   {
    "algoritmo": "lightgbm",
@@ -73,7 +73,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.6641,
    "precision_rojo": 0.8418,
-   "segundos_entrenamiento": 1.501
+   "segundos_entrenamiento": 1.964
   },
   {
    "algoritmo": "lightgbm",
@@ -87,7 +87,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.6564,
    "precision_rojo": 0.8465,
-   "segundos_entrenamiento": 1.501
+   "segundos_entrenamiento": 1.964
   },
   {
    "algoritmo": "lightgbm",
@@ -101,7 +101,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.6392,
    "precision_rojo": 0.8473,
-   "segundos_entrenamiento": 1.501
+   "segundos_entrenamiento": 1.964
   },
   {
    "algoritmo": "lightgbm",
@@ -115,7 +115,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.6238,
    "precision_rojo": 0.8486,
-   "segundos_entrenamiento": 1.501
+   "segundos_entrenamiento": 1.964
   },
   {
    "algoritmo": "lightgbm",
@@ -129,7 +129,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.6161,
    "precision_rojo": 0.8537,
-   "segundos_entrenamiento": 1.501
+   "segundos_entrenamiento": 1.964
   },
   {
    "algoritmo": "lightgbm",
@@ -143,7 +143,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.6104,
    "precision_rojo": 0.8595,
-   "segundos_entrenamiento": 1.501
+   "segundos_entrenamiento": 1.964
   },
   {
    "algoritmo": "lightgbm",
@@ -157,7 +157,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.7236,
    "precision_rojo": 0.809,
-   "segundos_entrenamiento": 0.624
+   "segundos_entrenamiento": 0.42
   },
   {
    "algoritmo": "lightgbm",
@@ -171,7 +171,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.5833,
    "precision_rojo": 0.6176,
-   "segundos_entrenamiento": 7.953
+   "segundos_entrenamiento": 10.276
   },
   {
    "algoritmo": "lightgbm",
@@ -185,7 +185,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.6111,
    "precision_rojo": 0.6286,
-   "segundos_entrenamiento": 7.953
+   "segundos_entrenamiento": 10.276
   },
   {
    "algoritmo": "lightgbm",
@@ -199,7 +199,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.5833,
    "precision_rojo": 0.6176,
-   "segundos_entrenamiento": 7.953
+   "segundos_entrenamiento": 10.276
   },
   {
    "algoritmo": "lightgbm",
@@ -213,7 +213,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.5278,
    "precision_rojo": 0.6129,
-   "segundos_entrenamiento": 7.953
+   "segundos_entrenamiento": 10.276
   },
   {
    "algoritmo": "lightgbm",
@@ -227,7 +227,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.5833,
    "precision_rojo": 0.6364,
-   "segundos_entrenamiento": 7.953
+   "segundos_entrenamiento": 10.276
   },
   {
    "algoritmo": "lightgbm",
@@ -241,7 +241,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.5556,
    "precision_rojo": 0.6061,
-   "segundos_entrenamiento": 7.953
+   "segundos_entrenamiento": 10.276
   },
   {
    "algoritmo": "lightgbm",
@@ -255,7 +255,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.5833,
    "precision_rojo": 0.6176,
-   "segundos_entrenamiento": 7.953
+   "segundos_entrenamiento": 10.276
   },
   {
    "algoritmo": "lightgbm",
@@ -269,7 +269,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.5,
    "precision_rojo": 0.6923,
-   "segundos_entrenamiento": 0.966
+   "segundos_entrenamiento": 1.17
   },
   {
    "algoritmo": "lightgbm",
@@ -283,7 +283,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.3502,
    "precision_rojo": 0.9907,
-   "segundos_entrenamiento": 1.449
+   "segundos_entrenamiento": 1.767
   },
   {
    "algoritmo": "lightgbm",
@@ -297,7 +297,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.3437,
    "precision_rojo": 0.9906,
-   "segundos_entrenamiento": 1.449
+   "segundos_entrenamiento": 1.767
   },
   {
    "algoritmo": "lightgbm",
@@ -311,7 +311,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.3355,
    "precision_rojo": 0.9903,
-   "segundos_entrenamiento": 1.449
+   "segundos_entrenamiento": 1.767
   },
   {
    "algoritmo": "lightgbm",
@@ -325,7 +325,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.3322,
    "precision_rojo": 0.9902,
-   "segundos_entrenamiento": 1.449
+   "segundos_entrenamiento": 1.767
   },
   {
    "algoritmo": "lightgbm",
@@ -339,7 +339,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.3257,
    "precision_rojo": 0.99,
-   "segundos_entrenamiento": 1.449
+   "segundos_entrenamiento": 1.767
   },
   {
    "algoritmo": "lightgbm",
@@ -353,7 +353,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.3191,
    "precision_rojo": 0.9898,
-   "segundos_entrenamiento": 1.449
+   "segundos_entrenamiento": 1.767
   },
   {
    "algoritmo": "lightgbm",
@@ -367,7 +367,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.3142,
    "precision_rojo": 0.9948,
-   "segundos_entrenamiento": 1.449
+   "segundos_entrenamiento": 1.767
   },
   {
    "algoritmo": "lightgbm",
@@ -381,7 +381,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.5025,
    "precision_rojo": 0.9715,
-   "segundos_entrenamiento": 0.234
+   "segundos_entrenamiento": 0.304
   },
   {
    "algoritmo": "lightgbm",
@@ -395,7 +395,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.4853,
    "precision_rojo": 0.7174,
-   "segundos_entrenamiento": 5.222
+   "segundos_entrenamiento": 6.242
   },
   {
    "algoritmo": "lightgbm",
@@ -409,7 +409,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.4559,
    "precision_rojo": 0.6889,
-   "segundos_entrenamiento": 5.222
+   "segundos_entrenamiento": 6.242
   },
   {
    "algoritmo": "lightgbm",
@@ -423,7 +423,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.4853,
    "precision_rojo": 0.75,
-   "segundos_entrenamiento": 5.222
+   "segundos_entrenamiento": 6.242
   },
   {
    "algoritmo": "lightgbm",
@@ -437,7 +437,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.4412,
    "precision_rojo": 0.7317,
-   "segundos_entrenamiento": 5.222
+   "segundos_entrenamiento": 6.242
   },
   {
    "algoritmo": "lightgbm",
@@ -451,7 +451,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.3971,
    "precision_rojo": 0.7105,
-   "segundos_entrenamiento": 5.222
+   "segundos_entrenamiento": 6.242
   },
   {
    "algoritmo": "lightgbm",
@@ -465,7 +465,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.3676,
    "precision_rojo": 0.7143,
-   "segundos_entrenamiento": 5.222
+   "segundos_entrenamiento": 6.242
   },
   {
    "algoritmo": "lightgbm",
@@ -479,7 +479,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.3676,
    "precision_rojo": 0.7353,
-   "segundos_entrenamiento": 5.222
+   "segundos_entrenamiento": 6.242
   },
   {
    "algoritmo": "lightgbm",
@@ -493,7 +493,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.3529,
    "precision_rojo": 0.7273,
-   "segundos_entrenamiento": 0.775
+   "segundos_entrenamiento": 0.897
   },
   {
    "algoritmo": "xgboost",
@@ -507,7 +507,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.714,
    "precision_rojo": 0.8322,
-   "segundos_entrenamiento": 23.823
+   "segundos_entrenamiento": 58.685
   },
   {
    "algoritmo": "xgboost",
@@ -521,7 +521,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.7102,
    "precision_rojo": 0.8277,
-   "segundos_entrenamiento": 23.823
+   "segundos_entrenamiento": 58.685
   },
   {
    "algoritmo": "xgboost",
@@ -535,7 +535,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.7063,
    "precision_rojo": 0.8307,
-   "segundos_entrenamiento": 23.823
+   "segundos_entrenamiento": 58.685
   },
   {
    "algoritmo": "xgboost",
@@ -549,7 +549,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.6948,
    "precision_rojo": 0.8284,
-   "segundos_entrenamiento": 23.823
+   "segundos_entrenamiento": 58.685
   },
   {
    "algoritmo": "xgboost",
@@ -563,7 +563,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.6929,
    "precision_rojo": 0.8299,
-   "segundos_entrenamiento": 23.823
+   "segundos_entrenamiento": 58.685
   },
   {
    "algoritmo": "xgboost",
@@ -577,7 +577,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.6929,
    "precision_rojo": 0.8299,
-   "segundos_entrenamiento": 23.823
+   "segundos_entrenamiento": 58.685
   },
   {
    "algoritmo": "xgboost",
@@ -591,7 +591,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.691,
    "precision_rojo": 0.8333,
-   "segundos_entrenamiento": 23.823
+   "segundos_entrenamiento": 58.685
   },
   {
    "algoritmo": "xgboost",
@@ -605,7 +605,7 @@
    "rojos_obs": 521,
    "recall_rojo": 0.7428,
    "precision_rojo": 0.7898,
-   "segundos_entrenamiento": 2.638
+   "segundos_entrenamiento": 3.521
   },
   {
    "algoritmo": "xgboost",
@@ -619,7 +619,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.4722,
    "precision_rojo": 0.68,
-   "segundos_entrenamiento": 39.568
+   "segundos_entrenamiento": 47.082
   },
   {
    "algoritmo": "xgboost",
@@ -633,7 +633,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.4722,
    "precision_rojo": 0.68,
-   "segundos_entrenamiento": 39.568
+   "segundos_entrenamiento": 47.082
   },
   {
    "algoritmo": "xgboost",
@@ -647,7 +647,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.4722,
    "precision_rojo": 0.68,
-   "segundos_entrenamiento": 39.568
+   "segundos_entrenamiento": 47.082
   },
   {
    "algoritmo": "xgboost",
@@ -661,7 +661,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.5278,
    "precision_rojo": 0.7037,
-   "segundos_entrenamiento": 39.568
+   "segundos_entrenamiento": 47.082
   },
   {
    "algoritmo": "xgboost",
@@ -675,7 +675,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.5,
    "precision_rojo": 0.72,
-   "segundos_entrenamiento": 39.568
+   "segundos_entrenamiento": 47.082
   },
   {
    "algoritmo": "xgboost",
@@ -689,7 +689,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.5278,
    "precision_rojo": 0.7308,
-   "segundos_entrenamiento": 39.568
+   "segundos_entrenamiento": 47.082
   },
   {
    "algoritmo": "xgboost",
@@ -703,7 +703,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.4722,
    "precision_rojo": 0.7391,
-   "segundos_entrenamiento": 39.568
+   "segundos_entrenamiento": 47.082
   },
   {
    "algoritmo": "xgboost",
@@ -717,7 +717,7 @@
    "rojos_obs": 36,
    "recall_rojo": 0.2222,
    "precision_rojo": 0.8889,
-   "segundos_entrenamiento": 3.409
+   "segundos_entrenamiento": 3.996
   },
   {
    "algoritmo": "xgboost",
@@ -731,7 +731,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.4828,
    "precision_rojo": 0.9866,
-   "segundos_entrenamiento": 9.101
+   "segundos_entrenamiento": 10.335
   },
   {
    "algoritmo": "xgboost",
@@ -745,7 +745,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.4664,
    "precision_rojo": 0.9828,
-   "segundos_entrenamiento": 9.101
+   "segundos_entrenamiento": 10.335
   },
   {
    "algoritmo": "xgboost",
@@ -759,7 +759,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.4599,
    "precision_rojo": 0.9825,
-   "segundos_entrenamiento": 9.101
+   "segundos_entrenamiento": 10.335
   },
   {
    "algoritmo": "xgboost",
@@ -773,7 +773,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.455,
    "precision_rojo": 0.9858,
-   "segundos_entrenamiento": 9.101
+   "segundos_entrenamiento": 10.335
   },
   {
    "algoritmo": "xgboost",
@@ -787,7 +787,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.4452,
    "precision_rojo": 0.9855,
-   "segundos_entrenamiento": 9.101
+   "segundos_entrenamiento": 10.335
   },
   {
    "algoritmo": "xgboost",
@@ -801,7 +801,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.4337,
    "precision_rojo": 0.9851,
-   "segundos_entrenamiento": 9.101
+   "segundos_entrenamiento": 10.335
   },
   {
    "algoritmo": "xgboost",
@@ -815,7 +815,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.4337,
    "precision_rojo": 0.9851,
-   "segundos_entrenamiento": 9.101
+   "segundos_entrenamiento": 10.335
   },
   {
    "algoritmo": "xgboost",
@@ -829,7 +829,7 @@
    "rojos_obs": 611,
    "recall_rojo": 0.6939,
    "precision_rojo": 0.9217,
-   "segundos_entrenamiento": 4.39
+   "segundos_entrenamiento": 4.998
   },
   {
    "algoritmo": "xgboost",
@@ -843,7 +843,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.2941,
    "precision_rojo": 0.8333,
-   "segundos_entrenamiento": 10.657
+   "segundos_entrenamiento": 12.064
   },
   {
    "algoritmo": "xgboost",
@@ -857,7 +857,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.2794,
    "precision_rojo": 0.8636,
-   "segundos_entrenamiento": 10.657
+   "segundos_entrenamiento": 12.064
   },
   {
    "algoritmo": "xgboost",
@@ -871,7 +871,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.2794,
    "precision_rojo": 0.95,
-   "segundos_entrenamiento": 10.657
+   "segundos_entrenamiento": 12.064
   },
   {
    "algoritmo": "xgboost",
@@ -885,7 +885,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.2647,
    "precision_rojo": 1.0,
-   "segundos_entrenamiento": 10.657
+   "segundos_entrenamiento": 12.064
   },
   {
    "algoritmo": "xgboost",
@@ -899,7 +899,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.2206,
    "precision_rojo": 1.0,
-   "segundos_entrenamiento": 10.657
+   "segundos_entrenamiento": 12.064
   },
   {
    "algoritmo": "xgboost",
@@ -913,7 +913,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.1765,
    "precision_rojo": 1.0,
-   "segundos_entrenamiento": 10.657
+   "segundos_entrenamiento": 12.064
   },
   {
    "algoritmo": "xgboost",
@@ -927,7 +927,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.1618,
    "precision_rojo": 1.0,
-   "segundos_entrenamiento": 10.657
+   "segundos_entrenamiento": 12.064
   },
   {
    "algoritmo": "xgboost",
@@ -941,7 +941,7 @@
    "rojos_obs": 68,
    "recall_rojo": 0.4412,
    "precision_rojo": 0.7895,
-   "segundos_entrenamiento": 4.346
+   "segundos_entrenamiento": 5.038
   }
  ]
 }

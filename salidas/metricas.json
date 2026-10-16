@@ -1,7 +1,7 @@
 {
  "sintetico": false,
  "aviso": null,
- "generado": "2026-10-16 09:41",
+ "generado": "2026-10-16 10:30",
  "objetivo": "llegadas_ocio",
  "umbrales": {
   "ambar": 1.5,
@@ -157501,7 +157501,7 @@
    "algoritmo": "xgboost",
    "n_arboles": 437,
    "n_filas": 57868,
-   "segundos_entrenamiento": 5.625,
+   "segundos_entrenamiento": 6.13,
    "inicio": "2022-01-01",
    "fin": "2025-06-30"
   },
@@ -157509,7 +157509,7 @@
    "algoritmo": "xgboost",
    "n_arboles": 366,
    "n_filas": 405076,
-   "segundos_entrenamiento": 40.828,
+   "segundos_entrenamiento": 40.867,
    "inicio": "2022-01-01",
    "fin": "2025-06-30"
   }

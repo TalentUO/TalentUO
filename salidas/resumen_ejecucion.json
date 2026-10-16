@@ -12,7 +12,7 @@
   "diferencia_criterio_xgb_menos_lgb": 0.1029,
   "diferencia_wape_medio_xgb_menos_lgb": -0.0032
  },
- "segundos": 692.0,
+ "segundos": 868.7,
  "wape": {
   "corto/modelo": 0.0974,
   "corto/B0": 0.1293,
