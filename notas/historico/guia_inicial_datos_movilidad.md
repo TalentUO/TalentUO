@@ -1,5 +1,7 @@
 # Persona A: demanda y movilidad (lo que queremos predecir)
 
+> **Documento histórico.** Guía de tareas inicial (2026-10-15) para descargar en bruto los datos de demanda y movilidad (MITMA, INE, SADEI, COGERSA). Se conserva como registro del trabajo. Algunos pasos no funcionaron tal como se describen (la columna `municipalities` de las zonas y los enlaces `?f=` de SADEI): lo que se hizo de verdad está en `notas/fuentes/demanda/decisiones_demanda.md` y `notas/fuentes/demanda/registro_descargas.md`. «Persona A» y «Persona B» son los responsables de demanda y de factores.
+
 **Qué tienes que conseguir:** descargar a `data/raw/` los datos de cuánta gente viene a Asturias (MITMA, INE, SADEI). Solo descargar y comprobar que se abren. **No se limpia nada.**
 
 **Tu compañero (persona B)** se encarga de meteorología, calendarios y eventos.
@@ -35,7 +37,7 @@ Las marcas ✅ indican algo que hemos comprobado en la web; ⚠️ indica algo q
 ## 0. Preparación (10 min, los dos juntos)
 
 1. Crea en el repositorio las carpetas `data/raw/`, `data/manual/` y `notas/`.
-2. Crea el fichero `notas/registro_descargas.md`. Cada vez que guardes un fichero, apunta una línea: nombre, URL de origen, fecha de descarga y rango de fechas que trae.
+2. Crea el fichero `notas/fuentes/demanda/registro_descargas.md`. Cada vez que guardes un fichero, apunta una línea: nombre, URL de origen, fecha de descarga y rango de fechas que trae.
 3. Decide con qué lenguaje vas a bajar el MITMA (paso 2): **R** (más documentado) o **Python**.
    - R: instala el paquete: `install.packages("spanishoddata")`
    - Python: `pip install pySpainMobility pandas requests openpyxl pyaxis`
@@ -80,7 +82,7 @@ Las marcas ✅ indican algo que hemos comprobado en la web; ⚠️ indica algo q
 
 **Comprueba:**
 - Aparece al menos Oviedo, Gijón, Llanes y Cangas de Onís.
-- Has escrito en `notas/registro_descargas.md` si **Cangas de Onís es zona propia: SÍ / NO** y con quién va agrupada.
+- Has escrito en `notas/fuentes/demanda/registro_descargas.md` si **Cangas de Onís es zona propia: SÍ / NO** y con quién va agrupada.
 
 **Avisa a B ahora** (mándale el CSV y esa frase).
 
@@ -248,7 +250,7 @@ Descarga:
 
 ## Cierre (con B, 10 minutos)
 
-1. **Registro:** en `notas/registro_descargas.md` debe haber una línea por fichero con: nombre, URL de origen, fecha de descarga, rango de fechas real, zonas o concejos que incluye y problemas encontrados.
+1. **Registro:** en `notas/fuentes/demanda/registro_descargas.md` debe haber una línea por fichero con: nombre, URL de origen, fecha de descarga, rango de fechas real, zonas o concejos que incluye y problemas encontrados.
 2. **Lo que no pudiste conseguir:** apúntalo con el motivo (la web falla, el fichero no existe, el formato es distinto). En especial:
    - ¿Cangas de Onís es zona propia en el MITMA?
    - ¿Las tablas 2078, 2076 y 2082 del INE incluyen concejos asturianos?

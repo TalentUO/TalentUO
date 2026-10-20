@@ -1,12 +1,12 @@
-# Decisiones y consideraciones del proyecto
+# Decisiones y consideraciones: datos de demanda y movilidad
 
-Un apunte por decisión. Añadir al final, con fecha y autoría.
+Un apunte por decisión, con fecha, de la descarga en bruto de MITMA, INE, SADEI y COGERSA (2026-10-15). Los apuntes marcados «en curso» describen el momento en que se escribieron: el resultado final de la descarga del MITMA está en `notas/fuentes/mitma/registro_mitma.md` y en `notas/fuentes/mitma/cobertura_mitma.md`.
 
-## 2026-10-15 · Persona A · Zonificación MITMA (Paso 1, Fase 1)
+## 2026-10-15 · Equipo de demanda · Zonificación MITMA (Paso 1, Fase 1)
 
 ### Decisiones
 1. **Zonificación municipal, versión 2** (`Zones(zones='municipalities', version=2)` de `pyspainmobility`). La v2 es la de los datos de 2022 en adelante. La v1 (2020-2021) no se usa.
-2. **Cangas de Onís es zona propia** (`33012`, solo ese municipio). La demanda en la puerta de los Picos se puede medir a nivel municipal. Detalle y registro: `registro_descargas.md`.
+2. **Cangas de Onís es zona propia** (`33012`, solo ese municipio). La demanda en la puerta de los Picos se puede medir a nivel municipal. Detalle y registro: `notas/fuentes/demanda/registro_descargas.md`.
 3. **Fichero de zonas de Asturias** (`data/raw/zonas_mitma_asturias.csv`): se construye agrupando la tabla oficial `relacion_ine_zonificacionMitma.csv` (una fila por sección censal) por zona MITMA, con los códigos INE unidos por `;`. Es un derivado de dos ficheros descargados, no una descarga directa. `agrupada` = `sí` si hay más de un código.
 4. **Rango de datos MITMA a usar**: no mezclar datos anteriores y posteriores al 1 de julio de 2025 (cambio de metodología; lo dice la página oficial). Cualquier modelo debe tratarlas como series distintas o usar solo una.
 5. Se borró `municipios_2.geojson` (57 MB) que genera la librería: es caché derivado. Se puede regenerar con la misma llamada.
@@ -22,7 +22,7 @@ Un apunte por decisión. Añadir al final, con fecha y autoría.
 - Se importa `pyspainmobility` (minúsculas).
 - `python -I` falló al cargar un DLL de numpy por un bloqueo de Windows (Control de aplicaciones); sin `-I` funciona.
 - La página oficial de Transportes da 403 a WebFetch/curl simple; carga con cabeceras de navegador (`User-Agent`, `Accept-Language`).
-- La guía está en `notas/persona_A_demanda_movilidad` (el fichero se guardó **sin extensión `.md`**; conviene renombrarlo). Contrastada con este paso el 2026-10-15: los días sin datos, el aviso del 1 jul 2025, el código de `Zones(...)` y las columnas del CSV coinciden.
+- La guía está en `notas/historico/guia_inicial_datos_movilidad.md` (antes `notas/persona_A_demanda_movilidad`, sin extensión). Contrastada con este paso el 2026-10-15: los días sin datos, el aviso del 1 jul 2025, el código de `Zones(...)` y las columnas del CSV coinciden.
 
 ### Discrepancias con la guía
 - La guía (marcada ✅) dice que la tabla de zonas trae una columna `municipalities`. **No es así**: `get_zone_geodataframe()` solo devuelve `name` y `population`. Los códigos INE salen de `get_zone_relations()` (tabla por sección censal, columnas `municipalities` y `municipalities_mitma`). Corregir la guía.
@@ -30,12 +30,12 @@ Un apunte por decisión. Añadir al final, con fecha y autoría.
 
 ### Pendiente
 - Leer el PDF metodológico y anotar qué cambia exactamente.
-- Hacer commit de `data/raw/zonas_mitma_asturias.csv` y del registro para que la Persona B los reciba (siguen sin commitear).
+- ~~Hacer commit de `data/raw/zonas_mitma_asturias.csv` y del registro~~ (hecho: están versionados).
 - Los ficheros de los pasos 2 y 3 que ya están en `data/raw/` no los ha revisado este apunte (solo cubre el Paso 1).
 
-## 2026-10-15 · Persona A · MITMA viajes y pernoctaciones (Paso 2, Fase 1)
+## 2026-10-15 · Equipo de demanda · MITMA viajes y pernoctaciones (Paso 2, Fase 1)
 
-**Estado: EN CURSO, no completado.** La prueba del 2024-08-15 y el método están validados; la descarga completa (2022-01-01 a 2025-06-30) se lanzó a las ~17:00 y tardará unas 7-8 h. Falta ejecutar `scripts/verificar_mitma.py` por año y anotar sus resultados en `registro_descargas.md`. Hasta entonces no se da por cumplido el objetivo.
+**Estado al escribir este apunte: en curso** (terminada el mismo día a las 00:19; resultado en `notas/fuentes/mitma/registro_mitma.md`). La prueba del 2024-08-15 y el método están validados; la descarga completa (2022-01-01 a 2025-06-30) se lanzó a las ~17:00 y tardará unas 7-8 h. Falta ejecutar `scripts/verificar_mitma.py` por año y anotar sus resultados en `notas/fuentes/demanda/registro_descargas.md`. Hasta entonces no se da por cumplido el objetivo.
 
 ### Decisiones
 1. **Descarga directa por HTTP, no con `pyspainmobility`.** Se usan las mismas URLs diarias que la librería (`estudios_basicos/por-municipios/{viajes,pernoctaciones}/ficheros-diarios/...`), pero con script propio: permite filtrar y borrar cada día, reanudar y controlar errores.
@@ -63,9 +63,9 @@ Un apunte por decisión. Añadir al final, con fecha y autoría.
 - Decidir si se baja el fichero ODS de estadísticos (1,08 GB).
 - Leer el PDF metodológico de julio de 2025 (heredado del Paso 1).
 
-## 2026-10-15 · Persona A · INE ocupación por punto turístico (Paso 4, Fase 1)
+## 2026-10-15 · Equipo de demanda · INE ocupación por punto turístico (Paso 4, Fase 1)
 
-**Estado: COMPLETADO como descarga bruta, con cobertura PARCIAL respecto al objetivo.** Hoteles sí cubren Cangas de Onís; apartamentos, campings y rural no. Detalle de ficheros y ausencias en `registro_descargas.md`.
+**Estado: COMPLETADO como descarga bruta, con cobertura PARCIAL respecto al objetivo.** Hoteles sí cubren Cangas de Onís; apartamentos, campings y rural no. Detalle de ficheros y ausencias en `notas/fuentes/demanda/registro_descargas.md`.
 
 ### Decisiones
 1. **Descarga directa del CSV de JAXI** (`jaxiT3/files/t/csv_bdsc/<tabla>.csv`) en vez de exportar por pantalla: funciona, trae histórico completo (2005M01–2026M08) y es reproducible.
@@ -94,9 +94,9 @@ Parcialmente. Sí: dato oficial, gratuito, mensual y largo para validar nivel y 
 - Decidir si se añade la tabla de viviendas turísticas (`ine_viviendas_turisticas.csv`, ya descargada en otro paso) como complemento de oferta.
 - Borrar `data/raw/_ine_tmp/` si sigue existiendo (quedó bloqueada por un proceso).
 
-## 2026-10-15 · Persona A · SADEI por concejo (Paso 5, Fase 1)
+## 2026-10-15 · Equipo de demanda · SADEI por concejo (Paso 5, Fase 1)
 
-**Estado: COMPLETADO** (descarga en bruto y apertura comprobada). Detalle de ficheros, títulos y cobertura: `registro_descargas.md`. Cumple el objetivo de Fase 1; el valor para el modelo tiene los límites de abajo.
+**Estado: COMPLETADO** (descarga en bruto y apertura comprobada). Detalle de ficheros, títulos y cobertura: `notas/fuentes/demanda/registro_descargas.md`. Cumple el objetivo de Fase 1; el valor para el modelo tiene los límites de abajo.
 
 ### Decisiones
 1. **Se descarga por el visor PxWeb, no por los enlaces `?f=` de la guía.** Esos enlaces devuelven HTML y el enlace directo apunta a un host que no resuelve. El script reproduce el flujo del formulario (todos los valores → Continuar → "Archivo de PC-Axis"). Es frágil: si SADEI cambia la web, hay que revisarlo (`scripts/descarga_sadei.py`).
@@ -121,7 +121,7 @@ Parcialmente. Sí: dato oficial, gratuito, mensual y largo para validar nivel y 
 - Decidir si se baja `02040202` (padrón por edad/nacionalidad) y buscar ocupación hotelera por concejo.
 - Los `.px` suman ~1,4 MB: se pueden versionar sin problema (a diferencia de los CSV de MITMA). Sin commit todavía.
 
-## 2026-10-15 (tarde) · Persona A · MITMA: cambio de método para acelerar la descarga
+## 2026-10-15 (tarde) · Equipo de demanda · MITMA: cambio de método para acelerar la descarga
 
 ### Qué pasó
 La primera versión del script (pandas, `chunksize`, 4 procesos, uno por año) iba a ~11 h: 68 días por año en 63 min, y empeorando (solo ~3,8 GB de RAM libres; un filtrado simple medido en ese estado tardó 847 s en vez de ~10 s).

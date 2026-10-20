@@ -1,5 +1,7 @@
 # Correcciones de la fase B (tras la auditoría)
 
+> **Documento histórico.** Correcciones aplicadas el 2026-10-15 tras la auditoría de la fase B. Se conserva como registro; el estado final de los datos está en `notas/diccionario_B.md` y `notas/control_calidad_B.md`.
+
 Fecha: 2026-10-15. Orden y numeración de la tarea. Regla general: nada borrado en `data/raw/`; lo inválido va a `_descartados/`; ningún dato en bruto transformado. Parte A (MITMA, INE, SADEI) no tocada.
 
 ## 1. Open-Meteo
@@ -12,9 +14,9 @@ Fecha: 2026-10-15. Orden y numeración de la tarea. Regla general: nada borrado 
 ### 1b. Descarga completa
 - 9/9 zonas de `config/zonas_meteo.csv` con Historical Forecast, Previous Runs y (ahora) ERA5, más `openmeteo_prevision_ejemplo.json` (7 días, 2026-10-15 → 10-21).
 - **Nulos:** Historical Forecast y ERA5: 0 en todas las variables y zonas. Previous Runs: solo en `*_previous_dayN` (446, 470 y 494 horas por variable en day1/day2/day3, las horas anteriores al 2024-01-19 14:00, 01-20 14:00 y 01-21 14:00; 8460 nulos por fichero, igual en las 9 zonas); el día 0 no tiene nulos. Previsión de ejemplo: 0.
-- **Rango temporal** documentado arriba y en la tabla de `notas/registro_openmeteo.md` (regenerada por el script). El último día (2026-10-15) es el de la descarga: puede estar incompleto (no verificado).
+- **Rango temporal** documentado arriba y en la tabla de `notas/fuentes/openmeteo/registro_openmeteo.md` (regenerada por el script). El último día (2026-10-15) es el de la descarga: puede estar incompleto (no verificado).
 - Cambio en `src/descarga_openmeteo.py`: `ZONAS_ARCHIVE` ahora incluye las 9 zonas (antes solo Covadonga y Cangas) para poder comparar por zona (1d).
-- `notas/registro_openmeteo.md`: estado, tabla de coordenadas, pendientes y nota sobre el corte actualizados.
+- `notas/fuentes/openmeteo/registro_openmeteo.md`: estado, tabla de coordenadas, pendientes y nota sobre el corte actualizados.
 - **Abierto:** `aud_openmeteo_resumen.py` imprime mal los nombres de zona de los ficheros archive en su última línea (`lstrip` de caracteres); es cosmético del script de auditoría, los ficheros están bien.
 
 ### 1c. Coordenadas
@@ -24,13 +26,13 @@ Fecha: 2026-10-15. Orden y numeración de la tarea. Regla general: nada borrado 
 - Rejilla devuelta: para Historical Forecast/Previous Runs el punto cae a ≤ 0,01° salvo Madrid (~3 km) y Sevilla (~3 km); el ERA5 de Covadonga y Cangas cae ~5–6 km al norte/oeste. No hay nada que corregir ni redescargar. `config/zonas_meteo.csv` **sin cambios**; `provisional=si` se mantiene (la lista final de zonas es decisión del equipo).
 
 ### 1d. Tramo 2022 (fuga)
-- Descargado el ERA5 de las 7 zonas que faltaban. Resultado y opciones en `notas/openmeteo_tramo_2022.md` (script: `src/auditoria/tramo_2022_openmeteo.py`).
+- Descargado el ERA5 de las 7 zonas que faltaban. Resultado y opciones en `notas/fuentes/openmeteo/openmeteo_tramo_2022.md` (script: `src/auditoria/tramo_2022_openmeteo.py`).
 - Cortes: 7 zonas asturianas, último día idéntico a ERA5 = 2022-11-08 (primer día de previsión 2022-11-09); Madrid y Sevilla: 2022-11-15 / 2022-11-16. Previous Runs **no** cubre el tramo (day1 nulo en todo 2022–2023).
 - **Abierto (decisión vuestra):** qué hacer con el tramo; la temperatura del tramo no se puede clasificar con este método.
 
 ## 2. Calendarios
 
-- **2a:** `juridicas_res_calendario_escolar_asturias_2021-22.html` (25 bytes, "ERROR Host NO CONFIGURADO") movido a `data/raw/calendario/_descartados/`. Corregidos `notas/registro_calendarios.md` (celda marcada NO OBTENIDO), `notas/inventario_calendarios.md` (dos frases) y la fila de `data/raw/calendario/_verificacion.csv` (`no_obtenido_error_pagina`). Reintento de la URL el mismo día: sigue dando el mismo error; sin copia en Internet Archive (API de disponibilidad: sin snapshots).
+- **2a:** `juridicas_res_calendario_escolar_asturias_2021-22.html` (25 bytes, "ERROR Host NO CONFIGURADO") movido a `data/raw/calendario/_descartados/`. Corregidos `notas/fuentes/calendarios/registro_calendarios.md` (celda marcada NO OBTENIDO), `notas/fuentes/calendarios/inventario_calendarios.md` (dos frases) y la fila de `data/raw/calendario/_verificacion.csv` (`no_obtenido_error_pagina`). Reintento de la URL el mismo día: sigue dando el mismo error; sin copia en Internet Archive (API de disponibilidad: sin snapshots).
 - **2b:** `src/descarga_calendarios.py` ahora valida los HTML (≥ 1000 bytes y sin mensaje de error en los primeros 1500 bytes: "host no configurado", "access denied", "forbidden", "page not found", "404 not found", "service unavailable", "bad gateway", "error 404", "no encontrada"). Probado: rechaza el contenido de 25 bytes (`error_html_demasiado_corto`) y una página "404 Not Found" (`error_html_mensaje_de_error`) y acepta los 9 HTML reales guardados. Comprobado con el manifiesto: 54/55 ficheros presentes y válidos; falta solo el de Noticias Jurídicas.
 - **2c:** una búsqueda (web + Internet Archive + prueba de URL del BOPA) del BOPA nº 104 de 1-jun-2021 (Res. 5-may-2021, calendario escolar 2021-22) sin resultado. **Hueco conocido**, no se insiste. Queda como alternativa oficial el calendario gráfico de Educastur (`educastur_calendario_escolar_2021-22_grafico.pdf`) y el BOPA 2021-08142 (modificación para FP).
 - Abierto: el correo personal sigue en el `User-Agent` de `descarga_calendarios.py` (hallazgo menor del informe; no estaba en esta tarea, no lo he cambiado).
@@ -49,7 +51,7 @@ Fecha: 2026-10-15. Orden y numeración de la tarea. Regla general: nada borrado 
   - **FIDMA 2025: discrepancia no resuelta.** El CSV dice 1–17 agosto. Diario de León y asturias.com dan **2–17 agosto** (68.ª edición; el 1 de agosto de 2025 fue viernes y las demás ediciones empiezan en sábado: 2022-08-06, 2023-08-05, 2024-08-03, 2026-08-01). No he cambiado la fecha porque no tengo la fuente oficial de la Cámara de Comercio: **posible error de un día en `fecha_ini` de FIDMA 2025**, a decidir/confirmar.
 - **4b (FIDMA 2023):** la URL de la Universidad de Oviedo (`…/motostudent/en/wolfast-at-fidma-2023/` y la variante `?p=2326` que devuelve el buscador) sigue dando 404. No se encuentra fuente alternativa: marcada en el campo `notas` como NO ENCONTRADA / fecha no verificada (sigue `probable`).
 - **4c (partidos):** contrastados con las páginas de resultados de laliga.com (jornadas, hora en UTC) 7 partidos en casa de Oviedo/Sporting: Oviedo–Valladolid 2022-03-13 18:15, Sporting–Tenerife 2022-03-13 16:00, Oviedo–Ibiza 2022-09-17 16:15, Oviedo–Huesca 2022-10-12 18:30, Sporting–Almería 2025-02-22 21:00, Sporting–Tenerife 2025-04-05 21:00, Oviedo–Betis 2026-01-10 14:00 (Primera). **7/7 coinciden en fecha y hora** (CSV en hora de Madrid = hora de LaLiga + 1 h en invierno, + 2 h en verano). Es una muestra (temporadas 2021-22, 2022-23, 2024-25, 2025-26; ninguna de 2023-24 ni partido aplazado), no una verificación completa.
-- **4d (cruceros):** una búsqueda (web de la Autoridad Portuaria y prensa/turismo profesional): solo cifras agregadas de prensa (≈21 buques en 2024, sin fechas) y previsiones. No hay escalas realizadas por fecha. Borrador de correo en `notas/solicitud_cruceros.md`; factor documentado como **no disponible 2022–2024**.
+- **4d (cruceros):** una búsqueda (web de la Autoridad Portuaria y prensa/turismo profesional): solo cifras agregadas de prensa (≈21 buques en 2024, sin fechas) y previsiones. No hay escalas realizadas por fecha. Borrador de correo en `notas/fuentes/eventos/solicitud_cruceros.md`; factor documentado como **no disponible 2022–2024**.
 
 ## 5. Google Trends
 

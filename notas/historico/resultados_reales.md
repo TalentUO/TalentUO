@@ -1,5 +1,7 @@
 # Resultados con datos reales (MITMA, 2022-01-01 → 2025-06-30)
 
+> **Documento histórico.** Resultados de la primera ejecución con datos reales (2026-10-16): **5 zonas y LightGBM**. **No describen las salidas actuales** (46 zonas, XGBoost). Las cifras vigentes, con su fichero de origen, están en `README.md` («Resultados») y la comparación 5 frente a 46 zonas, en `notas/ampliacion_zonas.md`. Las secciones de método (B0 y B1, calibración con los Lagos, validación con el INE no realizada) siguen siendo válidas.
+
 Fecha: 2026-10-16. Rama `resultados-reales`. Objetivo `llegadas_ocio` de `data/clean/objetivo_diario.parquet` (parte A), sin construirlo de nuevo. Orden ejecutada (entorno `.venv` con las versiones de `requirements.txt`):
 
 ```bash
@@ -131,7 +133,7 @@ Media de |SHAP| (escala log):
 - **«Acceso regulado a los Lagos» (+9,6 % los días regulados, −6,2 % los demás) no es un efecto causal.** El calendario de regulación coincide con los fines de semana de temporada y el verano, así que actúa como otro marcador de temporada. No se puede leer como «regular atrae visitantes».
 - **«Interés en internet» es el factor más importante del corto plazo, y no lo esperábamos.**
   - Su efecto medio cae de año en año: +7,3 % en 2023, −1,9 % en 2024 y −7,0 % en 2025.
-  - En esos años, las llegadas reales suben (ver `notas/estado_resultados.md`).
+  - En esos años, las llegadas reales suben (ver `notas/historico/estado_resultados.md`).
   - Correlaciona 0,52 con «Época del año», así que en parte repite la estacionalidad.
   - Hipótesis no verificada: las visitas a Wikipedia bajan con el tiempo por causas ajenas al turismo y empujan hacia abajo la predicción de 2025. Explicaría una parte del sesgo negativo del corto plazo, pero no del de largo plazo, que no usa esta señal.
 - Eventos y partidos: aportan muy poco (≤ 0,005).
@@ -250,7 +252,7 @@ No hay datos de turistas mensuales del INE medidos con teléfonos móviles en el
 - `data/raw/ine_moviles_*` está en `.gitignore`, y no existe en ninguna rama remota ni en local (buscado el 2026-10-16). Solo está el script `scripts/descarga_ine_moviles.py`.
 - No se ha descargado nada.
 
-Sí hay series mensuales del INE por punto turístico hasta 2026M08 (`notas/registro_descargas.md`):
+Sí hay series mensuales del INE por punto turístico hasta 2026M08 (`notas/fuentes/demanda/registro_descargas.md`):
 - hoteles (`ine_eoh_2078.csv`): Cangas de Onís, Gijón, Llanes y Oviedo;
 - apartamentos (`ine_eoap_2082.csv`) y campings (`ine_camping_2084.csv`): solo Llanes.
 
@@ -298,6 +300,8 @@ Comprobaciones:
   - **Los puentes de diciembre son un fallo claro del modelo.** No se han cambiado los periodos de la demo, porque es una decisión del equipo.
 
 ### Actualizar la web (sin ejecutar: no se ha tocado la rama `web`)
+
+> **No ejecutar hoy estas órdenes:** `origin/resultados-reales` tiene las salidas antiguas de 5 zonas y sobrescribirían las de 46 zonas. El procedimiento vigente está en `README_web.md` («Actualizar los datos»).
 
 `origin/web` (`6fba3b5`) tiene `scripts/actualizar_datos_web.py`. Comprueba el contrato y copia los 5 JSON a `Afluencia Asturias/datos/modelo/`, junto con el mapeo y el calendario. En `origin/web`, `config/mapeo_zonas.csv` todavía tiene `zona_mitma_id` vacío, así que con los identificadores reales el script se pararía si no se trae también el mapeo. Orden, en una copia con la rama `web`:
 

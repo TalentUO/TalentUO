@@ -28,4 +28,4 @@ Generado por `src/limpieza_B/limpia_aemet.py` desde `data/clean/aemet_diario.par
 - **1249X**: tmed 2023-10-05→2023-10-16 (12); prec 2023-10-05→2023-10-15 (11)
 - **3195**: tmed 2022-11-03→2022-11-07 (5), 2025-09-29→2025-12-19 (82); prec —
 
-No se imputa ningún hueco. Si el modelo necesita una serie sin huecos, elegir otra estación de respaldo (ver `notas/estaciones_aemet.md`) o usar Open-Meteo.
+No se imputa ningún hueco. Si el modelo necesita una serie sin huecos, elegir otra estación de respaldo (ver `notas/fuentes/aemet/estaciones_aemet.md`) o usar Open-Meteo.

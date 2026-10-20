@@ -12,7 +12,7 @@ Salidas:
 - data/clean/openmeteo_prevision_ejemplo.parquet  mismo esquema exacto que openmeteo_diario
 - data/clean/_qc/openmeteo_*.json
 
-Decisiones (ver notas/diccionario_B.md y notas/openmeteo_tramo_2022.md):
+Decisiones (ver notas/diccionario_B.md y notas/fuentes/openmeteo/openmeteo_tramo_2022.md):
 - `es_reanalisis` = fecha < corte de la zona (Asturias 2022-11-09; Madrid y Sevilla 2022-11-16).
   Esos días NO deben usarse para evaluar; se conservan para el análisis de sensibilidad.
 - Previous Runs (horario, hora local Europe/Madrid) -> diario por día natural local:

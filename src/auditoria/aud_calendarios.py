@@ -2,7 +2,7 @@
 import glob, os, re, subprocess
 import pypdf
 D = "data/raw/calendario/"
-reg = open("notas/registro_calendarios.md", encoding="utf-8").read()
+reg = open("notas/fuentes/calendarios/registro_calendarios.md", encoding="utf-8").read()
 filas = {}
 for l in reg.splitlines():
     c = [x.strip() for x in l.strip().strip("|").split("|")]

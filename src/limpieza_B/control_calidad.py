@@ -258,19 +258,19 @@ def main():
          "desde las tablas de `data/clean/`. Significado de cada columna: `notas/diccionario_B.md`.", "",
          "## Validaciones manuales", "",
          "- Calendario: muestra aleatoria contrastada contra los PDF originales y comprobación de "
-         "Semana Santa en `notas/validacion_calendario.md` (resumen abajo).",
+         "Semana Santa en `notas/fuentes/calendarios/validacion_calendario.md` (resumen abajo).",
          "- Unión: `src/limpieza_B/test_unir_B.py` (datos sintéticos) y prueba con las tablas reales "
          "y `config/mapeo_zonas_ejemplo.csv` (IDs ficticios; tabla `factores_B_ejemplo` abajo).", ""]
-    val = NOTAS / "validacion_calendario.md"
+    val = NOTAS / "fuentes" / "calendarios" / "validacion_calendario.md"
     if val.exists():
         txt = val.read_text(encoding="utf-8")
         res = [l for l in txt.splitlines() if l.lower().startswith(("**resultado", "resultado"))]
         L += [f"Resumen de la validación del calendario: {res[0] if res else '(ver el fichero)'}", ""]
     L += ["## Hallazgos de la limpieza (revisados a mano)", "",
-          "- **La muestra de fiestas locales de la auditoría (`auditoria_fase_B.md` §3.3) no es fiable.** "
+          "- **La muestra de fiestas locales de la auditoría (`notas/historico/auditoria_fase_B.md` §3.3) no es fiable.** "
           "El `.txt` de pdftotext desalinea las filas de la tabla del BOPA. Ejemplo: el texto pone "
           "«Cangas de Onís 16 de mayo San Isidro» (2022), pero la imagen del PDF da 13 de junio "
-          "(San Antonio) y 25 de julio (Pastor). Lo he comprobado yo, renderizando la página. "
+          "(San Antonio) y 25 de julio (Pastor). Comprobado renderizando la página. "
           "`festivos_locales` está validada contra la imagen del PDF, no contra el `.txt`.",
           "- **Erratas en el BOPA**, conservadas y marcadas con `dia_semana_coherente=False`: "
           "Grado 2022-07-26 («lunes», pero fue martes) y Pravia 2024-09-06 («miércoles», pero fue viernes).",

@@ -1,6 +1,6 @@
 # Eventos 2022-2026: fuentes, estado y candidatos
 
-Recopilación a 2026-10-15. Tabla: `data/manual/eventos_recopilado.csv` (378 filas). Fuentes en bruto: `data/raw/eventos/` (ver `notas/registro_eventos.md`). Referencia espacial: concejo. No es la tabla final.
+Recopilación a 2026-10-15. Tabla: `data/manual/eventos_recopilado.csv` (378 filas). Fuentes en bruto: `data/raw/eventos/` (ver `notas/fuentes/eventos/registro_eventos.md`). Referencia espacial: concejo. No es la tabla final.
 
 Estados: `verificado` = fuente oficial/organizador para esa edición; `probable` = solo prensa/secundaria, o previsión oficial sin confirmar que se realizó; `no_encontrado`.
 

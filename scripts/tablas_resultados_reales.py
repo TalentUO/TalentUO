@@ -1,4 +1,4 @@
-"""Tablas de notas/resultados_reales.md a partir de las salidas del modelo.
+"""Tablas de notas/historico/resultados_reales.md a partir de las salidas del modelo.
 
     python -X utf8 scripts/tablas_resultados_reales.py > salidas/tablas_resultados_reales.md
 

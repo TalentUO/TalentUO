@@ -1,5 +1,7 @@
 # Integración de los datos reales en la web
 
+> **Documento histórico.** Comprobación de la web con la primera ejecución real (2026-10-16): **5 zonas y LightGBM**. Las cifras no corresponden a las salidas actuales (46 zonas, XGBoost; ver `README.md` y `notas/ampliacion_zonas.md`), y varias funciones descritas (panel de los Lagos, «Gestión») han cambiado.
+
 Fecha: 2026-10-16. Rama: `web-datos-reales` (desde `origin/web` 6fba3b5).
 
 ## Paso 0: estado en GitHub
@@ -21,14 +23,14 @@ Copia de trabajo limpia al empezar (rama `web`, al día con `origin/web`). `git 
 
 ### `origin/resultados-reales`
 
-- Están todos los ficheros pedidos: `salidas/{predicciones,alternativas,regulacion,perfil,metricas}.json`, `data/clean/llegadas_por_hora.parquet`, `config/mapeo_zonas.csv`, `notas/resultados_reales.md` y `notas/contrato_web.md`.
+- Están todos los ficheros pedidos: `salidas/{predicciones,alternativas,regulacion,perfil,metricas}.json`, `data/clean/llegadas_por_hora.parquet`, `config/mapeo_zonas.csv`, `notas/historico/resultados_reales.md` y `notas/contrato_web.md`.
 - Los cinco JSON de la web tienen `sintetico=false` en la raíz y en todos los registros, `aviso=null` y `generado=2026-10-16 01:36`. `src/modelo/validar_salidas.py`: «Contrato OK».
 - **Dos JSON de `salidas/` sí tienen `sintetico=true`**: `sintetico_efectos_reales.json` y `sintetico_recuperacion_factores.json`. Son el experimento de recuperación de factores con datos inventados (sirve para validar el modelo). No forman parte del contrato de la web y **no se han traído** a esta rama.
 - Mapeo real: 5 zonas, `zona_mitma_id` = código INE del concejo (33012 Cangas de Onís con Covadonga y Lagos [principal], 33036 Llanes, 33056 Ribadesella, 33024 Gijón, 33044 Oviedo). Coinciden con `predicciones.json → zonas`. Cada concejo está en una sola zona.
 
 ### `web-gestion`
 
-- Ya integrada en `web`: `notas/coordinacion_web.md` dice «web-gestion lista — commit edcf286» y «integrada en web por avance rápido (fc6ebb5)». `git log` lo confirma.
+- Ya integrada en `web`: `notas/historico/coordinacion_web.md` dice «web-gestion lista — commit edcf286» y «integrada en web por avance rápido (fc6ebb5)». `git log` lo confirma.
 - Después hay un único commit de su autor que no está en `web`: eb7cf76 «Gestión y Sobre los datos: README de las pestañas» (solo añade `Afluencia Asturias/pestanas/README.md`, sin código). **No se ha integrado** (es posterior al «lista»). Pendiente de confirmar.
 
 ### `origin/main`
@@ -82,7 +84,7 @@ Panel de los Picos el 17 oct: «Unos 8.655 visitantes, probablemente entre 7.725
 ### Sobre los datos
 - Fuentes, cómo funciona el modelo y limitaciones: presentes. El algoritmo sale de `metricas.json → algoritmo` = `lightgbm` («LightGBM»). Mapa: «Límites municipales: © Instituto Geográfico Nacional (CC BY 4.0)».
 - Corregido con tu visto bueno, solo en textos:
-  - el INE pasa a «Validación prevista… Esta comprobación aún no se ha hecho» (`resultados_reales.md` §8);
+  - el INE pasa a «Validación prevista… Esta comprobación aún no se ha hecho» (`notas/historico/resultados_reales.md` §8);
   - el tiempo solo entra a 1-3 días: «Cómo funciona el modelo», ficha de Open-Meteo y texto de Alertas de Gestión.
 
 ### Modo demo (`?demo=1`)
@@ -94,7 +96,7 @@ Panel de los Picos el 17 oct: «Unos 8.655 visitantes, probablemente entre 7.725
   - la **zona alternativa** sí sirve: Oviedo, −25 %, a 59 km.
   - En la demo conviene enseñar la zona y no el día.
 
-## Paso 3: coherencia con `notas/resultados_reales.md`
+## Paso 3: coherencia con `notas/historico/resultados_reales.md`
 
 | Cifra | Web | Referencia | ¿Cuadra? |
 |---|---|---|---|

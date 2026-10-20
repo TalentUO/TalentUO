@@ -13,8 +13,8 @@ Cómo se aplica:
   la de mejor cobertura. Si una es más cercana y otra tiene mejor cobertura,
   es un «empate» y se aplica la preferencia del equipo.
 - Candidatas: las estaciones de la misma vertiente/emplazamiento que se
-  propusieron para cada zona en notas/estaciones_aemet.md y en el mapeo.
-  Salida: notas/eleccion_estaciones.md (con todas las distancias, para revisar).
+  propusieron para cada zona en notas/fuentes/aemet/estaciones_aemet.md y en el mapeo.
+  Salida: notas/fuentes/aemet/eleccion_estaciones.md (con todas las distancias, para revisar).
 """
 import math
 import sys
@@ -85,7 +85,7 @@ def main():
           "Aviso (no cambia la elección): para Ribadesella, 1186P Amieva-Panizales está algo más cerca "
           f"({km(43.46, -5.06, 43.26667, -5.11917):.1f} km) que Llanes, pero es una estación de valle de "
           "montaña a 370 m. No se ha incluido entre las candidatas de una zona costera."]
-    (NOTAS / "eleccion_estaciones.md").write_text("\n".join(L), encoding="utf-8")
+    (NOTAS / "fuentes" / "aemet" / "eleccion_estaciones.md").write_text("\n".join(L), encoding="utf-8")
     for z, (e, m) in elegidas.items():
         print(f"{z:15s} -> {e}  ({m})")
 

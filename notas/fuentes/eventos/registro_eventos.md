@@ -1,6 +1,6 @@
 # Registro de descargas: eventos
 
-Una línea por fichero de `data/raw/eventos/`. Fecha de descarga: 2026-10-15 (todos). Los ficheros de los subagentes (Sella, Pastor, San Mateo, Nava, Semana Negra, FICX, FIDMA) no registraron la URL exacta de cada descarga: la URL usada como fuente de cada fecha está en `fuente_url` de `data/manual/eventos_recopilado.csv` y el dominio consta en el nombre del fichero. Si hace falta URL exacta por fichero, hay que rehacer esa descarga.
+Una línea por fichero de `data/raw/eventos/`. Fecha de descarga: 2026-10-15 (todos). Los ficheros de las búsquedas por evento (Sella, Pastor, San Mateo, Nava, Semana Negra, FICX, FIDMA) no registraron la URL exacta de cada descarga: la URL usada como fuente de cada fecha está en `fuente_url` de `data/manual/eventos_recopilado.csv` y el dominio consta en el nombre del fichero. Si hace falta URL exacta por fichero, hay que rehacer esa descarga.
 
 | Fichero | URL | Descarga | Rango cubierto | Problemas de acceso / notas |
 |---|---|---|---|---|

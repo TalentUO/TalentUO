@@ -1,12 +1,10 @@
 # Registro de descargas
 
-Anotar aquí cada descarga de datos para mantener la trazabilidad.
+Trazabilidad de las descargas de datos de demanda y movilidad (MITMA, INE, SADEI, COGERSA), una sección por paso. Las descargas de factores (AEMET, Open-Meteo, calendarios, eventos y señales) tienen su propio registro en `notas/fuentes/`.
 
-| Fecha | Fuente | URL / método | Archivo en `data/raw/` o `data/manual/` | Descargado por | Notas |
-|-------|--------|--------------|------------------------------------------|----------------|-------|
-|       |        |              |                                          |                |       |
+> **Datos del INE de turismo con móviles (paso 3):** se descargaron en el equipo del responsable de demanda, pero no están en el repositorio (`data/raw/ine_moviles_*` está en `.gitignore`) y el modelo no los usa. La validación externa con el INE no se ha hecho (`notas/historico/resultados_reales.md` §8).
 
-## 2026-10-15 · Paso 1 · MITMA: zonificación municipal (v2) – Persona A
+## 2026-10-15 · Paso 1 · MITMA: zonificación municipal (v2) – equipo de demanda
 
 **Cangas de Onís es zona propia: SÍ** (id MITMA `33012`, contiene solo el municipio INE 33012; Covadonga y Lagos son núcleos dentro de ese municipio, no tienen zona propia).
 
@@ -49,9 +47,9 @@ https://www.transportes.gob.es/ministerio/proyectos-singulares/estudios-de-movil
 - Implicación: Cabrales (acceso a Picos por Arenas/Poncebos) y Onís no se pueden medir por separado en MITMA, ni Amieva (se agrupa con Caso/Ponga/Sobrescobio).
 - Zonas agrupadas en Asturias: 13 de 46 (las que acaban en `_AM`, "agregacion de municipios").
 
-## 2026-10-15 · Paso 2 · MITMA: viajes y pernoctaciones (estudios básicos, municipios, v2) – Persona A
+## 2026-10-15 · Paso 2 · MITMA: viajes y pernoctaciones (estudios básicos, municipios, v2) – equipo de demanda
 
-**Estado: EN CURSO** (descarga lanzada el 2026-10-15 ~17:00, 4 procesos, uno por año). Se actualiza al terminar cada año.
+**Estado al escribir esta sección: en curso** (descarga lanzada el 2026-10-15 ~17:00). Terminó a las 00:19; filas, días y ausencias por año en `notas/fuentes/mitma/registro_mitma.md`.
 
 ### Prueba 2024-08-15: OK (sin errores de red; no hizo falta probar otro día)
 - URL viajes: `https://movilidad-opendata.mitma.es/estudios_basicos/por-municipios/viajes/ficheros-diarios/2024-08/20240815_Viajes_municipios.csv.gz` (147 MB, 13 156 431 filas, separador `|`).
@@ -78,7 +76,7 @@ Carpeta `https://movilidad-opendata.mitma.es/estudios_basicos/estadisticos/` (a�
 | `pernoctaciones_municipal_residencia.csv` | `pernoctaciones/2024/estadisticos_diasemana_municipal_residencia.csv` | por zona de residencia |
 - NO descargado: `viajes/2024/municipal_estadisticos_diasemana_ods.csv` (origen-destino, **1,08 GB**; el único con detalle por pareja origen-destino). También existen versiones provinciales. "Sin julio ni agosto" y "2024" salen de la página oficial; **NO VERIFICADO** en los propios ficheros.
 
-## 2026-10-15 · Paso 6 (opcional) · Viviendas turísticas (INE) y residuos (COGERSA) – Persona A
+## 2026-10-15 · Paso 6 (opcional) · Viviendas turísticas (INE) y residuos (COGERSA) – equipo de demanda
 
 ### 6a. INE · Viviendas turísticas por municipio — DESCARGADO
 - Página: `https://www.ine.es/experimental/viv_turistica/exp_viv_turistica_tablas.htm`. Tabla municipal: **Tabla 2 "Viviendas turísticas, plazas y plazas por vivienda turística. Municipios"** (id INE 39363). Hay otra municipal, Tabla 4 (% de viviendas turísticas sobre total censado, id 39366), **no descargada**.
@@ -95,7 +93,7 @@ Carpeta `https://movilidad-opendata.mitma.es/estudios_basicos/estadisticos/` (a�
 - **NO DISPONIBLE (descargable)**: 2022–2025. Solo existen como paneles Power BI (en línea, sin descarga según la página) y folletos PDF resumen 2024 y 2025 (no descargados; **NO VERIFICADO** si traen datos por concejo). **NO VERIFICADO** si los paneles Power BI muestran detalle mensual (no se abrieron). Anteriores: XLSX 2020 (incluido en el de 2021), XLS 2019/2018, PDF 2011–2017 (no descargados).
 - Utilidad: con datos anuales y solo hasta 2021 no sirve para entrenar la serie diaria; solo como indicador estructural/anual. El rango temporal descargable (2020–2021) no solapa con MITMA (2022–2025).
 
-## 2026-10-15 · Paso 5 · SADEI: tablas PC-Axis por concejo – Persona A
+## 2026-10-15 · Paso 5 · SADEI: tablas PC-Axis por concejo – equipo de demanda
 
 **Estado: HECHO** (6 tablas + padrón). Los 7 ficheros se abren con pyaxis y contienen Cangas de Onís y Llanes (salvo las 2 tablas de Asturias, que no son por concejo; ver abajo).
 
@@ -131,7 +129,7 @@ Los .px traen celdas vacías (`NaN` al abrirlas): **no se rellenan con 0**. En l
 ### Padrón
 **Encontrado** en https://www.sadei.es/sadei/poblacion/evolucion-e-indicadores_166_1_ap.html (Población → Evolución e indicadores). Se eligió `02020202` por ser una sola tabla compacta concejo × periodo. Alternativas en la página "Padrones de habitantes" (`.../padrones-de-habitantes_167_1_ap.html`), no descargadas: `02__04__02/02040202` (población por nacionalidad, sexo y edad, concejos) y `02__04__01/02040102` (Población. Concejos). **NO VERIFICADO**: qué filas del periodo 2021–2026 son padrón definitivo, residente de referencia o provisional (la columna `Periodo` mezcla etiquetas "(Censo)", "(Provisional…)" etc.; mirar las etiquetas completas antes de usarla).
 
-## 2026-10-15 · Paso 4 · INE: encuestas de ocupación por punto turístico – Persona A
+## 2026-10-15 · Paso 4 · INE: encuestas de ocupación por punto turístico – equipo de demanda
 
 **Estado: DESCARGADO y abierto (8 CSV). Sin limpiar.** URL patrón (funciona, HTTP 200): `https://www.ine.es/jaxiT3/files/t/csv_bdsc/<tabla>.csv`. Formato: separador `;`, UTF-8 con BOM (la cabecera HTTP dice ISO-8859-15 pero el contenido es UTF-8), decimal/millar con `.` (p. ej. `25.874` = 25 874 viajeros; **NO VERIFICADO** si algún valor lleva decimales). Formato largo: punto turístico; variable; [residencia]; `Periodo` (`2026M08`); `Total`.
 
@@ -169,7 +167,7 @@ Cada serie tiene 260 filas (2005M01–2026M08 × variable); el valor puede ser `
 - Confirmar con muestra que `.` y vacío corresponden a meses cerrados/secreto (comparar con el PDF/nota metodológica EOH).
 - Cangas de Onís solo tiene hoteles; para presión turística local no hay apartamentos, campings ni rural por punto.
 
-## 2026-10-15 · Paso 3 · INE: turismo con móviles, interno (estadística experimental) – Persona A
+## 2026-10-15 · Paso 3 · INE: turismo con móviles, interno (estadística experimental) – equipo de demanda
 
 **ALCANCE: turismo interno interprovincial.** Solo cuenta turistas residentes en España que viajan a una provincia **distinta** de la de residencia. **NO incluye a los asturianos que viajan dentro de Asturias** (eso lo cubre MITMA). Las cifras de destino asturiano son visitantes de fuera de Asturias; no son el total de visitantes. Tampoco incluye extranjeros (según la nota del propio Excel; la tabla 53001 NO VERIFICADO que use la misma definición, aunque su concepto es "Turistas").
 
@@ -233,5 +231,5 @@ URL: `https://www.ine.es/experimental/turismo_moviles/exp_tmov_interno_mun_<año
 
 ### 2026-10-15 18:16 · Paso 2: cambio de script (v2, streaming) — registro de la reanudación
 - Se descartó la tanda inicial (pandas); sus CSV parciales (≈68 días por año) están en `data/raw/_mitma_viejo/`. El script actual `scripts/descarga_mitma.py` rehace la descarga entera con el método de streaming; salida y columnas idénticas (comprobado en 4 casos). Estado en `data/raw/_mitma_estado_v2.jsonl` (el antiguo `_mitma_estado.jsonl` quedó en `_mitma_viejo/`).
-- Orden: pernoctaciones de todo el periodo → viajes 2024-01..2025-06 → 2023 → 2022. Los CSV anuales se ensamblan al terminar la tanda (o con `--solo-ensamblar`). Ver `decisiones_y_consideraciones.md` para las mediciones.
-- Resultados finales por año (filas, días, fechas ausentes): **pendientes** (se anotarán tras `scripts/verificar_mitma.py`).
+- Orden: pernoctaciones de todo el periodo → viajes 2024-01..2025-06 → 2023 → 2022. Los CSV anuales se ensamblan al terminar la tanda (o con `--solo-ensamblar`). Ver `notas/fuentes/demanda/decisiones_demanda.md` para las mediciones.
+- Resultados finales por año (filas, días, fechas ausentes): en `notas/fuentes/mitma/registro_mitma.md`.

@@ -26,7 +26,7 @@ TRAMOS = RAW / "aemet" / "tramos"
 ESTADO_TRAMOS = RAW / "aemet" / "estado_tramos.json"
 INICIO = date(2022, 1, 1)
 
-# Estaciones confirmadas contra el inventario (ver notas/estaciones_aemet.md).
+# Estaciones confirmadas contra el inventario (ver notas/fuentes/aemet/estaciones_aemet.md).
 ESTACIONES = {
     "1212E": "Asturias Aeropuerto",
     "1249X": "Oviedo",
@@ -222,8 +222,8 @@ def cmd_cobertura(_a):
             c = por_mes[m]
             lineas.append(f"| {m} | {c['dias']} | " + " | ".join(str(c[k]) for k in VARS) + " |")
     (RAIZ / "notas").mkdir(exist_ok=True)
-    (RAIZ / "notas" / "cobertura_aemet.md").write_text("\n".join(lineas) + "\n", encoding="utf-8")
-    print("Escrito notas/cobertura_aemet.md")
+    (RAIZ / "notas" / "fuentes" / "aemet" / "cobertura_aemet.md").write_text("\n".join(lineas) + "\n", encoding="utf-8")
+    print("Escrito notas/fuentes/aemet/cobertura_aemet.md")
 
 
 # ---------------------------------------------------------------- prevision

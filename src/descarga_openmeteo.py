@@ -28,7 +28,7 @@ CONFIG = RAIZ / "config" / "zonas_meteo.csv"
 RAW = RAIZ / "data" / "raw"
 CHUNKS = RAW / "_chunks"
 MANIFEST = CHUNKS / "manifest.json"
-REGISTRO = RAIZ / "notas" / "registro_openmeteo.md"
+REGISTRO = RAIZ / "notas" / "fuentes" / "openmeteo" / "registro_openmeteo.md"
 
 TZ = "Europe/Madrid"
 INICIO_HIST = date(2022, 1, 1)
@@ -185,7 +185,7 @@ def vivo(zona):
 
 
 def escribir_registro(filas, manifest):
-    """Regenera la tabla de ficheros entre marcadores en notas/registro_openmeteo.md."""
+    """Regenera la tabla de ficheros entre marcadores en notas/fuentes/openmeteo/registro_openmeteo.md."""
     lineas = ["| Fichero | Endpoint | Descargado | Rango real | N reg. | Nulos por variable | Incidencias |",
               "|---|---|---|---|---|---|---|"]
     for p in sorted(RAW.glob("openmeteo_*.json")):

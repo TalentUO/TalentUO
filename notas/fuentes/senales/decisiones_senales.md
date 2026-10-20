@@ -1,6 +1,6 @@
 # Decisiones y consideraciones: señales adelantadas
 
-Estado a 2026-10-15 (fase 1, descarga en bruto). Detalle de cada fuente en `notas_senales.md`; ficheros en `registro_senales.md`. Las señales son contexto, no la base del modelo.
+Estado a 2026-10-15 (fase 1, descarga en bruto). Detalle de cada fuente en `notas/fuentes/senales/notas_senales.md`; ficheros en `notas/fuentes/senales/registro_senales.md`. Las señales son contexto, no la base del modelo.
 
 ## Decisiones tomadas
 1. **Wikipedia, 20 ficheros:** 15 artículos es + 3 en + 2 fr, `agent=user`, `all-access`, diario, 2022-01-01 a 2026-10-14. Se usa siempre el título final tras redirección (`Santa Cueva de Covadonga`, `Pics d'Europe`).
@@ -17,7 +17,7 @@ Estado a 2026-10-15 (fase 1, descarga en bruto). Detalle de cada fuente en `nota
 
 ## Consideraciones importantes
 - **Trends es relativo (0-100 por consulta)**, la muestra cambia entre descargas y la granularidad diaria solo existe en ventanas cortas (límite exacto sin verificar). Para encadenar ventanas diarias hacen falta solapes y un término común, y no se reescala hasta limpiar.
-- **Trends pendiente:** ES-MD "covadonga", ES-CL, ES-AS y todas las ventanas diarias (instrucciones de exportación en `notas_senales.md`, sección 2).
+- **Trends pendiente:** ES-MD "covadonga", ES-CL, ES-AS y todas las ventanas diarias (instrucciones de exportación en `notas/fuentes/senales/notas_senales.md`, sección 2).
 - **Cifras OAPN no comparables entre parques:** mezclan conteos directos y estimaciones modeladas con metodología propia de cada parque (vía SIR). Sirven para el nivel anual de Picos, no para la dinámica diaria.
 - **Referencia previa verificada:** 2022 = 1.798.533, 2023 = 1.698.780, 2024 = 1.632.805; coinciden con el documento oficial. 2025 = 1.565.899.
 - **Sin cifras por punto de acceso (Lagos, centros de visitantes)** en lo revisado; la búsqueda no fue exhaustiva.

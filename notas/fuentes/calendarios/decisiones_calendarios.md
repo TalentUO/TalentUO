@@ -1,6 +1,6 @@
 # Decisiones y consideraciones: calendarios (fase 1)
 
-Fecha: 2026-10-15. Complementa `notas/inventario_calendarios.md` (qué hay) y `notas/registro_calendarios.md` (de dónde viene cada fichero). Aquí va el porqué y lo que hay que tener en cuenta al montar la tabla.
+Fecha: 2026-10-15. Complementa `notas/fuentes/calendarios/inventario_calendarios.md` (qué hay) y `notas/fuentes/calendarios/registro_calendarios.md` (de dónde viene cada fichero). Aquí va el porqué y lo que hay que tener en cuenta al montar la tabla.
 
 ## Valoración frente a los objetivos del proyecto
 

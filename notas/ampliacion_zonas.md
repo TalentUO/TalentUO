@@ -1,9 +1,9 @@
 # Ampliación del modelo a toda Asturias (46 zonas MITMA, 78 concejos)
 
-Fecha: 2026-10-16. Rama: `zonas-asturias` (desde `main`).
+Fecha: 2026-10-16. Rama: `zonas-asturias` (desde `main`). **Es la configuración de las salidas actuales** (`salidas/`, 46 zonas, XGBoost).
 
 ## Por qué
-El modelo y la web cubrían 5 zonas (Cangas de Onís, Llanes, Ribadesella, Gijón y Oviedo). Los otros 73 concejos salían como «Sin previsión». Los viajes del MITMA descargados por la parte A cubren las 46 zonas de Asturias (`data/raw/zonas_mitma_asturias.csv`, `notas/cobertura_mitma.md`).
+El modelo y la web cubrían 5 zonas (Cangas de Onís, Llanes, Ribadesella, Gijón y Oviedo). Los otros 73 concejos salían como «Sin previsión». Los viajes del MITMA descargados por el equipo de demanda cubren las 46 zonas de Asturias (`data/raw/zonas_mitma_asturias.csv`, `notas/fuentes/mitma/cobertura_mitma.md`).
 
 ## Qué cambia (hecho)
 - **`config/mapeo_zonas.csv`: 46 zonas.**
@@ -15,11 +15,11 @@ El modelo y la web cubrían 5 zonas (Cangas de Onís, Llanes, Ribadesella, Gijó
 - **Tiempo de las zonas nuevas (decisión del equipo): punto de Open-Meteo más cercano** entre los de valle o ciudad (cangas_de_onis, llanes, ribadesella, gijon, oviedo).
   - Es una aproximación, peor en el occidente: hasta unos 90 km.
   - Está anotada en la columna `notas` de cada zona.
-  - El tiempo pesa poco en el modelo: SHAP 0,016 frente a 0,126 de las vacaciones (`notas/resultados_reales.md` §3).
+  - El tiempo pesa poco en el modelo: SHAP 0,016 frente a 0,126 de las vacaciones (`notas/historico/resultados_reales.md` §3).
 - **`src/modelo/web_salidas.py`: las coordenadas de cada zona salen de `lat`/`lon` del mapeo** (antes, del punto del tiempo). Sin ellas, las zonas que comparten punto saldrían superpuestas y a 0 km entre sí. No toca el entrenamiento.
 - **`data/clean/factores_B_diario.parquet`** regenerado con `unir_B.py`: 80 454 filas, 46 zonas.
 
-## Lo que tiene que hacer Adrián (necesita `data/raw/mitma_viajes/` y `data/raw/mitma_pernoctaciones/`)
+## Pasos del equipo de demanda (necesita `data/raw/mitma_viajes/` y `data/raw/mitma_pernoctaciones/`)
 
 ```bash
 git fetch && git switch zonas-asturias
@@ -35,7 +35,7 @@ Comprobaciones antes de subir:
 - La columna `calidad` marca los mismos días sin dato que antes (16 `sin_dato_mitma` y 3 `anomalia_mitma` por zona).
 - `llegadas_por_hora.parquet` con 46 zonas.
 
-## Hecho por Adrián
+## Hecho por el equipo de demanda
 `80828e1`: `objetivo_diario.parquet` (58 742 filas = 46 zonas × 1 277 días; 736 `sin_dato_mitma` y 138 `anomalia_mitma`, 16 y 3 por zona) y `llegadas_por_hora.parquet` (26 496 filas). Las 5 zonas antiguas son idénticas a las de `main`.
 
 ## Resultado: el modelo de 46 zonas y un fallo de la parada temprana
@@ -68,7 +68,7 @@ Comprobaciones antes de subir:
 |---|---|---|
 | WAPE modelo / día normal (B0) | 9,3 % / 13,2 % | 9,9 % / 12,9 % |
 | Rojos detectados / precisión, todas las zonas | 79,9 % / 96,0 % | 68,7 % / 85,2 % |
-| Picos: rojos detectados (precisión) | 65 de 87 (94 %) | **71 de 87 (93 %)** |
+| Picos: rojos detectados (precisión) | 65 de 87 (94 %) | **66 de 87 (93 %)**; 71 días pintados en rojo |
 | Llanes / Ribadesella | — | 80 % / 81 % |
 | Colunga / Cudillero / Cabrales y 4 más / Tapia | — | 86 % / 80 % / 83 % / 86 % |
 | Demo 15-08-2024, Picos (h=8) | rojo, ×3,00 (+200 %) | **rojo, ×3,27 (+227 %)**; observado ×3,90 |

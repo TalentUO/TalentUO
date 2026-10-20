@@ -78,7 +78,7 @@ Contraste con la API de geocodificación de Open-Meteo (2026-10-15):
 
 - Modelo usado antes de 2022-11-10; si hay más cambios de modelo posteriores a 2025-06-30 (solo se comparó con modelos concretos hasta esa fecha) y si Previous Runs cambia de modelo entre 2024 y 2026.
 - Causa del parecido con ERA5 antes de 2022-11-10 (hipótesis no confirmada).
-- ERA5 descargado ya para las 9 zonas (ver `notas/correcciones_fase_B.md`). Tramo 2022 por zona: `notas/openmeteo_tramo_2022.md` (corte 2022-11-08/09 en las 7 zonas asturianas; 2022-11-15/16 en Madrid y Sevilla; **corrige** la fecha 2022-11-10 de arriba para la identidad con ERA5).
+- ERA5 descargado ya para las 9 zonas (ver `notas/historico/correcciones_fase_B.md`). Tramo 2022 por zona: `notas/fuentes/openmeteo/openmeteo_tramo_2022.md` (corte 2022-11-08/09 en las 7 zonas asturianas; 2022-11-15/16 en Madrid y Sevilla; **corrige** la fecha 2022-11-10 de arriba para la identidad con ERA5).
 - Coordenadas: ver tabla; Covadonga y Lagos verificadas el 2026-10-15. `provisional=si` se mantiene: la lista de zonas es decisión del equipo.
 - Valor del último día (2026-10-15) posiblemente provisional.
 - Comparación con AEMET: pendiente de la otra sesión.

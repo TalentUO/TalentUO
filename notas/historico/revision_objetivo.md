@@ -1,5 +1,7 @@
 # Revisión rápida del objetivo (`data/clean/objetivo_diario.parquet`)
 
+> **Documento histórico.** Revisión rápida del objetivo con **5 zonas** (2026-10-16). El objetivo actual tiene 46 zonas (58 742 filas; `notas/ampliacion_zonas.md`). La observación del §4 sobre los días que el portal sí publicó pero `config/mitma_calidad.yaml` marca como `sin_dato_mitma` sigue vigente.
+
 Generado con `src/modelo/revision_objetivo.py`. Periodo 2022-01-01 a 2025-06-30, 5 zonas MITMA (una por zona del mapeo). Es una revisión rápida, no el análisis completo.
 
 ## 1. Serie diaria de llegadas de ocio
@@ -53,7 +55,7 @@ Resumen de esos 20 días: agosto 20, Semana Santa 0, festivo 1, puente o finde l
 - En esos días las 7 columnas de valores son NaN en las 5 zonas: **sí** · ceros en esos días: **0** · NaN en días con dato: **0**.
 - Ceros reales (días con fichero y zona sin viajes): 0.
 - `anomalia_mitma` (29-31 oct 2024, se conservan los valores): 15 filas.
-- **Atención:** `config/mitma_calidad.yaml` marca como `sin_dato_mitma` los días 2024-04-04, 2024-04-19 y 2024-11-11, **aunque el portal sí los publicó** (están en los ficheros descargados). Quedan en NaN por esa configuración. Además faltan en el portal 2024-11-09 y 2024-11-26 (no están en la lista oficial; también quedan NaN). Ver `notas/cobertura_mitma.md`.
+- **Atención:** `config/mitma_calidad.yaml` marca como `sin_dato_mitma` los días 2024-04-04, 2024-04-19 y 2024-11-11, **aunque el portal sí los publicó** (están en los ficheros descargados). Quedan en NaN por esa configuración. Además faltan en el portal 2024-11-09 y 2024-11-26 (no están en la lista oficial; también quedan NaN). Ver `notas/fuentes/mitma/cobertura_mitma.md`.
 
 ## 5. Quién llega a los Picos (Cangas de Onís, días `completa`)
 

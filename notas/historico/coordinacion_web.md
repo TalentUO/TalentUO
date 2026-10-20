@@ -1,5 +1,7 @@
 # Coordinación de la web (persona 1 ↔ persona 2)
 
+> **Documento histórico.** Notas de coordinación entre el responsable de la base de la web (Inicio, datos y mapa; «persona 1») y el de las pestañas Funciones avanzadas y Sobre los datos («persona 2»), del 2026-10-15 y 16. La documentación vigente del frontend está en `Afluencia Asturias/README.md` y `README_web.md`.
+
 Ramas: **`web`** (persona 1: base, capa de datos, mapa, Inicio, demo) y **`web-gestion`** (persona 2: Gestión y Sobre los datos), creada desde `web`. La web vive en `Afluencia Asturias/` (HTML + CSS + JS clásicos, sin compilación).
 
 ## Quién toca qué
@@ -116,7 +118,7 @@ Valida `salidas/` con `src/modelo/validar_salidas.py`, copia los cinco JSON a `A
 
 ## Datos reales (rama `web-datos-reales`, 2026-10-16)
 
-Detalle en `notas/integracion_web.md`. Cambios en ficheros de la persona 2 (solo datos y textos; sin tocar estilos ni maquetación):
+Detalle en `notas/historico/integracion_web.md`. Cambios en ficheros de la persona 2 (solo datos y textos; sin tocar estilos ni maquetación):
 - `pestanas/gestion/gestion.js`:
   - **patrón horario conectado**: `pintarHoras()` rellena el mismo `#perfil-horas` desde `datos.horas` (nuevo en el módulo «datos», sale de `data/clean/llegadas_por_hora.parquet`); sin datos, queda el «Pendiente de datos»;
   - texto de Alertas: el tiempo entra a 1-3 días, no hasta una semana.

@@ -1,6 +1,6 @@
 # Inventario de calendarios (fase 1, descarga en bruto)
 
-Fecha: 2026-10-15. Ficheros en `data/raw/calendario/`; detalle por fichero (URL, fecha, problemas) en `notas/registro_calendarios.md`. Todos los PDF tienen texto extraíble (`.txt` hermano) salvo el folleto de acceso a Lagos (imagen). **Ningún documento oficial se ha sustituido por prensa.** Nada se ha descargado a mano ni de Internet Archive (ver "Cómo se obtuvo" al final).
+Fecha: 2026-10-15. Ficheros en `data/raw/calendario/`; detalle por fichero (URL, fecha, problemas) en `notas/fuentes/calendarios/registro_calendarios.md`. Todos los PDF tienen texto extraíble (`.txt` hermano) salvo el folleto de acceso a Lagos (imagen). **Ningún documento oficial se ha sustituido por prensa.** Nada se ha descargado a mano ni de Internet Archive (ver "Cómo se obtuvo" al final).
 
 Leyenda: SÍ = obtenido y verificado (abre, año y comunidad correctos, texto extraíble). Págs entre paréntesis.
 

@@ -15,7 +15,7 @@ Evidencia (todas las zonas): antes del corte, precipitación, horas de precipita
 
 Matices:
 - **Temperatura (Tmax/Tmin): no es una copia exacta de ERA5 en ningún tramo** (1–6 % de días idénticos tanto antes como después, porque Open-Meteo la corrige a la elevación del punto). Por tanto la temperatura **no sirve para detectar el corte**, y no sé decir si el tramo 2022 de temperatura es reanálisis ajustado o previsión (error medio absoluto vs ERA5 en Covadonga: 1,41 °C antes del corte y 1,24 °C después: no discrimina). Tratadla como "no verificada".
-- Corrección al registro anterior: `registro_openmeteo.md` ponía el corte en 2022-11-10 (fecha en la que `best_match` empieza a coincidir con Météo-France). La última fecha idéntica a ERA5 es 2022-11-08; el 2022-11-09 es día de transición.
+- Corrección al registro anterior: `notas/fuentes/openmeteo/registro_openmeteo.md` ponía el corte en 2022-11-10 (fecha en la que `best_match` empieza a coincidir con Météo-France). La última fecha idéntica a ERA5 es 2022-11-08; el 2022-11-09 es día de transición.
 - En Madrid y Sevilla el corte es una semana posterior (2022-11-15): el modelo/cobertura cambia en otro momento. La causa de ambos cortes **no está verificada** (la API no indica qué modelo usa).
 - Rejilla: la API devuelve para ERA5 una celda distinta de la de Historical Forecast (en Covadonga ~5 km al noroeste), pero **aun así** los valores de precipitación y viento coinciden al 100 % antes del corte. Eso refuerza que la "previsión" de ese tramo es el propio reanálisis servido por Open-Meteo (la API aplica la misma celda a ambas); no se ha podido comprobar de otro modo.
 
@@ -43,7 +43,7 @@ Prueba adicional (indicativa): pidiendo a Historical Forecast un modelo concreto
 - + Mantiene el histórico y es previsión archivada, no reanálisis.
 - − Modelo distinto al del resto de la serie (`best_match` = Météo-France desde 2022-11-10): añade un cambio de régimen; además hay que descargar y validar, y la calidad de GFS en la orografía de los Picos no está evaluada. No se ha hecho.
 
-Mi lectura (a vuestra decisión): A como línea base, y C solo si necesitáis los 10 meses de 2022 para el modelo de movilidad; en ese caso evaluad siempre en periodos posteriores al corte.
+Recomendación: A como línea base, y C solo si hacen falta los 10 meses de 2022 para el modelo; en ese caso, evaluar siempre en periodos posteriores al corte. **Decisión final del equipo:** el modelo usa el tiempo en modo estricto (solo previsión archivada, desde 2024-01-22), así que este tramo no entra en el entrenamiento (`notas/modelo.md`).
 
 ## 4. Pendiente / no verificado
 

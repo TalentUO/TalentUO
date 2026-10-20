@@ -1,5 +1,7 @@
 # Estado de partida para los resultados con datos reales
 
+> **Documento histórico.** Estado de partida (2026-10-16) antes de entrenar con datos reales: ramas, ficheros y validación del objetivo de **5 zonas**. Superado por la ampliación a 46 zonas (`notas/ampliacion_zonas.md`).
+
 Fecha: 2026-10-16. Rama de trabajo: `resultados-reales`, creada desde `origin/modelo` (`a19b727`) e integrada con `origin/fase-A-objetivo` (`e99268d`). La integración fue un avance rápido (fast-forward): `fase-A-objetivo` es `modelo` más un commit, así que no hubo conflictos.
 
 ## Ramas remotas (tras `git fetch --all`)
@@ -28,9 +30,9 @@ Las ramas `web` y `web-gestion` no se han tocado. El trabajo se hace en un workt
 | data/clean/llegadas_por_hora.parquet | 31 887 |
 | data/raw/zonas_mitma_asturias.csv | 1 741 |
 | config/mapeo_zonas.csv | 1 061 |
-| notas/registro_mitma.md | 5 402 |
-| notas/cobertura_mitma.md | 6 794 |
-| notas/revision_objetivo.md | 7 840 |
+| notas/fuentes/mitma/registro_mitma.md | 5 402 |
+| notas/fuentes/mitma/cobertura_mitma.md | 6 794 |
+| notas/historico/revision_objetivo.md | 7 840 |
 
 `origin/modelo` (todos presentes): src/modelo/ejecutar.py, notas/contrato_objetivo.md, notas/contrato_web.md, notas/modelo.md, notas/guion_modelo.md, src/limpieza_B/unir_B.py.
 

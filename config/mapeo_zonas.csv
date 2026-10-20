@@ -1,8 +1,8 @@
 zona_mitma_id,nombre,concejos_ine,zona_meteo,zona_meteo_montana,estacion_aemet,concejo_eventos,notas,lat,lon
-33012,Cangas de Onís (incluye Covadonga y Lagos),33012,cangas_de_onis,lagos_enol,1186P,Cangas de Onís,"INE 33012 verificado (maestro AEMET). Dos puntos meteorológicos (decisión del equipo): valle = cangas_de_onis (om_*) y montaña = lagos_enol (om_montana_*). Estación según notas/eleccion_estaciones.md.",43.3253,-5.0555
+33012,Cangas de Onís (incluye Covadonga y Lagos),33012,cangas_de_onis,lagos_enol,1186P,Cangas de Onís,"INE 33012 verificado (maestro AEMET). Dos puntos meteorológicos (decisión del equipo): valle = cangas_de_onis (om_*) y montaña = lagos_enol (om_montana_*). Estación según notas/fuentes/aemet/eleccion_estaciones.md.",43.3253,-5.0555
 33036,Llanes,33036,llanes,,1183X,Llanes,INE 33036 verificado (maestro AEMET).,43.398,-4.8324
-33056,Ribadesella,33056,ribadesella,,1183X,Ribadesella,INE 33056 verificado (config/comarcas_asturias.csv). Sin estación propia: 1183X Llanes por la regla de empate (notas/eleccion_estaciones.md).,43.4449,-5.0837
-33024,Gijón,33024,gijon,,1207U,Gijón,INE 33024 verificado (config/comarcas_asturias.csv). 1207U Gijón Campus por la regla de empate (notas/eleccion_estaciones.md); tmax al 87 %.,43.5008,-5.6824
+33056,Ribadesella,33056,ribadesella,,1183X,Ribadesella,INE 33056 verificado (config/comarcas_asturias.csv). Sin estación propia: 1183X Llanes por la regla de empate (notas/fuentes/aemet/eleccion_estaciones.md).,43.4449,-5.0837
+33024,Gijón,33024,gijon,,1207U,Gijón,INE 33024 verificado (config/comarcas_asturias.csv). 1207U Gijón Campus por la regla de empate (notas/fuentes/aemet/eleccion_estaciones.md); tmax al 87 %.,43.5008,-5.6824
 33044,Oviedo,33044,oviedo,,1249X,Oviedo,INE 33044 verificado (config/comarcas_asturias.csv).,43.3497,-5.8736
 33001_AM,Allande y 3 más,33001;33022;33027;33028,oviedo,,,Allande;Degaña;Grandas de Salime;Ibias,Ampliación a toda Asturias (2026-10-16). Tiempo aproximado: punto más cercano «oviedo» a 78 km del centro de la zona. Sin estación AEMET. Nombre corto: el concejo de más superficie y el número de concejos restantes (lista completa en concejos_ine).,43.1143,-6.7606
 33002,Aller,33002,oviedo,,,Aller,Ampliación a toda Asturias (2026-10-16). Tiempo aproximado: punto más cercano «oviedo» a 35 km del centro de la zona. Sin estación AEMET.,43.1087,-5.5956

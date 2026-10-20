@@ -1,6 +1,6 @@
 # Registro de la descarga MITMA (viajes y pernoctaciones, Asturias)
 
-Persona A. Descarga hecha el 2026-10-15 (de 17:00 a 00:19, hora de España) con `scripts/descarga_mitma.py`. Resumen por mes y tipo: `notas/cobertura_mitma.md`. Lo que no se pudo comprobar figura como **NO VERIFICADO**.
+Equipo de demanda. Descarga hecha el 2026-10-15 (de 17:00 a 00:19, hora de España) con `scripts/descarga_mitma.py`. Resumen por mes y tipo: `notas/fuentes/mitma/cobertura_mitma.md`. Lo que no se pudo comprobar figura como **NO VERIFICADO**.
 
 ## Fuente
 - Portal Open Data Movilidad del MITMA, estudios básicos, zonificación municipal v2, ficheros diarios:
@@ -50,11 +50,11 @@ Comprobado (`scripts/verificar_mitma.py` y `scripts/cobertura_mitma.py`): los 84
 ## Incidencias de la descarga
 - Dos reintentos que se recuperaron solos (2022-05-31: respuesta no gzip del servidor; 2022-06-01: conexión cerrada). Ambos días constan como correctos.
 - Rendimiento limitado por el ancho de banda del portal (≈ 2–20 MB/s según el momento); se usaron 4 conexiones. Con 10 el rendimiento empeoró.
-- Referencia de filas por día y tipo (2 554 días-tipo, incluidos los 26 sin publicar): `notas/mitma_referencia_filas_por_dia.csv`; comparar una descarga propia con `scripts/comparar_con_referencia.py` (solo se probó contra el propio estado: **NO VERIFICADO** que detecte diferencias reales).
+- Referencia de filas por día y tipo (2 554 días-tipo, incluidos los 26 sin publicar): `notas/fuentes/mitma/mitma_referencia_filas_por_dia.csv`; comparar una descarga propia con `scripts/comparar_con_referencia.py` (solo se probó contra el propio estado: **NO VERIFICADO** que detecte diferencias reales).
 
 ## Cómo reproducir
 ```
 python scripts/descarga_mitma.py --workers 4                                  # descarga (reanudable) y ensamblado anual
 python scripts/dividir_mitma_mensual.py --raw data/raw                       # ficheros mensuales
-python scripts/cobertura_mitma.py --raw data/raw --zonas data/raw/zonas_mitma_asturias.csv --salida notas/cobertura_mitma.md
+python scripts/cobertura_mitma.py --raw data/raw --zonas data/raw/zonas_mitma_asturias.csv --salida notas/fuentes/mitma/cobertura_mitma.md
 ```

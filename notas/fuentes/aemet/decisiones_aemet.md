@@ -1,12 +1,12 @@
 # AEMET: decisiones, límites y pendientes antes de limpiar
 
-Fase 1 (descarga en bruto), 2026-10-15. Complementa `estaciones_aemet.md`, `cobertura_aemet.md` y `registro_aemet.md`. No se ha limpiado ni transformado nada.
+Fase 1 (descarga en bruto), 2026-10-15. Complementa `notas/fuentes/aemet/estaciones_aemet.md`, `notas/fuentes/aemet/cobertura_aemet.md` y `notas/fuentes/aemet/registro_aemet.md`. No se ha limpiado ni transformado nada.
 
 ## Decisiones tomadas durante la descarga
 
 1. **Se descargaron 12 estaciones**, más de las tres fijas del enunciado (1212E, 1249X, 1183X), para poder comparar candidatas cercanas a Cangas de Onís por completitud de la serie: 1186P, 1179B, 1178R, 1199X y 1203D. Se añadieron además Gijón Campus (1207U), Cabo Peñas (1210X), Madrid Retiro (3195) y Sevilla Aeropuerto (5783).
 2. **Estación recomendada para Cangas de Onís / Picos: 1186P Amieva-Panizales** (7 km de Covadonga, 9 de Cangas, 10 de Lagos; 1741 de 1745 días, sin huecos de más de 7 días). Respaldo para Lagos y el lado este: 1179B Cabrales.
-3. **Gijón `1208` y Gijón La Merced `1208A` se quitaron de `ESTACIONES`** en `src/descarga_aemet.py` porque devuelven 404 («No hay datos que satisfagan esos criterios») en los 10 tramos. Se sustituyeron por `1207U`. Por tanto, el script ya no reproduce esos intentos: solo quedan documentados en `data/raw/aemet/estado_tramos.json`, en `estaciones_aemet.md` y en `registro_aemet.md`. Si se quiere reintentar alguna vez, hay que volver a añadirlas al diccionario.
+3. **Gijón `1208` y Gijón La Merced `1208A` se quitaron de `ESTACIONES`** en `src/descarga_aemet.py` porque devuelven 404 («No hay datos que satisfagan esos criterios») en los 10 tramos. Se sustituyeron por `1207U`. Por tanto, el script ya no reproduce esos intentos: solo quedan documentados en `data/raw/aemet/estado_tramos.json`, en `notas/fuentes/aemet/estaciones_aemet.md` y en `notas/fuentes/aemet/registro_aemet.md`. Si se quiere reintentar alguna vez, hay que volver a añadirlas al diccionario.
 4. **Tramos de 6 meses naturales** (ene-jun y jul-dic), el último hasta ayer (2026-10-14). La última fecha con dato real es 2026-10-11 (~4 días de retraso).
 5. **Pausa de 2 s entre peticiones** con backoff exponencial ante 429, 5xx y errores de red. Aparecieron 429 y un `ConnectionError` aislados, resueltos con espera. No se ha medido el límite real de peticiones por minuto.
 6. **Códigos de previsión**: Cangas de Onís `33012` (incluye Covadonga y Lagos) y Llanes `33036`, tomados del maestro `/api/maestro/municipios`. Los códigos que se habían supuesto al principio (33016 y 33034) eran incorrectos y se corrigieron antes de guardar el ejemplo.
@@ -16,7 +16,7 @@ Fase 1 (descarga en bruto), 2026-10-15. Complementa `estaciones_aemet.md`, `cobe
 - **«Tal cual» se cumple en los valores, no en los bytes.** Los ficheros están decodificados (UTF-8, con latin-1 de reserva) y vueltos a serializar con sangría de 1 espacio. Ningún valor se ha cambiado.
 - **Distancias aproximadas**: las coordenadas de Cangas vienen del maestro de municipios; las de Covadonga y Lagos son aproximadas (estimadas a mano), no oficiales. No altera la recomendación de 1186P, que está claramente más cerca, pero las cifras exactas no son oficiales.
 - **Cangas de Onís no tiene estación propia** en el inventario, y **Ribadesella tampoco**.
-- **`cobertura_aemet.md` solo se revisó al principio** (cabecera y primeros meses). La tabla completa se generó por script y no se leyó entera.
+- **`notas/fuentes/aemet/cobertura_aemet.md` solo se revisó al principio** (cabecera y primeros meses). La tabla completa se generó por script y no se leyó entera.
 - **La previsión no se archiva en AEMET**: sirve para la app en producción, no para entrenar.
 
 ## Datos con problemas conocidos
@@ -38,7 +38,7 @@ Fase 1 (descarga en bruto), 2026-10-15. Complementa `estaciones_aemet.md`, `cobe
 
 - Todo viene como **texto**, con **coma decimal** (por ejemplo `"20,4"`, `"0,0"`); las fechas son `AAAA-MM-DD` y las horas `HH:MM`.
 - **`Ip` (precipitación inapreciable)** aparece solo en cuatro estaciones: 1207U (51 días), 1212E (122), 1249X (72) y 5783 (86). En las demás no hay valores no numéricos en `tmax`, `tmin`, `tmed`, `prec`, `velmedia`, `racha` ni `sol`.
-- En `cobertura_aemet.md` un día con `Ip` cuenta como día con dato.
+- En `notas/fuentes/aemet/cobertura_aemet.md` un día con `Ip` cuenta como día con dato.
 - Campos presentes además de los analizados: `dir`, `hrMedia`, `hrMax`, `hrMin`, `pintMax` y sus horas.
 
 ## Decisiones pendientes antes de limpiar
@@ -53,4 +53,3 @@ Fase 1 (descarga en bruto), 2026-10-15. Complementa `estaciones_aemet.md`, `cobe
 
 - La clave se lee solo de la variable de entorno `AEMET_API_KEY` y se envía en la cabecera `api_key`. No está en ningún fichero del repo (comprobado con `grep` del valor, excluyendo `.venv` y `.git`).
 - `.gitignore` ahora cubre `.env` y `.env.*`, que antes no estaban.
-- La clave quedó **visible en la conversación de Claude Code** cuando se ejecutó el `setx` con `!`. Si esa conversación se comparte o se guarda, conviene regenerar la clave en AEMET.

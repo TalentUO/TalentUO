@@ -1,6 +1,6 @@
 # Eventos: decisiones, límites y consideraciones (fase 1)
 
-Fecha: 2026-10-15. Complementa `notas/eventos_fuentes.md` (fuentes y estado por evento) y `notas/registro_eventos.md` (ficheros). Tabla: `data/manual/eventos_recopilado.csv`.
+Fecha: 2026-10-15. Complementa `notas/fuentes/eventos/eventos_fuentes.md` (fuentes y estado por evento) y `notas/fuentes/eventos/registro_eventos.md` (ficheros). Tabla: `data/manual/eventos_recopilado.csv`.
 
 ## Valoración honesta frente a los objetivos del proyecto
 El objetivo de la fase 1 era dejar los eventos recopilados con fuente y estado, sin inventar. Eso se cumple: 378 filas, ninguna sin fuente ni estado, y lo no hallado figura como `no_encontrado`. Pero la cobertura útil para el modelo es desigual:
@@ -9,7 +9,7 @@ El objetivo de la fase 1 era dejar los eventos recopilados con fuente y estado, 
 - **Débil:** el 87 % de las filas son `probable`. La mayoría son partidos de liga, cuya fuente es secundaria; los partidos jugados 2021-22 a 2025-26 no se contrastaron con LaLiga (solo una comprobación puntual de la hora).
 - **Hueco importante:** cruceros de Gijón 2022-2024 (`no_encontrado`). Los datos de movilidad a predecir cubren 2022 a junio de 2025, así que el factor "cruceros" solo tiene calendario en 2025 (y como previsión). Sin las escalas realizadas, el modelo no puede aprender su efecto.
 - **Sin recopilar:** Copa del Rey, promociones de ascenso, aforo de estadios y de eventos (la columna `aforo_o_pasajeros` solo se rellenó en cruceros, con capacidad declarada).
-- **Revisión pendiente:** las fechas de Sella, Pastor, San Mateo, Nava, Semana Negra, FICX y FIDMA las recopilaron subagentes. Se comprobó que cada fila tuviera fuente y estado, pero no se contrastó cada fecha contra su fuente en bruto. Hay que repasarlas antes de darlas por buenas, empezando por las `verificado`.
+- **Revisión pendiente:** las fechas de Sella, Pastor, San Mateo, Nava, Semana Negra, FICX y FIDMA las recopilaron en tareas de búsqueda separadas. Se comprobó que cada fila tuviera fuente y estado, pero no se contrastó cada fecha contra su fuente en bruto. Hay que repasarlas antes de darlas por buenas, empezando por las `verificado`.
 
 ## Decisiones tomadas
 1. **Estados.** `verificado` solo con fuente oficial o del organizador para esa edición. Prensa, agregadores y previsiones sin confirmación de que se realizaron son `probable`. Las previsiones de cruceros 2025 y 2026 son `probable` aunque el PDF sea oficial: es una previsión, no una escala realizada.
@@ -46,4 +46,4 @@ El objetivo de la fase 1 era dejar los eventos recopilados con fuente y estado, 
 3. Cruceros: usar la previsión o esperar a las escalas realizadas; la capacidad declarada no es el número real de pasajeros.
 4. Partidos: variables de peso propias (categoría, rival, derbi); el Oviedo solo jugó en Primera en 2025-26.
 5. Entrada al modelo de los `probable`: incluirlos con una columna de calidad de fuente o usar solo `verificado`.
-6. Qué candidatos adicionales (ver `eventos_fuentes.md`, sección 4) pasan a la tabla.
+6. Qué candidatos adicionales (ver `notas/fuentes/eventos/eventos_fuentes.md`, sección 4) pasan a la tabla.

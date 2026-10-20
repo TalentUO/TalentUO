@@ -65,10 +65,10 @@ ARTICULOS = [
 
 TRENDS_TERMINOS = ["lagos de covadonga", "llanes", "cangas de onís", "ruta del cares",
                    "covadonga"]
-TRENDS_ANCLA = "cabrales"  # por qué esta ancla y no "picos de europa": notas/correcciones_fase_B.md
+TRENDS_ANCLA = "cabrales"  # por qué esta ancla y no "picos de europa": notas/historico/correcciones_fase_B.md
 TRENDS_GEOS = ["ES", "ES-MD", "ES-CL", "ES-AS"]
 
-# URLs de los PDF de la OAPN (ver notas/notas_senales.md)
+# URLs de los PDF de la OAPN (ver notas/fuentes/senales/notas_senales.md)
 OAPN_BASE = "https://www.miteco.gob.es/content/dam/miteco/es/parques-nacionales-oapn/red-parques-nacionales"
 OAPN_PDFS = {
     "oapn_visitantes_2022.pdf": OAPN_BASE + "/gestion/Visitantes-PPNN-2022.pdf",
