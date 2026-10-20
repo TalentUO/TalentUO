@@ -2,7 +2,7 @@
 
     python -X utf8 scripts/actualizar_datos_web.py
 
-Mañana, con datos reales: ejecutar el modelo y después este script. Nada más.
+Flujo: ejecutar el modelo (src/modelo/ejecutar.py) y después este script.
 
 Qué hace:
 1. Copia los cinco JSON del contrato (notas/contrato_web.md) de salidas/ a

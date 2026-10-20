@@ -10,7 +10,7 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
 import modelo as M  # noqa: E402
-from util import AVISO_SINTETICO, FIGURAS, SALIDAS, cfg, guardar_json, umbrales  # noqa: E402
+from util import AVISO_SINTETICO, FIGURAS, SALIDAS, guardar_json, umbrales  # noqa: E402
 
 # Estilo sobrio (tinta neutra, rejilla tenue, un solo eje).
 TINTA, TINTA2, MUTED, REJILLA, FONDO = "#0b0b0b", "#52514e", "#898781", "#e1e0d9", "#fcfcfb"
@@ -29,7 +29,7 @@ def _titulo(ax_o_fig, texto: str, sintetico: bool):
 
 
 def comprobar_treeexplainer(m, x: pd.DataFrame, feats: list[str], n: int = 300) -> dict:
-    """Compara el TreeSHAP nativo de LightGBM con shap.TreeExplainer."""
+    """Compara el TreeSHAP nativo del algoritmo (LightGBM o XGBoost) con shap.TreeExplainer."""
     import shap
     s = x[feats].head(n)
     nativo, _ = M.shap(m, s, feats)

@@ -1,4 +1,4 @@
-"""Paso 3 (Persona A): INE turismo con móviles, interno (estadística experimental).
+"""INE: turismo con móviles, interno (estadística experimental).
 
 Descarga en bruto a data/raw/ (no limpia, no modela):
   - ine_moviles_interno_<año>.xlsx  (2022-2026, un Excel por año, una hoja por mes)

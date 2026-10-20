@@ -86,7 +86,7 @@ def leer_mapeo(objetivo: str) -> pd.DataFrame:
 def zona_principal(mapeo: pd.DataFrame) -> str | None:
     ine = str(cfg()["zona_principal_concejo_ine"])
     for z, c in zip(mapeo["zona_mitma_id"], mapeo["concejos_ine"]):
-        if ine in str(c or "").split(";") and str(c).strip() == ine:
+        if str(c or "").strip() == ine:
             return z
     for z, c in zip(mapeo["zona_mitma_id"], mapeo["concejos_ine"]):
         if ine in str(c or "").split(";"):

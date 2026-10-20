@@ -22,7 +22,7 @@ from util import a_log_cociente, cfg, colores, desde_log_cociente
 
 EXPERIMENTOS = {
     "base": dict(desde=None, modo="estricto", verificados=False, modelos=("largo", "corto")),
-    # sensibilidad: entrenar solo desde el corte del reanálisis (2022-11-09), como antes de 2026-10-15
+    # sensibilidad: entrenar solo desde el corte del reanálisis (2022-11-09), el inicio usado hasta el 2026-10-15
     "desde_corte": dict(desde="corte", modo="estricto", verificados=False, modelos=("largo", "corto")),
     "solo_eventos_verificados": dict(desde=None, modo="estricto", verificados=True, modelos=("largo", "corto")),
     "tiempo_aproximado": dict(desde=None, modo="aproximado", verificados=False, modelos=("corto",)),

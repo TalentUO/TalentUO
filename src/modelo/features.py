@@ -78,7 +78,6 @@ def tabla_base(mapeo: pd.DataFrame, tablas: dict, solo_eventos_verificados: bool
     laborable = (~u["es_fin_de_semana"].astype(bool))
     fest_ast = (u["festivo_ast"].astype(bool) | u["festivo_local"].astype(bool))
     fest_mad = u["festivo_mad"].astype(bool)
-    g = u.groupby("zona_mitma_id", sort=False)
     sig_ast = fest_ast.groupby(u["zona_mitma_id"]).shift(-1).astype("boolean").fillna(False).astype(bool)
     sig_mad = fest_mad.groupby(u["zona_mitma_id"]).shift(-1).astype("boolean").fillna(False).astype(bool)
     b["cal_vispera_festivo_ast"] = (sig_ast & laborable & ~fest_ast).astype(float)
@@ -88,7 +87,6 @@ def tabla_base(mapeo: pd.DataFrame, tablas: dict, solo_eventos_verificados: bool
     ult = ff.groupby(u["zona_mitma_id"]).ffill()
     b["cal_dias_hasta_festivo"] = (prox - u["fecha"]).dt.days.clip(upper=30).astype(float)
     b["cal_dias_desde_festivo"] = (u["fecha"] - ult).dt.days.clip(upper=30).astype(float)
-    del g
 
     for c in ["ast", "mad", "cyl"]:
         b[f"cal_vacaciones_{c}"] = _bool_float(u[f"vacaciones_escolares_{c}"])

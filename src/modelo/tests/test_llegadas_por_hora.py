@@ -40,3 +40,4 @@ def test_horas_y_tipo_de_dia(tmp_path):
 def test_mismo_resultado_con_trozos_y_formato_spanishoddata(tmp_path):
     a = _tabla(tmp_path, VIAJES_MITMA)
     pd.testing.assert_frame_equal(a, _tabla(tmp_path, VIAJES_MITMA, trozo=1))
+    pd.testing.assert_frame_equal(a, _tabla(tmp_path, VIAJES_SOD))

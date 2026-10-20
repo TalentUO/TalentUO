@@ -55,7 +55,7 @@ def dentro_anillo(x, y, a):
     return d
 
 def concejo_de(lon, lat):
-    for ine, nombre, polis in concejos:
+    for ine, _nombre, polis in concejos:
         for p in polis:
             if dentro_anillo(lon, lat, p[0]) and not any(dentro_anillo(lon, lat, h) for h in p[1:]):
                 return ine
