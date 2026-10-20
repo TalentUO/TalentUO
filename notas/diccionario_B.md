@@ -25,7 +25,7 @@ Uso para el modelo (resumen):
 
 ### `data/clean/aemet_diario.parquet`
 
-Script: `src/limpieza_B/limpia_aemet.py`. Fuente: AEMET OpenData, climatologías diarias (`data/raw/aemet_diario_<indicativo>.json`). Hay una fila por `fecha` y `estacion`, en calendario completo desde 2022-01-01 hasta el último día que devuelve cada estación (2026-10-11; Colunga 1203D, 2026-06-04). Son 20 811 filas y 12 estaciones. Los días que la API no devuelve son filas con NaN en todas las variables y `fila_ausente_en_fuente=True` (874 filas). **Ningún hueco está imputado.** Los porcentajes de hueco por estación y variable están en `notas/huecos_aemet.md` y en `data/clean/_qc/aemet_diario.json`.
+Script: `src/limpieza_B/limpia_aemet.py`. Fuente: AEMET OpenData, climatologías diarias (`data/raw/aemet_diario_<indicativo>.json`). Hay una fila por `fecha` y `estacion`, en calendario completo desde 2022-01-01 hasta el último día que devuelve cada estación (2026-10-11; Colunga 1203D, 2026-06-04). Son 20 811 filas y 12 estaciones. Los días que la API no devuelve son filas con NaN en todas las variables y `fila_ausente_en_fuente=True` (874 filas). **Ningún hueco está imputado.** Los porcentajes de hueco por estación y variable están en `notas/fuentes/aemet/huecos_aemet.md` y en `data/clean/_qc/aemet_diario.json`.
 
 | Columna | Significado | Unidad | Tratamiento / limitaciones |
 |---|---|---|---|
@@ -60,7 +60,7 @@ Limitaciones: AEMET publica con 3 o 4 días de retraso (última fecha, 2026-10-1
 | `nombre`, `altitud_m`, `provincia` | Tal como vienen en los registros diarios (iguales en todas las filas de cada estación). |
 | `lat`, `lon` | Grados decimales, convertidos desde el inventario (`GGMMSS[NSEW]`; W/S negativo). |
 | `indsinop` | Indicativo sinóptico (vacío si no tiene). |
-| `zona`, `uso` | Papel de la estación según `notas/estaciones_aemet.md` (principal, alternativa, origen…). |
+| `zona`, `uso` | Papel de la estación según `notas/fuentes/aemet/estaciones_aemet.md` (principal, alternativa, origen…). |
 | `fuente` | Inventario de AEMET OpenData. |
 
 ## 2. Meteorología para entrenar (Open-Meteo)
@@ -102,7 +102,7 @@ Es la previsión en vivo del 2026-10-15 al 2026-10-21 (7 filas) de la zona **cov
 
 ## 3. Calendario
 
-Script: `src/limpieza_B/limpia_calendario.py` (datos transcritos a mano en `src/limpieza_B/calendario_datos.py`). Validación manual: `notas/validacion_calendario.md`. Todos los documentos fuente están en `data/raw/calendario/`.
+Script: `src/limpieza_B/limpia_calendario.py` (datos transcritos a mano en `src/limpieza_B/calendario_datos.py`). Validación manual: `notas/fuentes/calendarios/validacion_calendario.md`. Todos los documentos fuente están en `data/raw/calendario/`.
 
 ### `data/clean/calendario_diario.parquet`
 
@@ -203,7 +203,7 @@ Script: `python -X utf8 src/limpieza_B/limpia_eventos.py`. Entrada: `data/manual
 | `notas` | Notas del CSV de origen | texto | CSV manual | Sin cambios | Texto libre |
 | `id_evento_original` | Nº de línea en el CSV manual (cabecera = 1) | entero | Derivado | Para trazar cada fila a su origen | — |
 
-**Cruceros (importante).** Solo hay escalas con fecha para **2025 (39) y 2026 (50)**, y **todas son previsiones** de los PDF oficiales (`es_prevision=True`), no escalas realizadas. `pasajeros_capacidad` es la capacidad declarada del buque, no los pasajeros reales. **2022, 2023 y 2024: no hay datos** (filas `no_encontrado` en `eventos_sin_fecha.csv`; solicitud a la Autoridad Portuaria redactada en `notas/solicitud_cruceros.md`, sin enviar). Como el objetivo de movilidad cubre 2022 a jun-2025, **las columnas de cruceros no se deben usar para entrenar**: en ese periodo serían cero por falta de dato, no por ausencia de cruceros. Solo sirven como contexto o en producción, una vez existan escalas realizadas para entrenar. Además, la previsión no coincide con la realidad: la prensa cuenta 15 buques de enero a julio de 2025 y el PDF lista 17.
+**Cruceros (importante).** Solo hay escalas con fecha para **2025 (39) y 2026 (50)**, y **todas son previsiones** de los PDF oficiales (`es_prevision=True`), no escalas realizadas. `pasajeros_capacidad` es la capacidad declarada del buque, no los pasajeros reales. **2022, 2023 y 2024: no hay datos** (filas `no_encontrado` en `eventos_sin_fecha.csv`; solicitud a la Autoridad Portuaria redactada en `notas/fuentes/eventos/solicitud_cruceros.md`, sin enviar). Como el objetivo de movilidad cubre 2022 a jun-2025, **las columnas de cruceros no se deben usar para entrenar**: en ese periodo serían cero por falta de dato, no por ausencia de cruceros. Solo sirven como contexto o en producción, una vez existan escalas realizadas para entrenar. Además, la previsión no coincide con la realidad: la prensa cuenta 15 buques de enero a julio de 2025 y el PDF lista 17.
 
 ### 4.2 `data/clean/partidos_diario.parquet`: una fila por `fecha` (2021-08-15 → 2027-06-06, 2122 días)
 
@@ -252,7 +252,7 @@ Script: `python -X utf8 src/limpieza_B/limpia_senales.py`.
 | `anio`, `parque` | Año y parque (Picos de Europa) | — |
 | `visitantes` | Visitantes anuales (personas) | Extraídos por el script del texto del PDF: 2022-2025 de la frase del informe de visitantes (págs. 4, 5, 5 y 7); 2015-2021 de la tabla "Visitas anuales" (Ilustración 27) de la memoria 2021, pág. 129. Mezcla de conteos y estimaciones, con metodología propia de cada parque |
 | `documento`, `pagina`, `localizacion` | PDF de `data/raw/oapn/`, página (1 = primera) y dónde está la cifra | — |
-| `referencia_notas` | Cifra de `notas/notas_senales.md` | — |
+| `referencia_notas` | Cifra de `notas/fuentes/senales/notas_senales.md` | — |
 | `verificado` | Lo extraído coincide con la referencia | **11/11 True**. 2022-2025 no se compararon con la tabla del informe (solo la frase) |
 | `fuente`, `uso` | OAPN/MITECO; `solo_contexto` | Datos mensuales solo en gráficos de porcentaje (no extraídos); se piden a seguimiento@oapn.es |
 
@@ -275,28 +275,30 @@ Series semanales (251 semanas, 2021-12-26 → 2026-10-11, con la semana que empi
 | `fuente` | Google Trends vía pytrends (no oficial) | Faltan 17 consultas con ancla cabrales (ES ruta del cares y covadonga, y ES-MD/ES-CL/ES-AS) y todas las ventanas diarias. Granularidad semanal. **Decisión del equipo:** no se pasa a diario ni se hacen las 17 consultas que faltan; se usa como variable semanal con una semana de retraso (ver `factores_B`). |
 
 
-## 6. Preparación del cruce con la parte A
+## 6. Cruce con las zonas del MITMA
 
-### `config/mapeo_zonas.csv` (plantilla)
+### `config/mapeo_zonas.csv`
 
-Hay una fila por zona candidata. **`zona_mitma_id` está vacío** porque depende de la zonificación del MITMA (parte A). `unir_B.py` se niega a ejecutarse mientras haya filas sin él.
+Hay una fila por zona MITMA de Asturias: **46 zonas** que cubren los 78 concejos (13 son agrupaciones de concejos, con sufijo `_AM`). `zona_mitma_id` está relleno desde `data/raw/zonas_mitma_asturias.csv`; `unir_B.py` se niega a ejecutarse si alguna fila no lo tiene. La ampliación de 5 a 46 zonas se explica en `notas/ampliacion_zonas.md`.
 
 | Columna | Significado | Estado |
 |---|---|---|
-| `zona_mitma_id` | Identificador de zona MITMA | Vacío: lo rellena A. |
-| `nombre` | Nombre legible | Propuesto. |
-| `concejos_ine` | Código(s) INE del concejo, separados por `;` | 33012 y 33036 verificados (maestro AEMET); 33056, 33024 y 33044 **[NO VERIFICADOS]**. |
-| `zona_meteo` | Punto principal de `openmeteo_diario` (en Cangas de Onís, el **valle**: `cangas_de_onis`) | Deducido de `config/zonas_meteo.csv`. |
+| `zona_mitma_id` | Identificador de zona MITMA | Relleno (46 zonas). |
+| `nombre` | Nombre legible | Las zonas de 3 o más concejos se llaman «<concejo de más superficie> y N más». |
+| `concejos_ine` | Código(s) INE de los concejos de la zona, separados por `;` | Salen de `data/raw/zonas_mitma_asturias.csv` (relación oficial INE-MITMA). |
+| `zona_meteo` | Punto principal de `openmeteo_diario` (en Cangas de Onís, el **valle**: `cangas_de_onis`) | Las 41 zonas añadidas usan el punto de valle o ciudad más cercano (aproximación; hasta unos 90 km en el occidente). |
 | `zona_meteo_montana` | Segundo punto, opcional: **montaña** (`lagos_enol`). Decisión del equipo, solo para la zona de Cangas de Onís, que ahora incluye Covadonga y Lagos | Vacío en el resto. |
-| `estacion_aemet` | Indicativo de `aemet_diario` | Regla del equipo: la más cercana con mejor cobertura y, en empate, la preferida (Ribadesella → 1183X, Gijón → 1207U). La aplica `src/limpieza_B/elige_estaciones.py`; el detalle está en `notas/eleccion_estaciones.md`. |
+| `estacion_aemet` | Indicativo de `aemet_diario` (solo las 5 zonas iniciales; el modelo no usa AEMET como variable) | Regla del equipo: la más cercana con mejor cobertura y, en empate, la preferida (Ribadesella → 1183X, Gijón → 1207U). La aplica `src/limpieza_B/elige_estaciones.py`; el detalle está en `notas/fuentes/aemet/eleccion_estaciones.md`. |
 | `concejo_eventos` | Concejo(s), separados por `;`, para los eventos y las fiestas locales | Se cruza sin tildes ni mayúsculas y solo con la parte en castellano («Gijón/Xixón» → «gijon»). |
-| `notas` | Dudas por zona | |
+| `notas` | Observaciones por zona | |
+
+| `lat`, `lon` | Centroide de los concejos de la zona, ponderado por área | Lo usa `src/modelo/web_salidas.py` para las distancias entre zonas. |
 
 `config/mapeo_zonas_ejemplo.csv` usa IDs **ficticios** (`EJEMPLO_*`) y solo sirve para probar la unión.
 
 ### `data/clean/factores_B_diario.parquet` (lo genera `src/limpieza_B/unir_B.py`)
 
-Hay una fila por `fecha` y `zona_mitma_id`. El rango por defecto va del 2022-01-01 al último día de Open-Meteo; se cambia con `--desde` y `--hasta`. Hoy no existe, porque falta el mapeo. La prueba con el mapeo de ejemplo se guarda en `data/clean/_prueba/factores_B_ejemplo.parquet`.
+Hay una fila por `fecha` y `zona_mitma_id`. El rango por defecto va del 2022-01-01 al último día de Open-Meteo; se cambia con `--desde` y `--hasta`. Con el mapeo actual tiene 80 454 filas (46 zonas). La prueba con el mapeo de ejemplo se guarda en `data/clean/_prueba/factores_B_ejemplo.parquet`.
 
 | Grupo de columnas | Origen | Regla de unión |
 |---|---|---|

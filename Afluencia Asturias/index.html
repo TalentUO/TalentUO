@@ -1,7 +1,15 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>NTT Tourism</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Previsión de afluencia turística por zonas de Asturias con semáforo de presión turística. Predicciones del modelo de afluencia por zonas.">
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>NTT Tourism · Previsión de afluencia turística en Asturias</title>
+<meta name="description" content="Previsión diaria de afluencia turística en las zonas de Asturias, con un semáforo de presión turística y las causas de cada previsión.">
+<meta name="theme-color" content="#F2F5F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D141A" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<!-- Base: márgenes seguros (muescas de móvil), imágenes que no desbordan y [hidden] siempre oculto -->
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Schibsted+Grotesk:wght@600;700;800&display=swap">
@@ -13,37 +21,45 @@
   --tinta: #13202B; --tinta-2: #4B5B69; --linea: #CED8E0; --linea-fuerte: #8FA1B0;
   --acento: #1B5C8F; --acento-tinta: #FFFFFF; --acento-suave: #D6E6F3;
   --foco: #0B5FD0; --foco-suave: rgba(11, 95, 208, .25);
-  --mar: #D9E7F0; --mar-tinta: #4F7695; --pista: #D3DDE5;
+  --pista: #D3DDE5;
   --verde: #2E7D4B; --verde-suave: #DCEFE2;
   --ambar: #8A5A00; --ambar-vivo: #E3A21A; --ambar-raya: #F4D27E; --ambar-suave: #FCEBC2;
   --rojo: #B3261E; --rojo-raya: #E26A5F; --rojo-suave: #F9D3CE;
   --gris: #6A747D; --gris-suave: #E4E7EA;
   --mapa-verde: #BFE0C9; --mapa-ambar: #F6D98C; --mapa-rojo: #EFA79D; --mapa-gris: #DDE1E5;
   --trama-ambar: #B87D05; --trama-rojo: #9E2018; --trama-gris: #7D868E;
-  --mapa-borde: #FFFFFF; --mapa-etiqueta: #13202B; --mapa-halo: rgba(255, 255, 255, .9);
+  --mapa-borde: #FFFFFF;
   --aviso-bg: #FFF4D6; --aviso-borde: #E3B13E; --raya-clara: rgba(255, 255, 255, .4);
   --sombra: 0 1px 2px rgba(19, 32, 43, .06), 0 6px 18px rgba(19, 32, 43, .06);
   --f-titulo: 'Schibsted Grotesk', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --f-texto: 'Atkinson Hyperlegible', Verdana, 'Segoe UI', sans-serif;
   --radio: 12px;
   --sitio-punto: #FFFFFF; --sitio-borde: rgba(19, 32, 43, .55);
+  /* Sombras de las etiquetas del mapa, los puntos de sitios y los diálogos (iguales en claro y oscuro) */
+  --sombra-etiqueta: 0 1px 4px rgba(0, 0, 0, .18); --sombra-punto: 0 1px 2px rgba(0, 0, 0, .3);
+  --sombra-dialogo: 0 20px 50px rgba(0, 0, 0, .3);
+  /* Gráfica de Fiabilidad: real frente a predicción */
+  --g-real: #eb6834; --g-prev: #1B5C8F;
 }
+/* Velo detrás de los diálogos: también en ::backdrop, que en algunos navegadores no hereda de :root */
+:root, ::backdrop { --velo: rgba(10, 18, 24, .55); }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0D141A; --superficie: #151F28; --superficie-2: #1D2934;
     --tinta: #E6EDF2; --tinta-2: #A2B2BF; --linea: #2A3946; --linea-fuerte: #566B7C;
     --acento: #86BDEB; --acento-tinta: #0D141A; --acento-suave: #1B3449;
     --foco: #8EC5FF; --foco-suave: rgba(142, 197, 255, .3);
-    --mar: #122332; --mar-tinta: #7FA6C6; --pista: #2A3946;
+    --pista: #2A3946;
     --verde: #6BCB8B; --verde-suave: #173825;
     --ambar: #F3C25C; --ambar-vivo: #E8AE34; --ambar-raya: #8C6514; --ambar-suave: #3A2D0F;
     --rojo: #FF8B7E; --rojo-raya: #9C3A31; --rojo-suave: #43201C;
     --gris: #97A2AC; --gris-suave: #262F37;
     --mapa-verde: #235A3A; --mapa-ambar: #6A5014; --mapa-rojo: #6E2B24; --mapa-gris: #2B343C;
     --trama-ambar: #E8B54C; --trama-rojo: #FF9184; --trama-gris: #6C7782;
-    --mapa-borde: #0D141A; --mapa-etiqueta: #F2F6F9; --mapa-halo: rgba(13, 20, 26, .85);
+    --mapa-borde: #0D141A;
     --aviso-bg: #2E2610; --aviso-borde: #8C6A1E; --raya-clara: rgba(255, 255, 255, .18);
     --sombra: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+    --g-real: #d95926; --g-prev: #3987e5;
     color-scheme: dark;
   }
 }
@@ -52,16 +68,17 @@
   --tinta: #E6EDF2; --tinta-2: #A2B2BF; --linea: #2A3946; --linea-fuerte: #566B7C;
   --acento: #86BDEB; --acento-tinta: #0D141A; --acento-suave: #1B3449;
   --foco: #8EC5FF; --foco-suave: rgba(142, 197, 255, .3);
-  --mar: #122332; --mar-tinta: #7FA6C6; --pista: #2A3946;
+  --pista: #2A3946;
   --verde: #6BCB8B; --verde-suave: #173825;
   --ambar: #F3C25C; --ambar-vivo: #E8AE34; --ambar-raya: #8C6514; --ambar-suave: #3A2D0F;
   --rojo: #FF8B7E; --rojo-raya: #9C3A31; --rojo-suave: #43201C;
   --gris: #97A2AC; --gris-suave: #262F37;
   --mapa-verde: #235A3A; --mapa-ambar: #6A5014; --mapa-rojo: #6E2B24; --mapa-gris: #2B343C;
   --trama-ambar: #E8B54C; --trama-rojo: #FF9184; --trama-gris: #6C7782;
-  --mapa-borde: #0D141A; --mapa-etiqueta: #F2F6F9; --mapa-halo: rgba(13, 20, 26, .85);
+  --mapa-borde: #0D141A;
   --aviso-bg: #2E2610; --aviso-borde: #8C6A1E; --raya-clara: rgba(255, 255, 255, .18);
   --sombra: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+  --g-real: #d95926; --g-prev: #3987e5;
   color-scheme: dark;
 }
 body { background: var(--bg); color: var(--tinta); }
@@ -69,8 +86,8 @@ body { background: var(--bg); color: var(--tinta); }
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="estilos/estilos.css">
 <link rel="stylesheet" href="pestanas/gestion/gestion.css">
-<link rel="stylesheet" href="pestanas/sobre/sobre.css">
-<!-- /cabeza -->
+</head>
+<body>
 
 <a class="saltar" href="#contenido">Saltar al contenido</a>
 
@@ -217,7 +234,7 @@ body { background: var(--bg); color: var(--tinta); }
         <p class="nota-mapa" id="nota-mapa">Pulsa una zona o un concejo para ver el detalle. Acerca el mapa con los botones +/−, con dos dedos o con Ctrl + rueda para pasar de zonas a concejos. Si prefieres una tabla, elige «Lista».</p>
       </div>
       <aside class="col-lateral" id="lateral" aria-label="Detalle">
-        <section id="ranking" class="tarjeta" aria-live="off"></section>
+        <section id="ranking" class="tarjeta"></section>
         <section id="panel-zona" class="tarjeta" hidden></section>
       </aside>
     </div>
@@ -279,23 +296,23 @@ body { background: var(--bg); color: var(--tinta); }
     </details>
   </section>
 
-  <!-- ============== GESTIÓN (persona 2: pestanas/gestion/) ============== -->
+  <!-- ============ FUNCIONES AVANZADAS (pestanas/gestion/) ============ -->
   <section role="tabpanel" id="panel-gestion" aria-labelledby="tab-gestion" class="envoltura panel" hidden></section>
 
-  <!-- ========== SOBRE LOS DATOS (persona 2: pestanas/sobre/) ========== -->
+  <!-- ============== SOBRE LOS DATOS (pestanas/sobre/) ============== -->
   <section role="tabpanel" id="panel-datos" aria-labelledby="tab-datos" class="envoltura panel" hidden></section>
 </main>
 
 <div id="aviso-vivo" class="sr" aria-live="polite" aria-atomic="true"></div>
 
 
-<!-- Capa de datos: salidas del modelo (generado por scripts/actualizar_datos_web.py) → módulo «datos» →
-     fuente-modelo.js (Inicio). fuente-ficticia.js solo aporta nombres, tipos de destino y el calendario de reserva. -->
+<!-- Capa de datos: salidas del modelo (generadas por scripts/actualizar_datos_web.py) → módulo «datos» →
+     fuente-modelo.js (fachada de Inicio). catalogo.js aporta lo que no son cifras: concejos, tipos de destino,
+     lugares del buscador, sitios de interés y eventos. -->
 <script src="datos/sitios.js"></script>
-<script src="datos/eventos.js"></script>
 <script src="datos/modelo/salidas-inicio.js"></script>
 <script src="datos/datos.js"></script>
-<script src="datos/fuente-ficticia.js"></script>
+<script src="datos/catalogo.js"></script>
 <script src="datos/fuente-modelo.js"></script>
 <script src="datos/api.js"></script>
 <!-- Mapa: librerías locales (funcionan desde file://) y límites de los concejos -->
@@ -304,7 +321,7 @@ body { background: var(--bg); color: var(--tinta); }
 <script src="interfaz/geo-asturias.js"></script>
 <!-- Interfaz -->
 <script src="interfaz/mapa.js"></script>
-<!-- Pestañas de la persona 2 (antes de app.js) -->
+<!-- Pestañas Funciones avanzadas y Sobre los datos (antes de app.js, que las monta) -->
 <script src="pestanas/gestion/gestion.js"></script>
 <script src="pestanas/sobre/sobre.js"></script>
 <script src="interfaz/app.js"></script>

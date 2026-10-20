@@ -70,6 +70,24 @@ def futuro_largo(D: Datos, finales: dict, cuantiles: pd.DataFrame, desde, hasta)
     return predecir(D, finales, "largo", F.tabla_largo(b, D.zonas), cuantiles)
 
 
+def tiempo_previsto(prev: pd.DataFrame, a: pd.Timestamp, max_lead: int) -> tuple[pd.DataFrame, list[int]]:
+    """Filas de openmeteo_diario con la previsión emitida el día a: una por (fecha, zona_meteo) a
+    1..max_lead días, con las variables del tiempo como `{v}_prev{h}`. Devuelve también los horizontes con dato."""
+    filas, hs = [], []
+    for _, p in prev.iterrows():
+        h = int((p["fecha"] - a).days)
+        if 1 <= h <= max_lead:
+            fila = {"fecha": p["fecha"], "zona_meteo": p["zona_meteo"]}
+            for v in F.VARS_TIEMPO.values():
+                fila[f"{v}_prev{h}"] = p[v]
+            filas.append(fila)
+            if h not in hs:
+                hs.append(h)
+    # Sin `columns=`: con él pandas descartaría las columnas `_prev{h}` de cada fila.
+    extra = pd.DataFrame(filas) if filas else pd.DataFrame(columns=["fecha", "zona_meteo"])
+    return extra, hs
+
+
 def futuro_corto_con_prevision(D: Datos, finales: dict, cuantiles: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     """Corto plazo con la previsión en vivo de Open-Meteo.
 
@@ -103,18 +121,7 @@ def futuro_corto_con_prevision(D: Datos, finales: dict, cuantiles: pd.DataFrame)
             "puntos_sin_prevision": sorted(puntos - set(prev["zona_meteo"])), "horizontes_con_tiempo": []}
     om = D.tablas["openmeteo_diario"]
     horizontes = cfg()["horizontes_corto"]
-    max_lead = int(cfg()["tiempo"]["max_lead_archivado"])
-    filas = []
-    for _, p in prev.iterrows():
-        h = int((p["fecha"] - a).days)
-        if 1 <= h <= max_lead:
-            fila = {"fecha": p["fecha"], "zona_meteo": p["zona_meteo"]}
-            for v in F.VARS_TIEMPO.values():
-                fila[f"{v}_prev{h}"] = p[v]
-            filas.append(fila)
-            if h not in info["horizontes_con_tiempo"]:
-                info["horizontes_con_tiempo"].append(h)
-    extra = pd.DataFrame(filas, columns=["fecha", "zona_meteo"])
+    extra, info["horizontes_con_tiempo"] = tiempo_previsto(prev, a, int(cfg()["tiempo"]["max_lead_archivado"]))
     clave = om.set_index(["fecha", "zona_meteo"]).index
     nuevas = pd.MultiIndex.from_frame(extra[["fecha", "zona_meteo"]])
     om2 = pd.concat([om[~clave.isin(nuevas)], extra], ignore_index=True)

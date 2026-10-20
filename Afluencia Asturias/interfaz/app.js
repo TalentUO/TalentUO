@@ -7,8 +7,6 @@
 (function () {
   'use strict';
 
-  document.documentElement.lang = 'es';
-
   const D = window.Datos;
 
   /* ---------- Utilidades ---------- */
@@ -112,7 +110,7 @@
     concejos: [], concejosPorId: {}, mapa: null,
     sitios: [], sitiosPorId: {}, sitiosOrden: 'menos', sitiosVisibles: 0,
     eventos: { eventos: [] }, eventosCat: 'todas', eventosVisibles: 0,
-    prevDia: [], prevPorZona: {}, prevPorConcejo: {}, plegablesAbiertos: {},
+    prevDia: [], prevPorZona: {}, prevPorConcejo: {}, plegablesAbiertos: {}, zonaPanelAnterior: null,
   };
   const esPeriodo = () => E.desde !== E.hasta;
   const nDias = () => diasEntre(E.desde, E.hasta) + 1;
@@ -130,6 +128,13 @@
     v.textContent = '';
     clearTimeout(temporizadorAviso);
     temporizadorAviso = setTimeout(() => { v.textContent = texto; }, 60);
+  }
+
+  // Error al pedir datos: se avisa donde va la fecha, igual que si falla el arranque
+  function avisarError(err) {
+    console.error(err);
+    $('#fecha-estado').innerHTML = '<span class="etq etq-aviso">No se han podido cargar los datos. Recarga la página. Si sigue sin funcionar, revisa la fuente de datos.</span>';
+    anunciar('No se han podido cargar los datos.');
   }
 
   /* ====================================================================
@@ -176,7 +181,7 @@
   /* ---------- Modo demo (?demo=1) ----------
    * La fuente fija «hoy» en el histórico de agosto de 2024 (validación fuera de muestra).
    * Se abre el día del puente con más presión en la zona principal (Picos de Europa) y su panel.
-   * Recorrido: mapa → Picos en rojo → ¿Por qué? → alternativa → Gestión. */
+   * Recorrido: mapa → Picos en rojo → ¿Por qué? → alternativa → Funciones avanzadas. */
   async function arrancarDemo() {
     const principal = E.zonas.find(z => z.principal) || E.zonas[0];
     if (!principal) return;
@@ -280,12 +285,18 @@
     E.hasta = hasta;
     const periodo = desde !== hasta;
 
-    const [prev, prevC, cal, eventos] = await Promise.all([
-      periodo ? D.getPrevisionPeriodo(desde, hasta) : D.getPrevisionDia(desde),
-      periodo ? D.getPrevisionConcejos(desde, hasta) : D.getPrevisionConcejos(desde),
-      D.getCalendario(desde, diasEntre(desde, hasta) + 1),
-      D.getEventos(desde, hasta),
-    ]);
+    let prev, prevC, cal, eventos;
+    try {
+      [prev, prevC, cal, eventos] = await Promise.all([
+        periodo ? D.getPrevisionPeriodo(desde, hasta) : D.getPrevisionDia(desde),
+        periodo ? D.getPrevisionConcejos(desde, hasta) : D.getPrevisionConcejos(desde),
+        D.getCalendario(desde, diasEntre(desde, hasta) + 1),
+        D.getEventos(desde, hasta),
+      ]);
+    } catch (err) {
+      if (s === seqFecha) avisarError(err);
+      return;
+    }
     if (s !== seqFecha) return;
     E.eventos = eventos;
     E.prevDia = prev;
@@ -863,15 +874,21 @@
     // En un periodo, las causas se explican con el día con más gente y el mejor día se busca dentro del periodo
     const fechaFactores = periodo && p.pico ? p.pico.fecha : E.desde;
 
-    const [serie, factores, mejor, alts, perfil, fiab, mejorDia] = await Promise.all([
-      D.getSerieZona(id, v.desde, v.dias),
-      D.getFactores(id, fechaFactores),
-      periodo ? D.getMejorMomento(id, E.desde, nDias()) : D.getMejorMomento(id, v.desde, v.dias),
-      periodo ? D.getAlternativas(id, E.desde, E.hasta) : D.getAlternativas(id, E.desde),
-      periodo ? D.getPerfil(id, E.desde, E.hasta) : D.getPerfil(id, E.desde),
-      D.getFiabilidad(id),
-      periodo ? Promise.resolve(null) : D.getMejorDia(id, E.desde),
-    ]);
+    let serie, factores, mejor, alts, perfil, fiab, mejorDia;
+    try {
+      [serie, factores, mejor, alts, perfil, fiab, mejorDia] = await Promise.all([
+        D.getSerieZona(id, v.desde, v.dias),
+        D.getFactores(id, fechaFactores),
+        periodo ? D.getMejorMomento(id, E.desde, nDias()) : D.getMejorMomento(id, v.desde, v.dias),
+        periodo ? D.getAlternativas(id, E.desde, E.hasta) : D.getAlternativas(id, E.desde),
+        D.getPerfil(id, E.desde), // media del mes (en un periodo, el del primer día)
+        D.getFiabilidad(id),
+        periodo ? Promise.resolve(null) : D.getMejorDia(id, E.desde),
+      ]);
+    } catch (err) {
+      if (s === seqPanel) avisarError(err);
+      return;
+    }
     if (s !== seqPanel || E.zona !== id) return;
 
     // Tras repintar, el foco vuelve al mismo día o concejo si estaba en el panel
@@ -1055,11 +1072,9 @@
         ${periodo || d.fecha !== E.desde ? `<button type="button" class="btn-mini" data-fecha="${d.fecha}">${periodo ? 'Ver solo ese día' : 'Ver ese día'}</button>` : '<p class="mm-nota"><strong>Es el día que estás viendo.</strong></p>'}</div>`;
     }
     if (!tarjeta) return '';
-    const hora = mejor && mejor.hora ? `<div class="mm"><p class="eyebrow">Mejor hora</p><p class="mm-valor">${esc(mejor.hora.texto)}</p>
-        <p class="mm-nota">${esc(mejor.hora.nota)} Orientativo: los datos de movilidad son diarios.</p></div>` : '';
     return `<section class="pz-sec" aria-labelledby="pz-s-c">
       <h3 id="pz-s-c">Mejor momento para ir</h3>
-      <div class="mm-grid">${tarjeta}${hora}</div>
+      <div class="mm-grid">${tarjeta}</div>
     </section>`;
   }
 
@@ -1216,8 +1231,8 @@
   }
 
   /* ====================================================================
-   * Eventos (PredictHQ)
-   * Datos reales; la asistencia es la estimación de PredictHQ.
+   * Eventos: agenda de las salidas del modelo (festivos, partidos y grandes eventos
+   * de fuentes públicas). La asistencia, cuando la hay, es la que publica la fuente.
    * ==================================================================== */
   const PASO_EVENTOS = 20;
   const ICONO_EVENTO = '<svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.8" y="3" width="12.4" height="11" rx="2" class="ico-trazo"/><path d="M1.8 6.6h12.4M5 1.6v2.8M11 1.6v2.8" class="ico-trazo"/></svg>';
@@ -1231,7 +1246,7 @@
         <p class="ev-titulo">${esc(e.titulo)}</p>
         <p class="ev-meta"><span class="sr">${esc(fechaLarga(e.inicio))}. </span><span class="ev-cat">${esc(e.categoria)}</span>
           ${esc(fechaEvento(e))}${e.lugar ? ' · ' + esc(e.lugar) : ''}${conConcejo && e.concejo ? ' · ' + esc(nombreC(e.concejo)) : ''}</p>
-        ${e.asistencia ? `<p class="ev-asis">Unos ${num(e.asistencia)} asistentes previstos${e.impacto ? `<span class="ev-imp">: ${e.impacto >= 1 ? `${String(Math.round(e.impacto * 10) / 10).replace('.', ',')} veces` : `el ${Math.round(e.impacto * 100)}${NBSP}% de`} los visitantes de un día normal en ${esc(nombreC(e.concejo))}</span>` : ''}</p>` : ''}
+        ${e.asistencia ? `<p class="ev-asis">Unas ${num(e.asistencia)} personas, según la fuente${e.impacto ? `<span class="ev-imp">: ${e.impacto >= 1 ? `${String(Math.round(e.impacto * 10) / 10).replace('.', ',')} veces` : `el ${Math.round(e.impacto * 100)}${NBSP}% de`} los visitantes de un día normal en ${esc(nombreC(e.concejo))}</span>` : ''}</p>` : ''}
       </div>
       ${conConcejo && e.concejo ? `<button type="button" class="btn-mini" data-concejo="${e.concejo}">Ver el concejo<span class="sr"> de ${esc(nombreC(e.concejo))}</span></button>` : ''}
     </li>`;
@@ -1263,8 +1278,7 @@
     const lista = d.eventos.filter(e => (cat === 'todas' || e.categoria === cat) && (!e.concejo || coincideTipo(E.zonasPorId[zonaDeConcejo(e.concejo)])));
     const vis = lista.slice(0, E.eventosVisibles);
     $('#eventos-sub').textContent = textoSel() + (E.tipo === 'todos' ? '' : ' · Solo ' + TIPO_NOMBRE[E.tipo].toLowerCase());
-    $('#eventos-nota').textContent = 'Festivos de Asturias y de cada concejo (BOE y BOPA), partidos del Real Oviedo y del Sporting en su estadio, y conciertos, ferias y otros eventos con mucho público (PredictHQ'
-      + (d.hastaDatos ? `, publicados hasta el ${fechaLarga(d.hastaDatos).toLowerCase()}` : '') + '). Son días en los que puede venir más gente de lo normal.';
+    $('#eventos-nota').textContent = 'Festivos de Asturias y de cada concejo (BOE y BOPA), partidos del Real Oviedo y del Sporting en su estadio, y grandes fiestas, festivales, ferias y pruebas deportivas recopilados de sus webs oficiales y de prensa. Son días en los que puede venir más gente de lo normal.';
     let vacio = '';
     if (!lista.length) {
       vacio = d.hastaDatos && E.desde > d.hastaDatos
@@ -1300,7 +1314,7 @@
   }
 
   /* ====================================================================
-   * Pestañas de la persona 2 (pestanas/gestion/, pestanas/sobre/)
+   * Pestañas Funciones avanzadas y Sobre los datos (pestanas/gestion/, pestanas/sobre/)
    * Se montan la primera vez que se abren, con el objeto del módulo «datos».
    * ==================================================================== */
   const COMPONENTE = { gestion: 'gestion', datos: 'sobre' };
@@ -1316,6 +1330,7 @@
       .then(datos => comp.montar(cont, datos, window.UtilWeb))
       .catch(err => {
         console.error(err);
+        montadas[t] = false; // al volver a la pestaña se reintenta
         cont.innerHTML = `<div class="tarjeta"><p><strong>No se han podido cargar las salidas del modelo.</strong></p><p class="error-datos">${esc(err.message)}</p></div>`;
       });
   }
@@ -1333,7 +1348,7 @@
     });
   }
 
-  /* ---------- Utilidades para las pestañas de la persona 2 ---------- */
+  /* ---------- Utilidades para las pestañas de pestanas/ ---------- */
   window.UtilWeb = Object.freeze({
     $, $$, esc, num, pct, delta, pill, anunciar, listaNatural,
     fechaLarga: f => fechaLarga(f), fechaCorta: f => fechaCorta(f),

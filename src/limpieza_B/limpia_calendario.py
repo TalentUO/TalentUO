@@ -17,6 +17,7 @@ de los Lagos se transcribieron a mano en `calendario_datos.py`.
 """
 from __future__ import annotations
 
+import calendar
 import re
 import sys
 import unicodedata
@@ -233,7 +234,6 @@ def ambito_festivo(nombre, concejo: str) -> str:
 
 
 def festivos_locales() -> pd.DataFrame:
-    canon = None
     dfs = []
     for a in ANIOS:
         doc = pymupdf.open(CAL / f"bopa_fiestas_locales_{a}.pdf")
@@ -249,7 +249,6 @@ def festivos_locales() -> pd.DataFrame:
     # mayúsculas se emparejan sin tildes ni espacios.
     canon = {clave(c): c for c in df[df.anio == 2022].concejo.unique()}
     assert len(canon) == 78, f"2022: {len(canon)} concejos (Asturias tiene 78)"
-    canon[clave("Villayón")] = canon.get(clave("Villayón"), "Villayón")
     df["concejo"] = df.concejo.map(lambda c: canon.get(clave(c)))
     assert df.concejo.notna().all(), "concejo no reconocido en algún año"
     for a in ANIOS:
@@ -392,7 +391,7 @@ def lagos(cal: pd.DataFrame) -> pd.DataFrame:
             assert i0.year == a and i1.year == a and i0 <= i1
             dias.update(rango(i0, i1))
         for m in L["findes"]:
-            dias.update(d for d in rango(date(a, m, 1), (date(a, m + 1, 1) - timedelta(1))) if d.weekday() >= 5)
+            dias.update(d for d in rango(date(a, m, 1), date(a, m, calendar.monthrange(a, m)[1])) if d.weekday() >= 5)
         dias -= set(L["excepto"])
         for d in rango(date(a, 1, 1), date(a, 12, 31)):
             reg[d] = d in dias

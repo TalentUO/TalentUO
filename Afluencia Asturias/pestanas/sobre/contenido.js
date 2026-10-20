@@ -1,5 +1,5 @@
 /* ==========================================================================
- * CONTENIDO de «Sobre los datos» (persona 2). Solo textos: se editan aquí
+ * CONTENIDO de «Sobre los datos». Solo textos: se editan aquí
  * sin tocar sobre.js. Las cifras no se escriben a mano: las que aparecen
  * salen de las salidas del modelo (umbrales, algoritmo, fechas).
  * ========================================================================== */
@@ -12,23 +12,23 @@ window.SobreContenido = {
   // Fuentes: eyebrow = papel que juega en el modelo
   fuentes: [
     { etiqueta: 'Variable principal', titulo: 'MITMA Open Data Movilidad',
-      texto: 'Ministerio de Transportes. Llegadas diarias de visitantes a cada zona, estimadas con telefonía móvil, separando a quien viene de paso y a quien hace noche.' },
+      texto: 'Ministerio de Transportes. Llegadas diarias de visitantes a cada zona, estimadas con telefonía móvil, separando a quien viene de paso y a quien hace noche. Basado en datos abiertos Ministerio de Transportes y Movilidad Sostenible (transportes.gob.es).' },
     { etiqueta: 'Validación prevista', titulo: 'INE',
-      texto: 'Instituto Nacional de Estadística. Turismo mensual por concejo y medición con telefonía móvil, para comprobar que las cifras diarias cuadran. Esta comprobación aún no se ha hecho.' },
+      texto: 'Instituto Nacional de Estadística. Turismo mensual por concejo y medición con telefonía móvil, para comprobar que las cifras diarias cuadran. Esta comprobación aún no se ha hecho. Fuente: sitio web del INE (www.ine.es).' },
     { etiqueta: 'Contexto', titulo: 'SADEI',
       texto: 'Sociedad Asturiana de Estudios e Investigación. Población y alojamiento por concejo, para entender la presión sobre quien vive allí.' },
     { etiqueta: 'Factor explicativo', titulo: 'AEMET',
-      texto: 'Agencia Estatal de Meteorología. Temperatura y lluvia observadas en estaciones del valle y de la montaña.' },
+      texto: 'Agencia Estatal de Meteorología. Temperatura y lluvia observadas en estaciones del valle y de la montaña, para contrastar la previsión. Fuente: AEMET.' },
     { etiqueta: 'Factor explicativo', titulo: 'Open-Meteo',
-      texto: 'Previsión del tiempo para los próximos días y datos históricos. El tiempo solo se usa en el corto plazo, a 1-3 días vista.' },
+      texto: 'Previsión del tiempo para los próximos días y datos históricos. El tiempo solo se usa en el corto plazo, a 1-3 días vista. Weather data by Open-Meteo.com (CC BY 4.0).' },
     { etiqueta: 'Factor explicativo', titulo: 'BOE y BOPA',
-      texto: 'Boletín Oficial del Estado y Boletín Oficial del Principado de Asturias. Festivos nacionales, autonómicos y locales, y las resoluciones de acceso regulado a los Lagos de Covadonga.' },
+      texto: 'Boletín Oficial del Estado y Boletín Oficial del Principado de Asturias. Festivos nacionales, autonómicos y locales, y las resoluciones de acceso regulado a los Lagos de Covadonga. Origen de los datos: Agencia Estatal Boletín Oficial del Estado y Administración del Principado de Asturias.' },
     { etiqueta: 'Factor explicativo', titulo: 'Calendarios escolares',
       texto: 'Vacaciones escolares de Asturias, Madrid y Castilla y León, las principales comunidades de origen de quien visita Asturias.' },
     { etiqueta: 'Factor explicativo', titulo: 'Eventos',
-      texto: 'Partidos, conciertos, festivales y ferias en Asturias, recopilados de fuentes oficiales y de los organizadores.' },
+      texto: 'Partidos, fiestas, festivales, ferias y pruebas deportivas en Asturias, recopilados de fuentes oficiales y de los organizadores.' },
     { etiqueta: 'Factor explicativo', titulo: 'Wikipedia y Google Trends',
-      texto: 'Interés en internet por los lugares más visitados (visitas a artículos y búsquedas). Una señal adelantada, no la base del modelo.' },
+      texto: 'Interés en internet por los lugares más visitados (visitas a artículos y búsquedas). Una señal adelantada, no la base del modelo. Fuentes: Wikimedia (estadísticas de visitas, CC0) y Google Trends.' },
   ],
 
   // «Cómo funciona el modelo»: 4-5 frases. {algoritmo} lo rellena la web con metricas.algoritmo.
@@ -37,7 +37,7 @@ window.SobreContenido = {
     'Un modelo de aprendizaje automático ({algoritmo}) aprende de los datos de movilidad, el calendario, los eventos y el tiempo qué días se llenan más.',
     'Hay dos modelos: uno a corto plazo (de 1 a 7 días), que usa además el interés en internet y, a 1-3 días, el tiempo, y uno a largo plazo (más de 7 días), que solo usa calendario y eventos.',
     'El resultado se muestra como semáforo según las veces que supera el día normal, junto con los tres factores que más pesan y un rango probable.',
-    'Se valida con días que el modelo no ha visto al entrenar, y esa fiabilidad se muestra en Gestión.',
+    'Se valida con días que el modelo no ha visto al entrenar, y esa fiabilidad se muestra en Funciones avanzadas.',
   ],
 
   // Limitaciones
@@ -47,12 +47,12 @@ window.SobreContenido = {
     { titulo: 'El umbral lo fijamos nosotros.', texto: 'El semáforo y los umbrales (ámbar, rojo) son una decisión del equipo, no un dato oficial de capacidad de ninguna zona.' },
     { titulo: 'Medimos presión relativa, no personas.', texto: 'La cifra es la presión frente a un día normal en la zona. No cuenta cuánta gente hay en los Lagos ni en un punto concreto: la unidad mínima es la zona.' },
     { titulo: 'Los cruceros quedan fuera.', texto: 'No tenemos las escalas realizadas por fecha, así que la llegada de cruceristas no entra en el modelo.' },
-    { titulo: 'El tiempo de algunas zonas es aproximado.', texto: 'Tenemos previsión del tiempo para 5 puntos de Asturias; cada zona usa el más cercano, que en el occidente queda lejos. En Villaviciosa, los Oscos y el entorno de Somiedo el modelo detecta pocos de los días de más presión.' },
+    { titulo: 'El tiempo de algunas zonas es aproximado.', texto: 'Tenemos previsión del tiempo para 6 puntos de Asturias; cada zona usa el más cercano, que en el occidente queda lejos. En Villaviciosa, los Oscos y el entorno de Somiedo el modelo detecta pocos de los días de más presión.' },
   ],
 
-  // Mapa: fuente y licencia (datos de la persona 1, notas/coordinacion_web.md)
+  // Mapa, sitios de interés y librerías: fuentes y licencias
   mapa: {
-    titulo: 'Mapa',
-    texto: 'Límites municipales: © Instituto Geográfico Nacional (CC BY 4.0). El mapa no usa teselas externas.',
+    titulo: 'Mapa y créditos',
+    texto: 'Límites municipales: obra derivada de BDLJE CC-BY 4.0 ign.es (Instituto Geográfico Nacional). El mapa no usa teselas externas. Posición de los sitios de interés: © colaboradores de OpenStreetMap (ODbL). Fotos: Wikimedia Commons, con su autor y licencia junto a cada una. Mapa interactivo con Leaflet (BSD-2) y topojson-client (ISC).',
   },
 };

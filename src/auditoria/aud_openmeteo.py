@@ -1,5 +1,5 @@
 """Auditoria Open-Meteo (solo lectura)."""
-import json, glob, os, csv, re
+import json, glob, os, csv
 from collections import Counter
 R = "data/raw/"
 zonas = [r["zona"] for r in csv.DictReader(open("config/zonas_meteo.csv"))]
@@ -25,11 +25,11 @@ for f in sorted(glob.glob(R+"openmeteo_*.json")):
         print("  nulos declarados==reales:", dd["nulos"] == real_nul)
     if blk == "daily":
         # huecos de fecha
-        from datetime import date, timedelta
+        from datetime import date
         a, b = date.fromisoformat(t[0]), date.fromisoformat(t[-1])
         print("  dias faltantes:", (b-a).days+1-len(set(t)))
     else:
-        from datetime import datetime, timedelta
+        from datetime import datetime
         a, b = datetime.fromisoformat(t[0]), datetime.fromisoformat(t[-1])
         print("  horas esperadas", int((b-a).total_seconds()//3600)+1, "reales", len(t))
         # primer dato no nulo por variable

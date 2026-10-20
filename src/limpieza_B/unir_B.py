@@ -79,7 +79,7 @@ def leer_mapeo(ruta: Path) -> pd.DataFrame:
     m = m.replace({"": None})
     if m["zona_mitma_id"].isna().any():
         raise ValueError("mapeo incompleto: hay filas sin zona_mitma_id "
-                         "(la plantilla config/mapeo_zonas.csv se completa cuando llegue la parte A)")
+                         "(revisa la columna zona_mitma_id de config/mapeo_zonas.csv)")
     if m["zona_mitma_id"].duplicated().any():
         raise ValueError("zona_mitma_id duplicado en el mapeo")
     if m["zona_meteo"].isna().any():

@@ -26,7 +26,7 @@ TRAMOS = RAW / "aemet" / "tramos"
 ESTADO_TRAMOS = RAW / "aemet" / "estado_tramos.json"
 INICIO = date(2022, 1, 1)
 
-# Estaciones confirmadas contra el inventario (ver notas/estaciones_aemet.md).
+# Estaciones confirmadas contra el inventario (ver notas/fuentes/aemet/estaciones_aemet.md).
 ESTACIONES = {
     "1212E": "Asturias Aeropuerto",
     "1249X": "Oviedo",
@@ -177,18 +177,18 @@ def cmd_diarios(a):
 
 
 def unir(idema):
-    registros = []
+    # Un tramo parcial de una descarga anterior (p. ej. ..._2026-07-01_2026-10-14.json) puede convivir con el
+    # mismo tramo más largo de una posterior: cada fecha se queda con el registro del último fichero en orden.
+    por_fecha, dup = {}, 0
     for f in sorted(TRAMOS.glob(f"{idema}_*.json")):
         d = cargar_json(f)
         if isinstance(d, list):
-            registros.extend(d)
-    vistos, dup = set(), 0
-    for r in registros:
-        if r.get("fecha") in vistos:
-            dup += 1
-        vistos.add(r.get("fecha"))
+            for r in d:
+                dup += r.get("fecha") in por_fecha
+                por_fecha[r.get("fecha")] = r
+    registros = [por_fecha[k] for k in sorted(por_fecha, key=str)]
     guardar_json(RAW / f"aemet_diario_{idema}.json", registros)
-    print(f"  unido: {len(registros)} registros, {len(vistos)} fechas distintas, {dup} duplicados")
+    print(f"  unido: {len(registros)} fechas distintas ({dup} duplicadas entre tramos, descartadas)")
 
 
 # ----------------------------------------------------------------- cobertura
@@ -222,8 +222,8 @@ def cmd_cobertura(_a):
             c = por_mes[m]
             lineas.append(f"| {m} | {c['dias']} | " + " | ".join(str(c[k]) for k in VARS) + " |")
     (RAIZ / "notas").mkdir(exist_ok=True)
-    (RAIZ / "notas" / "cobertura_aemet.md").write_text("\n".join(lineas) + "\n", encoding="utf-8")
-    print("Escrito notas/cobertura_aemet.md")
+    (RAIZ / "notas" / "fuentes" / "aemet" / "cobertura_aemet.md").write_text("\n".join(lineas) + "\n", encoding="utf-8")
+    print("Escrito notas/fuentes/aemet/cobertura_aemet.md")
 
 
 # ---------------------------------------------------------------- prevision

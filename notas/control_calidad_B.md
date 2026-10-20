@@ -4,14 +4,14 @@ Generado por `python -X utf8 src/limpieza_B/control_calidad.py` (no editar a man
 
 ## Validaciones manuales
 
-- Calendario: muestra aleatoria contrastada contra los PDF originales y comprobación de Semana Santa en `notas/validacion_calendario.md` (resumen abajo).
+- Calendario: muestra aleatoria contrastada contra los PDF originales y comprobación de Semana Santa en `notas/fuentes/calendarios/validacion_calendario.md` (resumen abajo).
 - Unión: `src/limpieza_B/test_unir_B.py` (datos sintéticos) y prueba con las tablas reales y `config/mapeo_zonas_ejemplo.csv` (IDs ficticios; tabla `factores_B_ejemplo` abajo).
 
 Resumen de la validación del calendario: **Resultado: 16/16 coinciden.**
 
 ## Hallazgos de la limpieza (revisados a mano)
 
-- **La muestra de fiestas locales de la auditoría (`auditoria_fase_B.md` §3.3) no es fiable.** El `.txt` de pdftotext desalinea las filas de la tabla del BOPA. Ejemplo: el texto pone «Cangas de Onís 16 de mayo San Isidro» (2022), pero la imagen del PDF da 13 de junio (San Antonio) y 25 de julio (Pastor). Lo he comprobado yo, renderizando la página. `festivos_locales` está validada contra la imagen del PDF, no contra el `.txt`.
+- **La muestra de fiestas locales de la auditoría (`notas/historico/auditoria_fase_B.md` §3.3) no es fiable.** El `.txt` de pdftotext desalinea las filas de la tabla del BOPA. Ejemplo: el texto pone «Cangas de Onís 16 de mayo San Isidro» (2022), pero la imagen del PDF da 13 de junio (San Antonio) y 25 de julio (Pastor). Comprobado renderizando la página. `festivos_locales` está validada contra la imagen del PDF, no contra el `.txt`.
 - **Erratas en el BOPA**, conservadas y marcadas con `dia_semana_coherente=False`: Grado 2022-07-26 («lunes», pero fue martes) y Pravia 2024-09-06 («miércoles», pero fue viernes).
 - **El tramo de reanálisis de Open-Meteo también es más frío en temperatura**: en Covadonga, la Tmax media de julio y agosto es 22,5 °C en 2022 frente a 24,8–25,8 °C en 2023–2026. En AEMET 1186P, el verano de 2022 es el más caluroso (26,5 °C). Ver la primera gráfica de Open-Meteo.
 - El pico de 120 mm del 2026-10-07 en Covadonga es real: AEMET 1186P registra 57 mm y la previsión a 1 día daba 78 mm.

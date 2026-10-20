@@ -1,5 +1,5 @@
 """Compara el estado de TU descarga (data/raw/_mitma_estado_v2.jsonl) con la tabla de referencia
-notas/mitma_referencia_filas_por_dia.csv (filas de Asturias por día y tipo, de la descarga original).
+notas/fuentes/mitma/mitma_referencia_filas_por_dia.csv (filas de Asturias por día y tipo, de la descarga original).
 Un día descargado por ti debe dar EXACTAMENTE las mismas filas_origen y filas_asturias que en la referencia.
 Uso: python scripts/comparar_con_referencia.py"""
 import json
@@ -7,7 +7,7 @@ from pathlib import Path
 import pandas as pd
 
 raiz = Path(__file__).resolve().parent.parent
-ref = pd.read_csv(raiz / "notas" / "mitma_referencia_filas_por_dia.csv", dtype={"fecha": str})
+ref = pd.read_csv(raiz / "notas" / "fuentes" / "mitma" / "mitma_referencia_filas_por_dia.csv", dtype={"fecha": str})
 est = {}
 for l in (raiz / "data" / "raw" / "_mitma_estado_v2.jsonl").read_text(encoding="utf-8").splitlines():
     if l.strip():

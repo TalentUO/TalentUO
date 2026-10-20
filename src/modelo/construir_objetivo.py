@@ -82,10 +82,6 @@ def _leer_trozos(f: Path, alias: dict, trozo: int = TROZO):
         yield df.rename(columns=alias)
 
 
-def _leer(f: Path, alias: dict) -> pd.DataFrame:
-    return pd.concat(_leer_trozos(f, alias), ignore_index=True)
-
-
 def _agregar_fichero(f: Path, alias: dict, agregar, zonas: set[str], trozo: int = TROZO) -> pd.DataFrame:
     """Agrega un fichero trozo a trozo. Exacto: se vuelve a sumar por (fecha, zona) al final."""
     partes = [agregar(t, zonas) for t in _leer_trozos(f, alias, trozo)]

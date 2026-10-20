@@ -1,13 +1,13 @@
-# Contrato con la parte A: `data/clean/objetivo_diario.parquet`
+# Contrato del objetivo: `data/clean/objetivo_diario.parquet`
 
 Fecha: 2026-10-15. Lo genera `python -X utf8 src/modelo/construir_objetivo.py` a partir de los ficheros mensuales del MITMA. Lo consume `src/modelo/ejecutar.py --objetivo real`.
 
-## Qué tiene que entregar A
+## Entradas (las prepara el equipo de demanda)
 
 | Qué | Dónde | Formato |
 |---|---|---|
-| Lista de zonas MITMA de Asturias | `data/raw/zonas_mitma_asturias.csv` | CSV con `zona_mitma_id` (o `id`) y `nombre`; el resto de columnas es libre (p. ej. municipios INE que agrupa). |
-| `zona_mitma_id` de cada zona del proyecto | `config/mapeo_zonas.csv` (columna vacía hoy) | El identificador exacto tal y como aparece en `origen`/`destino` de los ficheros. Si una zona del proyecto son varias zonas MITMA, avisad: hoy el mapeo es 1 a 1. |
+| Lista de zonas MITMA de Asturias | `data/raw/zonas_mitma_asturias.csv` | CSV con `id_zona_mitma` (también se aceptan `zona_mitma_id` o `id`) y `nombre`; el resto de columnas es libre (p. ej. municipios INE que agrupa). |
+| `zona_mitma_id` de cada zona del proyecto | `config/mapeo_zonas.csv` (46 zonas, rellenas) | El identificador exacto tal y como aparece en `origen`/`destino` de los ficheros. El mapeo es 1 a 1: cada zona del proyecto es una zona MITMA. |
 | Viajes, 2022-01-01 → 2025-06-30 | `data/raw/mitma_viajes/AAAA-MM.csv` | Ver columnas abajo. |
 | Pernoctaciones, mismo periodo | `data/raw/mitma_pernoctaciones/AAAA-MM.csv` | Ver columnas abajo. |
 

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+  <!-- Semáforo de la cabecera (index.html, .marca-ico). Colores: --tinta, --rojo, --ambar-vivo y --verde de index.html -->
+  <style>
+    .caja { fill: #13202B; } .r { fill: #B3261E; } .a { fill: #E3A21A; } .v { fill: #2E7D4B; }
+    @media (prefers-color-scheme: dark) { .caja { fill: #E6EDF2; } .r { fill: #FF8B7E; } .a { fill: #E8AE34; } .v { fill: #6BCB8B; } }
+  </style>
+  <g transform="translate(7 0)">
+    <rect x="1" y="1" width="20" height="34" rx="7" class="caja"/>
+    <circle cx="11" cy="9.5" r="4.2" class="r"/>
+    <circle cx="11" cy="18" r="4.2" class="a"/>
+    <circle cx="11" cy="26.5" r="4.2" class="v"/>
+  </g>
+</svg>

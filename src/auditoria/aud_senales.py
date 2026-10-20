@@ -1,6 +1,6 @@
 """Auditoria senales: Wikipedia, Trends, OAPN (solo lectura + verificacion en vivo de muestras)."""
-import json, glob, os, re, hashlib, requests
-from datetime import date, timedelta
+import json, glob, os, requests
+from datetime import date
 R = "data/raw/"
 H = {"User-Agent": "auditoria-TalentUO/1.0 (hackathon; contacto repo)"}
 for f in sorted(glob.glob(R+"wikipedia_*.json")):

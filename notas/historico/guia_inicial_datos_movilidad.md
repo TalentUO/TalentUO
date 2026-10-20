@@ -1,0 +1,271 @@
+# Persona A: demanda y movilidad (lo que queremos predecir)
+
+> **Documento histórico.** Guía de tareas inicial (2026-10-15) para descargar en bruto los datos de demanda y movilidad (MITMA, INE, SADEI, COGERSA). Se conserva como registro del trabajo. Algunos pasos no funcionaron tal como se describen (la columna `municipalities` de las zonas y los enlaces `?f=` de SADEI): lo que se hizo de verdad está en `notas/fuentes/demanda/decisiones_demanda.md` y `notas/fuentes/demanda/registro_descargas.md`. «Persona A» y «Persona B» son los responsables de demanda y de factores.
+
+**Qué tienes que conseguir:** descargar a `data/raw/` los datos de cuánta gente viene a Asturias (MITMA, INE, SADEI). Solo descargar y comprobar que se abren. **No se limpia nada.**
+
+**Tu compañero (persona B)** se encarga de meteorología, calendarios y eventos.
+
+**Cómo leer este documento:** cada fuente tiene siempre los mismos bloques:
+- **Qué es**: para qué la queremos.
+- **Pasos**: lo que tienes que hacer, en orden, incluido dónde pinchar en la web.
+- **Guarda**: nombre exacto del fichero resultante.
+- **Comprueba**: cómo saber que está bien.
+
+Las marcas ✅ indican algo que hemos comprobado en la web; ⚠️ indica algo que NO hemos podido comprobar y tienes que verificar tú.
+
+---
+
+## Resumen: qué vas a hacer y en qué orden
+
+| Orden | Fuente | De dónde se descarga | Tiempo | Lo que queda guardado |
+|---|---|---|---|---|
+| 0 | Preparación | tu ordenador | 10 min | carpetas y registro |
+| 1 | MITMA: zonas | librería R o Python | 20 min | `zonas_mitma_asturias.csv` |
+| 2 | MITMA: viajes y pernoctaciones | librería R o Python | horas (lanzar y dejar) | `mitma_viajes_<año>.csv`, `mitma_pernoctaciones_<año>.csv` |
+| 3 | INE: turismo con móviles | ine.es | 20 min | tabla 53001 + 5 ficheros `.xlsx` |
+| 4 | INE: ocupación por punto turístico | ine.es | 30 min | 3 CSV |
+| 5 | SADEI | sadei.es | 30 min | 6 ficheros `.px` |
+| 6 | Opcional | INE, COGERSA | 15 min | 2 ficheros |
+
+**Empieza por el paso 2** en cuanto esté la prueba del paso 1: es la descarga más larga. Mientras corre, haz los pasos 3, 4 y 5.
+
+**Punto de sincronización con B:** al acabar el paso 1, envíale `zonas_mitma_asturias.csv` y dile si Cangas de Onís es zona propia. B lo necesita para Open-Meteo y los festivos locales.
+
+---
+
+## 0. Preparación (10 min, los dos juntos)
+
+1. Crea en el repositorio las carpetas `data/raw/`, `data/manual/` y `notas/`.
+2. Crea el fichero `notas/fuentes/demanda/registro_descargas.md`. Cada vez que guardes un fichero, apunta una línea: nombre, URL de origen, fecha de descarga y rango de fechas que trae.
+3. Decide con qué lenguaje vas a bajar el MITMA (paso 2): **R** (más documentado) o **Python**.
+   - R: instala el paquete: `install.packages("spanishoddata")`
+   - Python: `pip install pySpainMobility pandas requests openpyxl pyaxis`
+
+---
+
+## 1. MITMA, parte 1: saber qué zonas hay y si Cangas de Onís tiene la suya
+
+**Qué es:** el Ministerio de Transportes publica cuántos viajes hay entre zonas de España (calculado con datos de móviles). Los datos se dan por *zonas* y no siempre una zona es un municipio: los municipios pequeños se agrupan. Antes de descargar nada tenemos que saber en qué zona cae cada sitio que nos interesa.
+
+**Pasos:**
+
+1. Abre la página oficial y lee los avisos: https://www.transportes.gob.es/ministerio/proyectos-singulares/estudios-de-movilidad-con-big-data/opendata-movilidad
+   - ✅ Allí verás el portal de datos (`movilidad-opendata.mitma.es`) y los enlaces a las dos librerías (spanishoddata en R, pySpainMobility en Python). **Los ficheros no se descargan pinchando en esa página**: se bajan con la librería.
+   - ✅ Anota los días sin datos que avisa la página (los necesitará la limpieza más adelante):
+     - 26, 27, 30 y 31 de octubre y 1, 2 y 3 de noviembre de 2023
+     - 4, 18 y 19 de abril y 10 y 11 de noviembre de 2024
+     - 28 y 29 de abril de 2025 (apagón)
+     - 29 a 31 de octubre de 2024: datos con anomalías en Levante (DANA)
+     - Desde el 1 de julio de 2025 los datos cambian de metodología: **no los mezclamos** con los anteriores.
+2. Pide a la librería las zonas **municipales** (la versión de datos es la 2, de 2022 en adelante):
+   - **R:**
+     ```r
+     library(spanishoddata)
+     spod_set_data_dir("~/datos_mitma")          # carpeta donde se guardará todo
+     zonas <- spod_get_zones("muni", ver = 2)    # zonas municipales
+     ```
+   - **Python** (⚠️ escrito de memoria del README; si algún nombre no existe, copia el ejemplo del README en https://github.com/Grupo-de-Estudios-de-Movilidad/pySpainMobility):
+     ```python
+     from pyspainmobility import Zones
+     z = Zones(zones='municipalities', version=2, output_directory='datos_mitma')
+     zonas = z.get_zone_geodataframe()
+     ```
+3. Busca las zonas de Asturias. ✅ La tabla de zonas trae una columna `municipalities` con los **códigos INE** de los municipios que forman cada zona (si hay varios, van separados por `;`). Los municipios de Asturias empiezan por **33**.
+   - Filtra las zonas cuyo `municipalities` contenga códigos que empiecen por `33`.
+   - Cangas de Onís = **33012**, Llanes = **33036**, Oviedo = **33044**, Gijón = **33024**. Los demás (Ribadesella, Cabrales, Onís, Amieva...) búscalos por nombre en la lista de municipios de Asturias del INE y apunta su código.
+4. Para cada lugar que nos interesa, mira **si su zona contiene solo ese municipio o también otros**:
+   - Zona con un único código (por ejemplo, solo `33012`) → **zona propia**. 
+   - Zona con varios códigos (por ejemplo, `33012;33045;...`) → **zona agrupada**. Apunta cuáles se agrupan.
+
+**Guarda:** `data/raw/zonas_mitma_asturias.csv` con las columnas: `id_zona_mitma`, `nombre`, `municipalities` (códigos INE), `agrupada` (sí/no).
+
+**Comprueba:**
+- Aparece al menos Oviedo, Gijón, Llanes y Cangas de Onís.
+- Has escrito en `notas/fuentes/demanda/registro_descargas.md` si **Cangas de Onís es zona propia: SÍ / NO** y con quién va agrupada.
+
+**Avisa a B ahora** (mándale el CSV y esa frase).
+
+---
+
+## 2. MITMA, parte 2: viajes y pernoctaciones (la descarga larga)
+
+**Qué es:**
+- **Viajes**: cuántas personas van de una zona a otra cada día. Nos interesan los viajes **con destino en Asturias**.
+- **Pernoctaciones**: cuántas personas duermen en cada zona y de dónde son. Sirve para separar excursionistas de gente que duerme.
+- Solo cuenta **residentes en España** (no hay extranjeros).
+
+**Rango a descargar:** del **2022-01-01 al 2025-06-30**. (Los meses posteriores tienen otra metodología.)
+
+**Pasos:**
+
+1. **Primero, una prueba de un solo día.** Elige 2024-08-15. Si falla, no sigas con todo.
+   - **R:**
+     ```r
+     spod_get_valid_dates(ver = 2)     # lista de fechas disponibles
+     od <- spod_get(type = "od", zones = "muni",
+                    dates = c(start = "2024-08-15", end = "2024-08-15"))
+     od_tabla <- dplyr::collect(od)    # pasa a tabla normal
+     ```
+     ✅ También hay `spod_quick_get_od()` para obtener el flujo **diario** municipal directamente en memoria, que pesa mucho menos que el horario. ⚠️ Mira su ayuda (`?spod_quick_get_od`) para ver cómo se le pasa un rango de fechas.
+   - **Python:** sigue el ejemplo del README de pySpainMobility (⚠️ de memoria: `Mobility(version=2, zones='municipalities', start_date=..., end_date=..., output_directory=...)` y luego el método para viajes y el de pernoctaciones).
+2. **Mira qué columnas trae** el día de prueba. ✅ En los viajes deben aparecer:
+   `fecha, periodo (hora), origen, destino, distancia, actividad_origen, actividad_destino, residencia (provincia), renta, edad, sexo, viajes, viajes_km`.
+   En pernoctaciones: `fecha, zona_residencia, zona_pernoctacion, personas`.
+3. **Filtra a Asturias:** quédate solo con las filas cuyo `destino` (viajes) o `zona_pernoctacion` (pernoctaciones) está en la lista de zonas del paso 1.
+4. **Descarga el periodo completo, día a día o mes a mes**, filtrando a Asturias en cada iteración y **borrando el fichero original** cuando termines con él. No bajes todo y filtres al final: el conjunto completo nacional ocupa cientos de GB.
+   - Guarda un fichero por año: `data/raw/mitma_viajes_2022.csv`, `..._2023.csv`, `..._2024.csv`, `..._2025.csv` (solo hasta junio).
+   - Haz lo mismo con las pernoctaciones: `data/raw/mitma_pernoctaciones_<año>.csv`.
+   - Deja el proceso corriendo y sigue con los pasos 3, 4 y 5.
+5. **Estadísticos de "día normal"** (opcional): ✅ la página oficial dice que existen medias, cuartiles y umbrales por día de la semana, calculados con los estudios básicos de 2024 sin julio ni agosto. ⚠️ La página no da el nombre del fichero: búscalo en el portal de datos (`movilidad-opendata.mitma.es`) dentro de la carpeta de estudios básicos. **Si no lo encuentras, no pasa nada**: lo calcularemos nosotros. Apúntalo en el registro.
+
+**Si la prueba del día 15 de agosto da errores de red**, prueba con otro día de otro mes y anota cuál ha fallado.
+
+**Comprueba:**
+- Cada fichero anual tiene todas las fechas del año (menos las que el MITMA dice que faltan). Cuenta los días distintos de la columna `fecha`.
+- En viajes, `destino` siempre es una zona de Asturias.
+- Apunta en el registro: filas por fichero, primera y última fecha, y qué fechas **no** aparecen.
+
+---
+
+## 3. INE: turismo con móviles (nos da turistas por municipio y mes)
+
+**Qué es:** el INE publica de forma experimental cuántos turistas llegan a cada municipio de destino, según su origen. ✅ **Ojo:** este estudio es de turismo **interno interprovincial**: cuenta turistas que viajan de una provincia a otra. **No incluye a los asturianos que viajan dentro de Asturias** (eso lo cubre el MITMA).
+
+**Pasos:**
+
+**3.1 Ficheros anuales de Excel (la opción más sencilla)**
+
+1. Abre: https://www.ine.es/dynt3/inebase/es/index.htm?padre=8578&capsel=8581
+   (✅ Título de la página: "Medición del turismo interno interprovincial a partir de la posición de los teléfonos móviles".)
+2. Baja hasta la sección de ficheros. Verás un enlace por año: "Número de turistas por municipio de origen y destino - Año YYYY".
+3. Descarga los de **2022, 2023, 2024, 2025 y 2026**. ✅ Las direcciones directas son (cambia el año):
+   `https://www.ine.es/experimental/turismo_moviles/exp_tmov_interno_mun_2022.xlsx`
+
+**Guarda:** `data/raw/ine_moviles_interno_2022.xlsx` ... `ine_moviles_interno_2026.xlsx`.
+
+**3.2 Tabla mensual por municipio de destino (opcional, pero muy útil)**
+
+1. ✅ En la misma página hay tres tablas. La que nos interesa es la **t=53001**: "Número de turistas mensuales por CCAA y provincia de origen desagregados por municipio de destino".
+2. Prueba la descarga completa directa: `https://www.ine.es/jaxiT3/files/t/csv_bdsc/53001.csv` (⚠️ patrón habitual del INE; no lo hemos probado).
+3. Si no funciona: abre `https://www.ine.es/jaxiT3/Tabla.htm?t=53001&L=0`, **selecciona todos los periodos y todos los municipios de destino de Asturias** y usa el botón de descarga (CSV separado por `;`). Una tabla del INE solo exporta lo que tengas seleccionado en pantalla, y por defecto suele traer solo los últimos periodos.
+
+**Guarda:** `data/raw/ine_moviles_53001.csv`.
+
+**Comprueba:**
+- En el Excel o CSV aparecen Cangas de Onís (33012) y Llanes (33036) como destino.
+- Anota cuál es el **último mes disponible** (en el Excel de 2026 y en la tabla 53001). ✅ La página dice "última modificación 07/10/2026", pero no dice hasta qué mes llegan los datos: míralo tú.
+- Anota los municipios que aparezcan con valor vacío o con un punto (".") (secreto estadístico): significan "dato no disponible", no cero.
+
+---
+
+## 4. INE: encuestas de ocupación (viajeros y pernoctaciones por punto turístico)
+
+**Qué es:** cuántos viajeros y pernoctaciones tienen los hoteles, apartamentos, campings y casas rurales en cada *punto turístico* (por ejemplo, Llanes o Cangas de Onís), mes a mes. Es el dato más útil para validar lo que predigamos.
+
+⚠️ **Importante:** los números de tabla (2078, 2076, 2082) salen de un catálogo que consultamos y **no hemos abierto**. Tu primera tarea es comprobar que son las tablas correctas.
+
+**Pasos:**
+
+1. Prueba la descarga directa de cada tabla (⚠️ patrón habitual del INE, sin probar):
+   - `https://www.ine.es/jaxiT3/files/t/csv_bdsc/2078.csv` (viajeros y pernoctaciones)
+   - `https://www.ine.es/jaxiT3/files/t/csv_bdsc/2076.csv` (plazas y grado de ocupación)
+   - `https://www.ine.es/jaxiT3/files/t/csv_bdsc/2082.csv` (apartamentos)
+2. Abre cada CSV y comprueba **dos cosas**:
+   - ¿Hay una columna de *punto turístico* o *municipio* en la que aparezcan **Cangas de Onís, Llanes, Oviedo, Gijón, Villaviciosa**? Si solo hay provincias o comunidades, **no es la tabla que buscamos**.
+   - ¿Hasta qué mes llega? (debería llegar a agosto de 2026).
+3. Si la tabla no es la correcta o la descarga directa no funciona, búscala a mano:
+   - Entra en https://www.ine.es y busca "Encuesta de ocupación hotelera puntos turísticos" (o ve a INEbase → Hostelería y turismo → Encuesta de ocupación hotelera → Resultados → "Puntos turísticos").
+   - Abre la tabla de viajeros y pernoctaciones por punto turístico, **selecciona todos los puntos de Asturias y todos los meses**, y descárgala en CSV con el botón de descarga. Haz lo mismo con las de apartamentos, **turismo rural** y **campings** (esas pueden ir por *zona turística* o por *punto*; anota cuál).
+4. Anota el número de tabla de cada una que sí funcione.
+
+**Guarda:** `data/raw/ine_eoh_2078.csv`, `ine_eoh_2076.csv`, `ine_eoap_2082.csv`, y las de rural y campings como `ine_rural_<numero>.csv` y `ine_camping_<numero>.csv`.
+
+**Comprueba:**
+- Escribe en el registro, para cada tabla, **qué puntos turísticos asturianos aparecen y hasta qué mes llega**.
+- Las celdas con "." o vacías son secreto estadístico (menos de 9 establecimientos): son datos que **faltan**, no ceros.
+
+---
+
+## 5. SADEI (datos propios de Asturias, por concejo)
+
+**Qué es:** el instituto estadístico de Asturias publica turismo por concejo. ✅ Todos los ficheros se descargan en formato **PC-Axis (`.px`)**; la web no ofrece CSV ni Excel.
+
+**Cómo funciona la web:** en cada página hay una lista de tablas con su título. ✅ Cada enlace tiene el tooltip "Ver fichero .px". Pincha en el título (o en el icono "Descargar el fichero" al lado) y se descarga el `.px`. ⚠️ Si en lugar de descargarse se abre una tabla en pantalla, busca el botón de descarga/exportar y elige PC-Axis o CSV.
+
+**Pasos:**
+
+**5.1 Página de viajeros y pernoctaciones**
+URL: https://www.sadei.es/sadei/turismo/viajeros--pernoctaciones--gasto-e-indicadores-de-rentabilidad_212_1_ap.html
+
+Descarga **estos cuatro** (están en grupos distintos; el título debe coincidir exactamente):
+
+| Dónde está (grupo) | Título del enlace | Guarda como |
+|---|---|---|
+| "Turismo receptor y emisor (INE. Estadística experimental de turismo por teléfonos móviles)" | "Turismo receptor nacional. Concejos" | `sadei_receptor_nacional_concejos.px` |
+| (mismo grupo) | "Turismo receptor extranjero. Concejos" | `sadei_receptor_extranjero_concejos.px` |
+| "Indicadores de rentabilidad y precios hoteleros" | "Indicadores de rentabilidad del sector hotelero" | `sadei_rentabilidad.px` |
+| "Viajeros, pernoctaciones y grado de ocupación (INE. Encuestas de ocupación)" | "Viajeros y pernoctaciones según origen del viajero y tipo de establecimiento" | `sadei_eoh_viajeros.px` |
+
+Si los títulos tienen enlace directo, estos son los códigos (se añaden a la dirección de la página, tras un `?f=`):
+- Receptor nacional concejos: `?f=11__04__07$$11040706.px`
+- Receptor extranjero concejos: `?f=11__04__07$$11040704.px`
+- Rentabilidad: `?f=99__04__08__04$$9904080406.px`
+- Viajeros y pernoctaciones: `?f=99__04__08__04$$9904080402.px`
+
+**5.2 Página de establecimientos y plazas**
+URL: https://www.sadei.es/sadei/turismo/establecimientos-y-plazas_211_1_ap.html
+
+Descarga:
+
+| Título del enlace | Guarda como | Código |
+|---|---|---|
+| "Alojamientos y plazas según tipo. Concejos" | `sadei_plazas_concejos.px` | `?f=11__02__02$$11020202.px` |
+| "Otros alojamientos. Apartamentos turísticos. Concejos" | `sadei_apartamentos_concejos.px` | `?f=11__02__04$$11020418.px` |
+
+**5.3 Padrón (población por concejo)**
+⚠️ **No hemos localizado el enlace exacto.** Entra en https://www.sadei.es/inicio, busca la sección de **Población** y dentro la tabla de población por concejos (cifras del padrón). Descárgala como `.px` o CSV y guárdala como `data/raw/padron_concejos.px`. Si tardas más de 10 minutos, déjalo para el final: no bloquea nada.
+
+**Comprueba:**
+- Abre cada `.px` con `pyaxis`:
+  ```python
+  from pyaxis import pyaxis
+  tabla = pyaxis.parse("data/raw/sadei_receptor_nacional_concejos.px", encoding="ISO-8859-1")
+  print(tabla["DATA"].head())
+  ```
+  Si da error de codificación, prueba `encoding="utf-8"` o `"cp1252"`.
+- Aparecen **Cangas de Onís** y **Llanes** como concejos.
+- Apunta en el registro hasta qué año o mes llega cada tabla. ⚠️ Algunos datos de plazas llegan solo hasta 2023.
+
+---
+
+## 6. Opcional (solo si hay tiempo)
+
+1. **Viviendas turísticas por municipio (INE):** https://www.ine.es/experimental/viv_turistica/exp_viv_turistica_tablas.htm
+   Abre la página, localiza el fichero o tabla por municipio y descárgalo como `data/raw/ine_viviendas_turisticas.xlsx` (o CSV). Sirve para medir presión estructural.
+2. **Residuos por concejo (COGERSA):** https://cogersa.es/datos_residuos/
+   Descarga lo que haya por concejo y mes como `data/raw/cogersa_residuos.<extension>`. Sirve como pista indirecta de presión humana.
+
+---
+
+## Cierre (con B, 10 minutos)
+
+1. **Registro:** en `notas/fuentes/demanda/registro_descargas.md` debe haber una línea por fichero con: nombre, URL de origen, fecha de descarga, rango de fechas real, zonas o concejos que incluye y problemas encontrados.
+2. **Lo que no pudiste conseguir:** apúntalo con el motivo (la web falla, el fichero no existe, el formato es distinto). En especial:
+   - ¿Cangas de Onís es zona propia en el MITMA?
+   - ¿Las tablas 2078, 2076 y 2082 del INE incluyen concejos asturianos?
+   - ¿Hasta qué mes llegan INE y SADEI?
+   - ¿Se encontró el fichero de "día normal" del MITMA?
+3. **Revisad juntos** que lo descargado se puede cruzar por **fecha** y **zona** con lo que ha bajado B.
+
+## Lista final: qué debes tener en `data/raw/`
+
+- [ ] `zonas_mitma_asturias.csv`
+- [ ] `mitma_viajes_2022.csv`, `2023`, `2024`, `2025` (hasta junio)
+- [ ] `mitma_pernoctaciones_2022.csv`, `2023`, `2024`, `2025` (hasta junio)
+- [ ] `ine_moviles_interno_2022.xlsx` ... `2026.xlsx` (5 ficheros)
+- [ ] `ine_moviles_53001.csv`
+- [ ] `ine_eoh_2078.csv`, `ine_eoh_2076.csv`, `ine_eoap_2082.csv` (o sus sustitutas), más rural y campings
+- [ ] `sadei_receptor_nacional_concejos.px`, `sadei_receptor_extranjero_concejos.px`, `sadei_rentabilidad.px`, `sadei_eoh_viajeros.px`
+- [ ] `sadei_plazas_concejos.px`, `sadei_apartamentos_concejos.px`, `padron_concejos.px`
+- [ ] (opcional) viviendas turísticas, residuos

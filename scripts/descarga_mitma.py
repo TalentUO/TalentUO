@@ -68,7 +68,7 @@ def _procesar(tipo, d, zonas):
         r.raise_for_status()
         esperado = int(r.headers.get("Content-Length", -1))
         dec = zlib.decompressobj(wbits=31)  # gzip; verifica CRC al final
-        cabecera, resto, total, bajados = None, b"", 0, 0
+        cabecera, resto, bajados = None, b"", 0
         partes, filas, filas_origen = [], 0, 0
         for bloque in r.iter_content(1 << 22):
             bajados += len(bloque)
@@ -206,7 +206,7 @@ def main():
             return False
         if r["estado"] == "OK":
             # Un OK solo vale si el fichero diario existe o el día ya se ensambló en el CSV anual.
-            # Así el estado (que viaja por git) no da por hechos días cuyos datos no están en este PC.
+            # Así un estado copiado de otro equipo no da por hechos días cuyos datos no están en este PC.
             return ruta_dia(tipo, d).exists() or bool(r.get("ensamblado"))
         return r["estado"] == "NO_DISPONIBLE" and not a.reintentar_no_disponibles
 

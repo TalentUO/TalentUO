@@ -1,4 +1,4 @@
-"""Revisión rápida de data/clean/objetivo_diario.parquet -> notas/revision_objetivo.md + notas/figuras_objetivo/*.png
+"""Revisión rápida de data/clean/objetivo_diario.parquet -> notas/historico/revision_objetivo.md + notas/historico/figuras_objetivo/*.png
 
 Uso: python -X utf8 src/modelo/revision_objetivo.py
 Solo lee data/clean/objetivo_diario.parquet, calendario_diario.parquet y el mapeo de zonas. No modifica ningún dato.
@@ -46,7 +46,7 @@ def main() -> None:
                 on="fecha", how="left", validate="many_to_one")
     V = ["llegadas_total", "llegadas_ocio", "llegadas_desde_asturias", "llegadas_resto_espana",
          "llegadas_total_desde_asturias", "llegadas_total_resto_espana", "pernoctaciones_no_residentes"]
-    figs = NOTAS / "figuras_objetivo"
+    figs = NOTAS / "historico" / "figuras_objetivo"
     figs.mkdir(exist_ok=True)
 
     # 1) Serie diaria por zona (una escala por zona: pequeños múltiplos, sin doble eje)
@@ -160,7 +160,7 @@ Resumen de esos 20 días: {", ".join(f"{k} {v}" for k, v in cuenta.items())}. (L
 - En esos días las 7 columnas de valores son NaN en las 5 zonas: **{"sí" if nan_en_datos == 0 and nan_ok else "NO"}** · ceros en esos días: **{ceros_sd}** · NaN en días con dato: **{nan_en_datos}**.
 - Ceros reales (días con fichero y zona sin viajes): {ceros_reales}.
 - `anomalia_mitma` (29-31 oct 2024, se conservan los valores): {int((o.calidad == "anomalia_mitma").sum())} filas.
-- **Atención:** `config/mitma_calidad.yaml` marca como `sin_dato_mitma` los días 2024-04-04, 2024-04-19 y 2024-11-11, **aunque el portal sí los publicó** (están en los ficheros descargados). Quedan en NaN por esa configuración. Además faltan en el portal 2024-11-09 y 2024-11-26 (no están en la lista oficial; también quedan NaN). Ver `notas/cobertura_mitma.md`.
+- **Atención:** `config/mitma_calidad.yaml` marca como `sin_dato_mitma` los días 2024-04-04, 2024-04-19 y 2024-11-11, **aunque el portal sí los publicó** (están en los ficheros descargados). Quedan en NaN por esa configuración. Además faltan en el portal 2024-11-09 y 2024-11-26 (no están en la lista oficial; también quedan NaN). Ver `notas/fuentes/mitma/cobertura_mitma.md`.
 
 ## 5. Quién llega a los Picos (Cangas de Onís, días `completa`)
 
@@ -179,8 +179,8 @@ En los Picos el cociente va de {por_mes["pernoctantes ÷ llegadas de ocio"].min(
 - `pernoctaciones_no_residentes` cuenta cualquier persona cuya zona de residencia es distinta de la de pernoctación, incluidos asturianos de otras zonas: no es «turistas».
 - El MITMA solo cubre residentes en España y la unidad mínima es el municipio: Covadonga y Lagos no se pueden separar de Cangas de Onís.
 """
-    (NOTAS / "revision_objetivo.md").write_text(md, encoding="utf-8")
-    print("notas/revision_objetivo.md escrito;", len(md), "caracteres")
+    (NOTAS / "historico" / "revision_objetivo.md").write_text(md, encoding="utf-8")
+    print("notas/historico/revision_objetivo.md escrito;", len(md), "caracteres")
 
 
 if __name__ == "__main__":

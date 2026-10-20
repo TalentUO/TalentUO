@@ -13,12 +13,15 @@ from shapely.ops import polylabel
 UA = {'User-Agent': 'NTTTurism-piloto/1.0 (prototipo de hackathon; uso puntual)'}
 bruto, ods_path, geo_js, destino_js, dir_fotos = sys.argv[1:6]
 
+# Nombre alternativo para buscar en Nominatim los sitios que no se encuentran por su nombre (clave = nº del sitio)
 ALTERNATIVAS = {
-    5: 'Sames', 9: 'Belmonte de Miranda', 112: 'San Tirso de Abres', 6: 'Avilés', 8: 'Llodero', 9: 'Lapedo', 10: 'Martimporra', 15: 'Arenas de Cabrales', 18: 'San Román de Candamo',
-    20: 'Covadonga', 22: 'Lago Enol', 23: 'Muniellos', 25: 'Cangas del Narcea', 29: 'Salinas', 41: 'Artedo',
-    42: 'Degaña', 46: 'Universidad Laboral de Gijón', 51: 'Campa Torres', 58: 'Chao Samartín', 59: 'San Antolín de Ibias',
-    60: 'Pastur', 65: 'Entralgo', 90: 'Plaza del Fontán, Oviedo', 91: 'Monte Naranco', 92: 'Arriondas', 95: 'Panes',
-    96: 'Pesoz', 102: 'Pimiango', 106: 'Soto de Ribera', 107: 'Angliru', 133: 'Vegadeo', 136: 'Valdediós',
+    5: 'Sames', 6: 'Avilés', 8: 'Llodero', 9: 'Lapedo', 10: 'Martimporra', 15: 'Arenas de Cabrales',
+    18: 'San Román de Candamo', 20: 'Covadonga', 22: 'Lago Enol', 23: 'Muniellos', 25: 'Cangas del Narcea',
+    29: 'Salinas', 41: 'Artedo', 42: 'Degaña', 46: 'Universidad Laboral de Gijón', 51: 'Campa Torres',
+    58: 'Chao Samartín', 59: 'San Antolín de Ibias', 60: 'Pastur', 65: 'Entralgo',
+    90: 'Plaza del Fontán, Oviedo', 91: 'Monte Naranco', 92: 'Arriondas', 95: 'Panes', 96: 'Pesoz',
+    102: 'Pimiango', 106: 'Soto de Ribera', 107: 'Angliru', 112: 'San Tirso de Abres', 133: 'Vegadeo',
+    136: 'Valdediós',
 }
 
 def get(url, binario=False):

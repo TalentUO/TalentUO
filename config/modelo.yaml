@@ -7,16 +7,17 @@ semilla: 42
 #   llegadas_ocio (por defecto) | llegadas_total | pernoctaciones_no_residentes
 objetivo: llegadas_ocio
 
-# "Hoy" para la demo de la web (predicciones futuras de largo plazo).
-fecha_hoy_demo: "2026-10-16"
-dias_futuro_demo: 365   # un año desde fecha_hoy (antes 60)
+# "Hoy" de la web (inicio de las predicciones futuras). null = día de emisión de la previsión del tiempo
+# (data/clean/openmeteo_prevision.parquet, que descarga src/modelo/descargar_prevision.py).
+fecha_hoy_demo: null
+dias_futuro_demo: 365   # un año desde fecha_hoy
 
 fuentes:
   sintetico:
     mapeo: config/mapeo_zonas_ejemplo.csv          # IDs FICTICIOS (EJEMPLO_*)
     objetivo: salidas/sintetico/objetivo_diario_sintetico.parquet
   real:
-    mapeo: config/mapeo_zonas.csv                  # necesita zona_mitma_id relleno
+    mapeo: config/mapeo_zonas.csv                  # 46 zonas MITMA (toda Asturias)
     objetivo: data/clean/objetivo_diario.parquet   # lo genera construir_objetivo.py
 
 # Periodo cubierto por los datos diarios del MITMA (parte A).
@@ -109,7 +110,7 @@ lightgbm:
   num_threads: 4
 max_iteraciones: 2000
 parada_temprana: 100
-dias_validacion_interna: 365    # últimos días del entrenamiento para la parada temprana (máx. 40 % del periodo); 365 = incluye un verano (antes 90: con más zonas paraba sin aprender los picos de agosto)
+dias_validacion_interna: 365    # últimos días del entrenamiento para la parada temprana (máx. 40 % del periodo); 365 = incluye un verano (con menos, paraba sin aprender los picos de agosto)
 
 interes:
   # Artículos de Wikipedia que forman la señal "Picos" (suma de visitas).

@@ -11,7 +11,6 @@ Uso: python -X utf8 src/limpieza_B/limpia_eventos.py
 """
 from __future__ import annotations
 
-import re
 import sys
 from pathlib import Path
 

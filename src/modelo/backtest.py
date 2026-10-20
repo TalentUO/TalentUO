@@ -22,7 +22,7 @@ from util import a_log_cociente, cfg, colores, desde_log_cociente
 
 EXPERIMENTOS = {
     "base": dict(desde=None, modo="estricto", verificados=False, modelos=("largo", "corto")),
-    # sensibilidad: entrenar solo desde el corte del reanálisis (2022-11-09), como antes de 2026-10-15
+    # sensibilidad: entrenar solo desde el corte del reanálisis (2022-11-09), el inicio usado hasta el 2026-10-15
     "desde_corte": dict(desde="corte", modo="estricto", verificados=False, modelos=("largo", "corto")),
     "solo_eventos_verificados": dict(desde=None, modo="estricto", verificados=True, modelos=("largo", "corto")),
     "tiempo_aproximado": dict(desde=None, modo="aproximado", verificados=False, modelos=("corto",)),
@@ -105,7 +105,6 @@ def ejecutar(D: Datos, experimentos: list[str] | None = None, algoritmos: list[s
     bt["color_pred"] = colores(bt["cociente_pred"], bt["zona_mitma_id"])
     bt["color_b0"] = colores(bt["cociente_b0"], bt["zona_mitma_id"])
     bt["color_b1"] = colores(bt["cociente_b1"], bt["zona_mitma_id"])
-    bt["y_obs_bt"] = a_log_cociente(bt["visitas_obs"], bt["normal_bt"])
     bt["residuo_log"] = np.log((bt["visitas_obs"] + 1) / (bt["visitas_pred"] + 1))
     bt["sintetico"] = D.sintetico
     return bt

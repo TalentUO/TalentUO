@@ -1,4 +1,4 @@
-"""Descarga ficheros PC-Axis (.px) del SADEI a data/raw/ (Fase 1: solo bruto).
+"""Descarga ficheros PC-Axis (.px) del SADEI a data/raw/.
 
 Los enlaces "Ver fichero .px" de la web (?f=...) devuelven HTML y el enlace directo
 redirige a un host que no resuelve; el .px real se obtiene del PxWeb de SADEI:

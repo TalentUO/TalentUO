@@ -1,11 +1,11 @@
 /* ==========================================================================
- * PESTAÑA «Funciones avanzadas» (antes «Gestión») — PROPIEDAD DE LA PERSONA 2
+ * PESTAÑA «Funciones avanzadas» (id interno: gestion)
  * --------------------------------------------------------------------------
  * interfaz/app.js llama a montar() la primera vez que se abre la pestaña, y a
  * mostrar() cada vez que se vuelve a ella.
  *
  *   contenedor  <section id="panel-gestion"> (vacío)
- *   datos       objeto de window.DatosModelo.cargar() (ver notas/coordinacion_web.md)
+ *   datos       objeto de window.DatosModelo.cargar() (datos/datos.js)
  *   util        window.UtilWeb (pill, num, pct, esc, anunciar…)
  *
  * Las secciones son paneles: una fila de botones (pestañas) arriba y solo se ve
@@ -80,8 +80,10 @@ window.Pestanas = window.Pestanas || {};
     const alertas = L.alertasProximas(datos);
     const mesHoy = +hoy.slice(5, 7);
     const opcionesZona = zonas.map(z => `<option value="${esc(z.zona_mitma_id)}">${esc(z.nombre_zona)}</option>`).join('');
-    const lagos = L.compararLagos(datos);
-    const paneles = PANELES.filter(p => p.id !== 'lagos' || lagos);
+    const paneles = PANELES;
+    // Días de antelación con previsión del tiempo (1-3 hoy): sale de las salidas del modelo
+    const hMeteo = Math.max(0, ...((datos.predicciones.info_corto_plazo && datos.predicciones.info_corto_plazo.horizontes_con_tiempo) || []));
+    const conTiempo = hMeteo ? `A ${hMeteo === 1 ? '1 día' : '1-' + hMeteo + ' días'} la previsión incluye el tiempo` : 'La previsión no incluye el tiempo';
 
     // Periodos de la previsión de saturación (todos desde hoy y dentro de lo que cubre el modelo)
     const anioHoy = +hoy.slice(0, 4), anioFin = +finPrev.slice(0, 4);
@@ -139,12 +141,12 @@ window.Pestanas = window.Pestanas || {};
       <div id="sat-detalle" class="sat-detalle"></div>
       <h3 class="sat-sub" id="sat-zonas-t">Todas las zonas en este periodo</h3>
       <ul class="rg-lista sat-zonas" id="sat-zonas" aria-labelledby="sat-zonas-t"></ul>
-      <p class="g-nota">A 1-3 días la previsión incluye el tiempo; después usa calendario y eventos, y en los días marcados «previsión solo de calendario» solo tiene en cuenta el calendario (festivos, puentes, vacaciones) y es orientativa. Por defecto, saturación es ${esc(pct(umb.rojo))} sobre un día normal, el rojo del semáforo (alta: ${esc(pct(umb.ambar))}). Un concejo muestra la previsión de su zona.</p>
+      <p class="g-nota">${esc(conTiempo)}; después usa calendario y eventos, y en los días marcados «previsión solo de calendario» solo tiene en cuenta el calendario (festivos, puentes, vacaciones) y es orientativa. Por defecto, saturación es ${esc(pct(umb.rojo))} sobre un día normal, el rojo del semáforo (alta: ${esc(pct(umb.ambar))}). Un concejo muestra la previsión de su zona.</p>
     </section>
 
     <section class="tarjeta g-sec" id="g-alertas" role="tabpanel" aria-labelledby="gt-alertas" tabindex="-1" hidden>
       <h2>Alertas de las próximas ${Math.round(C.diasAlertas / 7)} semanas</h2>
-      <p class="g-desc">Nivel previsto por día. Elige una zona y añade sus concejos a la tabla, o muestra todas las zonas. A 1-3 días la previsión incluye el tiempo; después usa solo calendario y eventos y es más incierta.</p>
+      <p class="g-desc">Nivel previsto por día. Elige una zona y añade sus concejos a la tabla, o muestra todas las zonas. ${esc(conTiempo)}; después usa solo calendario y eventos y es más incierta.</p>
       <div class="al-controles">
         <div>
           <label for="al-zona" class="filtro-et">Zona</label>
@@ -164,7 +166,7 @@ window.Pestanas = window.Pestanas || {};
           </div>
         </div>
       </div>
-      <div class="al-chips" id="al-chips" aria-label="Concejos en la tabla"></div>
+      <div class="al-chips" id="al-chips" role="group" aria-label="Concejos en la tabla"></div>
       <p class="pz-ayuda al-vacia" id="al-vacia">La tabla está vacía. Elige una zona y marca uno o varios concejos, o pulsa «Todas las zonas».</p>
       <div class="tabla-marco" id="matriz-marco" hidden><table class="matriz" id="matriz"></table></div>
       <h3 class="sat-sub">Resumen de los días con alerta</h3>
@@ -206,14 +208,14 @@ window.Pestanas = window.Pestanas || {};
     <section class="tarjeta g-sec" id="g-perfil" role="tabpanel" aria-labelledby="gt-perfil" tabindex="-1" hidden>
       <h2>Perfil del visitante</h2>
       <p class="g-desc">De dónde llega quien viene a la zona por ocio y cuánto se queda. Media histórica del mes elegido.</p>
-      <div class="sim-form">
+      <div class="g-form">
         <div><label for="perfil-zona" class="filtro-et">Zona</label><select id="perfil-zona" class="select">${opcionesZona}</select></div>
         <div><label for="perfil-mes" class="filtro-et">Mes</label><select id="perfil-mes" class="select">${MESES.map((m, i) => `<option value="${i + 1}"${i + 1 === mesHoy ? ' selected' : ''}>${m.charAt(0).toUpperCase() + m.slice(1)}</option>`).join('')}</select></div>
       </div>
       <div class="metricas" id="perfil-metricas"></div>
       <p class="g-nota" id="perfil-nota"></p>
-      <h3 class="filtro-et" style="margin-top:1rem">Patrón horario</h3>
-      <p class="g-desc" id="perfil-horas">Pendiente de datos: aún no hay llegadas por hora (data/clean/llegadas_por_hora.parquet). Cuando lleguen, aquí saldrá la hora a la que suele llegar la gente.</p>
+      <h3 class="filtro-et g-horas-t">Patrón horario</h3>
+      <p class="g-desc" id="perfil-horas">Todavía no hay datos de llegadas por hora.</p>
     </section>
 
     <section class="tarjeta g-sec" id="g-exportar" role="tabpanel" aria-labelledby="gt-exportar" tabindex="-1" hidden>
@@ -314,11 +316,14 @@ window.Pestanas = window.Pestanas || {};
         sub: zs.length ? 'Concejo · zona ' + util.listaNatural(zs.map(nombreZ)) : 'Concejo · sin previsión (fuera de las zonas del modelo)' });
     });
 
-    let resultadoSat = [];
-    function calcularSat() {
-      const p = periodoActual();
-      resultadoSat = L.previsionSaturacion(datos, { desde: p.desde, hasta: p.hasta, umbral: umbralActual() });
+    // Previsión de cada periodo: se calcula una vez y el deslizador solo cambia el umbral
+    const filasPeriodo = new Map();
+    function saturacion(p, umbral) {
+      if (!filasPeriodo.has(p.v)) filasPeriodo.set(p.v, L.alertasProximas(datos, { desde: p.desde, dias: L.diasEntreISO(p.desde, p.hasta) + 1 }));
+      return L.previsionSaturacion(datos, { desde: p.desde, hasta: p.hasta, umbral, filas: filasPeriodo.get(p.v) });
     }
+    let resultadoSat = [];
+    function calcularSat() { resultadoSat = saturacion(periodoActual(), umbralActual()); }
 
     function htmlDia(d) {
       const cal = calendario[d.fecha] || {};
@@ -326,7 +331,7 @@ window.Pestanas = window.Pestanas || {};
       if (d.p10 != null && d.p90 != null && d.normal) extra.push(`probable entre ${pct(d.p10 / d.normal)} y ${pct(d.p90 / d.normal)}`);
       if (cal.festivo) extra.push(cal.festivo);
       else if (cal.puente) extra.push('puente');
-      if (d.lagos_regulado && lagos && d.zona_mitma_id === lagos.zona_mitma_id) extra.push('acceso a los Lagos regulado');
+      if (d.lagos_regulado) extra.push('acceso a los Lagos regulado'); // solo viene en la zona de los Lagos
       if (d.lejana) extra.push('previsión solo de calendario');
       else if (d.incierto) extra.push('previsión incierta');
       return `<li class="sat-dia">
@@ -705,11 +710,11 @@ window.Pestanas = window.Pestanas || {};
         vl.setAttribute('x1', cx); vl.setAttribute('x2', cx);
         pR.setAttribute('cx', cx); pR.setAttribute('cy', y(r[1]));
         pP.setAttribute('cx', cx); pP.setAttribute('cy', y(r[2]));
-        const dif = Math.round((r[2] / r[1] - 1) * 100);
+        const dif = r[1] ? Math.round((r[2] / r[1] - 1) * 100) : null;
         tip.innerHTML = `<p class="g-tip-f">${esc(util.fechaLarga(r[0]))}</p>
           <p><span class="g-ley-l g-ley-real" aria-hidden="true"></span>Real: <strong>${num(r[1])}</strong> ${pill(colorDe(r[1] / r[3]))}</p>
           <p><span class="g-ley-l g-ley-prev" aria-hidden="true"></span>Predicción: <strong>${num(r[2])}</strong> ${pill(colorDe(r[2] / r[3]))}</p>
-          <p class="g-tip-n">${dif === 0 ? 'Acertó la cifra' : `${dif > 0 ? 'Previó un ' + dif : 'Previó un ' + (-dif)}${NBSP}% ${dif > 0 ? 'más' : 'menos'} de lo real`} · día normal: ${num(r[3])}</p>`;
+          <p class="g-tip-n">${dif == null ? 'Sin llegadas reales ese día' : dif === 0 ? 'Acertó la cifra' : `Previó un ${Math.abs(dif)}${NBSP}% ${dif > 0 ? 'más' : 'menos'} de lo real`} · día normal: ${num(r[3])}</p>`;
         tip.hidden = false;
         const tw = tip.offsetWidth, izq = cx + 14 + tw > ancho ? cx - 14 - tw : cx + 14;
         tip.style.left = Math.max(0, izq) + 'px';
@@ -721,7 +726,8 @@ window.Pestanas = window.Pestanas || {};
       const sumO = filas.reduce((a, r) => a + r[1], 0), err = filas.reduce((a, r) => a + Math.abs(r[2] - r[1]), 0);
       const acierto = filas.filter(r => colorDe(r[1] / r[3]) === colorDe(r[2] / r[3])).length / filas.length;
       const rojosR = filas.filter(r => colorDe(r[1] / r[3]) === 'rojo').length, rojosOk = filas.filter(r => colorDe(r[1] / r[3]) === 'rojo' && colorDe(r[2] / r[3]) === 'rojo').length;
-      q('#fiab-graf-res').textContent = `En estos ${filas.length} días, la predicción se desvió de media un ${Math.round(err / sumO * 100)}${NBSP}% de las llegadas reales y acertó el color del semáforo el ${Math.round(acierto * 100)}${NBSP}% de los días`
+      const desvio = sumO ? `la predicción se desvió de media un ${Math.round(err / sumO * 100)}${NBSP}% de las llegadas reales y ` : '';
+      q('#fiab-graf-res').textContent = `En estos ${filas.length} días, ${desvio}acertó el color del semáforo el ${Math.round(acierto * 100)}${NBSP}% de los días`
         + (rojosR ? `; de ${rojosR} ${rojosR === 1 ? 'día' : 'días'} de saturación real, anticipó ${rojosOk}.` : '.');
       const porMes = {};
       filas.forEach(r => { const k = r[0].slice(0, 7); (porMes[k] = porMes[k] || []).push(r); });
@@ -747,9 +753,9 @@ window.Pestanas = window.Pestanas || {};
       q('#perfil-nota').textContent = `${p.nombre_zona}, ${MESES[mes - 1]}: unas ${num(p.llegadas_ocio_media_dia)} llegadas de ocio al día (${p.dias} días de muestra); ${Math.round(p.pernoctaciones_por_100_llegadas)} pernoctaciones de no residentes por cada 100 llegadas. Sin visitantes extranjeros.`;
       pintarHoras(id, mes);
     }
-    // Patrón horario: hora con más llegadas de ocio (data/clean/llegadas_por_hora.parquet vía datos.horas)
+    // Patrón horario: hora con más llegadas de ocio (datos.horas, de horas.json)
     function pintarHoras(id, mes) {
-      if (!datos.horas) return; // sin datos: queda el texto «Pendiente de datos»
+      if (!datos.horas) return; // sin datos: queda el texto de reserva
       const tipos = [['laborable', 'los laborables'], ['fin_de_semana_o_festivo', 'los fines de semana y festivos']];
       const partes = tipos.map(([t, et]) => {
         const f = datos.horas.filas.filter(x => x.zona_mitma_id === id && x.mes === mes && x.tipo_dia === t);
@@ -770,7 +776,7 @@ window.Pestanas = window.Pestanas || {};
       const sint = !!datos.sintetico;
       if (tipo === 'saturacion') {
         const u = umbralExp(), p = periodoExp();
-        csv = L.csvSaturacion(L.previsionSaturacion(datos, { desde: p.desde, hasta: p.hasta, umbral: u }), u, sint);
+        csv = L.csvSaturacion(saturacion(p, u), u, sint);
         nombre = `saturacion_prevista_${p.desde}_${p.hasta}.csv`;
         desc = `Días con más de ${pct(u)} sobre un día normal ${rangoTxt(p)}, por zona, con el rango probable y la acción sugerida.`;
       } else if (tipo === 'prevision') {
@@ -798,7 +804,7 @@ window.Pestanas = window.Pestanas || {};
       const u = umbralExp(), p = periodoExp();
       q('#exp-umbral-valor').textContent = pct(u);
       q('#exp-umbral').setAttribute('aria-valuetext', `Más de ${Math.round((u - 1) * 100)} por ciento sobre un día normal`);
-      const n = L.previsionSaturacion(datos, { desde: p.desde, hasta: p.hasta, umbral: u }).reduce((a, z) => a + z.dias.length, 0);
+      const n = saturacion(p, u).reduce((a, z) => a + z.dias.length, 0);
       q('#exp-sat-txt').textContent = `Con estos filtros, el archivo tendrá ${num(n)} ${n === 1 ? 'fila' : 'filas'} (un día y una zona por fila) ${rangoTxt(p)}.`;
     }
     q('#exp-umbral').addEventListener('input', pintarExportar);

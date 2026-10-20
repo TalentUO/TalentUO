@@ -1,4 +1,4 @@
-"""Tablas de notas/resultados_reales.md a partir de las salidas del modelo.
+"""Tablas de notas/historico/resultados_reales.md a partir de las salidas del modelo.
 
     python -X utf8 scripts/tablas_resultados_reales.py > salidas/tablas_resultados_reales.md
 
@@ -126,7 +126,7 @@ print("| zona | mínima | media | máxima |")
 print("|---|---|---|---|")
 for z, g in f.groupby("zona_mitma_id"):
     print(f"| {NOMBRES[z]} | {pct(g['cobertura'].min())} | {pct(g['cobertura'].mean())} | {pct(g['cobertura'].max())} |")
-print(f"| todas (40 combinaciones zona × horizonte) | {pct(f['cobertura'].min())} | {pct(f['cobertura'].mean())} "
+print(f"| todas ({len(f)} combinaciones zona × horizonte) | {pct(f['cobertura'].min())} | {pct(f['cobertura'].mean())} "
       f"| {pct(f['cobertura'].max())} |")
 print(f"\nCombinaciones con cobertura ≥ 80 %: {int((f['cobertura'] >= 0.8).sum())} de {len(f)}.")
 

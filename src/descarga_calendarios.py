@@ -34,10 +34,6 @@ MENSAJES_ERROR = ("host no configurado", "access denied", "forbidden", "page not
 BOPA = "https://miprincipado.asturias.es/bopa"
 BOE = "https://www.boe.es/boe/dias"
 EDUCASTUR = "https://www.educastur.es/documents/34868/39577"
-MITECO = (
-    "https://www.miteco.gob.es/content/dam/miteco/es/parques-nacionales-oapn/"
-    "red-parques-nacionales/desarrollo-socioeconomico/informes/"
-)
 
 # (fichero, url, oficial, nota)
 MANIFEST = [
@@ -61,7 +57,7 @@ MANIFEST = [
     ("bopa_calendario_escolar_2024-25.pdf", f"{BOPA}/2024/05/30/2024-04412.pdf", True, "Res. 15-may-2024"),
     ("bopa_calendario_escolar_2025-26.pdf", f"{BOPA}/2025/05/21/2025-03852.pdf", True, "Res. 8-may-2025"),
     ("bopa_calendario_escolar_2026-27.pdf", f"{BOPA}/2026/06/01/2026-04361.pdf", True, "Res. 13-may-2026"),
-    ("bopa_modif_calendario_escolar_2021-22_FP.pdf", f"https://www.asturias.es/bopa/2021/09/06/2021-08142.pdf", True, "Res. 27-ago-2021 (organización FP); su disposición adicional única modifica el calendario escolar 2021-22 (FP presencial). Descargado desde www.asturias.es/bopa porque miprincipado.asturias.es dejó de responder"),
+    ("bopa_modif_calendario_escolar_2021-22_FP.pdf", "https://www.asturias.es/bopa/2021/09/06/2021-08142.pdf", True, "Res. 27-ago-2021 (organización FP); su disposición adicional única modifica el calendario escolar 2021-22 (FP presencial). Descargado desde www.asturias.es/bopa porque miprincipado.asturias.es dejó de responder"),
     ("educastur_calendario_escolar_2021-22_grafico.pdf", "https://www.educastur.es/documents/34868/262513/2021-06-calendario-21-22-vertical.pdf/42001202-fb54-1f40-5200-7530348cbbd5?t=1623323628050", True, "Calendario gráfico Educastur 2021-22; ALTERNATIVA al BOPA de 1-jun-2021 (no obtenido)"),
     ("juridicas_res_calendario_escolar_asturias_2021-22.html", "https://noticias.juridicas.com/base_datos/CCAA/699208-r-educacion-5-may-2021-ca-asturias-calendario-escolar-para-el-curso-2021-2022.html", False, "NO OFICIAL: copia del texto de la Res. 5-may-2021 (BOPA 1-jun-2021); el BOPA original no se obtuvo. NOTA 2026-10-15: la URL devuelve una pagina de error; la validacion HTML la rechaza"),
     ("educastur_festivos_locales_23-24.pdf", f"{EDUCASTUR}/2023-10-calendario-escolar-festivos-locales-23-24.pdf/899da8ad-dbb0-9ac8-5710-ed2583d25ea1?t=1696423648123", True, "Días sustitutivos de fiestas locales (no es el calendario escolar)"),
@@ -99,12 +95,8 @@ MANIFEST = [
     ("prensa_telecinco_cierre_co4_agosto2023.html", "https://www.telecinco.es/noticias/sociedad/20230803/asturias-decreta-cierre-carretera-lagos-covadonga-coches-autocaravanas-particulares_18_010191467.html", False, "Prensa; cierre CO-4 a particulares 3-ago-2023"),
     ("prensa_elfielato_balance_plan_lagos_2025.html", "https://www.elfielato.es/articulo/cangas-de-onis/35000-usuarios-menos-plan-transporte-lagos-covadonga/20251213105442088961.html", False, "Prensa; balance plan transporte 2025 (182.683 viajeros)"),
     ("prensa_eldiariodeasturias_balance_plan_lagos_2025.html", "https://eldiariodeasturias.com/asturias/el-plan-especial-de-transporte-a-los-lagos-de-cuadonga-covadonga-movilizo-mas-de-182-000-viajeros-este-ano/", False, "Prensa; balance plan transporte 2025"),
-    # --- Visitantes Parque Nacional (MITECO/OAPN, oficial) ---
-    ("miteco_visitantes_parques_nacionales_2022.pdf", "https://www.miteco.gob.es/content/dam/miteco/es/parques-nacionales-oapn/red-parques-nacionales/gestion/Visitantes-PPNN-2022.pdf", True, "OAPN, visitantes 2022"),
-    ("miteco_visitantes_parques_nacionales_2023.pdf", MITECO + "Visitantes%20a%20los%20Parques%20Nacionales%20Espa%C3%B1oles.%20A%C3%B1o%202023.pdf", True, "OAPN, visitantes 2023"),
-    ("miteco_visitantes_parques_nacionales_2024.pdf", MITECO + "Visitantes%20a%20los%20Parques%20Nacionales%20Espa%C3%B1oles.%20A%C3%B1o%202024.pdf", True, "OAPN, visitantes 2024"),
-    ("miteco_visitantes_parques_nacionales_2025.pdf", MITECO + "Visitantes%20a%20los%20Parques%20Nacionales%20Espa%C3%B1oles.%20A%C3%B1o%202025.pdf", True, "OAPN, visitantes 2025"),
 ]
+
 
 def valida_html(contenido):
     """None si parece una pagina real; si no, el motivo. Misma idea que la cabecera %PDF de los PDF."""

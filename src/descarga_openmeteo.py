@@ -18,7 +18,7 @@ import csv
 import json
 import sys
 import time
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 from pathlib import Path
 
 import requests
@@ -28,12 +28,11 @@ CONFIG = RAIZ / "config" / "zonas_meteo.csv"
 RAW = RAIZ / "data" / "raw"
 CHUNKS = RAW / "_chunks"
 MANIFEST = CHUNKS / "manifest.json"
-REGISTRO = RAIZ / "notas" / "registro_openmeteo.md"
+REGISTRO = RAIZ / "notas" / "fuentes" / "openmeteo" / "registro_openmeteo.md"
 
 TZ = "Europe/Madrid"
 INICIO_HIST = date(2022, 1, 1)
 INICIO_PREVIOUS = date(2024, 1, 1)  # la doc dice que la mayoria de modelos se archivan desde ene-2024
-ZONAS_ARCHIVE = ("covadonga", "cangas_de_onis", "lagos_enol", "llanes", "ribadesella", "gijon", "oviedo", "madrid", "sevilla")  # todas: la comparacion hist-vs-ERA5 por zona lo necesita
 PAUSA = 6.0  # segundos entre llamadas (limite gratuito: 600/min, 5000/h, 10000/dia, ponderadas)
 
 DIARIAS = ["temperature_2m_max", "temperature_2m_min", "precipitation_sum", "precipitation_hours",
@@ -49,12 +48,6 @@ URL_PREVIOUS = "https://previous-runs-api.open-meteo.com/v1/forecast"
 URL_ARCHIVE = "https://archive-api.open-meteo.com/v1/archive"
 URL_VIVO = "https://api.open-meteo.com/v1/forecast"
 
-ZONAS_PROVISIONALES = [
-    ("covadonga", 43.31, -5.05), ("lagos_enol", 43.27, -4.99), ("cangas_de_onis", 43.35, -5.13),
-    ("llanes", 43.42, -4.75), ("ribadesella", 43.46, -5.06), ("gijon", 43.53, -5.66),
-    ("oviedo", 43.36, -5.86), ("madrid", 40.42, -3.70), ("sevilla", 37.39, -5.98),
-]
-
 
 def log(*a):
     print(datetime.now().strftime("%H:%M:%S"), *a, flush=True)
@@ -62,13 +55,7 @@ def log(*a):
 
 def cargar_zonas():
     if not CONFIG.exists():
-        CONFIG.parent.mkdir(parents=True, exist_ok=True)
-        with CONFIG.open("w", newline="", encoding="utf-8") as f:
-            w = csv.writer(f)
-            w.writerow(["zona", "lat", "lon", "provisional"])
-            for z, la, lo in ZONAS_PROVISIONALES:
-                w.writerow([z, la, lo, "si"])
-        log("Creado", CONFIG, "con la lista provisional")
+        sys.exit(f"Falta {CONFIG.relative_to(RAIZ)} (zona, lat, lon): es la lista de puntos meteorológicos")
     with CONFIG.open(newline="", encoding="utf-8") as f:
         return [{"zona": r["zona"].strip(), "lat": float(r["lat"]), "lon": float(r["lon"])}
                 for r in csv.DictReader(f) if r["zona"].strip()]
@@ -198,7 +185,7 @@ def vivo(zona):
 
 
 def escribir_registro(filas, manifest):
-    """Regenera la tabla de ficheros entre marcadores en notas/registro_openmeteo.md."""
+    """Regenera la tabla de ficheros entre marcadores en notas/fuentes/openmeteo/registro_openmeteo.md."""
     lineas = ["| Fichero | Endpoint | Descargado | Rango real | N reg. | Nulos por variable | Incidencias |",
               "|---|---|---|---|---|---|---|"]
     for p in sorted(RAW.glob("openmeteo_*.json")):
@@ -238,7 +225,7 @@ def main():
             tarea("hist", z, INICIO_HIST, hasta, manifest, filas)
         if args.solo in (None, "previous"):
             tarea("previous", z, INICIO_PREVIOUS, hasta, manifest, filas)
-        if args.solo in (None, "archive") and z["zona"] in ZONAS_ARCHIVE:
+        if args.solo in (None, "archive"):
             tarea("archive", z, INICIO_HIST, hasta, manifest, filas)
     if args.solo in (None, "vivo"):
         cov = next((z for z in zonas if z["zona"] == "covadonga"), zonas[0])

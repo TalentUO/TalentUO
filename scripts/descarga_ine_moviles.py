@@ -1,4 +1,4 @@
-"""Paso 3 (Persona A): INE turismo con móviles, interno (estadística experimental).
+"""INE: turismo con móviles, interno (estadística experimental).
 
 Descarga en bruto a data/raw/ (no limpia, no modela):
   - ine_moviles_interno_<año>.xlsx  (2022-2026, un Excel por año, una hoja por mes)
@@ -6,7 +6,7 @@ Descarga en bruto a data/raw/ (no limpia, no modela):
                                      Asturias, origen = "Total Nacional")
 
 El CSV completo de la 53001 pesa >2,3 GB, así que se lee en streaming y se corta al
-acabar el bloque "Total Nacional" (el INE lo sirve el primero). Ver notas/registro_descargas.md.
+acabar el bloque "Total Nacional" (el INE lo sirve el primero). Ver notas/fuentes/demanda/registro_descargas.md.
 NO VERIFICADO de principio a fin: la única prueba se cortó por un reset de conexión del INE
 a los 14 min (el servidor va lento); las filas descargadas coincidieron byte a byte con el extracto
 hecho a mano. Si falla, repetir o exportar desde https://www.ine.es/jaxiT3/Tabla.htm?t=53001&L=0.

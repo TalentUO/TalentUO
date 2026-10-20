@@ -9,7 +9,7 @@ Salidas:
   devuelve son filas con NaN y `fila_ausente_en_fuente=True`).
 - data/clean/estaciones_aemet.csv
 - data/clean/_qc/aemet_diario.json
-- notas/huecos_aemet.md
+- notas/fuentes/aemet/huecos_aemet.md
 
 Tratamiento (ver notas/diccionario_B.md):
 - Coma decimal -> punto; texto vacío/ausente -> NaN (nunca 0).
@@ -69,7 +69,7 @@ HORAS = {
 VARS_HUECOS = ["tmed_c", "tmin_c", "tmax_c", "prec_mm", "viento_medio_ms", "racha_max_ms",
                "sol_h", "hr_media_pct", "pres_max_hpa"]
 
-# zona/uso según notas/estaciones_aemet.md
+# zona/uso según notas/fuentes/aemet/estaciones_aemet.md
 USO = {
     "1186P": ("picos_de_europa", "principal Cangas de Onís / Covadonga / Lagos"),
     "1179B": ("picos_de_europa", "alternativa (Lagos, lado este)"),
@@ -224,8 +224,8 @@ def escribir_huecos_md(h: dict, est_nombres: dict) -> None:
             lineas.append(f"- **{est}**: tmed {', '.join(f'{a}→{b} ({n})' for a, b, n in t) or '—'}; "
                           f"prec {', '.join(f'{a}→{b} ({n})' for a, b, n in p) or '—'}")
     lineas += ["", "No se imputa ningún hueco. Si el modelo necesita una serie sin huecos, elegir otra "
-               "estación de respaldo (ver `notas/estaciones_aemet.md`) o usar Open-Meteo.", ""]
-    (NOTAS / "huecos_aemet.md").write_text("\n".join(lineas), encoding="utf-8")
+               "estación de respaldo (ver `notas/fuentes/aemet/estaciones_aemet.md`) o usar Open-Meteo.", ""]
+    (NOTAS / "fuentes" / "aemet" / "huecos_aemet.md").write_text("\n".join(lineas), encoding="utf-8")
 
 
 def estaciones(raw: pd.DataFrame) -> pd.DataFrame:

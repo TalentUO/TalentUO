@@ -146,7 +146,8 @@ window.MapaAsturias = (function () {
       } else if (Date.now() - ultimoAvisoRueda > 30000) {
         // La rueda desplaza la página: el aviso sale como mucho una vez cada 30 s, para no molestar al bajar
         ultimoAvisoRueda = Date.now();
-        avisarGesto(/Mac/.test(navigator.platform) ? 'Usa Cmd + rueda para acercar el mapa' : 'Usa Ctrl + rueda para acercar el mapa');
+        const plataforma = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+        avisarGesto(/mac/i.test(plataforma) ? 'Usa Cmd + rueda para acercar el mapa' : 'Usa Ctrl + rueda para acercar el mapa');
       }
     }, { passive: false });
     if (tactil) {
@@ -476,7 +477,7 @@ window.MapaAsturias = (function () {
         }
         // Se abre al terminar el vuelo; por si el mapa no llega a moverse (ya estaba ahí), hay un respaldo
         let abierto = false;
-        const abrir = () => { if (!abierto) { abierto = true; marca.openPopup(); } };
+        const abrir = () => { map.off('moveend', abrir); if (!abierto) { abierto = true; marca.openPopup(); } };
         map.once('moveend', abrir);
         setTimeout(abrir, 900);
         map.flyTo(marca.getLatLng(), zoom, { duration: 0.6 });

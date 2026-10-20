@@ -72,31 +72,33 @@ def criterios(bt: pd.DataFrame) -> pd.DataFrame:
 
 def elegir(c: pd.DataFrame) -> dict:
     sel = cfg()["seleccion_algoritmo"]
+    m_prec, m_crit, m_wape = (sel[k] * 100 for k in ("margen_precision_rojo", "margen_recall_rojo", "margen_wape"))
+    nombre_desempate = {"lightgbm": "LightGBM", "xgboost": "XGBoost"}.get(sel["desempate"], sel["desempate"])
     l, x = c.loc["lightgbm"], c.loc["xgboost"]
     # candidato por recall (empate exacto -> LightGBM) y control de precisión
     cand, otro = ("xgboost", "lightgbm") if x["recall_rojo_verano"] > l["recall_rojo_verano"] else ("lightgbm", "xgboost")
     caida_prec = c.loc[otro, "precision_rojo_verano"] - c.loc[cand, "precision_rojo_verano"]
     if caida_prec > sel["margen_precision_rojo"]:
         criterio, col = "F1 de días rojos en verano", "f1_rojo_verano"
-        por_que = (f"el de mayor recall ({cand}) tiene {caida_prec * 100:.1f} puntos menos de precisión (> 5): "
+        por_que = (f"el de mayor recall ({cand}) tiene {caida_prec * 100:.1f} puntos menos de precisión (> {m_prec:g}): "
                    "decide el F1")
     else:
         criterio, col = "recall de días rojos en verano", "recall_rojo_verano"
-        por_que = (f"la precisión del de mayor recall ({cand}) no es más de 5 puntos inferior "
+        por_que = (f"la precisión del de mayor recall ({cand}) no es más de {m_prec:g} puntos inferior "
                    f"({max(caida_prec, 0) * 100:.1f}): decide el recall")
     d_crit = x[col] - l[col]
     d_wape = x["wape_medio"] - l["wape_medio"]
     if abs(d_crit) >= sel["margen_recall_rojo"]:
         g, paso = ("xgboost" if d_crit > 0 else "lightgbm"), 1
-        motivo = f"{por_que}; {criterio} {abs(d_crit) * 100:.1f} puntos mayor (≥ 3)"
+        motivo = f"{por_que}; {criterio} {abs(d_crit) * 100:.1f} puntos mayor (≥ {m_crit:g})"
     elif abs(d_wape) >= sel["margen_wape"]:
         g, paso = ("xgboost" if d_wape < 0 else "lightgbm"), 2
-        motivo = (f"{por_que}; {criterio} a {abs(d_crit) * 100:.1f} puntos (< 3) -> "
-                  f"WAPE medio {abs(d_wape) * 100:.1f} puntos menor (≥ 1)")
+        motivo = (f"{por_que}; {criterio} a {abs(d_crit) * 100:.1f} puntos (< {m_crit:g}) -> "
+                  f"WAPE medio {abs(d_wape) * 100:.1f} puntos menor (≥ {m_wape:g})")
     else:
         g, paso = sel["desempate"], 3
-        motivo = (f"{por_que}; {criterio} a {abs(d_crit) * 100:.1f} puntos (< 3) y WAPE medio a "
-                  f"{abs(d_wape) * 100:.1f} puntos (< 1) -> LightGBM por regla")
+        motivo = (f"{por_que}; {criterio} a {abs(d_crit) * 100:.1f} puntos (< {m_crit:g}) y WAPE medio a "
+                  f"{abs(d_wape) * 100:.1f} puntos (< {m_wape:g}) -> {nombre_desempate} por regla")
     return {"ganador": g, "paso_de_la_regla": paso, "criterio_decisivo": criterio, "motivo": motivo,
             "candidato_por_recall": cand, "caida_precision_del_candidato": caida_prec,
             "diferencia_criterio_xgb_menos_lgb": d_crit, "diferencia_wape_medio_xgb_menos_lgb": d_wape}

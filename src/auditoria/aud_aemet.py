@@ -8,12 +8,12 @@ print("inventario:", type(inv).__name__, len(inv), "claves:", sorted(inv[0].keys
 idx = {e["indicativo"]: e for e in inv}
 dup_inv = [k for k, v in Counter(e["indicativo"] for e in inv).items() if v > 1]
 print("duplicados inventario:", dup_inv)
-est_md = open("notas/estaciones_aemet.md", encoding="utf-8").read()
+est_md = open("notas/fuentes/aemet/estaciones_aemet.md", encoding="utf-8").read()
 listadas = sorted(set(re.findall(r"\|\s*\**(\d{4}[A-Z]?|\d{4})\**\s*\|", est_md)))
 print("listadas en estaciones_aemet.md:", listadas)
 files = sorted(glob.glob(R+"aemet_diario_*.json"))
 print("ficheros diarios:", [os.path.basename(f) for f in files])
-cob = open("notas/cobertura_aemet.md", encoding="utf-8").read()
+cob = open("notas/fuentes/aemet/cobertura_aemet.md", encoding="utf-8").read()
 for f in files:
     ind = re.search(r"diario_(.+)\.json", f).group(1)
     d = json.load(open(f, encoding="utf-8"))

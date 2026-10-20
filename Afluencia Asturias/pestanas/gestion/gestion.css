@@ -1,4 +1,4 @@
-/* Estilos de la pestaña Funciones avanzadas (persona 2). Usa solo las variables de color de index.html. */
+/* Estilos de la pestaña Funciones avanzadas. Usa solo las variables de color de index.html. */
 
 /* ---------- Botones de paneles: solo se ve la sección elegida ---------- */
 .g-paneles { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
@@ -93,10 +93,8 @@
 
 /* ---------- Fiabilidad: gráfica de lo real frente a lo previsto ----------
  * Dos series (validadas con el comprobador de paletas de dataviz: contraste, separación
- * para daltonismo y para visión normal, en claro y en oscuro). El día normal es referencia neutra. */
-:root { --g-real: #eb6834; --g-prev: #1B5C8F; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --g-real: #d95926; --g-prev: #3987e5; } }
-:root[data-theme="dark"] { --g-real: #d95926; --g-prev: #3987e5; }
+ * para daltonismo y para visión normal, en claro y en oscuro). Sus colores, --g-real y --g-prev,
+ * están en index.html con el resto. El día normal es referencia neutra. */
 
 .g-graf-cab { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .8rem 1.5rem; margin-top: .8rem; }
 .g-graf-cab .select { min-width: 15rem; }
@@ -130,3 +128,5 @@
 .g-tip .g-tip-f { font-weight: 700; }
 .g-tip .g-tip-n { color: var(--tinta-2); font-size: .8rem; }
 .g-tip .pill { font-size: .75rem; }
+
+.g-horas-t { margin-top: 1rem; }

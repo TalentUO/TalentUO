@@ -1,16 +1,25 @@
+# Dependencias directas (Python 3.11). Versiones exactas probadas: requirements-lock.txt
+
+# Datos y tablas
 pandas
+pyarrow
+pyyaml
 requests
+
+# Descargas y lectura de fuentes
 openpyxl
 pyaxis
 pySpainMobility
 pytrends==4.9.2
 pypdf==6.20.1
-matplotlib
-pyarrow
-pymupdf
+pymupdf==1.28.2   # 2.x extrae las tablas del BOPA de otra forma
+
+# Modelo
 lightgbm==4.7.0
-shap==0.51.0
 xgboost==3.2.0
+shap==0.51.0
 scikit-learn
-pyyaml
+
+# Figuras y pruebas
+matplotlib
 pytest

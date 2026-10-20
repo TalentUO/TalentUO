@@ -1,12 +1,12 @@
 """Ejecuta el modelo de principio a fin.
 
-    python -X utf8 src/modelo/ejecutar.py --objetivo sintetico
-    python -X utf8 src/modelo/ejecutar.py --objetivo real
+    python -X utf8 src/modelo/ejecutar.py --objetivo real --algoritmo ambos   # el que publica la web
+    python -X utf8 src/modelo/ejecutar.py --objetivo sintetico                # prueba de la cadena con efectos conocidos
 
 Pasos: datos y variables -> (objetivo sintético) -> validación por bloques y
 experimentos -> métricas y fiabilidad -> modelos finales -> factores (SHAP) ->
 calibración con la regulación de los Lagos -> JSON de la web -> comprobación
-del contrato. Todo con semilla fija; tarda unos minutos como mucho.
+del contrato. Todo con semilla fija; con datos reales y --algoritmo ambos tarda unos 15 min.
 """
 from __future__ import annotations
 
@@ -17,7 +17,8 @@ import warnings
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-warnings.filterwarnings("ignore", category=UserWarning)
+# Solo los avisos informativos de las librerías del modelo; los de pandas y numpy siguen saliendo.
+warnings.filterwarnings("ignore", category=UserWarning, module=r"(lightgbm|xgboost|shap|sklearn)")
 
 import backtest  # noqa: E402
 import calibracion  # noqa: E402
@@ -64,7 +65,7 @@ def main() -> None:
     else:
         ganador = alg
         bt_all = backtest.ejecutar(D, algoritmos=[ganador], log=log)
-    bt_all.to_parquet(SALIDAS / "backtest.parquet", index=False)
+    bt_all.to_parquet(SALIDAS / "backtest.parquet", index=False, compression="zstd", compression_level=9)
     bt = bt_all[bt_all["algoritmo"] == ganador].reset_index(drop=True)
 
     log("3. Métricas y fiabilidad")

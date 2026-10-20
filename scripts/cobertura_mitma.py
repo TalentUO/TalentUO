@@ -3,7 +3,7 @@
 Para cada mes 2022-01..2025-06 y tipo (viajes, pernoctaciones): ¿existe y abre?, filas, días presentes frente a esperados,
 huecos oficiales / no oficiales, días oficialmente «sin datos» que SÍ están publicados, y filas cuyo destino
 (viajes) o zona de pernoctación (pernoctaciones) no es una zona de Asturias.
-Uso: python scripts/cobertura_mitma.py --raw C:/ruta/data/raw --zonas C:/ruta/zonas_mitma_asturias.csv --salida notas/cobertura_mitma.md
+Uso: python scripts/cobertura_mitma.py --raw C:/ruta/data/raw --zonas C:/ruta/zonas_mitma_asturias.csv --salida notas/fuentes/mitma/cobertura_mitma.md
 """
 import argparse
 import calendar

@@ -130,7 +130,7 @@ def wikipedia() -> pd.DataFrame:
 # OAPN
 # --------------------------------------------------------------------------
 
-# Cifras de referencia de notas/notas_senales.md (para contrastar lo extraído).
+# Cifras de referencia de notas/fuentes/senales/notas_senales.md (para contrastar lo extraído).
 OAPN_REF = {2015: 1913858, 2016: 2101293, 2017: 2047956, 2018: 1958240, 2019: 1791410,
             2020: 1383338, 2021: 1620739, 2022: 1798533, 2023: 1698780, 2024: 1632805, 2025: 1565899}
 OAPN_DOCS = {2022: ("oapn_visitantes_2022.pdf", 4), 2023: ("oapn_visitantes_2023.pdf", 5),
@@ -175,7 +175,7 @@ def oapn() -> pd.DataFrame:
         "anio_min": int(df["anio"].min()), "anio_max": int(df["anio"].max()),
         "verificados": int(df["verificado"].sum()),
         "no_verificados": df.loc[~df["verificado"], "anio"].tolist(),
-        "validaciones": ["cifra extraída del PDF = cifra de notas/notas_senales.md"],
+        "validaciones": ["cifra extraída del PDF = cifra de notas/fuentes/senales/notas_senales.md"],
     })
     return df
 

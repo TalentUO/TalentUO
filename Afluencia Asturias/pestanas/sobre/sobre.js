@@ -1,10 +1,10 @@
 /* ==========================================================================
- * PESTAÑA «Sobre los datos» — PROPIEDAD DE LA PERSONA 2 (rama web-gestion)
+ * PESTAÑA «Sobre los datos»
  * --------------------------------------------------------------------------
  * Misma interfaz que pestanas/gestion/gestion.js:
  *   montar(contenedor, datos, util) la primera vez; mostrar() al volver.
  * Los textos están en pestanas/sobre/contenido.js; aquí solo se maquetan,
- * con el marcado y las clases del piloto (.prosa, .leyenda, .fuentes…).
+ * con el marcado y las clases de estilos/estilos.css (.prosa, .leyenda, .fuentes…).
  * ========================================================================== */
 window.Pestanas = window.Pestanas || {};
 window.Pestanas.sobre = {

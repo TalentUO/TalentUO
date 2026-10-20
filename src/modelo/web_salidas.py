@@ -231,12 +231,13 @@ def metricas_json(D: Datos, tablas: dict, notas: pd.DataFrame, cuantiles: pd.Dat
 def ejecutar(D: Datos, bt: pd.DataFrame, finales: dict, cuantiles: pd.DataFrame, tablas_met: dict,
              notas: pd.DataFrame, calib: dict, extra_metricas: dict, log=print) -> dict:
     cab = _cabecera(D)
-    hoy = pd.Timestamp(cfg()["fecha_hoy_demo"])
+    fc, info_corto = P.futuro_corto_con_prevision(D, finales, cuantiles)
+    # "Hoy" de la web: el fijado en config o, si no hay, el día en que se emitió la previsión del tiempo.
+    hoy = pd.Timestamp(cfg().get("fecha_hoy_demo") or info_corto["fecha_emision"]).normalize()
     n = int(cfg()["dias_futuro_demo"])
     fl = P.futuro_largo(D, finales, cuantiles, hoy + pd.Timedelta(days=1), hoy + pd.Timedelta(days=n))
     fl["horizonte"] = (fl["fecha"] - hoy).dt.days
     fl["fecha_emision"] = hoy
-    fc, info_corto = P.futuro_corto_con_prevision(D, finales, cuantiles)
     hi = historico(D, bt, cuantiles)
     preds = pd.concat([fl.assign(conjunto="futuro_largo"), fc.assign(conjunto="futuro_corto"),
                        hi.assign(conjunto="historico")], ignore_index=True)
