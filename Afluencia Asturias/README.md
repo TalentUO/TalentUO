@@ -37,15 +37,14 @@ index.html                    Estructura de las 3 pestañas, variables de color 
 favicon.svg                   Icono de la pestaña del navegador (el semáforo de la cabecera)
 estilos/estilos.css           Estilos generales (solo usan las variables de index.html)
 datos/
-  modelo/salidas-inicio.js    Salidas del modelo para Inicio (GENERADO, ≈13 MB; no editar)
-  modelo/salidas.js           Salidas completas para Funciones avanzadas y Sobre los datos (GENERADO, ≈28 MB)
+  modelo/salidas-inicio.js    Salidas del modelo para Inicio (GENERADO, ≈8 MB; no editar)
+  modelo/salidas.js           Salidas completas para Funciones avanzadas y Sobre los datos (GENERADO, ≈15 MB)
   modelo/*.json               Las mismas salidas en JSON: solo respaldo con fetch en local (no se publican)
   datos.js                    Módulo «datos» (window.DatosModelo): valida y entrega las salidas
-  catalogo.js                 Lo que no son cifras (window.Catalogo): concejos, tipo de destino, lugares, criterio de eventos
+  catalogo.js                 Lo que no son cifras (window.Catalogo): concejos, tipo de destino, lugares, sitios
   fuente-modelo.js            Fuente de Inicio (window.FuenteDatos): traduce las salidas al contrato de api.js
   api.js                      Fachada window.Datos y CONTRATO documentado en su comentario inicial
   sitios.js                   141 sitios de interés (GENERADO por herramientas/construir_sitios.py)
-  eventos.js                  Eventos de PredictHQ (GENERADO por herramientas/eventos_phq.py)
 interfaz/
   app.js                      Pestaña Inicio: solo pinta y gestiona la interacción; monta las otras dos pestañas
   mapa.js                     Mapa Leaflet: zonas, concejos, etiquetas, sitios, zoom y teclado (no sabe de previsiones)
@@ -60,13 +59,13 @@ pestanas/
   sobre/contenido.js          Sus textos
 assets/sitios/                Fotos de los sitios de interés (Wikimedia Commons, 480 px)
 vendor/                       Leaflet y topojson-client
-herramientas/                 Scripts de Python que generan geo-asturias.js, sitios.js y eventos.js (no se publican)
+herramientas/                 Scripts de Python que generan geo-asturias.js y sitios.js (no se publican)
 ```
 
 ## 4. Capa de datos
 
 ```
-salidas-inicio.js ─┐                      ┌─ catalogo.js (concejos, tipos, lugares, sitios, eventos)
+salidas-inicio.js ─┐                      ┌─ catalogo.js (concejos, tipos, lugares, sitios)  
                    ├─ datos.js ─ fuente-modelo.js ─ api.js (window.Datos) ─ interfaz/app.js (Inicio)
 salidas.js ────────┘        └──────────────────────────── pestanas/ (Funciones avanzadas, Sobre los datos)
 ```
@@ -75,11 +74,11 @@ salidas.js ────────┘        └──────────�
   - `cargarInicio()` usa `salidas-inicio.js`, que `index.html` carga al principio.
   - `cargar()` usa `salidas.js`, que se inserta la primera vez que se abre Funciones avanzadas o Sobre los datos.
   - Si no hay `salidas.js`, prueba los JSON con `fetch` (solo con servidor y en local).
+  - Los `.js` generados guardan las listas largas por columnas (`{ __columnas, __filas }`) para pesar menos de la mitad; `expandir()` reconstruye los mismos objetos que los JSON del contrato.
   - Comprueba los campos obligatorios del contrato (`notas/contrato_web.md`). Si falta alguno, rechaza la promesa con un error que los enumera.
 - **`datos/catalogo.js`** (`window.Catalogo`) guarda lo que no son cifras:
   - los 78 concejos (código INE y nombre oficial), agrupados en 15 comarcas turísticas. Las comarcas solo sirven para dar a cada concejo su tipo de destino (costa, montaña, ciudad) y los lugares que encuentra el buscador;
-  - el criterio `IMPACTO` de los eventos;
-  - el acceso a `sitios.js` y `eventos.js`.
+  - el acceso a `sitios.js`.
 - **`datos/fuente-modelo.js`** (`window.FuenteDatos`) implementa el contrato para Inicio. No calcula previsiones: elige, traduce y resume lo que da el modelo.
   - Para cada fecha y zona enseña `futuro_corto` si existe y, si no, `futuro_largo`.
   - En la demo usa `historico` (modelo de largo plazo con 8 días de antelación).
@@ -101,7 +100,7 @@ Lleva además unos extras del modelo: `incierto`, `conjunto`, `modelo`, `horizon
 | `getZonas()` | `[{ id, nombre, tipos[], concejos[] (nombres), lugares[], vecinos:null, principal, sinDatos }]` |
 | `getConcejos()` | `[{ id (INE), nombre, zonaId\|null }]`; `id` es el mismo que en `geo-asturias.js` |
 | `getSitios()` | `[{ id, nombre, concejos:[INE], lat, lon, ubicacionAproximada, foto }]`: sin previsión propia, se usa la de `concejos[0]` |
-| `getEventos(desde, hasta?)` | `{ fuente, actualizado, hastaDatos, criterio, eventos[] }`: eventos grandes de PredictHQ más los festivos y partidos de la agenda del modelo |
+| `getEventos(desde, hasta?)` | `{ fuente, hastaDatos, eventos[] }`: festivos, partidos en casa y grandes eventos de la agenda de las salidas (los mismos que usa el modelo) |
 | `getCalendario(desde, dias)` | `[{ fecha, finde, festivo, puente, vacaciones }]` (calendario de las salidas del modelo) |
 | `getProximoPuente(desde)` | `{ nombre, inicio, fin } \| null` |
 | `getPrevisionDia(fecha)` | `Prevision[]`, una por zona |
@@ -157,8 +156,7 @@ Lleva además unos extras del modelo: `incierto`, `conjunto`, `modelo`, `horizon
 
   Las secciones secundarias se pliegan y recuerdan si estaban abiertas.
 - **Eventos y festivos** y **Sitios de interés** son secciones desplegables debajo del mapa.
-  - Los eventos de PredictHQ solo se muestran si pueden mover la afluencia (criterio `IMPACTO` en `catalogo.js`): asistencia ≥ 3.500 y ≥ 50 % de los visitantes de un día normal en su concejo, o ≥ 10.000 en cualquier caso.
-  - Los festivos y partidos de la agenda del modelo salen siempre.
+  - Los eventos salen de la agenda que genera `scripts/actualizar_datos_web.py`: festivos (BOE y BOPA), partidos del Real Oviedo y del Sporting en casa, y fiestas, festivales, ferias, romerías y pruebas deportivas recopilados de fuentes públicas (`data/manual/eventos_recopilado.csv`). Son los mismos que usa el modelo; los cruceros quedan fuera, como en el modelo.
   - Las fotos de los sitios llevan siempre su crédito, como exige su licencia.
 
 ### Funciones avanzadas (ayuntamientos, Principado, Parque Nacional)
@@ -215,7 +213,7 @@ Los textos están en `pestanas/sobre/contenido.js`.
 - **Responsive:** la página funciona a 390 px de ancho sin scroll horizontal. Solo las tablas, el mapa y las gráficas se desplazan dentro de su contenedor.
 - **Visibilidad:** para mostrar u ocultar se usa el atributo `hidden`.
 - **Carreras de peticiones:** las llamadas asíncronas que pintan algo usan un contador `seq*` para descartar las respuestas que llegan tarde.
-- **Ficheros generados** (`datos/modelo/*`, `geo-asturias.js`, `sitios.js`, `eventos.js`): no se editan a mano.
+- **Ficheros generados** (`datos/modelo/*`, `geo-asturias.js`, `sitios.js`): no se editan a mano.
 
 ## 7. Cómo comprobar los cambios
 
@@ -227,7 +225,7 @@ node --check interfaz/app.js interfaz/mapa.js datos/api.js datos/datos.js datos/
 
 - **Lógica de Funciones avanzadas:** abre `pestanas/gestion/pruebas.html` en el navegador (doble clic). Tiene que decir «TODO OK».
 - **Capa de datos de Inicio sin navegador:**
-  1. En Node, con `global.window = global` y `global.location = { search: '' }`, carga en este orden: `datos/sitios.js`, `datos/eventos.js`, `datos/modelo/salidas-inicio.js`, `datos/datos.js`, `datos/catalogo.js`, `datos/fuente-modelo.js` y `datos/api.js`.
+  1. En Node, con `global.window = global` y `global.location = { search: '' }`, carga en este orden: `datos/sitios.js`, `datos/modelo/salidas-inicio.js`, `datos/datos.js`, `datos/catalogo.js`, `datos/fuente-modelo.js` y `datos/api.js`.
   2. Llama a `window.Datos.*`.
 - **En el navegador:**
   - las tres pestañas;
@@ -249,7 +247,4 @@ node --check interfaz/app.js interfaz/mapa.js datos/api.js datos/datos.js datos/
 - **Sitios de interés** (`datos/sitios.js`, fotos en `assets/sitios/`):
   - `herramientas/sitios.tsv` → `buscar_sitios.py` (posición con OpenStreetMap Nominatim) → `construir_sitios.py` (requiere `pip install shapely pillow`).
   - Los sitios colocados a mano o en el centro del concejo llevan `ubicacionAproximada`.
-- **Eventos** (`datos/eventos.js`):
-  - Los genera `herramientas/eventos_phq.py` con la API de PredictHQ: radio de 95 km, solo los que caen dentro de un concejo de Asturias y con asistencia estimada ≥ 150.
-  - El token no va en la web ni en ningún fichero del proyecto. Se pasa como variable de entorno: `$env:PHQ_TOKEN = '...'; python herramientas/eventos_phq.py`.
-  - Conviene regenerarlo a menudo: PredictHQ publica los eventos con unos meses de antelación.
+- **Eventos:** ya no hay fichero propio en esta carpeta. Van en la agenda de `datos/modelo/salidas*.js`. Antes se usaban datos de PredictHQ, pero sus términos no permiten guardarlos ni publicarlos (`FUENTES_Y_LICENCIAS.md`).

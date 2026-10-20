@@ -6,7 +6,7 @@
  * No calcula previsiones: solo elige, traduce y resume lo que da el modelo.
  *
  * Lo que no son cifras (nombres de los 78 concejos, tipo de destino, lugares
- * del buscador, sitios de interés y eventos de PredictHQ) sale de
+ * del buscador y sitios de interés) sale de
  * datos/catalogo.js. El calendario (festivos, puentes, vacaciones) es el de
  * las salidas del modelo; si faltara, solo se marcan los fines de semana.
  *
@@ -211,33 +211,19 @@
     getConcejos() { return listo().then(() => M.concejos.map(c => ({ id: c.id, nombre: c.nombre, zonaId: c.zonaId }))); },
     getSitios() { return CAT.sitios(); },
     getEventos(desde, hasta) {
-      // Criterio de impacto del catálogo; el «día normal» es el del modelo (solo si la zona es ese concejo)
+      // Agenda de las salidas (festivos, partidos y grandes eventos de fuentes públicas: los mismos que usa
+      // el modelo). Con asistencia conocida, se compara con el día normal del modelo si la zona es ese concejo.
       return listo().then(() => {
-        const fuente = CAT.eventos(), crit = CAT.IMPACTO;
-        const d = { fuente: fuente.fuente, actualizado: fuente.actualizado, hastaDatos: fuente.hastaDatos, criterio: Object.assign({}, crit) };
-        const todos = fuente.eventos.filter(e => e.inicio <= (hasta || desde) && e.fin >= desde);
-        let eventos = todos.map(e => {
-          const c = M.concejoPorId[e.concejo], z = c && c.zonaId && M.zonaPorId[c.zonaId];
-          const normal = z && z.concejos.length === 1 ? z.normalTipico : null;
-          return Object.assign({}, e, { impacto: normal && e.asistencia ? e.asistencia / normal : null, normalConcejo: normal ? Math.round(normal) : null });
-        }).filter(e => e.asistencia >= crit.asistenciaSiempre || (e.impacto != null && e.impacto >= crit.minimo && e.asistencia >= crit.asistenciaMin));
-        // Festivos y partidos de fútbol de nuestros calendarios (datos.agenda): todos, sin criterio de tamaño.
-        // Si PredictHQ tiene el mismo partido (mismo día y concejo, con el club en el título), se queda el
-        // nuestro con la asistencia estimada de PredictHQ.
-        const club = { '33024': /sporting/i, '33044': /oviedo/i };
-        const agenda = ((M.d.agenda && M.d.agenda.eventos) || [])
+        const ag = M.d.agenda || { eventos: [] };
+        const eventos = ag.eventos
           .filter(e => e.inicio <= (hasta || desde) && e.fin >= desde)
           .map(e => {
-            const out = Object.assign({}, e, { impacto: null, normalConcejo: null });
-            if (e.categoria !== 'Fútbol') return out;
-            const i = eventos.findIndex(p => p.inicio === e.inicio && p.concejo === e.concejo && club[e.concejo] && club[e.concejo].test(p.titulo));
-            if (i === -1) return out;
-            const p = eventos.splice(i, 1)[0];
-            return Object.assign(out, { asistencia: p.asistencia, impacto: p.impacto, normalConcejo: p.normalConcejo });
-          });
-        eventos = eventos.concat(agenda)
+            const c = M.concejoPorId[e.concejo], z = c && c.zonaId && M.zonaPorId[c.zonaId];
+            const normal = z && z.concejos.length === 1 ? z.normalTipico : null;
+            return Object.assign({}, e, { impacto: normal && e.asistencia ? e.asistencia / normal : null, normalConcejo: normal ? Math.round(normal) : null });
+          })
           .sort((a, b) => (a.inicio < b.inicio ? -1 : a.inicio > b.inicio ? 1 : (b.asistencia || 0) - (a.asistencia || 0)));
-        return Object.assign({}, d, { eventos });
+        return { fuente: ag.origen || null, hastaDatos: ag.hasta || null, eventos };
       });
     },
     getCalendario(desde, dias) {

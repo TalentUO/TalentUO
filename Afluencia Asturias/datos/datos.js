@@ -7,8 +7,8 @@
  *
  *   window.DatosModelo.cargarInicio() -> Promise<{ predicciones, alternativas, perfil,
  *     metricas (solo cabecera, algoritmo y fiabilidad), mapeo, calendario, agenda, sintetico, aviso }>
- *     Lo que necesita la pestaña Inicio. Sale de datos/modelo/salidas-inicio.js (≈13 MB), que
- *     index.html carga al principio: así Inicio no espera a los datos de Funciones avanzadas (≈28 MB).
+ *     Lo que necesita la pestaña Inicio. Sale de datos/modelo/salidas-inicio.js (≈8 MB), que
+ *     index.html carga al principio: así Inicio no espera a los datos de Funciones avanzadas (≈15 MB).
  *
  *   window.DatosModelo.cargar() -> Promise<{
  *     predicciones, alternativas, regulacion, perfil, metricas,  // JSON tal cual
@@ -83,6 +83,24 @@ window.DatosModelo = (function () {
     return unicos.length > 15 ? unicos.slice(0, 15).concat(`… y ${unicos.length - 15} problemas más`) : unicos;
   }
 
+  // Los .js generados guardan las listas largas por columnas ({ __columnas, __filas }) para pesar menos;
+  // aquí se reconstruyen los mismos objetos que en los JSON del contrato (compactar() en scripts/actualizar_datos_web.py).
+  function expandir(v) {
+    if (Array.isArray(v)) return v.map(expandir);
+    if (v === null || typeof v !== 'object') return v;
+    if (Array.isArray(v.__columnas) && Array.isArray(v.__filas)) {
+      const cols = v.__columnas;
+      return v.__filas.map(f => {
+        const o = {};
+        for (let i = 0; i < cols.length; i++) o[cols[i]] = expandir(f[i]);
+        return o;
+      });
+    }
+    const o = {};
+    for (const k of Object.keys(v)) o[k] = expandir(v[k]);
+    return o;
+  }
+
   // Inserta un <script> (funciona también desde file://, donde fetch no puede leer ficheros)
   function insertarScript(src) {
     return new Promise((ok, ko) => {
@@ -95,9 +113,9 @@ window.DatosModelo = (function () {
   }
 
   function leer() {
-    if (window.SALIDAS_MODELO) return Promise.resolve(window.SALIDAS_MODELO);
+    if (window.SALIDAS_MODELO) return Promise.resolve(expandir(window.SALIDAS_MODELO));
     return insertarScript('datos/modelo/salidas.js')
-      .then(() => { if (!window.SALIDAS_MODELO) throw new Error('salidas.js no define SALIDAS_MODELO'); return window.SALIDAS_MODELO; })
+      .then(() => { if (!window.SALIDAS_MODELO) throw new Error('salidas.js no define SALIDAS_MODELO'); return expandir(window.SALIDAS_MODELO); })
       // Sin salidas.js se prueban los JSON; si tampoco están, el error cuenta las dos cosas
       .catch(errScript => leerJSON().catch(errJSON => {
         throw new Error(errScript.message + '; y tampoco hay copia en JSON: ' + errJSON.message);
@@ -127,8 +145,8 @@ window.DatosModelo = (function () {
   let promesaInicio = null;
   function cargarInicio() {
     if (promesaInicio) return promesaInicio;
-    const b = window.SALIDAS_MODELO_INICIO;
-    if (!b) { promesaInicio = cargar(); return promesaInicio; }
+    if (!window.SALIDAS_MODELO_INICIO) { promesaInicio = cargar(); return promesaInicio; }
+    const b = expandir(window.SALIDAS_MODELO_INICIO);
     promesaInicio = Promise.resolve().then(() => {
       const errores = validar(b, FICHEROS_INICIO);
       if (errores.length) {
@@ -172,5 +190,5 @@ window.DatosModelo = (function () {
     return promesa;
   }
 
-  return Object.freeze({ cargar, cargarInicio, validar, FICHEROS });
+  return Object.freeze({ cargar, cargarInicio, validar, expandir, FICHEROS });
 })();

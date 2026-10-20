@@ -45,11 +45,11 @@
  * getSitios()                       -> [{ id, nombre, concejos:[INE], lat, lon, ubicacionAproximada, foto:{src, autor, licencia, pagina}|null }]
  *                                      sitios de interés; concejos[0] = concejo principal. NO llevan previsión propia:
  *                                      la interfaz muestra la de su concejo. Datos reales en datos/sitios.js
- * getEventos(desde, hasta?)         -> { fuente, actualizado, hastaDatos, criterio, eventos:[{ id, titulo, categoria, inicio, fin, hora|null,
- *                                      lugar, concejo (INE), asistencia|null, impacto|null, normalConcejo|null, … }] }
- *                                      eventos que se solapan con las fechas: los de PredictHQ (datos/eventos.js) que pueden
- *                                      mover la afluencia (criterio de datos/catalogo.js) más los festivos y partidos de la
- *                                      agenda del modelo. hastaDatos = último día con eventos publicados en PredictHQ
+ * getEventos(desde, hasta?)         -> { fuente, hastaDatos, eventos:[{ id, titulo, categoria, inicio, fin, hora|null,
+ *                                      lugar, concejo (INE)|null, asistencia|null, impacto|null, normalConcejo|null }] }
+ *                                      eventos que se solapan con las fechas: festivos, partidos en casa y grandes eventos
+ *                                      de la agenda de las salidas (los mismos que usa el modelo). hastaDatos = último día
+ *                                      con eventos en la agenda
  * getCalendario(desde, dias)        -> [{ fecha, finde, festivo|null, puente|null, vacaciones|null }]
  * getProximoPuente(desde)           -> { nombre, inicio, fin } | null
  * getPrevisionDia(fecha)            -> Prevision[]   (una por zona)

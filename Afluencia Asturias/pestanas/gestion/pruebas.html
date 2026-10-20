@@ -6,11 +6,12 @@
 <p>Se ejecutan al abrir la página (doble clic). Usan las salidas reales del modelo en <code>datos/modelo/salidas.js</code>.</p>
 <ul id="res"></ul>
 <script src="../../datos/modelo/salidas.js"></script>
+<script src="../../datos/datos.js"></script>
 <script src="config-gestion.js"></script>
 <script src="logica.js"></script>
 <script>
 (function () {
-  const L = window.GestionLogica, D = window.SALIDAS_MODELO, C = window.GestionConfig;
+  const L = window.GestionLogica, D = window.DatosModelo.expandir(window.SALIDAS_MODELO), C = window.GestionConfig;
   const res = document.getElementById('res');
   let fallos = 0, total = 0;
   function prueba(nombre, fn) {

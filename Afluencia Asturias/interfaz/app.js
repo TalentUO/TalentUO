@@ -1231,8 +1231,8 @@
   }
 
   /* ====================================================================
-   * Eventos (PredictHQ)
-   * Datos reales; la asistencia es la estimación de PredictHQ.
+   * Eventos: agenda de las salidas del modelo (festivos, partidos y grandes eventos
+   * de fuentes públicas). La asistencia, cuando la hay, es la que publica la fuente.
    * ==================================================================== */
   const PASO_EVENTOS = 20;
   const ICONO_EVENTO = '<svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.8" y="3" width="12.4" height="11" rx="2" class="ico-trazo"/><path d="M1.8 6.6h12.4M5 1.6v2.8M11 1.6v2.8" class="ico-trazo"/></svg>';
@@ -1246,7 +1246,7 @@
         <p class="ev-titulo">${esc(e.titulo)}</p>
         <p class="ev-meta"><span class="sr">${esc(fechaLarga(e.inicio))}. </span><span class="ev-cat">${esc(e.categoria)}</span>
           ${esc(fechaEvento(e))}${e.lugar ? ' · ' + esc(e.lugar) : ''}${conConcejo && e.concejo ? ' · ' + esc(nombreC(e.concejo)) : ''}</p>
-        ${e.asistencia ? `<p class="ev-asis">Unos ${num(e.asistencia)} asistentes previstos${e.impacto ? `<span class="ev-imp">: ${e.impacto >= 1 ? `${String(Math.round(e.impacto * 10) / 10).replace('.', ',')} veces` : `el ${Math.round(e.impacto * 100)}${NBSP}% de`} los visitantes de un día normal en ${esc(nombreC(e.concejo))}</span>` : ''}</p>` : ''}
+        ${e.asistencia ? `<p class="ev-asis">Unas ${num(e.asistencia)} personas, según la fuente${e.impacto ? `<span class="ev-imp">: ${e.impacto >= 1 ? `${String(Math.round(e.impacto * 10) / 10).replace('.', ',')} veces` : `el ${Math.round(e.impacto * 100)}${NBSP}% de`} los visitantes de un día normal en ${esc(nombreC(e.concejo))}</span>` : ''}</p>` : ''}
       </div>
       ${conConcejo && e.concejo ? `<button type="button" class="btn-mini" data-concejo="${e.concejo}">Ver el concejo<span class="sr"> de ${esc(nombreC(e.concejo))}</span></button>` : ''}
     </li>`;
@@ -1278,8 +1278,7 @@
     const lista = d.eventos.filter(e => (cat === 'todas' || e.categoria === cat) && (!e.concejo || coincideTipo(E.zonasPorId[zonaDeConcejo(e.concejo)])));
     const vis = lista.slice(0, E.eventosVisibles);
     $('#eventos-sub').textContent = textoSel() + (E.tipo === 'todos' ? '' : ' · Solo ' + TIPO_NOMBRE[E.tipo].toLowerCase());
-    $('#eventos-nota').textContent = 'Festivos de Asturias y de cada concejo (BOE y BOPA), partidos del Real Oviedo y del Sporting en su estadio, y conciertos, ferias y otros eventos con mucho público (PredictHQ'
-      + (d.hastaDatos ? `, publicados hasta el ${fechaLarga(d.hastaDatos).toLowerCase()}` : '') + '). Son días en los que puede venir más gente de lo normal.';
+    $('#eventos-nota').textContent = 'Festivos de Asturias y de cada concejo (BOE y BOPA), partidos del Real Oviedo y del Sporting en su estadio, y grandes fiestas, festivales, ferias y pruebas deportivas recopilados de sus webs oficiales y de prensa. Son días en los que puede venir más gente de lo normal.';
     let vacio = '';
     if (!lista.length) {
       vacio = d.hastaDatos && E.desde > d.hastaDatos

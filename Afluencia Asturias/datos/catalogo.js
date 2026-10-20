@@ -5,9 +5,7 @@
  *   - los 78 concejos de Asturias (código INE y nombre oficial), agrupados en
  *     15 comarcas turísticas que solo sirven para dar a cada concejo su tipo
  *     de destino (costa, montaña, ciudad) y los lugares que encuentra el buscador;
- *   - el criterio para decidir qué eventos de PredictHQ pueden mover la afluencia;
- *   - el acceso a los sitios de interés (datos/sitios.js) y a los eventos
- *     (datos/eventos.js).
+ *   - el acceso a los sitios de interés (datos/sitios.js).
  * Las zonas de la previsión son las del modelo (mapeo de salidas-inicio.js),
  * no estas comarcas. Lo usa datos/fuente-modelo.js.
  * ========================================================================== */
@@ -81,14 +79,8 @@ window.Catalogo = (function () {
     ['33055', 'Ribadedeva', 'cabrales']
   ];
 
-  // Eventos que pueden mover la afluencia: impacto = asistencia / visitantes de un día normal
-  // en su concejo. Grande si impacto ≥ minimo y asistencia ≥ asistenciaMin, o si la asistencia
-  // supera asistenciaSiempre en cualquier caso.
-  const IMPACTO = Object.freeze({ minimo: 0.5, asistenciaMin: 3500, asistenciaSiempre: 10000 });
-
   const copia = a => a.slice();
   return Object.freeze({
-    IMPACTO,
     // [{ id, tipos, lugares, concejos:[INE] }]
     zonas: () => ZONAS.map(z => ({ id: z.id, tipos: copia(z.tipos), lugares: copia(z.lugares),
       concejos: CONCEJOS.filter(c => c[2] === z.id).map(c => c[0]) })),
@@ -96,7 +88,5 @@ window.Catalogo = (function () {
     concejos: () => CONCEJOS.map(([id, nombre, zonaId]) => ({ id, nombre, zonaId })),
     // Sitios de interés (datos/sitios.js): sin previsión propia
     sitios: () => (window.SitiosTuristicos || []).map(s => Object.assign({}, s, { concejos: s.concejos.slice(), foto: s.foto && Object.assign({}, s.foto) })),
-    // Eventos de PredictHQ (datos/eventos.js), tal cual
-    eventos: () => window.EventosAsturias || { eventos: [], actualizado: null, hastaDatos: null, fuente: 'PredictHQ' },
   });
 })();

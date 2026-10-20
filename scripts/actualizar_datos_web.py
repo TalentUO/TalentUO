@@ -32,6 +32,10 @@ SALIDAS = RAIZ / "salidas"
 CONFIG = RAIZ / "config"
 DESTINO = RAIZ / "Afluencia Asturias" / "datos" / "modelo"
 FICHEROS = ("predicciones", "alternativas", "regulacion", "perfil", "metricas")
+# Grandes eventos de eventos_diario que salen en la web (tipo -> categoría visible)
+CATEGORIA_EVENTO = {"fiesta": "Fiestas", "festival": "Festival", "feria": "Feria", "romeria": "Romería",
+                    "deportivo": "Deporte"}
+MIN_FILAS_COMPACTAR = 50  # listas más cortas se dejan tal cual en los .js (no compensa)
 
 
 def leer_mapeo(ruta: Path) -> list[dict]:
@@ -91,12 +95,13 @@ def _norm_concejo(s) -> str:
 
 
 def leer_agenda(mapeo: list[dict]) -> dict | None:
-    """Festivos (de Asturias y locales) y partidos de fútbol en casa, para la sección de eventos.
+    """Festivos, partidos de fútbol en casa y grandes eventos, para la sección de eventos de la web.
 
     Fuentes: data/clean/calendario_diario.parquet (festivos de Asturias), festivos_locales.parquet
     (BOPA, un festivo por concejo) y eventos_diario.parquet (partidos del Real Oviedo y del Sporting
-    en su estadio). Mismo formato que los eventos de PredictHQ (datos/eventos.js); concejo = código INE
-    o null si es de toda Asturias.
+    en su estadio, y fiestas, festivales, ferias, romerías y pruebas deportivas recopilados de fuentes
+    públicas: data/manual/eventos_recopilado.csv). Son los mismos eventos que usa el modelo; los cruceros
+    se dejan fuera, como en el modelo. concejo = código INE o null si es de toda Asturias.
     """
     try:
         import pandas as pd
@@ -104,7 +109,7 @@ def leer_agenda(mapeo: list[dict]) -> dict | None:
         loc = pd.read_parquet(RAIZ / "data" / "clean" / "festivos_locales.parquet")
         ev = pd.read_parquet(RAIZ / "data" / "clean" / "eventos_diario.parquet")
     except Exception as e:
-        print(f"AVISO: sin festivos ni partidos ({e}); los eventos serán solo los de PredictHQ")
+        print(f"AVISO: sin festivos ni eventos ({e}); la sección de eventos saldrá vacía")
         return None
     # Nombre de concejo -> INE, con los concejos del mapeo (concejo_eventos e INE en el mismo orden)
     ine = {}
@@ -146,11 +151,24 @@ def leer_agenda(mapeo: list[dict]) -> dict | None:
         out.append({"id": f"pf-{dia(r.fecha)}-{c}", "titulo": texto(r.evento) or "Partido de fútbol",
                     "categoria": "Fútbol", "inicio": dia(r.fecha), "fin": dia(r.fecha), "hora": texto(r.hora_ini),
                     "lugar": lugar, "concejo": c, "asistencia": None})
+    grandes = ev[ev["tipo"].isin(CATEGORIA_EVENTO)].drop_duplicates(["evento", "fecha_ini"])  # uno por evento
+    for r in grandes.itertuples():
+        c = ine.get(_norm_concejo(r.concejo))
+        if not c:
+            sin.add(r.concejo)
+            continue
+        aforo = None if pd.isna(r.aforo) else int(r.aforo)
+        out.append({"id": f"ev-{dia(r.fecha_ini)}-{c}-{_norm_concejo(r.evento)[:40].replace(' ', '-')}",
+                    "titulo": texto(r.evento), "categoria": CATEGORIA_EVENTO[r.tipo],
+                    "inicio": dia(r.fecha_ini), "fin": dia(r.fecha_fin), "hora": texto(r.hora_ini),
+                    "lugar": texto(r.lugar) or (" y ".join(r.concejos_evento.split(";"))
+                                                if r.evento_multiconcejo else ""),
+                    "concejo": c, "asistencia": aforo})
     if sin:
         print(f"AVISO: concejos sin código INE en el mapeo (se omiten): {sorted(sin)}")
     out.sort(key=lambda e: (e["inicio"], e["categoria"], e["titulo"]))
     return {"origen": "data/clean/calendario_diario.parquet, festivos_locales.parquet, eventos_diario.parquet",
-            "eventos": out}
+            "hasta": max(e["fin"] for e in out) if out else None, "eventos": out}
 
 
 def leer_comarcas() -> dict | None:
@@ -208,6 +226,30 @@ def leer_horas() -> dict | None:
     return {"origen": "data/clean/llegadas_por_hora.parquet", "filas": filas}
 
 
+def compactar(v):
+    """Listas largas de objetos con las mismas claves -> {"__columnas": [...], "__filas": [[...], ...]}.
+
+    Solo en los .js de la web (los JSON del contrato no cambian): las claves dejan de repetirse en cada fila
+    y el fichero pesa menos de la mitad. `expandir` de datos/datos.js reconstruye los mismos objetos.
+    """
+    if isinstance(v, dict):
+        return {k: compactar(x) for k, x in v.items()}
+    if isinstance(v, list):
+        if len(v) >= MIN_FILAS_COMPACTAR and all(isinstance(x, dict) for x in v):
+            cols = list(v[0])
+            if all(list(x) == cols for x in v):
+                return {"__columnas": cols, "__filas": [[compactar(x[c]) for c in cols] for x in v]}
+        return [compactar(x) for x in v]
+    return v
+
+
+def escribir_js(ruta: Path, variable: str, datos: dict, nota: str = "") -> None:
+    ruta.write_text(
+        f"// GENERADO por scripts/actualizar_datos_web.py. No editar a mano.{nota}\n"
+        f"window.{variable} = " + json.dumps(compactar(datos), ensure_ascii=False, separators=(",", ":")) + ";\n",
+        encoding="utf-8")
+
+
 def main() -> None:
     faltan = [n for n in FICHEROS if not (SALIDAS / f"{n}.json").exists()]
     if faltan:
@@ -257,10 +299,7 @@ def main() -> None:
     if horas:
         paquete["horas"] = horas
         (DESTINO / "horas.json").write_text(json.dumps(horas, ensure_ascii=False), encoding="utf-8")
-    (DESTINO / "salidas.js").write_text(
-        "// GENERADO por scripts/actualizar_datos_web.py. No editar a mano.\n"
-        "window.SALIDAS_MODELO = " + json.dumps(paquete, ensure_ascii=False, separators=(",", ":")) + ";\n",
-        encoding="utf-8")
+    escribir_js(DESTINO / "salidas.js", "SALIDAS_MODELO", paquete)
 
     # Versión ligera para la pestaña Inicio (la que carga index.html al principio): sin regulacion,
     # métricas solo con cabecera, algoritmo y fiabilidad, y el calendario recortado a las fechas útiles.
@@ -280,10 +319,7 @@ def main() -> None:
         desde = (date.fromisoformat(fechas[0]) - timedelta(days=31)).isoformat()
         hasta = (date.fromisoformat(max(fechas[-1], datos["predicciones"]["fecha_hoy"])) + timedelta(days=400)).isoformat()
         inicio["calendario"] = dict(calendario, dias=[d for d in calendario["dias"] if desde <= d["fecha"] <= hasta])
-    (DESTINO / "salidas-inicio.js").write_text(
-        "// GENERADO por scripts/actualizar_datos_web.py. No editar a mano. Datos de la pestaña Inicio.\n"
-        "window.SALIDAS_MODELO_INICIO = " + json.dumps(inicio, ensure_ascii=False, separators=(",", ":")) + ";\n",
-        encoding="utf-8")
+    escribir_js(DESTINO / "salidas-inicio.js", "SALIDAS_MODELO_INICIO", inicio, " Datos de la pestaña Inicio.")
 
     sint = {d.get("sintetico") for d in datos.values()}
     print(f"Copiados {len(FICHEROS)} JSON a {DESTINO.relative_to(RAIZ)}")
