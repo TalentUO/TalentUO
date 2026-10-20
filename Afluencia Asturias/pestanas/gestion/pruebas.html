@@ -23,84 +23,9 @@
   const igual = (a, b, m) => { if (a !== b) throw new Error((m || '') + ' esperado ' + b + ', obtenido ' + a); };
   const cierto = (c, m) => { if (!c) throw new Error(m || 'no se cumple'); };
 
-  const principal = L.zonaPrincipal(D);
+  const principal = L.zonas(D)[0];
 
-  prueba('la zona principal va primero', () => cierto(principal.es_principal && L.zonas(D)[0] === principal));
-
-  prueba('observados: coinciden con curva_umbral en toda la rejilla', () => {
-    L.zonas(D).forEach(z => L.umbralesDisponibles(D).forEach(u => {
-      [2023, 2024].forEach(a => {
-        const c = D.regulacion.por_zona.find(x => x.zona_mitma_id === z.zona_mitma_id).curva_umbral.find(x => x.anio === a && x.umbral === u);
-        igual(L.diasSobreUmbral(D, z.zona_mitma_id, a, u).dias, c.dias, z.zona_mitma_id + ' ' + a + ' ' + u);
-      });
-    }));
-  });
-
-  prueba('observado fuera de la rejilla: sin dato (no se interpola)', () => {
-    const r = L.diasSobreUmbral(D, principal.zona_mitma_id, 2024, 2.1);
-    igual(r.dias, null); igual(r.exacto, false);
-  });
-
-  prueba('previstos recalculados desde el cociente coinciden con curva_umbral (±3 días por redondeo)', () => {
-    L.zonas(D).forEach(z => L.umbralesDisponibles(D).forEach(u => {
-      [2026, 2027].forEach(a => {
-        const c = D.regulacion.por_zona.find(x => x.zona_mitma_id === z.zona_mitma_id).curva_umbral.find(x => x.anio === a && x.umbral === u);
-        const r = L.diasSobreUmbral(D, z.zona_mitma_id, a, u);
-        const tag = z.zona_mitma_id + ' ' + a + ' ' + u;
-        // El JSON redondea cociente, p10 y p90: se admite 3 días de diferencia con la curva del modelo
-        const casi = (x, y, m) => cierto(Math.abs(x - y) <= 3, m + ' esperado ' + y + ', obtenido ' + x);
-        casi(r.dias, c.dias, tag + ' dias');
-        if (c.dias_min != null) { casi(r.min, c.dias_min, tag + ' min'); casi(r.max, c.dias_max, tag + ' max'); }
-      });
-    }));
-  });
-
-  prueba('con los umbrales por defecto cuadra con dias_alerta y dias_rojos de cada año', () => {
-    const u = D.regulacion.umbrales;
-    D.regulacion.por_zona.forEach(z => z.anios.forEach(a => {
-      igual(L.diasSobreUmbral(D, z.zona_mitma_id, a.anio, u.ambar).dias, a.dias_alerta, z.zona_mitma_id + ' ' + a.anio + ' alerta');
-      igual(L.diasSobreUmbral(D, z.zona_mitma_id, a.anio, u.rojo).dias, a.dias_rojos, z.zona_mitma_id + ' ' + a.anio + ' rojos');
-    }));
-  });
-
-  prueba('subir el umbral nunca aumenta los días (monotonía)', () => {
-    L.zonas(D).forEach(z => [2023, 2024, 2026, 2027].forEach(a => {
-      let previo = Infinity;
-      L.umbralesDisponibles(D).forEach(u => { const d = L.diasSobreUmbral(D, z.zona_mitma_id, a, u).dias; cierto(d <= previo, z.zona_mitma_id + ' ' + a + ' ' + u); previo = d; });
-    }));
-  });
-
-  prueba('umbral entre puntos de la rejilla funciona en previstos y es intermedio', () => {
-    const a = L.diasSobreUmbral(D, principal.zona_mitma_id, 2026, 2.0).dias;
-    const m = L.diasSobreUmbral(D, principal.zona_mitma_id, 2026, 2.1).dias;
-    const b = L.diasSobreUmbral(D, principal.zona_mitma_id, 2026, 2.2).dias;
-    cierto(a >= m && m >= b, a + ' ' + m + ' ' + b);
-  });
-
-  prueba('veredicto según el criterio editable', () => {
-    igual(L.veredicto(30), 'estudiar'); igual(L.veredicto(29), 'vigilar'); igual(L.veredicto(10), 'vigilar');
-    igual(L.veredicto(9), 'ok'); igual(L.veredicto(null), 'sin_dato');
-    igual(L.veredicto(5, { criterio: { estudiar: 5, vigilar: 2 } }), 'estudiar', 'config propia');
-  });
-
-  prueba('tablaRegulacion: una fila por zona, principal primero, 4 años', () => {
-    const t = L.tablaRegulacion(D, 1.5);
-    igual(t.length, D.predicciones.zonas.length); igual(t[0].es_principal, true); igual(t[0].anios.length, 4);
-    igual(t[0].anioReferencia, 2026);
-  });
-
-  prueba('Lagos: dias_regulados y reparto de alertas coherentes con regulacion.json', () => {
-    const l = L.compararLagos(D);
-    igual(l.zona_mitma_id, principal.zona_mitma_id);
-    l.anios.forEach((a, i) => {
-      const o = D.regulacion.lagos.por_anio[i];
-      igual(a.dias_regulados, o.dias_regulados);
-      igual(a.alerta_en_regulados + a.alerta_fuera, o.alerta_en_dias_regulados + o.alerta_fuera_de_regulacion);
-      cierto(a.pct_alertas_en_regulados >= 0 && a.pct_alertas_en_regulados <= 100);
-    });
-    igual(l.anios.filter(a => a.supuesta).length, 1, 'solo 2027 supuesto');
-    cierto(l.calibracion && l.calibracion.mejor_umbral > 0);
-  });
+  prueba('la zona principal va primero', () => cierto(principal.es_principal));
 
   prueba('alertas: ventana de 28 días desde fecha_hoy, 5 zonas por día, ordenadas', () => {
     const f = L.alertasProximas(D);
@@ -134,6 +59,13 @@
     });
   });
 
+  prueba('alertas: el acceso regulado a los Lagos solo se marca en su zona', () => {
+    const zl = D.regulacion.lagos.zona_mitma_id;
+    const f = L.alertasProximas(D, { dias: 366 });
+    f.forEach(a => { if (a.zona_mitma_id !== zl) igual(a.lagos_regulado, null, a.fecha + ' ' + a.zona_mitma_id); });
+    cierto(f.some(a => a.zona_mitma_id === zl && a.lagos_regulado === true), 'ningún día regulado en la zona de los Lagos');
+  });
+
   prueba('fiabilidad: filas ordenadas 1..7, 8+ y grupos con n sumado', () => {
     const f = L.fiabilidad(D, principal.zona_mitma_id);
     igual(f.filas.map(x => x.horizonte_txt).join(','), '1,2,3,4,5,6,7,8+');
@@ -160,11 +92,6 @@
     igual(L.csvPrevision(f, false).split('\r\n')[0].includes('aviso'), false);
   });
 
-  prueba('CSV de regulación: una línea por zona', () => {
-    const t = L.tablaRegulacion(D, 1.5);
-    igual(L.csvRegulacion(t, 1.5, false).split('\r\n').length, t.length + 1);
-  });
-
   /* ---------- Previsión de saturación ---------- */
 
   prueba('saturación: con el umbral rojo cuadra con los días rojos de 2027 previstos (año completo)', () => {
@@ -186,6 +113,13 @@
       igual(z.rachas.reduce((s, r) => s + r.dias, 0), z.dias.length, 'rachas');
       if (z.dias.length) igual(z.pico.cociente, Math.max(...z.dias.map(d => d.cociente)));
     });
+  });
+
+  prueba('saturación: con las filas ya calculadas da lo mismo que sin ellas', () => {
+    const desde = D.predicciones.fecha_hoy, hasta = L.sumarDias(desde, 90);
+    const filas = L.alertasProximas(D, { desde, dias: L.diasEntreISO(desde, hasta) + 1 });
+    L.umbralesDisponibles(D).forEach(u => igual(JSON.stringify(L.previsionSaturacion(D, { desde, hasta, umbral: u, filas })),
+      JSON.stringify(L.previsionSaturacion(D, { desde, hasta, umbral: u })), 'umbral ' + u));
   });
 
   prueba('saturación: subir el umbral nunca aumenta los días', () => {

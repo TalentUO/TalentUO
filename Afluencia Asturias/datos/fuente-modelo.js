@@ -5,10 +5,10 @@
  * Inicio a partir del módulo «datos» (window.DatosModelo, datos/datos.js).
  * No calcula previsiones: solo elige, traduce y resume lo que da el modelo.
  *
- * Se carga DESPUÉS de fuente-ficticia.js y la sustituye. Del piloto solo se
- * reutiliza lo que no son cifras: nombres de los 78 concejos, tipo de destino
- * (costa, montaña, ciudad), sitios de interés, eventos de PredictHQ y, si no
- * hay calendario oficial en las salidas, su calendario aproximado.
+ * Lo que no son cifras (nombres de los 78 concejos, tipo de destino, lugares
+ * del buscador, sitios de interés y eventos de PredictHQ) sale de
+ * datos/catalogo.js. El calendario (festivos, puentes, vacaciones) es el de
+ * las salidas del modelo; si faltara, solo se marcan los fines de semana.
  *
  * Qué predicción se enseña para una fecha y una zona (notas/contrato_web.md):
  *   futuro_corto si existe; si no, futuro_largo; si no, historico (solo en
@@ -21,7 +21,7 @@
 (function () {
   'use strict';
 
-  const piloto = window.FuenteDatos; // fuente-ficticia.js: solo nombres, tipos, sitios, eventos y calendario de reserva
+  const CAT = window.Catalogo; // datos/catalogo.js
   const DM = window.DatosModelo;
 
   const DEMO = /[?&]demo=1\b/.test(location.search);
@@ -80,14 +80,15 @@
       if (zonaDeConcejo[c]) repetidos.push(`${c} en ${zonaDeConcejo[c]} y ${z.id}`);
       else zonaDeConcejo[c] = z.id;
     }));
-    if (repetidos.length) console.info('Concejos en más de una zona (se pinta en la más concreta):', repetidos.join('; '));
+    if (DEMO && repetidos.length) console.info('Concejos en más de una zona (se pinta en la más concreta):', repetidos.join('; '));
 
-    // Nombres y tipo de destino de cada concejo, del piloto (no son cifras)
-    const zonasPiloto = {};
-    piloto.getZonas().forEach(z => { zonasPiloto[z.id] = z; });
-    const concejos = piloto.getConcejos().map(c => ({
+    // Nombres y tipo de destino de cada concejo, del catálogo (no son cifras)
+    const comarcas = CAT.zonas();
+    const comarcaPorId = {};
+    comarcas.forEach(z => { comarcaPorId[z.id] = z; });
+    const concejos = CAT.concejos().map(c => ({
       id: c.id, nombre: c.nombre, zonaId: zonaDeConcejo[c.id] || null,
-      tipos: (zonasPiloto[c.zonaId] || { tipos: [] }).tipos,
+      tipos: (comarcaPorId[c.zonaId] || { tipos: [] }).tipos,
     }));
     const concejoPorId = {};
     concejos.forEach(c => { concejoPorId[c.id] = c; });
@@ -95,10 +96,10 @@
       const cs = z.ine.map(i => concejoPorId[i]).filter(Boolean);
       z.concejos = cs.filter(c => c.zonaId === z.id);
       z.tipos = Array.from(new Set([].concat.apply([], cs.map(c => c.tipos))));
-      // Lugares: los del piloto cuyas zonas caen enteras dentro de esta zona del modelo
-      z.lugares = [].concat.apply([], Object.keys(zonasPiloto).map(k => zonasPiloto[k])
-        .filter(zp => { const ids = piloto.getConcejos().filter(c => c.zonaId === zp.id).map(c => c.id); return ids.length && ids.every(i => zonaDeConcejo[i] === z.id); })
-        .map(zp => zp.lugares));
+      // Lugares: los de las comarcas del catálogo que caen enteras dentro de esta zona del modelo
+      z.lugares = [].concat.apply([], comarcas
+        .filter(zc => zc.concejos.length && zc.concejos.every(i => zonaDeConcejo[i] === z.id))
+        .map(zc => zc.lugares));
       const normales = pred.predicciones.filter(r => r.zona_mitma_id === z.id && r.normal != null).map(r => r.normal);
       z.normalTipico = mediana(normales);
     });
@@ -109,12 +110,9 @@
     const alternativas = {};
     d.alternativas.alternativas.forEach(a => { alternativas[[a.fecha, a.zona_mitma_id, a.conjunto, a.modelo, a.horizonte].join('|')] = a; });
 
-    // Calendario oficial (si el script lo ha exportado)
-    let calendario = null;
-    if (d.calendario && Array.isArray(d.calendario.dias)) {
-      calendario = {};
-      d.calendario.dias.forEach(x => { calendario[x.fecha] = x; });
-    }
+    // Calendario oficial (si el script lo ha exportado; si no, vacío: solo fines de semana)
+    const calendario = {};
+    if (d.calendario && Array.isArray(d.calendario.dias)) d.calendario.dias.forEach(x => { calendario[x.fecha] = x; });
 
     M = {
       d, umbrales, elegida, hoy, ultimo, zonas, zonaPorId, concejos, concejoPorId, alternativas, calendario,
@@ -200,7 +198,7 @@
         horizonteDias: Math.round((deISO(M.ultimo) - deISO(M.hoy)) / 86400000) + 1,
         diasConMeteo: M.diasConMeteo,
         umbrales: Object.assign({}, M.umbrales),
-        ficticio: false, sintetico: M.d.sintetico, demo: DEMO,
+        sintetico: M.d.sintetico, demo: DEMO,
       }));
     },
     getZonas() {
@@ -211,13 +209,13 @@
       })));
     },
     getConcejos() { return listo().then(() => M.concejos.map(c => ({ id: c.id, nombre: c.nombre, zonaId: c.zonaId }))); },
-    getSitios() { return piloto.getSitios(); },
+    getSitios() { return CAT.sitios(); },
     getEventos(desde, hasta) {
-      // Mismo criterio que el piloto, pero el «día normal» es el del modelo (solo si la zona es ese concejo)
+      // Criterio de impacto del catálogo; el «día normal» es el del modelo (solo si la zona es ese concejo)
       return listo().then(() => {
-        const d = piloto.getEventos(desde, hasta); // ya filtrados por fechas con el criterio del piloto…
-        const todos = (window.EventosAsturias || { eventos: [] }).eventos.filter(e => e.inicio <= (hasta || desde) && e.fin >= desde);
-        const crit = d.criterio || { minimo: 0.5, asistenciaMin: 3500, asistenciaSiempre: 10000 };
+        const fuente = CAT.eventos(), crit = CAT.IMPACTO;
+        const d = { fuente: fuente.fuente, actualizado: fuente.actualizado, hastaDatos: fuente.hastaDatos, criterio: Object.assign({}, crit) };
+        const todos = fuente.eventos.filter(e => e.inicio <= (hasta || desde) && e.fin >= desde);
         let eventos = todos.map(e => {
           const c = M.concejoPorId[e.concejo], z = c && c.zonaId && M.zonaPorId[c.zonaId];
           const normal = z && z.concejos.length === 1 ? z.normalTipico : null;
@@ -244,7 +242,6 @@
     },
     getCalendario(desde, dias) {
       return listo().then(() => {
-        if (!M.calendario) return piloto.getCalendario(desde, dias);
         const out = [];
         for (let i = 0; i < dias; i++) {
           const f = sumar(desde, i), x = diaCalendario(f);
@@ -256,7 +253,6 @@
     },
     getProximoPuente(desde) {
       return listo().then(() => {
-        if (!M.calendario) return piloto.getProximoPuente(desde);
         for (let i = 0; i < 400; i++) {
           const f = sumar(desde, i), x = M.calendario[f];
           if (!x) break;
@@ -284,14 +280,14 @@
         return r.factores.map(f => ({ clave: f.nombre, texto: f.nombre, efecto: Math.round(f.efecto_pct) }));
       });
     },
-    // Mejor día: el de alternativas.json si el día está en alerta; si no, el de menos presión de la ventana
+    // Día con menos presión de la ventana (la interfaz lo usa si el modelo no propone un mejor día)
     getMejorMomento(zonaId, desde, dias) {
       return listo().then(() => {
         const serie = [];
         for (let i = 0; i < dias; i++) { const p = prevision(zonaId, sumar(desde, i)); if (p.ratio != null) serie.push(p); }
         if (!serie.length) return null;
         const dia = serie.reduce((a, b) => (b.ratio < a.ratio ? b : a));
-        return { dia, hora: null };
+        return { dia };
       });
     },
     // Mejor día alternativo de alternativas.json (solo existe si ese día está en ámbar o rojo):
@@ -333,7 +329,7 @@
         return out;
       });
     },
-    // Quién viene: perfil.json del mes de la fecha (media histórica de la zona en ese mes)
+    // Quién viene: perfil.json del mes de la fecha (media histórica de la zona en ese mes; en un periodo, el del primer día)
     getPerfil(zonaId, fecha) {
       return listo().then(() => {
         const mes = +fecha.slice(5, 7);

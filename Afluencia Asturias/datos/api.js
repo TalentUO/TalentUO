@@ -1,17 +1,14 @@
 /* ==========================================================================
  * CAPA DE ACCESO A DATOS
  * --------------------------------------------------------------------------
- * La interfaz SOLO habla con window.Datos. Este archivo no sabe de dónde
- * salen los números: delega en window.FuenteDatos, que hoy es
- * datos/fuente-ficticia.js.
+ * La pestaña Inicio (interfaz/app.js) SOLO habla con window.Datos. Este
+ * archivo no sabe de dónde salen los números: delega en window.FuenteDatos,
+ * que define datos/fuente-modelo.js a partir de las salidas del modelo.
+ * Cada función devuelve una promesa, que se guarda en caché por argumentos.
  *
- * Para conectar el modelo real:
- *   1. Crea datos/fuente-modelo.js que defina window.FuenteDatos con las
- *      funciones de abajo. Pueden ser síncronas o devolver promesas
- *      (por ejemplo, con fetch('/api/prevision?fecha=...')).
- *   2. En index.html, cambia <script src="datos/fuente-ficticia.js"> por
- *      <script src="datos/fuente-modelo.js">.
- *   No hay que tocar nada en interfaz/.
+ * Para cambiar de fuente basta con otro fichero que defina window.FuenteDatos
+ * con las funciones de abajo (síncronas o con promesas) y cargarlo en
+ * index.html en lugar de fuente-modelo.js. No hay que tocar interfaz/.
  *
  * --------------------------------------------------------------------------
  * CONTRATO
@@ -29,6 +26,8 @@
  *   conMeteo,               // la predicción usa meteorología
  *   motivo?                 // texto, solo si nivel = 'gris'
  * }
+ * Extras del modelo que la interfaz usa si están: incierto, conjunto, modelo, horizonte,
+ * fechaEmision, observado, ratioObservado, nivelObservado (los tres últimos, solo en la demo).
  *
  * PrevisionPeriodo = Prevision con valores MEDIOS por día del periodo, más {
  *   desde, hasta, dias,     // fechas incluidas y número de días
@@ -36,18 +35,21 @@
  *   diasPorNivel            // { verde, ambar, rojo } días de cada nivel, o null
  * }                         // conMeteo = true solo si todos los días tienen meteorología
  *
- * getInfo()                         -> { hoy, horizonteDias, diasConMeteo, umbrales:{ambar, rojo}, ficticio }
- *                                      horizonteDias = días que se pueden elegir desde hoy (366 = un año)
- * getZonas()                        -> [{ id, nombre, tipos:['costa'|'montana'|'ciudad'], concejos[], lugares[], vecinos, sinDatos }]
- * getConcejos()                     -> [{ id, nombre, zonaId }]   id = código INE (5 cifras, '33xxx'),
- *                                      el mismo que usa interfaz/geo-asturias.js; cada concejo pertenece a una zona
+ * getInfo()                         -> { hoy, horizonteDias, diasConMeteo, umbrales:{ambar, rojo}, sintetico, demo }
+ *                                      horizonteDias = días que se pueden elegir desde hoy (hasta el último día con predicción);
+ *                                      diasConMeteo = días de antelación con previsión del tiempo; demo = modo ?demo=1
+ * getZonas()                        -> [{ id, nombre, tipos:['costa'|'montana'|'ciudad'], concejos[], lugares[], vecinos|null, principal, sinDatos }]
+ *                                      zonas del modelo (MITMA); concejos = nombres; principal = zona estrella (Picos de Europa)
+ * getConcejos()                     -> [{ id, nombre, zonaId|null }]   id = código INE (5 cifras, '33xxx'),
+ *                                      el mismo que usa interfaz/geo-asturias.js; zonaId null = fuera de las zonas del modelo
  * getSitios()                       -> [{ id, nombre, concejos:[INE], lat, lon, ubicacionAproximada, foto:{src, autor, licencia, pagina}|null }]
  *                                      sitios de interés; concejos[0] = concejo principal. NO llevan previsión propia:
  *                                      la interfaz muestra la de su concejo. Datos reales en datos/sitios.js
- * getEventos(desde, hasta?)         -> { fuente, actualizado, hastaDatos, eventos:[{ id, titulo, categoria, inicio, fin, hora|null,
- *                                      lugar, concejo (INE), lat, lon, asistencia, rango }] }
- *                                      eventos que se solapan con las fechas; hastaDatos = último día con eventos publicados.
- *                                      Datos reales de PredictHQ en datos/eventos.js (herramientas/eventos_phq.py)
+ * getEventos(desde, hasta?)         -> { fuente, actualizado, hastaDatos, criterio, eventos:[{ id, titulo, categoria, inicio, fin, hora|null,
+ *                                      lugar, concejo (INE), asistencia|null, impacto|null, normalConcejo|null, … }] }
+ *                                      eventos que se solapan con las fechas: los de PredictHQ (datos/eventos.js) que pueden
+ *                                      mover la afluencia (criterio de datos/catalogo.js) más los festivos y partidos de la
+ *                                      agenda del modelo. hastaDatos = último día con eventos publicados en PredictHQ
  * getCalendario(desde, dias)        -> [{ fecha, finde, festivo|null, puente|null, vacaciones|null }]
  * getProximoPuente(desde)           -> { nombre, inicio, fin } | null
  * getPrevisionDia(fecha)            -> Prevision[]   (una por zona)
@@ -56,16 +58,17 @@
  *                                      sin hasta: Prevision del día; con hasta: PrevisionPeriodo
  * getSerieZona(zonaId, desde, dias) -> Prevision[]   (una por día)
  * getFactores(zonaId, fecha)        -> [{ clave, texto, efecto }]   efecto en % (38 = +38 %), los 3 que más pesan
- * getMejorMomento(zonaId, desde, dias) -> { dia: Prevision, hora: { texto, nota } | null } | null
+ * getMejorMomento(zonaId, desde, dias) -> { dia: Prevision } | null   el día con menos presión de la ventana
  * getMejorDia(zonaId, fecha)        -> { fecha, nivel, ratio, visitantes, diferenciaPct, margen } | { fecha:null, margen } | null
  *                                      mejor día alternativo del modelo (alternativas.json); null si el día no está en alerta
  * getAlternativas(zonaId, fecha, hasta?) -> [Prevision + { nombre, minutos|null, km|null, delModelo? }]   zonas cercanas
  *                                      con hasta: PrevisionPeriodo, comparando la media del periodo
- * getPerfil(zonaId, fecha, hasta?)  -> { deUnDia, conPernocta, asturias, restoEspana } en % | null
- *                                      con hasta: media del periodo
+ * getPerfil(zonaId, fecha)          -> { deUnDia|null, conPernocta|null, asturias, restoEspana, mes, dias } en % | null
+ *                                      media histórica del mes de fecha (en un periodo, el mes del primer día)
  * getFiabilidad(zonaId)             -> { porHorizonte: { '1'…'7', '8+': { nota, aciertoColor, n } }, algoritmo } | null
  *
- * Gestión y Sobre los datos (pestanas/) no usan esta fachada: leen window.DatosModelo directamente.
+ * Funciones avanzadas y Sobre los datos (pestanas/) leen window.DatosModelo (datos/datos.js)
+ * directamente; de esta fachada solo usan getConcejos(), para los nombres de los concejos.
  * ========================================================================== */
 window.Datos = (function () {
   'use strict';
@@ -75,7 +78,6 @@ window.Datos = (function () {
     'getPrevisionConcejos', 'getSerieZona',
     'getFactores', 'getMejorMomento', 'getMejorDia', 'getAlternativas', 'getPerfil', 'getFiabilidad',
   ];
-  const SIN_CACHE = new Set();
 
   const fuente = window.FuenteDatos;
   if (!fuente) throw new Error('No hay ninguna fuente de datos cargada (falta window.FuenteDatos).');
@@ -91,16 +93,12 @@ window.Datos = (function () {
       const args = Array.prototype.slice.call(arguments);
       if (typeof fuente[m] !== 'function') return Promise.reject(new Error('Función no disponible: ' + m));
       const clave = m + JSON.stringify(args);
-      if (!SIN_CACHE.has(m) && cache.has(clave)) return cache.get(clave);
+      if (cache.has(clave)) return cache.get(clave);
       const p = Promise.resolve().then(() => fuente[m].apply(fuente, args));
-      if (!SIN_CACHE.has(m)) {
-        cache.set(clave, p);
-        p.catch(() => cache.delete(clave));
-      }
+      cache.set(clave, p);
+      p.catch(() => cache.delete(clave));
       return p;
     };
   });
-
-  api.limpiarCache = () => cache.clear();
   return Object.freeze(api);
 })();

@@ -1,6 +1,9 @@
-# Despliegue en Vercel: la web solo necesita estos ficheros estáticos.
-# Copias en JSON de datos que ya van en datos/modelo/salidas.js y salidas-inicio.js (solo son respaldo con fetch)
+# Despliegue en Vercel: ficheros de esta carpeta que NO se publican (el resto es la web estática).
+# Copias en JSON de los datos que ya van en datos/modelo/salidas.js y salidas-inicio.js (respaldo con fetch, solo en local)
 datos/modelo/*.json
 # Herramientas de Python para generar datos (no forman parte de la web)
 herramientas/
+# Documentación
 README.md
+# Página de pruebas de la lógica de Funciones avanzadas (se abre en local)
+pestanas/gestion/pruebas.html

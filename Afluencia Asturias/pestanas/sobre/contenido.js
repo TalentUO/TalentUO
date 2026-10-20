@@ -1,5 +1,5 @@
 /* ==========================================================================
- * CONTENIDO de «Sobre los datos» (persona 2). Solo textos: se editan aquí
+ * CONTENIDO de «Sobre los datos». Solo textos: se editan aquí
  * sin tocar sobre.js. Las cifras no se escriben a mano: las que aparecen
  * salen de las salidas del modelo (umbrales, algoritmo, fechas).
  * ========================================================================== */
@@ -37,7 +37,7 @@ window.SobreContenido = {
     'Un modelo de aprendizaje automático ({algoritmo}) aprende de los datos de movilidad, el calendario, los eventos y el tiempo qué días se llenan más.',
     'Hay dos modelos: uno a corto plazo (de 1 a 7 días), que usa además el interés en internet y, a 1-3 días, el tiempo, y uno a largo plazo (más de 7 días), que solo usa calendario y eventos.',
     'El resultado se muestra como semáforo según las veces que supera el día normal, junto con los tres factores que más pesan y un rango probable.',
-    'Se valida con días que el modelo no ha visto al entrenar, y esa fiabilidad se muestra en Gestión.',
+    'Se valida con días que el modelo no ha visto al entrenar, y esa fiabilidad se muestra en Funciones avanzadas.',
   ],
 
   // Limitaciones
@@ -47,10 +47,10 @@ window.SobreContenido = {
     { titulo: 'El umbral lo fijamos nosotros.', texto: 'El semáforo y los umbrales (ámbar, rojo) son una decisión del equipo, no un dato oficial de capacidad de ninguna zona.' },
     { titulo: 'Medimos presión relativa, no personas.', texto: 'La cifra es la presión frente a un día normal en la zona. No cuenta cuánta gente hay en los Lagos ni en un punto concreto: la unidad mínima es la zona.' },
     { titulo: 'Los cruceros quedan fuera.', texto: 'No tenemos las escalas realizadas por fecha, así que la llegada de cruceristas no entra en el modelo.' },
-    { titulo: 'El tiempo de algunas zonas es aproximado.', texto: 'Tenemos previsión del tiempo para 5 puntos de Asturias; cada zona usa el más cercano, que en el occidente queda lejos. En Villaviciosa, los Oscos y el entorno de Somiedo el modelo detecta pocos de los días de más presión.' },
+    { titulo: 'El tiempo de algunas zonas es aproximado.', texto: 'Tenemos previsión del tiempo para 6 puntos de Asturias; cada zona usa el más cercano, que en el occidente queda lejos. En Villaviciosa, los Oscos y el entorno de Somiedo el modelo detecta pocos de los días de más presión.' },
   ],
 
-  // Mapa: fuente y licencia (datos de la persona 1, notas/coordinacion_web.md)
+  // Mapa: fuente y licencia de los límites municipales
   mapa: {
     titulo: 'Mapa',
     texto: 'Límites municipales: © Instituto Geográfico Nacional (CC BY 4.0). El mapa no usa teselas externas.',

@@ -1,10 +1,10 @@
 /* ==========================================================================
- * LÓGICA de la pestaña Funciones avanzadas (antes Gestión; persona 2). Funciones puras, sin DOM.
- * Entrada: el objeto `datos` de window.DatosModelo (formato en
+ * LÓGICA de la pestaña Funciones avanzadas. Funciones puras, sin DOM.
+ * Entrada: el objeto `datos` de window.DatosModelo (datos/datos.js; formato en
  * notas/contrato_web.md). Salida: estructuras listas para pintar.
  * Pruebas: pestanas/gestion/pruebas.html (se abre en el navegador).
- * No inventa cifras: todo sale de regulacion.json, predicciones.json y
- * metricas.json.
+ * No inventa cifras: todo sale de regulacion.json, predicciones.json,
+ * metricas.json y perfil.json (con horas.json, si está).
  * ========================================================================== */
 (function (raiz, fabrica) {
   const api = fabrica(raiz);
@@ -23,128 +23,18 @@
     return datos.predicciones.zonas.slice().sort((a, b) =>
       (b.es_principal ? 1 : 0) - (a.es_principal ? 1 : 0) || a.nombre_zona.localeCompare(b.nombre_zona, 'es'));
   }
-  const zonaPrincipal = datos => (zonas(datos)[0] || null);
   const nombreZona = (datos, id) => {
     const z = datos.predicciones.zonas.find(x => x.zona_mitma_id === id);
     return z ? z.nombre_zona : id;
   };
 
-  /* ---------- Días por encima de un umbral ---------- */
+  /* ---------- Umbrales ---------- */
 
-  /** Umbrales (veces el día normal) para los que el modelo ya trae los días observados. */
+  /** Umbrales (veces el día normal) de la rejilla del modelo: son los pasos de los deslizadores. */
   function umbralesDisponibles(datos) {
     const s = new Set();
     datos.regulacion.por_zona.forEach(z => z.curva_umbral.forEach(c => s.add(c.umbral)));
     return Array.from(s).sort((a, b) => a - b);
-  }
-
-  /** Años que hay en regulacion.json, con su tipo (observado | previsto). */
-  function aniosDisponibles(datos) {
-    const m = new Map();
-    datos.regulacion.por_zona.forEach(z => z.anios.forEach(a => m.set(a.anio, a.tipo)));
-    return Array.from(m, ([anio, tipo]) => ({ anio, tipo })).sort((a, b) => a.anio - b.anio);
-  }
-
-  function filasCalendario(datos, zonaId, anio) {
-    const pre = String(anio) + '-';
-    return datos.regulacion.calendario_alertas.filter(c => c.zona_mitma_id === zonaId && c.fecha.startsWith(pre));
-  }
-
-  /**
-   * Días de `anio` en los que la zona supera `umbral` (veces el día normal).
-   * - previsto: se recalcula día a día con el cociente de calendario_alertas
-   *   (vale cualquier umbral); min/max usan p10/p90 sobre el mismo `normal`. Por el
-   *   redondeo del JSON, fuera de los umbrales por defecto puede diferir de
-   *   curva_umbral en 1-3 días.
-   * - observado: solo hay la curva del modelo (rejilla de umbralesDisponibles);
-   *   fuera de la rejilla devuelve dias = null (no se interpola).
-   * Devuelve { anio, tipo, dias, min, max, exacto } o null si no hay ese año.
-   */
-  function diasSobreUmbral(datos, zonaId, anio, umbral) {
-    const zona = datos.regulacion.por_zona.find(z => z.zona_mitma_id === zonaId);
-    if (!zona) return null;
-    const info = zona.anios.find(a => a.anio === anio);
-    if (!info) return null;
-    if (info.tipo === 'previsto') {
-      // Con los umbrales de la cabecera se cuenta por el color del modelo (exacto): el JSON
-      // redondea el cociente a 3 decimales y en el umbral justo bailaría algún día.
-      const um = datos.regulacion.umbrales || {};
-      const esRojo = Math.abs(umbral - um.rojo) < 1e-6, esAmbar = Math.abs(umbral - um.ambar) < 1e-6;
-      let dias = 0, min = 0, max = 0;
-      filasCalendario(datos, zonaId, anio).forEach(f => {
-        if (f.color === 'gris' || f.cociente == null) return;
-        if (esRojo ? f.color === 'rojo' : esAmbar ? (f.color === 'rojo' || f.color === 'ambar') : f.cociente >= umbral - EPS) dias++;
-        if (f.normal) {
-          if (f.p10 != null && f.p10 / f.normal >= umbral - EPS) min++;
-          if (f.p90 != null && f.p90 / f.normal >= umbral - EPS) max++;
-        }
-      });
-      return { anio, tipo: info.tipo, dias, min, max, exacto: true };
-    }
-    const c = zona.curva_umbral.find(x => x.anio === anio && Math.abs(x.umbral - umbral) < 1e-6);
-    return c
-      ? { anio, tipo: info.tipo, dias: c.dias, min: c.dias_min ?? null, max: c.dias_max ?? null, exacto: true }
-      : { anio, tipo: info.tipo, dias: null, min: null, max: null, exacto: false };
-  }
-
-  /** Veredicto orientativo según los días al año (criterio editable en config-gestion.js). */
-  function veredicto(dias, config) {
-    const crit = (config || configBase()).criterio;
-    if (dias == null) return 'sin_dato';
-    return dias >= crit.estudiar ? 'estudiar' : dias >= crit.vigilar ? 'vigilar' : 'ok';
-  }
-
-  /**
-   * Tabla «¿hace falta regular?»: por zona (principal primero), los días de cada año
-   * con el umbral dado y el veredicto del año de referencia (el primer año previsto
-   * por defecto, que es el que importa a quien planifica).
-   */
-  function tablaRegulacion(datos, umbral, opciones) {
-    const o = opciones || {};
-    const anios = aniosDisponibles(datos);
-    const ref = o.anioReferencia ?? (anios.filter(a => a.tipo === 'previsto')[0] || anios[anios.length - 1]).anio;
-    return zonas(datos).map(z => {
-      const porAnio = anios.map(a => diasSobreUmbral(datos, z.zona_mitma_id, a.anio, umbral)).filter(Boolean);
-      const r = porAnio.find(x => x.anio === ref);
-      return {
-        zona_mitma_id: z.zona_mitma_id, nombre_zona: z.nombre_zona, es_principal: !!z.es_principal,
-        anios: porAnio, anioReferencia: ref,
-        dias: r ? r.dias : null, veredicto: veredicto(r ? r.dias : null, o.config),
-      };
-    });
-  }
-
-  /* ---------- Comparación con los días de acceso regulado a los Lagos ---------- */
-
-  /**
-   * Por año: días con acceso regulado, y cuántas alertas (ámbar+rojo) y días rojos
-   * caen dentro / fuera de esos días (umbrales por defecto del modelo).
-   * `calibracion` trae qué umbral reproduce mejor el calendario regulado (F1).
-   */
-  function compararLagos(datos) {
-    const l = datos.regulacion.lagos;
-    if (!l) return null;
-    const pct = (a, b) => (b > 0 ? Math.round(100 * a / b) : null);
-    const anios = l.por_anio.map(a => {
-      const totalAlerta = a.alerta_en_dias_regulados + a.alerta_fuera_de_regulacion;
-      const totalRojos = a.rojos_en_dias_regulados + a.rojos_fuera_de_regulacion;
-      return {
-        anio: a.anio, tipo: a.tipo, supuesta: !!a.regulacion_supuesta,
-        dias_regulados: a.dias_regulados,
-        alerta_en_regulados: a.alerta_en_dias_regulados, alerta_fuera: a.alerta_fuera_de_regulacion,
-        rojos_en_regulados: a.rojos_en_dias_regulados, rojos_fuera: a.rojos_fuera_de_regulacion,
-        regulados_sin_alerta: Math.max(0, a.dias_regulados - a.alerta_en_dias_regulados),
-        pct_alertas_en_regulados: pct(a.alerta_en_dias_regulados, totalAlerta),
-        pct_rojos_en_regulados: pct(a.rojos_en_dias_regulados, totalRojos),
-      };
-    });
-    const cal = l.calibracion || {};
-    const rel = (cal.observado_2023_2024 || {}).relativo || null;
-    return {
-      zona_mitma_id: l.zona_mitma_id, nombre_zona: l.nombre_zona, anios,
-      calibracion: rel ? { mejor_umbral: rel.mejor_umbral, f1: rel.f1, precision: rel.precision, recall: rel.recall } : null,
-      nota: cal.nota || null,
-    };
   }
 
   /* ---------- Alertas de las próximas semanas ---------- */
@@ -172,6 +62,9 @@
     const dias = o.dias ?? (o.config || configBase()).diasAlertas ?? 28;
     const hasta = sumarDias(desde, dias - 1);
     const rango = { futuro_corto: 2, futuro_largo: 1 };
+    // El acceso regulado a los Lagos solo se marca en su zona (calendario_alertas lo trae en todas)
+    const zonaLagos = (datos.regulacion.lagos && datos.regulacion.lagos.zona_mitma_id) || null;
+    const nombres = new Map(datos.predicciones.zonas.map(z => [z.zona_mitma_id, z.nombre_zona]));
     const elegida = new Map();
     datos.predicciones.predicciones.forEach(p => {
       const r = rango[p.conjunto];
@@ -186,11 +79,11 @@
       const e = elegida.get(c.fecha + '|' + c.zona_mitma_id);
       const p = e ? e.p : c;
       filas.push({
-        fecha: c.fecha, zona_mitma_id: c.zona_mitma_id, nombre_zona: nombreZona(datos, c.zona_mitma_id),
+        fecha: c.fecha, zona_mitma_id: c.zona_mitma_id, nombre_zona: nombres.get(c.zona_mitma_id) || c.zona_mitma_id,
         color: p.color, cociente: p.cociente, prediccion: p.prediccion, normal: p.normal,
         p10: p.p10, p90: p.p90, incierto: !!p.incierto,
         horizonte: e ? p.horizonte : null, modelo: e ? p.modelo : 'largo',
-        lagos_regulado: c.lagos_regulado, calendario_supuesto: !!c.calendario_supuesto,
+        lagos_regulado: c.zona_mitma_id === zonaLagos ? c.lagos_regulado : null, calendario_supuesto: !!c.calendario_supuesto,
         factores: e ? p.factores : null,
         accion: accionPara(p.color, o.config),
       });
@@ -239,6 +132,8 @@
    * Usa la misma predicción que las alertas: futuro_corto, si no futuro_largo y, más
    * allá, la previsión de calendario_alertas. Cada día lleva `lejana` = true cuando
    * solo hay previsión de calendario (sin modelo de corto ni de largo plazo).
+   * `filas` (opcional): las de alertasProximas para ese mismo rango, si ya se tienen
+   * (así, al mover el deslizador del umbral no se recalculan).
    * Devuelve [{ zona_mitma_id, nombre_zona, es_principal, dias:[fila], rachas, pico }].
    */
   function previsionSaturacion(datos, opciones) {
@@ -247,9 +142,11 @@
     const hasta = o.hasta || finPrevision(datos);
     const umbrales = datos.regulacion.umbrales || datos.predicciones.umbrales;
     const umbral = o.umbral ?? umbrales.rojo;
-    const filas = alertasProximas(datos, { desde, dias: diasEntreISO(desde, hasta) + 1, config: o.config });
+    const filas = o.filas || alertasProximas(datos, { desde, dias: diasEntreISO(desde, hasta) + 1, config: o.config });
+    const porZona = new Map();
+    filas.forEach(f => { if (superaUmbral(f, umbral, umbrales)) (porZona.get(f.zona_mitma_id) || porZona.set(f.zona_mitma_id, []).get(f.zona_mitma_id)).push(f); });
     return zonas(datos).map(z => {
-      const dias = filas.filter(f => f.zona_mitma_id === z.zona_mitma_id && superaUmbral(f, umbral, umbrales))
+      const dias = (porZona.get(z.zona_mitma_id) || [])
         .map(f => Object.assign({}, f, { lejana: f.horizonte == null }))
         .sort((a, b) => a.fecha.localeCompare(b.fecha));
       const pico = dias.reduce((m, d) => (!m || d.cociente > m.cociente ? d : m), null);
@@ -351,20 +248,6 @@
     return aCSV([cab].concat(cuerpo));
   }
 
-  /** CSV de la tabla de días sobre el umbral (salida de tablaRegulacion). */
-  function csvRegulacion(tabla, umbral, sintetico) {
-    const anios = tabla.length ? tabla[0].anios : [];
-    const cab = ['zona', 'umbral_veces_dia_normal']
-      .concat(anios.flatMap(a => [`dias_${a.anio}_${a.tipo}`, `min_${a.anio}`, `max_${a.anio}`])).concat(['veredicto']);
-    if (sintetico) cab.push('aviso');
-    const cuerpo = tabla.map(t => {
-      const r = [t.nombre_zona, umbral].concat(t.anios.flatMap(a => [a.dias, a.min, a.max])).concat([t.veredicto]);
-      if (sintetico) r.push(AVISO_CSV);
-      return r;
-    });
-    return aCSV([cab].concat(cuerpo));
-  }
-
   /** CSV de los días con saturación prevista (salida de previsionSaturacion). */
   function csvSaturacion(resultado, umbral, sintetico) {
     const cab = ['fecha', 'zona', 'umbral_veces_dia_normal', 'color', 'veces_dia_normal', 'visitantes_previstos', 'dia_normal',
@@ -414,7 +297,7 @@
     return aCSV([cab].concat(cuerpo));
   }
 
-  return { zonas, zonaPrincipal, nombreZona, umbralesDisponibles, aniosDisponibles, diasSobreUmbral, veredicto, tablaRegulacion,
-    compararLagos, accionPara, alertasProximas, fiabilidad, aCSV, csvPrevision, csvRegulacion, csvPerfil, sumarDias,
-    finPrevision, superaUmbral, rachas, previsionSaturacion, concejosDeZona, zonasDeConcejo, normalizar, buscar, csvSaturacion };
+  return { zonas, nombreZona, umbralesDisponibles, accionPara, alertasProximas, fiabilidad, aCSV, csvPrevision, csvPerfil,
+    sumarDias, finPrevision, diasEntreISO, superaUmbral, rachas, previsionSaturacion, concejosDeZona, zonasDeConcejo,
+    normalizar, buscar, csvSaturacion };
 });
