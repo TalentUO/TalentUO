@@ -39,7 +39,8 @@ Comprobado (`scripts/verificar_mitma.py` y `scripts/cobertura_mitma.py`): los 84
 - **No coincide con la lista de la página del MITMA** (2023-10-26..2023-11-03, 2024-04-04, 18 y 19, 2024-11-10 y 11, 2025-04-28 y 29):
   - **Publicados aunque la página los da por sin datos:** 2024-04-04, 2024-04-19 y 2024-11-11 (están descargados).
   - **No publicados y no están en esa lista:** 2024-11-09 y 2024-11-26.
-  - Causa de la discrepancia: **NO VERIFICADO**.
+  - Causa de la discrepancia: no verificada.
+  - **Decisión:** el objetivo deja en NaN los 16 días (la lista oficial más los dos no publicados). Los tres publicados se excluyen porque el MITMA los declara sin datos válidos; se respeta su criterio en lugar de usar ficheros que la fuente no avala (`config/mitma_calidad.yaml`).
 - 2024-10-29, 30 y 31 (DANA, anomalías en Levante): publicados y descargados con normalidad; hay que tratarlos como anómalos aguas abajo (`calidad = anomalia_mitma` en el objetivo).
 
 ## Zonas

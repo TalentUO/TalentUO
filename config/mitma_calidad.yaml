@@ -3,6 +3,8 @@
 #   se excluyen del entrenamiento y de la evaluación (no se rellenan).
 # anomalia_mitma: datos publicados pero anómalos -> se conservan los valores,
 #   pero se excluyen del entrenamiento y de la evaluación.
+# La lista sin_dato_mitma es la oficial del MITMA. 2024-04-04, 2024-04-19 y 2024-11-11 sí tienen fichero en el
+# portal, pero el MITMA los da por inválidos: se respeta su criterio (notas/fuentes/mitma/registro_mitma.md).
 sin_dato_mitma:
   - "2023-10-26"
   - "2023-10-27"

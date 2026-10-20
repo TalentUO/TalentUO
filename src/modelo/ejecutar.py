@@ -65,7 +65,7 @@ def main() -> None:
     else:
         ganador = alg
         bt_all = backtest.ejecutar(D, algoritmos=[ganador], log=log)
-    bt_all.to_parquet(SALIDAS / "backtest.parquet", index=False)
+    bt_all.to_parquet(SALIDAS / "backtest.parquet", index=False, compression="zstd", compression_level=9)
     bt = bt_all[bt_all["algoritmo"] == ganador].reset_index(drop=True)
 
     log("3. Métricas y fiabilidad")

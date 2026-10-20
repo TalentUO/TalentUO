@@ -7,8 +7,9 @@ semilla: 42
 #   llegadas_ocio (por defecto) | llegadas_total | pernoctaciones_no_residentes
 objetivo: llegadas_ocio
 
-# "Hoy" para la demo de la web (predicciones futuras de largo plazo).
-fecha_hoy_demo: "2026-10-16"
+# "Hoy" de la web (inicio de las predicciones futuras). null = día de emisión de la previsión del tiempo
+# (data/clean/openmeteo_prevision.parquet, que descarga src/modelo/descargar_prevision.py).
+fecha_hoy_demo: null
 dias_futuro_demo: 365   # un año desde fecha_hoy
 
 fuentes:

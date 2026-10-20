@@ -105,7 +105,6 @@ def ejecutar(D: Datos, experimentos: list[str] | None = None, algoritmos: list[s
     bt["color_pred"] = colores(bt["cociente_pred"], bt["zona_mitma_id"])
     bt["color_b0"] = colores(bt["cociente_b0"], bt["zona_mitma_id"])
     bt["color_b1"] = colores(bt["cociente_b1"], bt["zona_mitma_id"])
-    bt["y_obs_bt"] = a_log_cociente(bt["visitas_obs"], bt["normal_bt"])
     bt["residuo_log"] = np.log((bt["visitas_obs"] + 1) / (bt["visitas_pred"] + 1))
     bt["sintetico"] = D.sintetico
     return bt
