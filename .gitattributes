@@ -1,0 +1,12 @@
+# Fin de línea normalizado a LF en el repositorio (cada sistema lo convierte al hacer checkout)
+* text=auto
+
+# Binarios: sin conversión ni diff de texto
+*.parquet binary
+*.png binary
+*.jpg binary
+*.pdf binary
+*.xlsx binary
+*.shp binary
+*.shx binary
+*.dbf binary

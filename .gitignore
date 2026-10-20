@@ -40,3 +40,6 @@ data/raw/mitma_*
 
 # Enlace local con el proyecto de Vercel (lo crea «vercel link»)
 .vercel/
+
+# Cachés de herramientas
+.ruff_cache/
