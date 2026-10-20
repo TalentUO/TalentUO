@@ -1,5 +1,5 @@
 """Auditoria calendarios: abre cada PDF, cuenta paginas, busca anio/comunidad/identificador en el texto."""
-import glob, os, re, subprocess, csv
+import glob, os, re, subprocess
 import pypdf
 D = "data/raw/calendario/"
 reg = open("notas/registro_calendarios.md", encoding="utf-8").read()
@@ -10,7 +10,7 @@ for l in reg.splitlines():
         filas[c[0]] = c
 def txt(f):
     try: return subprocess.run(["pdftotext", "-enc", "UTF-8", "-layout", D+f, "-"], capture_output=True, text=True, encoding="utf-8").stdout
-    except Exception as e: return ""
+    except Exception: return ""
 for f in sorted(glob.glob(D+"*.pdf")):
     n = os.path.basename(f)
     try: r = pypdf.PdfReader(f); pg = len(r.pages)

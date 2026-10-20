@@ -51,7 +51,6 @@ ARTICULOS = [
     ("es.wikipedia", "Descenso Internacional del Sella"),
     ("es.wikipedia", "Gijón"),
     ("es.wikipedia", "Oviedo"),
-    # anadidos (4 -> 15 en total)
     ("es.wikipedia", "Santa Cueva de Covadonga"),  # 'Santuario de Covadonga' redirige aqui
     ("es.wikipedia", "Cabrales"),
     ("es.wikipedia", "Potes"),
@@ -66,10 +65,10 @@ ARTICULOS = [
 
 TRENDS_TERMINOS = ["lagos de covadonga", "llanes", "cangas de onís", "ruta del cares",
                    "covadonga"]
-TRENDS_ANCLA = "cabrales"  # antes "picos de europa": un solo pico de 100 y mediana 3 aplastaba los demas terminos (ver notas/correcciones_fase_B.md)
+TRENDS_ANCLA = "cabrales"  # por qué esta ancla y no "picos de europa": notas/correcciones_fase_B.md
 TRENDS_GEOS = ["ES", "ES-MD", "ES-CL", "ES-AS"]
 
-# URLs de los PDF de la OAPN (se rellenan tras localizarlas; ver notas/notas_senales.md)
+# URLs de los PDF de la OAPN (ver notas/notas_senales.md)
 OAPN_BASE = "https://www.miteco.gob.es/content/dam/miteco/es/parques-nacionales-oapn/red-parques-nacionales"
 OAPN_PDFS = {
     "oapn_visitantes_2022.pdf": OAPN_BASE + "/gestion/Visitantes-PPNN-2022.pdf",
@@ -93,14 +92,23 @@ def ahora():
 
 
 def get(url, **kw):
+    r = None
     for intento in range(4):
-        r = requests.get(url, headers={"User-Agent": UA}, timeout=60, **kw)
+        try:
+            r = requests.get(url, headers={"User-Agent": UA}, timeout=60, **kw)
+        except requests.RequestException as e:
+            print(f"  error de red ({e.__class__.__name__}), reintento", file=sys.stderr)
+            time.sleep(10 * (intento + 1))
+            continue
         if r.status_code in (429, 500, 502, 503, 504):
-            espera = int(r.headers.get("Retry-After", 10 * (intento + 1)))
+            retry = r.headers.get("Retry-After", "")
+            espera = int(retry) if retry.isdigit() else 10 * (intento + 1)
             print(f"  HTTP {r.status_code}, espero {espera}s", file=sys.stderr)
             time.sleep(espera)
             continue
         return r
+    if r is None:
+        raise RuntimeError(f"sin respuesta tras 4 intentos: {url}")
     return r
 
 
@@ -129,7 +137,9 @@ def wikipedia(hasta, ini=INICIO):
         except ValueError:
             cuerpo = {"texto": r.text}
         if r.status_code != 200:
+            # Sin escribir el fichero: así la siguiente ejecución lo vuelve a intentar.
             print(f"ERROR {proyecto}/{titulo}: HTTP {r.status_code}")
+            continue
         destino.write_text(json.dumps({"meta": meta, "respuesta": cuerpo}, ensure_ascii=False),
                            encoding="utf-8")
         n = len(cuerpo.get("items", [])) if isinstance(cuerpo, dict) else 0
