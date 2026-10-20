@@ -1,6 +1,6 @@
 # NTT Tourism: alerta temprana de presión turística en Asturias
 
-Proyecto para el **Hackathon TalentUO 2026** (Universidad de Oviedo), reto de NTT DATA «Predicción de afluencia turística en Asturias».
+Proyecto para el **Hackathon TalentUO 2026** (Universidad de Oviedo), reto de NTT DATA «Predicción de afluencia turística en Asturias». «NTT Tourism» es el nombre del proyecto del equipo: no es un producto ni un servicio oficial de NTT DATA.
 
 **Demo:** <https://ntt-tourism.vercel.app>
 
@@ -103,7 +103,6 @@ Variables de entorno, ninguna se guarda en el repositorio:
 |---|---|
 | `AEMET_API_KEY` | Descargas de AEMET OpenData |
 | `TALENTUO_CONTACTO` | Contacto en el User-Agent de las descargas (Wikimedia lo pide); si no está, se usa «equipo TalentUO» |
-| `PHQ_TOKEN` | Regenerar los eventos de PredictHQ de la web (`Afluencia Asturias/herramientas/eventos_phq.py`) |
 
 ## Uso rápido
 
@@ -169,9 +168,9 @@ Qué ficheros pesados no están en el repositorio y cómo obtenerlos: `data/raw/
 
 ## Fuentes de datos y licencias
 
-Fuentes principales: MITMA (Open Data Movilidad), AEMET, Open-Meteo (CC BY 4.0), BOE, BOPA y calendarios escolares, INE, SADEI, OAPN, Wikipedia (Wikimedia), Google Trends, webs de eventos, IGN (CC BY 4.0, límites del mapa), Wikimedia Commons (fotos), OpenStreetMap (ODbL) y PredictHQ.
+Fuentes principales: MITMA (Open Data Movilidad), AEMET, Open-Meteo (CC BY 4.0), BOE, BOPA y calendarios escolares, INE, SADEI, OAPN, Wikipedia (Wikimedia), Google Trends, webs de eventos, IGN (CC BY 4.0, límites del mapa), Wikimedia Commons (fotos) y OpenStreetMap (ODbL).
 
-Uso, condiciones de reutilización y texto de atribución de cada una: **`FUENTES_Y_LICENCIAS.md`**. Las condiciones de PredictHQ están pendientes de confirmar.
+Uso, condiciones de reutilización y texto de atribución de cada una: **`FUENTES_Y_LICENCIAS.md`**.
 
 ## Documentación
 
@@ -189,12 +188,16 @@ Uso, condiciones de reutilización y texto de atribución de cada una: **`FUENTE
 
 ## Equipo y créditos
 
-<!-- completar: nombres del equipo -->
+Equipo del Hackathon TalentUO 2026, reto de NTT DATA:
 
-Proyecto desarrollado por el equipo participante en el Hackathon TalentUO 2026, reto de NTT DATA.
+- Hugo Gómez ([@hugoomez](https://github.com/hugoomez))
+- Adrián Fernández López ([@adrian-fzl-data](https://github.com/adrian-fzl-data))
+- L. Rodríguez Torres ([@LRodriguezTorres](https://github.com/LRodriguezTorres))
+- [@antoniocigales](https://github.com/antoniocigales)
+- [@sggg6](https://github.com/sggg6)
 
 ## Licencia
 
-Licencia del código: pendiente de decidir por el equipo.
+El código se publica con licencia MIT (`LICENSE`).
 
 Los datos y las imágenes de terceros conservan su propia licencia (`FUENTES_Y_LICENCIAS.md`).

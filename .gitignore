@@ -43,3 +43,6 @@ data/raw/mitma_*
 
 # Cachés de herramientas
 .ruff_cache/
+
+# COGERSA: su aviso legal exige autorización para distribuirlo (FUENTES_Y_LICENCIAS.md)
+data/raw/cogersa_residuos.xlsx

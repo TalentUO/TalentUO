@@ -10,8 +10,9 @@ Por tamaño (GitHub rechaza ficheros de más de 100 MB) no se suben; hay que reg
 | `mitma_viajes/AAAA-MM.csv`, `mitma_pernoctaciones/AAAA-MM.csv` (mensuales, los que lee `src/modelo/construir_objetivo.py`) | lo mismo, partido por mes (84 ficheros) | `python scripts/dividir_mitma_mensual.py --raw data/raw` a partir de los anuales |
 | `ine_moviles_53001.csv`, `ine_moviles_interno_2022..2026.xlsx` | extracto de Asturias / 28–49 MB por año | Paso 3 de `notas/fuentes/demanda/registro_descargas.md` (INE, estadística experimental de turismo con móviles; `scripts/descarga_ine_moviles.py`). No los usa el modelo |
 | `ine_viviendas_turisticas.csv` | 31 MB | `https://www.ine.es/jaxiT3/files/t/es/csv_bdsc/39363.csv?nocab=1` (el `.xlsx` equivalente sí está subido) |
+| `cogersa_residuos.xlsx` | 53 KB | `https://recursos.cogersa.es/gestion%20residuos/Residuos-COGERSA-Ayuntamientos-2021.xlsx`. No se sube porque COGERSA exige autorización escrita para distribuirlo. No lo usa el modelo |
 | `_mitma_estado_v2.jsonl`, `_mitma_dias/`, `_mitma_viejo/`, `_*_tmp/` | temporales | Los genera el script de descarga: estado por día, ficheros diarios antes de ensamblar y parciales de la primera versión del script |
 
-Sí están subidos: estadísticos de día normal del MITMA (`mitma_estadisticos_dia_normal_2024/`), zonificación (`mitma_zonificacion_v2/`, `zonas_mitma_asturias.csv`), INE (EOH, EOAP, camping, rural), SADEI (`.px`), padrón, COGERSA, `ine_viviendas_turisticas.xlsx`, AEMET, Open-Meteo, calendarios, eventos y señales.
+Sí están subidos: estadísticos de día normal del MITMA (`mitma_estadisticos_dia_normal_2024/`), zonificación (`mitma_zonificacion_v2/`, `zonas_mitma_asturias.csv`), INE (EOH, EOAP, camping, rural), SADEI (`.px`), padrón, `ine_viviendas_turisticas.xlsx`, AEMET, Open-Meteo, calendarios, eventos y señales.
 
 Regla general: los datos que faltan son ausentes, nunca 0.
