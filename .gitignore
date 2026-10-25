@@ -46,3 +46,14 @@ data/raw/mitma_*
 
 # COGERSA: su aviso legal exige autorización para distribuirlo (FUENTES_Y_LICENCIAS.md)
 data/raw/cogersa_residuos.xlsx
+
+# Copias de webs de terceros y datos sin permiso de redistribución (FUENTES_Y_LICENCIAS.md).
+# No se versionan: la URL y la fecha de cada fichero están en notas/fuentes/
+data/raw/eventos/
+data/raw/calendario/_descartados/
+data/raw/calendario/juridicas_*
+data/raw/calendario/prensa_*
+data/raw/calendario/pnpe_*
+data/raw/calendario/turismocangasdeonis_*
+data/raw/sadei_*.px
+data/raw/padron_concejos.px

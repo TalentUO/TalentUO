@@ -1,5 +1,7 @@
 # Registro de descargas: eventos
 
+> Desde el 2026-10-25 los ficheros de `data/raw/eventos/` no se versionan (derechos de terceros): este registro conserva la URL y la fecha de cada uno para volver a descargarlos.
+
 Una línea por fichero de `data/raw/eventos/`. Fecha de descarga: 2026-10-15 (todos). Los ficheros de las búsquedas por evento (Sella, Pastor, San Mateo, Nava, Semana Negra, FICX, FIDMA) no registraron la URL exacta de cada descarga: la URL usada como fuente de cada fecha está en `fuente_url` de `data/manual/eventos_recopilado.csv` y el dominio consta en el nombre del fichero. Si hace falta URL exacta por fichero, hay que rehacer esa descarga.
 
 | Fichero | URL | Descarga | Rango cubierto | Problemas de acceso / notas |

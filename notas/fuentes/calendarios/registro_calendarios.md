@@ -1,5 +1,7 @@
 # Registro de descargas: calendarios
 
+> Desde el 2026-10-25 las copias de prensa, del Parque Nacional (`pnpe_*`), de Turismo de Cangas de Onís y de `_descartados/` no se versionan (derechos de terceros): este registro conserva la URL y la fecha de cada uno para volver a descargarlos.
+
 Una línea por fichero en `data/raw/calendario/`. Descarga: 2026-10-15 (script `src/descarga_calendarios.py`, reanudable; resumen en `data/raw/calendario/_verificacion.csv`). Cada PDF tiene un `.txt` hermano con el texto extraído (`pdftotext -layout`); los PDF no se han modificado.
 
 | Fichero | Fuente | Carácter | URL | Fecha | Págs | Problemas / notas |
