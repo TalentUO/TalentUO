@@ -2,6 +2,8 @@
 
 Proyecto para el **Hackathon TalentUO 2026** (Universidad de Oviedo), reto de NTT DATA «Predicción de afluencia turística en Asturias». «NTT Tourism» es el nombre del proyecto del equipo: no es un producto ni un servicio oficial de NTT DATA.
 
+[![CI](https://github.com/TalentUO/TalentUO/actions/workflows/ci.yml/badge.svg)](https://github.com/TalentUO/TalentUO/actions/workflows/ci.yml)
+
 **Demo:** <https://ntt-tourism.vercel.app>
 
 ![Inicio de la web en modo demo: 15 de agosto de 2024, la zona de los Picos en saturación](notas/capturas_demo/1920x1080_01_inicio_demo.png)
