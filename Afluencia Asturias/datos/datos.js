@@ -21,6 +21,13 @@
  *     aviso         // texto del aviso del modelo, o null
  *   }>
  *
+ * Coherencia del rango probable: las salidas pueden traer una predicción fuera
+ * de su propio rango p10-p90 (en zonas donde el modelo se queda corto siempre,
+ * los dos cuantiles del error salen positivos). Al cargar se acota el rango para
+ * que contenga la predicción (p10 = min(p10, predicción), p90 = max(p90,
+ * predicción)), que es lo mismo que daría exigir q10 <= 0 <= q90 en el modelo,
+ * y se recalcula «incierto» en los registros tocados. Ver coherencia().
+ *
  * La promesa es única (se carga una vez). Si falta un fichero o un campo
  * obligatorio, se rechaza con un Error cuyo mensaje lista los problemas.
  *
@@ -101,6 +108,74 @@ window.DatosModelo = (function () {
     return o;
   }
 
+  /* ---------- Coherencia del rango probable ----------
+   * Solo corrige registros incoherentes; los demás quedan como los dio el modelo. */
+  function nivelDe(cociente, zona, um) {
+    if (cociente == null || !isFinite(cociente)) return 'gris';
+    const z = (um.por_zona && um.por_zona[zona]) || {};
+    const ambar = z.umbral_ambar != null ? z.umbral_ambar : um.ambar;
+    const rojo = z.umbral_rojo != null ? z.umbral_rojo : um.rojo;
+    return cociente >= rojo ? 'rojo' : cociente >= ambar ? 'ambar' : 'verde';
+  }
+  // Acota p10 <= prediccion <= p90 en un registro. Devuelve true si lo ha cambiado
+  function acotarRango(r, um) {
+    if (r.prediccion == null || r.p10 == null || r.p90 == null) return false;
+    if (r.p10 <= r.prediccion && r.prediccion <= r.p90) return false;
+    r.p10 = Math.min(r.p10, r.prediccion);
+    r.p90 = Math.max(r.p90, r.prediccion);
+    if (r.color !== 'gris' && r.normal > 0) {
+      r.incierto = nivelDe(r.p10 / r.normal, r.zona_mitma_id, um) !== nivelDe(r.p90 / r.normal, r.zona_mitma_id, um);
+    }
+    return true;
+  }
+  // Recuentos «entre X e Y días» de regulacion.por_zona: si el valor central queda fuera de su rango,
+  // se recuentan con el calendario ya acotado (misma regla que el modelo: días con p10 o p90 sobre el umbral)
+  function acotarRecuentos(reg, um) {
+    let porZonaAnio = null;
+    const filas = (zona, anio) => {
+      if (!porZonaAnio) {
+        porZonaAnio = {};
+        reg.calendario_alertas.forEach(c => {
+          const k = c.zona_mitma_id + '|' + c.fecha.slice(0, 4);
+          (porZonaAnio[k] || (porZonaAnio[k] = [])).push(c);
+        });
+      }
+      return porZonaAnio[zona + '|' + anio] || [];
+    };
+    const cuenta = (cal, campo, umbral) => cal.filter(c => c[campo] != null && c.normal > 0 && c[campo] / c.normal >= umbral).length;
+    const fuera = (o, k) => o[k + '_min'] != null && o[k + '_max'] != null && (o[k + '_min'] > o[k] || o[k + '_max'] < o[k]);
+    const ajustar = (o, k, cal, umbral) => {
+      if (!fuera(o, k)) return;
+      o[k + '_min'] = Math.min(o[k], cuenta(cal, 'p10', umbral));
+      o[k + '_max'] = Math.max(o[k], cuenta(cal, 'p90', umbral));
+    };
+    (reg.por_zona || []).forEach(z => {
+      const zu = (um.por_zona && um.por_zona[z.zona_mitma_id]) || {};
+      const ambar = zu.umbral_ambar != null ? zu.umbral_ambar : um.ambar;
+      const rojo = zu.umbral_rojo != null ? zu.umbral_rojo : um.rojo;
+      (z.anios || []).filter(a => a.tipo === 'previsto').forEach(a => {
+        if (!fuera(a, 'dias_rojos') && !fuera(a, 'dias_alerta')) return;
+        const cal = filas(z.zona_mitma_id, a.anio);
+        ajustar(a, 'dias_rojos', cal, rojo);
+        ajustar(a, 'dias_alerta', cal, ambar);
+      });
+      (z.curva_umbral || []).filter(c => c.tipo === 'previsto' && fuera(c, 'dias'))
+        .forEach(c => ajustar(c, 'dias', filas(z.zona_mitma_id, c.anio), c.umbral));
+    });
+  }
+  // d: datos ya expandidos (cualquier subconjunto de los ficheros). Los modifica antes de congelarlos
+  function coherencia(d) {
+    if (d.predicciones && Array.isArray(d.predicciones.predicciones) && d.predicciones.umbrales) {
+      d.predicciones.predicciones.forEach(r => acotarRango(r, d.predicciones.umbrales));
+    }
+    const reg = d.regulacion;
+    if (reg && Array.isArray(reg.calendario_alertas) && reg.umbrales) {
+      reg.calendario_alertas.forEach(r => acotarRango(r, reg.umbrales));
+      acotarRecuentos(reg, reg.umbrales);
+    }
+    return d;
+  }
+
   // Inserta un <script> (funciona también desde file://, donde fetch no puede leer ficheros)
   function insertarScript(src) {
     return new Promise((ok, ko) => {
@@ -156,6 +231,7 @@ window.DatosModelo = (function () {
       }
       const d = {};
       FICHEROS_INICIO.forEach(n => { d[n] = b[n]; });
+      coherencia(d);
       d.mapeo = b.mapeo;
       d.calendario = b.calendario || null;
       d.agenda = b.agenda || null;
@@ -178,6 +254,7 @@ window.DatosModelo = (function () {
       }
       const d = {};
       FICHEROS.forEach(n => { d[n] = bruto[n]; });
+      coherencia(d);
       d.mapeo = bruto.mapeo;
       d.calendario = bruto.calendario || null;
       d.horas = bruto.horas || null;
@@ -190,5 +267,5 @@ window.DatosModelo = (function () {
     return promesa;
   }
 
-  return Object.freeze({ cargar, cargarInicio, validar, expandir, FICHEROS });
+  return Object.freeze({ cargar, cargarInicio, validar, expandir, coherencia, FICHEROS });
 })();

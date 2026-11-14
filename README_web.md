@@ -89,6 +89,7 @@ Las salidas vigentes son las de `main`. No hay que traerlas de ramas antiguas: `
 
 ```bash
 node --check "Afluencia Asturias/interfaz/app.js" "Afluencia Asturias/interfaz/mapa.js" "Afluencia Asturias/datos/"*.js
+node "Afluencia Asturias/herramientas/comprobar_datos_web.js"   # coherencia de lo que se enseña: tiene que decir «TODO OK»
 ```
 
 Las pruebas de la lógica de Funciones avanzadas están en `Afluencia Asturias/pestanas/gestion/pruebas.html`: se abre en el navegador.

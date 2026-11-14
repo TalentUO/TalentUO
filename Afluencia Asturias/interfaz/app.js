@@ -1060,10 +1060,10 @@
       const dif = mejorDia.diferenciaPct != null ? `: ${Math.abs(Math.round(mejorDia.diferenciaPct))}${NBSP}% ${mejorDia.diferenciaPct < 0 ? 'menos' : 'más'} gente que el día elegido` : '';
       tarjeta = `<div class="mm"><p class="eyebrow">Mejor día alternativo</p><p class="mm-valor">${esc(fechaLarga(mejorDia.fecha))}</p>
         <p>${pill(mejorDia.nivel)}</p><p class="mm-nota">${esc(delta(mejorDia.ratio))}${dif}.</p>
-        <p class="mm-nota">El día con menos presión a ±${mejorDia.margen} días en la misma zona, según el modelo.</p>
+        <p class="mm-nota">El día con menos presión a ±${mejorDia.margen} días en la misma zona, entre los que tienen menos gente, según el modelo.</p>
         <button type="button" class="btn-mini" data-fecha="${mejorDia.fecha}">Ver ese día</button></div>`;
     } else if (mejorDia) {
-      tarjeta = `<div class="mm"><p class="eyebrow">Mejor día alternativo</p><p class="mm-nota">Ningún día a ±${mejorDia.margen} días tiene menos presión en esta zona.</p></div>`;
+      tarjeta = `<div class="mm"><p class="eyebrow">Mejor día alternativo</p><p class="mm-nota">Ningún día a ±${mejorDia.margen} días tiene menos gente y menos presión en esta zona.</p></div>`;
     } else if (mejor) {
       const d = mejor.dia;
       const donde = periodo ? 'Dentro de las fechas elegidas.' : `Entre el ${diaMes(v.desde)} y el ${diaMes(sumar(v.desde, v.dias - 1))}.`;

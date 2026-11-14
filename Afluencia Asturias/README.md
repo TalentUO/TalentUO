@@ -109,7 +109,7 @@ Lleva además unos extras del modelo: `incierto`, `conjunto`, `modelo`, `horizon
 | `getSerieZona(zonaId, desde, dias)` | `Prevision[]`, una por día |
 | `getFactores(zonaId, fecha)` | Los factores que más pesan: `[{ clave, texto, efecto }]` (efecto en %) |
 | `getMejorMomento(zonaId, desde, dias)` | `{ dia: Prevision } \| null`: el día con menos presión de la ventana |
-| `getMejorDia(zonaId, fecha)` | Mejor día alternativo del modelo, si el día está en alerta: `{ fecha, nivel, ratio, visitantes, diferenciaPct, margen }` |
+| `getMejorDia(zonaId, fecha)` | Mejor día alternativo, si el día está en alerta: `{ fecha, nivel, ratio, visitantes, diferenciaPct, margen }`. Siempre con menos visitantes y menos presión que el día elegido; `fecha: null` si no hay ninguno a ±`margen` días |
 | `getAlternativas(zonaId, fecha, hasta?)` | Zonas cercanas: la que propone el modelo y las que estén en verde a menos de `km_zona_cercana` |
 | `getPerfil(zonaId, fecha)` | `{ deUnDia, conPernocta, asturias, restoEspana, mes, dias }` en %: media histórica del mes |
 | `getFiabilidad(zonaId)` | `{ porHorizonte:{ '1'…'7', '8+': { nota, aciertoColor, n } }, algoritmo }` |
@@ -224,6 +224,7 @@ node --check interfaz/app.js interfaz/mapa.js datos/api.js datos/datos.js datos/
 ```
 
 - **Lógica de Funciones avanzadas:** abre `pestanas/gestion/pruebas.html` en el navegador (doble clic). Tiene que decir «TODO OK».
+- **Coherencia de lo que se enseña:** `node herramientas/comprobar_datos_web.js` recorre todos los días y zonas por `window.Datos` y tiene que acabar en «TODO OK»: la previsión cae dentro de su rango probable, el mejor día alternativo tiene menos gente y el acceso regulado a los Lagos solo sale como causa en su zona. También corre en la integración continua.
 - **Capa de datos de Inicio sin navegador:**
   1. En Node, con `global.window = global` y `global.location = { search: '' }`, carga en este orden: `datos/sitios.js`, `datos/modelo/salidas-inicio.js`, `datos/datos.js`, `datos/catalogo.js`, `datos/fuente-modelo.js` y `datos/api.js`.
   2. Llama a `window.Datos.*`.

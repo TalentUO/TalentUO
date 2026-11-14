@@ -28,6 +28,9 @@
   const DEMO_MES = '2024-08';
   const HISTORICO = { modelo: 'largo', horizonte: 8 }; // aviso con una semana de antelación
   const PRIORIDAD = { futuro_corto: 3, futuro_largo: 2, historico: 1 };
+  // Factores que valen lo mismo en las 46 zonas pero solo significan algo en la zona principal: fuera de ella
+  // el modelo los usa como indicador de temporada alta y no se enseñan como causa (nombre de config/factores.yaml)
+  const FACTORES_SOLO_ZONA_PRINCIPAL = ['Acceso regulado a los Lagos'];
 
   /* ---------- Fechas ---------- */
   function deISO(s) { const p = s.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2], 12); }
@@ -263,7 +266,9 @@
       return listo().then(() => {
         const r = M.elegida[fecha + '|' + zonaId];
         if (!r || r.color === 'gris') return [];
-        return r.factores.map(f => ({ clave: f.nombre, texto: f.nombre, efecto: Math.round(f.efecto_pct) }));
+        const z = M.zonaPorId[zonaId];
+        const visibles = z && z.principal ? r.factores : r.factores.filter(f => FACTORES_SOLO_ZONA_PRINCIPAL.indexOf(f.nombre) === -1);
+        return visibles.map(f => ({ clave: f.nombre, texto: f.nombre, efecto: Math.round(f.efecto_pct) }));
       });
     },
     // Día con menos presión de la ventana (la interfaz lo usa si el modelo no propone un mejor día)
@@ -276,17 +281,33 @@
         return { dia };
       });
     },
-    // Mejor día alternativo de alternativas.json (solo existe si ese día está en ámbar o rojo):
-    // el de menos presión a ±dias_margen días en la misma zona, o null
+    // Mejor día alternativo (solo si ese día está en ámbar o rojo, es decir, si está en alternativas.json).
+    // «Mejor» = menos visitantes Y menos presión que el día elegido. El modelo elige solo por presión
+    // (cociente sobre el día normal, que cambia con el día de la semana) y a veces propone un día con más
+    // gente: esa propuesta se descarta y se busca, a ±dias_margen días en la misma zona, el día de menos
+    // presión que cumpla las dos cosas. Si no hay ninguno, { fecha: null }.
     getMejorDia(zonaId, fecha) {
       return listo().then(() => {
         const r = M.elegida[fecha + '|' + zonaId];
         const a = r && M.alternativas[[fecha, zonaId, r.conjunto, r.modelo, r.horizonte].join('|')];
         if (!a) return null;
         const margen = (M.d.alternativas.parametros && M.d.alternativas.parametros.dias_margen) || 3;
-        if (!a.mejor_dia) return { fecha: null, margen };
+        const mejora = c => c && c.color !== 'gris' && c.prediccion != null && c.cociente != null
+          && c.prediccion < r.prediccion && c.cociente < r.cociente;
+        let mejor = null;
         const md = a.mejor_dia;
-        return { fecha: md.fecha, nivel: md.color, ratio: md.cociente, visitantes: redondea(md.prediccion), diferenciaPct: md.diferencia_pct, margen };
+        if (md && md.fecha >= M.hoy && md.fecha <= M.ultimo && mejora(md)) mejor = md;
+        else {
+          for (let i = -margen; i <= margen; i++) {
+            const f = sumar(fecha, i);
+            if (!i || f < M.hoy || f > M.ultimo) continue;
+            const c = M.elegida[f + '|' + zonaId];
+            if (mejora(c) && (!mejor || c.cociente < mejor.cociente)) mejor = c;
+          }
+        }
+        if (!mejor) return { fecha: null, margen };
+        return { fecha: mejor.fecha, nivel: mejor.color, ratio: mejor.cociente, visitantes: redondea(mejor.prediccion),
+          diferenciaPct: (mejor.prediccion / r.prediccion - 1) * 100, margen };
       });
     },
     getAlternativas(zonaId, fecha, hasta) {

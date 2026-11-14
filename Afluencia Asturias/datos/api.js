@@ -57,10 +57,14 @@
  * getPrevisionConcejos(desde, hasta?) -> una por concejo, con { concejoId, zonaId } además de zonaId:
  *                                      sin hasta: Prevision del día; con hasta: PrevisionPeriodo
  * getSerieZona(zonaId, desde, dias) -> Prevision[]   (una por día)
- * getFactores(zonaId, fecha)        -> [{ clave, texto, efecto }]   efecto en % (38 = +38 %), los 3 que más pesan
+ * getFactores(zonaId, fecha)        -> [{ clave, texto, efecto }]   efecto en % (38 = +38 %), los que más pesan (hasta 3).
+ *                                      El acceso regulado a los Lagos solo se da en la zona principal: en las demás
+ *                                      el modelo lo usa como indicador de temporada y no es una causa
  * getMejorMomento(zonaId, desde, dias) -> { dia: Prevision } | null   el día con menos presión de la ventana
  * getMejorDia(zonaId, fecha)        -> { fecha, nivel, ratio, visitantes, diferenciaPct, margen } | { fecha:null, margen } | null
- *                                      mejor día alternativo del modelo (alternativas.json); null si el día no está en alerta
+ *                                      mejor día alternativo a ±margen días: menos visitantes Y menos presión que el
+ *                                      elegido (diferenciaPct < 0 siempre); fecha:null si no hay ninguno;
+ *                                      null si el día no está en alerta (no figura en alternativas.json)
  * getAlternativas(zonaId, fecha, hasta?) -> [Prevision + { nombre, minutos|null, km|null, delModelo? }]   zonas cercanas
  *                                      con hasta: PrevisionPeriodo, comparando la media del periodo
  * getPerfil(zonaId, fecha)          -> { deUnDia|null, conPernocta|null, asturias, restoEspana, mes, dias } en % | null

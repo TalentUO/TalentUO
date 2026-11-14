@@ -44,13 +44,13 @@ jobs:
         run: python -m ruff check src scripts "Afluencia Asturias/herramientas"
 
       - name: Pruebas del modelo (rápidas)
-        run: python -X utf8 -m pytest -q -m "not lento" src/modelo/tests
+        run: python -X utf8 -m pytest -q -rxX -m "not lento" src/modelo/tests
 
       - name: Prueba de la unión de factores
         run: python -X utf8 src/limpieza_B/test_unir_B.py
 
   web:
-    name: Sintaxis de la web
+    name: Sintaxis y datos de la web
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -67,6 +67,9 @@ jobs:
                    "Afluencia Asturias"/pestanas/*/*.js; do
             node --check "$f"
           done
+
+      - name: Coherencia de los datos que enseña la web
+        run: node "Afluencia Asturias/herramientas/comprobar_datos_web.js"
 
   pruebas-lentas:
     name: Pruebas completas (lentas)
