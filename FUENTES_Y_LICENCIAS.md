@@ -47,7 +47,7 @@ El código del proyecto se publica con licencia MIT (`LICENSE`). Los datos, docu
 
 **PredictHQ retirado.** La web usó datos de PredictHQ para los grandes eventos de Inicio. Sus Términos (§3.7(c), §3.7(d)(i) y §4.5(b)) prohíben guardar copias de los datos y mostrarlos o redistribuirlos, y la prueba gratuita solo permite uso interno. Por eso se quitaron `Afluencia Asturias/datos/eventos.js` y `herramientas/eventos_phq.py` de la web y del repositorio. La sección de eventos usa ahora la agenda propia: festivos del BOE y el BOPA, y partidos y grandes eventos recopilados de fuentes públicas (`data/manual/eventos_recopilado.csv`).
 
-**Copias de páginas y PDF de terceros en `data/raw/`.** Las páginas HTML y los PDF de prensa, webs de eventos, LaLiga, el Parque Nacional y Turismo de Cangas se guardaron **solo para dejar constancia de la fuente y de la fecha** de cada dato. No son contenido del proyecto: los derechos son de sus titulares. Desde el 2026-10-25 **no se versionan**: se retiraron del repositorio y de su historial, y cada copia queda identificada por su URL y fecha de consulta en los registros de `notas/fuentes/`. Lo comprobado el 2026-10-20:
+**Copias de páginas y PDF de terceros en `data/raw/`.** Las páginas HTML y los PDF de prensa, webs de eventos, LaLiga, el Parque Nacional y Turismo de Cangas se guardaron **solo para dejar constancia de la fuente y de la fecha** de cada dato. No son contenido del proyecto: los derechos son de sus titulares. Desde el 2026-10-25 **no se versionan**: se retiraron del árbol actual del repositorio (siguen en el historial de git; ver el pendiente 7), y cada copia queda identificada por su URL y fecha de consulta en los registros de `notas/fuentes/`. Lo comprobado el 2026-10-20:
 
 - **Prohíben expresamente la reproducción sin autorización**: El Español (https://www.elespanol.com/aviso_legal/), Infobae (https://www.infobae.com/terminos-y-condiciones/), Vozpópuli (https://www.vozpopuli.com/aviso-legal), RTPA (https://www.rtpa.es/aviso-legal), LaLiga, el Parque Nacional de los Picos de Europa y Turismo de Cangas de Onís (URL en la tabla).
 - **elDiario.es** enlaza en su pie una licencia CC BY-NC 4.0, pero no se comprobó a qué contenidos se aplica (https://www.eldiario.es/aviso_legal/).
@@ -56,11 +56,12 @@ El código del proyecto se publica con licencia MIT (`LICENSE`). Los datos, docu
 
 ## Estado de los pendientes antes de hacer público el repositorio
 
-Revisado el 2026-10-25.
+Revisado el 2026-10-25; puntos 1, 4 y 7 corregidos el 2026-11-14.
 
-1. **Hecho.** Copias de terceros de `data/raw/eventos/` y `data/raw/calendario/` (prensa, LaLiga, `pnpe_*`, `turismocangasdeonis_*`): retiradas del repositorio y del historial; quedan su URL y su fecha en los registros de `notas/fuentes/`.
+1. **Hecho en el árbol actual; historial pendiente (ver 7).** Copias de terceros de `data/raw/eventos/` y `data/raw/calendario/` (prensa, LaLiga, `pnpe_*`, `turismocangasdeonis_*`): retiradas del árbol actual del repositorio; quedan su URL y su fecha en los registros de `notas/fuentes/`.
 2. **Hecho.** «Sobre los datos» (`Afluencia Asturias/pestanas/sobre/contenido.js`) incluye las atribuciones del MITMA, Open-Meteo, AEMET, OpenStreetMap e IGN.
 3. **Aviso vigente.** Open-Meteo: la API gratuita es solo para uso no comercial; un uso comercial de la web exige plan de pago o servidor propio.
-4. **Hecho.** SADEI y football-data.co.uk: retirados del repositorio y del historial; SADEI se descarga con `scripts/descarga_sadei.py`. COGERSA y los datos de PredictHQ también se purgaron del historial.
+4. **Hecho en el árbol actual; historial pendiente (ver 7).** SADEI y football-data.co.uk: retirados del árbol actual del repositorio; SADEI se descarga con `scripts/descarga_sadei.py`. COGERSA y los datos de PredictHQ tampoco están ya en el árbol actual.
 5. **Hecho.** Licencias de Leaflet (`vendor/leaflet/LICENSE`) y topojson-client (`vendor/LICENSE-topojson-client`).
 6. **Pendiente.** Comprobar el aviso propio de Educastur.
+7. **Pendiente.** Reescribir el historial de git. Los ficheros de los puntos 1 y 4 (copias de terceros, SADEI, COGERSA y PredictHQ) se borraron en el commit `45c34b6`, pero los commits anteriores siguen siendo públicos y su contenido se puede recuperar. Retirarlos de verdad exige reescribir el historial y forzar el push, lo que afecta a los clones de todo el equipo; está decidido hacerlo más adelante.
