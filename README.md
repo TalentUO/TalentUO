@@ -264,11 +264,13 @@ Uso, condiciones de reutilización y texto de atribución de cada una: **`FUENTE
 
 Equipo del Hackathon TalentUO 2026, reto de NTT DATA:
 
-- Hugo Gómez ([@hugoomez](https://github.com/hugoomez))
-- Adrián Fernández López ([@adrian-fzl-data](https://github.com/adrian-fzl-data))
-- L. Rodríguez Torres ([@LRodriguezTorres](https://github.com/LRodriguezTorres))
-- [@antoniocigales](https://github.com/antoniocigales)
-- [@sggg6](https://github.com/sggg6)
+- **Hugo Gómez** ([@hugoomez](https://github.com/hugoomez)): factores explicativos (calendarios, eventos, meteorología e interés en internet), modelo de predicción y su validación, e integración de la web con las salidas del modelo.
+- **Adrián Fernández López** ([@adrian-fzl-data](https://github.com/adrian-fzl-data)): demanda y movilidad (integración y limpieza de datos de MITMA, INE y SADEI) y revisión final del proyecto.
+- **Samuel García García** ([@sggg6](https://github.com/sggg6)): diseño y piloto de la interfaz web, y prototipo de la pestaña Funciones avanzadas.
+- **L. Rodríguez Torres** ([@LRodriguezTorres](https://github.com/LRodriguezTorres))
+- **Antonio Cigales Roces** ([@antoniocigales](https://github.com/antoniocigales))
+
+La atribución se basa en el historial del repositorio; parte del trabajo del equipo se hizo fuera de él.
 
 ## Licencia
 
