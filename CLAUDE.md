@@ -1,54 +1,54 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Este fichero orienta a Claude Code (claude.ai/code) cuando trabaja con el código de este repositorio.
 
-## What this is
+## Qué es
 
-NTT Tourism: an early-warning system for tourist pressure in Asturias (Hackathon TalentUO 2026). A Python pipeline predicts daily leisure arrivals for the 46 MITMA zones (78 concejos) relative to each zone's "día normal", and a static web app (`Afluencia Asturias/`) shows it as a traffic light (verde / ámbar ≥ 1.5× / rojo ≥ 2.0×).
+NTT Tourism: un sistema de alerta temprana de presión turística en Asturias (Hackathon TalentUO 2026). Una cadena en Python predice las llegadas diarias de ocio a las 46 zonas del MITMA (78 concejos) en relación con el «día normal» de cada zona, y una web estática (`Afluencia Asturias/`) lo muestra como un semáforo (verde / ámbar ≥ 1,5× / rojo ≥ 2,0×).
 
-**Everything is written in Spanish**: identifiers, comments, docs, UI text and commit messages. Keep it that way.
+**Todo está escrito en español**: identificadores, comentarios, documentación, textos de la interfaz y mensajes de commit. Hay que mantenerlo así.
 
-## Commands
+## Órdenes
 
-Python 3.11, run everything from the repository root (scripts use root-relative paths). Always pass `-X utf8` on Windows.
+Python 3.11; todo se ejecuta desde la raíz del repositorio (los scripts usan rutas relativas a la raíz). En Windows, pasar siempre `-X utf8`.
 
 ```bash
-pip install -r requirements.txt                 # requirements-lock.txt has the exact tested versions
+pip install -r requirements.txt                 # requirements-lock.txt tiene las versiones exactas probadas
 
-# Lint (only syntax errors and unused/undefined names: E9, F)
+# Lint (solo errores de sintaxis y nombres sin usar o sin definir: E9, F)
 python -m ruff check src scripts "Afluencia Asturias/herramientas"
 
-# Model tests
-python -X utf8 -m pytest -q -m "not lento" src/modelo/tests        # fast (~30 s)
-python -X utf8 -m pytest -q src/modelo/tests                       # all (~4 min; runs the full chain per algorithm)
-python -X utf8 -m pytest -q src/modelo/tests/test_antifuga.py      # one file
-python -X utf8 -m pytest -q src/modelo/tests -k "nombre_del_test"  # one test
+# Pruebas del modelo
+python -X utf8 -m pytest -q -m "not lento" src/modelo/tests        # rápidas (~30 s)
+python -X utf8 -m pytest -q src/modelo/tests                       # todas (~4 min; ejecuta la cadena completa con cada algoritmo)
+python -X utf8 -m pytest -q src/modelo/tests/test_antifuga.py      # un fichero
+python -X utf8 -m pytest -q src/modelo/tests -k "nombre_del_test"  # una prueba
 
-# Model: regenerate salidas/ and push them to the web
-python -X utf8 src/modelo/ejecutar.py --objetivo real --algoritmo ambos   # ~15 min, what the web publishes
-python -X utf8 src/modelo/ejecutar.py --objetivo sintetico                # chain check with a made-up target
-python -X utf8 scripts/actualizar_datos_web.py                            # validates salidas/ and copies to the web
+# Modelo: regenerar salidas/ y llevarlas a la web
+python -X utf8 src/modelo/ejecutar.py --objetivo real --algoritmo ambos   # ~15 min, lo que publica la web
+python -X utf8 src/modelo/ejecutar.py --objetivo sintetico                # comprobación de la cadena con un objetivo inventado
+python -X utf8 scripts/actualizar_datos_web.py                            # valida salidas/ y las copia a la web
 
-# Factor cleaning (part B): rebuilds data/clean/ from data/raw/ (~50 s, stops at the first failed check)
+# Limpieza de factores (parte B): rehace data/clean/ desde data/raw/ (~50 s, se detiene en la primera comprobación fallida)
 python -X utf8 src/limpieza_B/ejecutar_todo.py
-python -X utf8 src/limpieza_B/test_unir_B.py    # a plain script with asserts, not a pytest test
+python -X utf8 src/limpieza_B/test_unir_B.py    # un script normal con asserts, no una prueba de pytest
 
 # Web
 python scripts/servir_web.py            # http://127.0.0.1:8000/
-python scripts/servir_web.py --demo     # demo mode (?demo=1): August 2024 validation with observed values
+python scripts/servir_web.py --demo     # modo demo (?demo=1): validación de agosto de 2024 con los valores observados
 node --check "Afluencia Asturias/interfaz/app.js" "Afluencia Asturias/interfaz/mapa.js" "Afluencia Asturias/datos/"*.js
 ```
 
-Frontend logic tests live in `Afluencia Asturias/pestanas/gestion/pruebas.html` (open in a browser; must say «TODO OK»). Deploy: from `Afluencia Asturias/`, `vercel deploy --prod` (project `ntt-tourism`).
+Las pruebas de la lógica de la interfaz están en `Afluencia Asturias/pestanas/gestion/pruebas.html` (se abre en un navegador; debe decir «TODO OK»). Despliegue: desde `Afluencia Asturias/`, `vercel deploy --prod` (proyecto `ntt-tourism`).
 
-Environment variables: `AEMET_API_KEY` (AEMET downloads), `TALENTUO_CONTACTO` (contact in download User-Agent), `MODELO_SALIDAS` (redirects model output away from `salidas/`; the tests use it).
+Variables de entorno: `AEMET_API_KEY` (descargas de AEMET), `TALENTUO_CONTACTO` (contacto en el User-Agent de las descargas), `MODELO_SALIDAS` (redirige las salidas del modelo fuera de `salidas/`; la usan las pruebas).
 
-## Architecture
+## Arquitectura
 
 ```
-data/raw ──► src/descarga_*.py, scripts/descarga_*.py   (downloads; raw is never hand-edited)
-         ──► src/limpieza_B/  ──► data/clean/*.parquet  (factors: calendar, events, weather, Wikipedia/Trends)
-MITMA    ──► src/modelo/construir_objetivo.py ──► data/clean/objetivo_diario.parquet  (target)
+data/raw ──► src/descarga_*.py, scripts/descarga_*.py   (descargas; raw nunca se edita a mano)
+         ──► src/limpieza_B/  ──► data/clean/*.parquet  (factores: calendario, eventos, tiempo, Wikipedia/Trends)
+MITMA    ──► src/modelo/construir_objetivo.py ──► data/clean/objetivo_diario.parquet  (objetivo)
                       │
                       ▼
             src/modelo/ejecutar.py ──► salidas/*.json, backtest.parquet
@@ -57,43 +57,43 @@ MITMA    ──► src/modelo/construir_objetivo.py ──► data/clean/objetiv
             scripts/actualizar_datos_web.py ──► Afluencia Asturias/datos/modelo/  (salidas.js, salidas-inicio.js, *.json)
 ```
 
-### Model (`src/modelo/`)
+### Modelo (`src/modelo/`)
 
-- Modules are **not a package**: each entry point does `sys.path.insert(0, <its dir>)` and imports siblings by bare name (`import backtest`, `from util import cfg`). Follow that pattern; don't add relative imports.
-- `ejecutar.py` is the orchestrator: `datos.cargar` → `backtest` (block validation + sensitivity experiments) → `metricas` → `produccion.entrenar_finales` → `explicar` (SHAP) → `calibracion` (Lagos regulation) → `web_salidas` → `validar_salidas`. It aborts if the web contract is not met.
-- `util.py` holds paths (`RAIZ`, `CLEAN`, `SALIDAS`…), config loaders (`cfg()`, `cfg_semaforo()`…) and the traffic-light helpers. All tunables live in `config/*.yaml`; `config/modelo.yaml → fuentes` is the only thing that differs between `sintetico` and `real` mode.
-- Target: `y = log((x + 1) / (normal + 1))`. "Día normal" (`dia_normal.py`) = median per zone and weekday in 2024, excluding July, August and holidays. In the backtest it is recomputed from the 365 days before each block.
-- **Two global models** (one for all zones, zone as a categorical): long-term (h ≥ 8, calendar + events only) and short-term (h = 1–7, plus weather forecast, internet interest and horizon). `--algoritmo ambos` backtests LightGBM and XGBoost and picks one with the pre-registered rule in `comparacion.py` / `config/modelo.yaml → seleccion_algoritmo`; everything downstream uses the winner (currently XGBoost).
-- **No-leakage rule (the central invariant):** to predict day d at horizon h, `features.py` may only use what was published by d−h. Weather is the archived forecast only (`om_*_prev{h}`, h ≤ 3, from 2024-01-22), never AEMET observations or ERA5; never lagged values of the target. `tests/test_antifuga.py` corrupts everything after d−h and asserts no feature changes — any change to `features.py` must keep it green.
-- Days flagged `sin_dato_mitma` / `anomalia_mitma` are neither trained on nor evaluated. Missing data is absent (NaN), never 0.
-- Synthetic mode stamps `sintetico: true` on every output and the web shows a warning banner; never publish it as real.
+- Los módulos **no son un paquete**: cada punto de entrada hace `sys.path.insert(0, <su directorio>)` e importa a sus hermanos por el nombre a secas (`import backtest`, `from util import cfg`). Hay que seguir ese patrón; no añadir importaciones relativas.
+- `ejecutar.py` es el orquestador: `datos.cargar` → `backtest` (validación por bloques + experimentos de sensibilidad) → `metricas` → `produccion.entrenar_finales` → `explicar` (SHAP) → `calibracion` (regulación de los Lagos) → `web_salidas` → `validar_salidas`. Aborta si no se cumple el contrato de la web.
+- `util.py` contiene las rutas (`RAIZ`, `CLEAN`, `SALIDAS`…), los cargadores de configuración (`cfg()`, `cfg_semaforo()`…) y las funciones auxiliares del semáforo. Todos los parámetros ajustables están en `config/*.yaml`; `config/modelo.yaml → fuentes` es lo único que cambia entre el modo `sintetico` y el `real`.
+- Objetivo: `y = log((x + 1) / (normal + 1))`. El «día normal» (`dia_normal.py`) = mediana por zona y día de la semana en 2024, sin julio, agosto ni festivos. En el backtest se recalcula con los 365 días anteriores a cada bloque.
+- **Dos modelos globales** (uno para todas las zonas, con la zona como variable categórica): largo plazo (h ≥ 8, solo calendario y eventos) y corto plazo (h = 1–7, además previsión del tiempo, interés en internet y horizonte). `--algoritmo ambos` hace el backtest de LightGBM y de XGBoost y elige uno con la regla fijada de antemano en `comparacion.py` / `config/modelo.yaml → seleccion_algoritmo`; todo lo posterior usa el ganador (ahora mismo, XGBoost).
+- **Regla anti-fuga (el invariante central):** para predecir el día d con horizonte h, `features.py` solo puede usar lo publicado hasta d−h. El tiempo es únicamente la previsión archivada (`om_*_prev{h}`, h ≤ 3, desde el 2024-01-22), nunca las observaciones de AEMET ni ERA5; nunca valores retardados del objetivo. `tests/test_antifuga.py` corrompe todo lo posterior a d−h y comprueba que ninguna variable cambia: cualquier cambio en `features.py` debe mantenerla en verde.
+- Los días marcados `sin_dato_mitma` / `anomalia_mitma` ni se usan para entrenar ni se evalúan. Un dato que falta está ausente (NaN), nunca vale 0.
+- El modo sintético marca `sintetico: true` en todas las salidas y la web muestra un aviso; nunca se publica como real.
 
-### Contracts
+### Contratos
 
-- `notas/contrato_objetivo.md`: format of `objetivo_diario.parquet` (model input).
-- `notas/contrato_web.md`: format of the JSON in `salidas/` read by the web. Enforced on the Python side by `validar_salidas.py` and `tests/test_contrato_web.py`, and on the JS side by `Afluencia Asturias/datos/datos.js`. Change all three together.
+- `notas/contrato_objetivo.md`: formato de `objetivo_diario.parquet` (entrada del modelo).
+- `notas/contrato_web.md`: formato de los JSON de `salidas/` que lee la web. En Python lo hacen cumplir `validar_salidas.py` y `tests/test_contrato_web.py`; en JavaScript, `Afluencia Asturias/datos/datos.js`. Los tres se cambian a la vez.
 
 ### Web (`Afluencia Asturias/`)
 
-Static HTML/CSS/JS with no build step, no framework, and vendored Leaflet + topojson-client. It must keep working from `file://` (double click) and offline, which is why scripts are classic (not ES modules) and data ships as `.js` files instead of being fetched.
+HTML, CSS y JavaScript estáticos, sin compilación ni framework, con Leaflet y topojson-client incluidos en el repositorio. Tiene que seguir funcionando desde `file://` (doble clic) y sin conexión; por eso los scripts son clásicos (no módulos ES) y los datos van en ficheros `.js` en lugar de pedirse con fetch.
 
-Data layer, in load order:
+Capa de datos, en orden de carga:
 
 ```
 salidas-inicio.js ─┐
                    ├─ datos.js (window.DatosModelo) ─ fuente-modelo.js (window.FuenteDatos) ─ api.js (window.Datos) ─ interfaz/app.js
-salidas.js ────────┘              └─────────────── pestanas/ (Funciones avanzadas, Sobre los datos) read DatosModelo directly
+salidas.js ────────┘              └─────────────── pestanas/ (Funciones avanzadas, Sobre los datos) leen DatosModelo directamente
 ```
 
-- `interfaz/` only paints and handles interaction: it never computes forecasts, levels or thresholds (thresholds come from `predicciones.umbrales`). `mapa.js` knows nothing about forecasts.
-- To add a datum to Inicio: document it in the header comment of `datos/api.js`, add it to `METODOS`, implement it in `fuente-modelo.js`, then use it from `app.js`.
-- `pestanas/gestion/logica.js` is pure functions without DOM (tested by `pruebas.html`).
-- **Generated, never hand-edit:** `datos/modelo/*` (from `actualizar_datos_web.py`), `interfaz/geo-asturias.js` and `datos/sitios.js` (from `herramientas/`).
-- Conventions (details in `Afluencia Asturias/README.md` §6): the visual design is frozen (code may change, what is seen may not); all colours are CSS variables defined in `index.html` (light, `prefers-color-scheme: dark` and `[data-theme="dark"]`), no literals in CSS/JS; a level is never conveyed by colour alone (icon + pattern + word); show/hide with the `hidden` attribute; async painters use a `seq*` counter to drop late responses; numbers use `8.880`, NBSP before `%`, and the real minus sign `−`.
+- `interfaz/` solo pinta y gestiona la interacción: nunca calcula previsiones, niveles ni umbrales (los umbrales vienen de `predicciones.umbrales`). `mapa.js` no sabe nada de previsiones.
+- Para añadir un dato a Inicio: documentarlo en el comentario de cabecera de `datos/api.js`, añadirlo a `METODOS`, implementarlo en `fuente-modelo.js` y después usarlo desde `app.js`.
+- `pestanas/gestion/logica.js` son funciones puras sin DOM (las prueba `pruebas.html`).
+- **Generados, nunca se editan a mano:** `datos/modelo/*` (los crea `actualizar_datos_web.py`), `interfaz/geo-asturias.js` y `datos/sitios.js` (los crea `herramientas/`).
+- Convenciones (detalle en `Afluencia Asturias/README.md` §6): el diseño visual está congelado (el código puede cambiar, lo que se ve no); todos los colores son variables CSS definidas en `index.html` (claro, `prefers-color-scheme: dark` y `[data-theme="dark"]`), sin literales en CSS ni en JS; un nivel nunca se transmite solo con el color (icono + trama + palabra); se muestra y se oculta con el atributo `hidden`; las funciones asíncronas que pintan usan un contador `seq*` para descartar las respuestas tardías; los números se escriben `8.880`, con espacio de no separación antes de `%` y el signo menos real `−`.
 
-## Data and licensing constraints
+## Datos y restricciones de licencia
 
-- Heavy or non-redistributable inputs are gitignored on purpose (≈27 GB of MITMA files, COGERSA, copies of third-party event/calendar pages, SADEI `.px`). Don't add them back; see `data/raw/LEEME_datos_no_versionados.md` and `FUENTES_Y_LICENCIAS.md`. The model trains from the versioned `data/clean/` tables without them.
-- The current outputs are the ones on `main` (46 zones). Old branches such as `resultados-reales` hold 5-zone outputs; don't pull from them.
-- `notas/historico/` and `src/auditoria/` are records of finished phases, not current behaviour. `notas/README.md` indexes what is current; `notas/modelo.md` is the reference for model decisions (note that several result sections in it are from the synthetic run and are labelled as such).
-- Figures quoted in `README.md` cite the `salidas/` file they come from; when outputs are regenerated, update those figures from the files rather than from memory.
+- Las entradas pesadas o no redistribuibles están en `.gitignore` a propósito (≈27 GB de ficheros del MITMA, COGERSA, copias de páginas de eventos y calendarios de terceros, los `.px` de SADEI). No hay que volver a añadirlas; ver `data/raw/LEEME_datos_no_versionados.md` y `FUENTES_Y_LICENCIAS.md`. El modelo se entrena sin ellas, a partir de las tablas versionadas de `data/clean/`.
+- Las salidas vigentes son las de `main` (46 zonas). Ramas antiguas como `resultados-reales` tienen salidas de 5 zonas; no hay que traer nada de ellas.
+- `notas/historico/` y `src/auditoria/` son registros de fases terminadas, no el comportamiento actual. `notas/README.md` indica qué está vigente; `notas/modelo.md` es la referencia de las decisiones del modelo (ojo: varias secciones de resultados son de la ejecución sintética y están marcadas como tales).
+- Las cifras citadas en `README.md` indican el fichero de `salidas/` del que salen; cuando se regeneren las salidas, hay que actualizar esas cifras a partir de los ficheros, no de memoria.
