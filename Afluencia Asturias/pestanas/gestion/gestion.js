@@ -73,17 +73,23 @@ window.Pestanas = window.Pestanas || {};
     const nombreC = ine => nombresIne[ine] || 'Concejo ' + ine;
     const umbrales = L.umbralesDisponibles(datos);
     const umb = datos.regulacion.umbrales || datos.predicciones.umbrales;
-    const hoy = datos.predicciones.fecha_hoy;
+    // «Hoy» = la fecha real si la previsión la cubre (DatosModelo.referencia); los días ya pasados no se ofrecen
+    const fechaDatos = datos.predicciones.fecha_hoy;
     const finPrev = L.finPrevision(datos);
+    const ref = window.DatosModelo.referencia(fechaDatos, fechaDatos, finPrev);
+    const hoy = ref.hoy;
     const calendario = {};
     ((datos.calendario && datos.calendario.dias) || []).forEach(d => { calendario[d.fecha] = d; });
-    const alertas = L.alertasProximas(datos);
+    const alertas = L.alertasProximas(datos, { desde: hoy });
     const mesHoy = +hoy.slice(5, 7);
     const opcionesZona = zonas.map(z => `<option value="${esc(z.zona_mitma_id)}">${esc(z.nombre_zona)}</option>`).join('');
     const paneles = PANELES;
     // Días de antelación con previsión del tiempo (1-3 hoy): sale de las salidas del modelo
     const hMeteo = Math.max(0, ...((datos.predicciones.info_corto_plazo && datos.predicciones.info_corto_plazo.horizontes_con_tiempo) || []));
     const conTiempo = hMeteo ? `A ${hMeteo === 1 ? '1 día' : '1-' + hMeteo + ' días'} la previsión incluye el tiempo` : 'La previsión no incluye el tiempo';
+    // De cuándo son los datos, y si su previsión del tiempo sigue sirviendo (calculados hoy o ayer)
+    const calculada = `Previsión calculada el ${util.fechaCompleta(fechaDatos)}`;
+    const introTiempo = ref.vigente ? `${calculada}. ${conTiempo}; después usa` : `${calculada}, hace ${ref.desfaseDias} días: ya no incluye la previsión del tiempo y usa`;
 
     // Periodos de la previsión de saturación (todos desde hoy y dentro de lo que cubre el modelo)
     const anioHoy = +hoy.slice(0, 4), anioFin = +finPrev.slice(0, 4);
@@ -141,12 +147,12 @@ window.Pestanas = window.Pestanas || {};
       <div id="sat-detalle" class="sat-detalle"></div>
       <h3 class="sat-sub" id="sat-zonas-t">Todas las zonas en este periodo</h3>
       <ul class="rg-lista sat-zonas" id="sat-zonas" aria-labelledby="sat-zonas-t"></ul>
-      <p class="g-nota">${esc(conTiempo)}; después usa calendario y eventos, y en los días marcados «previsión solo de calendario» solo tiene en cuenta el calendario (festivos, puentes, vacaciones) y es orientativa. Por defecto, saturación es ${esc(pct(umb.rojo))} sobre un día normal, el rojo del semáforo (alta: ${esc(pct(umb.ambar))}). Un concejo muestra la previsión de su zona.</p>
+      <p class="g-nota">${esc(introTiempo)} calendario y eventos, y en los días marcados «previsión solo de calendario» solo tiene en cuenta el calendario (festivos, puentes, vacaciones) y es orientativa. Por defecto, saturación es ${esc(pct(umb.rojo))} sobre un día normal, el rojo del semáforo (alta: ${esc(pct(umb.ambar))}). Un concejo muestra la previsión de su zona.</p>
     </section>
 
     <section class="tarjeta g-sec" id="g-alertas" role="tabpanel" aria-labelledby="gt-alertas" tabindex="-1" hidden>
       <h2>Alertas de las próximas ${Math.round(C.diasAlertas / 7)} semanas</h2>
-      <p class="g-desc">Nivel previsto por día. Elige una zona y añade sus concejos a la tabla, o muestra todas las zonas. ${esc(conTiempo)}; después usa solo calendario y eventos y es más incierta.</p>
+      <p class="g-desc">Nivel previsto por día. Elige una zona y añade sus concejos a la tabla, o muestra todas las zonas. ${esc(introTiempo)} solo calendario y eventos y es más incierta.</p>
       <div class="al-controles">
         <div>
           <label for="al-zona" class="filtro-et">Zona</label>
@@ -781,7 +787,7 @@ window.Pestanas = window.Pestanas || {};
         desc = `Días con más de ${pct(u)} sobre un día normal ${rangoTxt(p)}, por zona, con el rango probable y la acción sugerida.`;
       } else if (tipo === 'prevision') {
         csv = L.csvPrevision(alertas, sint);
-        nombre = `prevision_${hoy}.csv`;
+        nombre = `prevision_${fechaDatos}.csv`;
         desc = `Previsión de las ${zonas.length} zonas para los próximos ${C.diasAlertas} días, con el color, el rango probable y la acción sugerida.`;
       } else if (tipo === 'perfil') {
         csv = L.csvPerfil(datos, sint);

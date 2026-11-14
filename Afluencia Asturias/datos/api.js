@@ -35,9 +35,16 @@
  *   diasPorNivel            // { verde, ambar, rojo } días de cada nivel, o null
  * }                         // conMeteo = true solo si todos los días tienen meteorología
  *
- * getInfo()                         -> { hoy, horizonteDias, diasConMeteo, umbrales:{ambar, rojo}, sintetico, demo }
+ * getInfo()                         -> { hoy, horizonteDias, diasConMeteo, umbrales:{ambar, rojo}, sintetico, demo,
+ *                                        fechaDatos, esHoy, desfaseDias, datosVigentes, fueraDeRango }
+ *                                      hoy = primer día que se puede elegir: la fecha real si hay previsión para ella;
+ *                                      si no, el día más cercano que la tenga (entonces esHoy = false y no se llama «hoy»);
  *                                      horizonteDias = días que se pueden elegir desde hoy (hasta el último día con predicción);
- *                                      diasConMeteo = días de antelación con previsión del tiempo; demo = modo ?demo=1
+ *                                      diasConMeteo = días de antelación con previsión del tiempo (0 si ya no vale);
+ *                                      demo = modo ?demo=1;
+ *                                      fechaDatos = día en que se calculó la previsión; desfaseDias = días pasados desde
+ *                                      entonces; datosVigentes = calculada hoy o ayer (su previsión del tiempo aún sirve);
+ *                                      fueraDeRango = la fecha real es posterior al último día con previsión
  * getZonas()                        -> [{ id, nombre, tipos:['costa'|'montana'|'ciudad'], concejos[], lugares[], vecinos|null, principal, sinDatos }]
  *                                      zonas del modelo (MITMA); concejos = nombres; principal = zona estrella (Picos de Europa)
  * getConcejos()                     -> [{ id, nombre, zonaId|null }]   id = código INE (5 cifras, '33xxx'),

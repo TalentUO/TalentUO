@@ -28,6 +28,11 @@
  * predicción)), que es lo mismo que daría exigir q10 <= 0 <= q90 en el modelo,
  * y se recalcula «incierto» en los registros tocados. Ver coherencia().
  *
+ * Fecha de los datos: las salidas se calculan un día (predicciones.fecha_hoy) y
+ * la web puede abrirse semanas después. referencia() compara esa fecha con la
+ * del reloj y dice qué día es «hoy» en pantalla, si de verdad es hoy y si la
+ * previsión del tiempo sigue vigente. La usan las tres pestañas.
+ *
  * La promesa es única (se carga una vez). Si falta un fichero o un campo
  * obligatorio, se rechaza con un Error cuyo mensaje lista los problemas.
  *
@@ -176,6 +181,32 @@ window.DatosModelo = (function () {
     return d;
   }
 
+  /* ---------- Fecha de los datos ---------- */
+  // Fecha real 'YYYY-MM-DD' (hora local). ?hoy=YYYY-MM-DD la sustituye, para pruebas y capturas
+  function hoyReal() {
+    const m = /[?&]hoy=(\d{4}-\d{2}-\d{2})(?:&|$)/.exec((window.location && window.location.search) || '');
+    if (m) return m[1];
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  const diasEntre = (a, b) => Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / 86400000);
+  /**
+   * fechaDatos: día en que se calcularon las salidas; primera y ultima: primer y último día con previsión;
+   * real: fecha del reloj (por defecto, hoyReal()). Devuelve:
+   *   hoy          día de referencia en pantalla: la fecha real si tiene previsión; si no, el día más cercano que la tenga
+   *   esHoy        true solo si ese día es la fecha real (si no, no se puede llamar «hoy»)
+   *   desfaseDias  días transcurridos desde que se calcularon los datos
+   *   vigente      la previsión del tiempo de las salidas sigue sirviendo (calculadas hoy o ayer)
+   *   fueraDeRango la fecha real es posterior al último día con previsión
+   */
+  function referencia(fechaDatos, primera, ultima, real) {
+    real = real || hoyReal();
+    const fueraDeRango = real > ultima;
+    const hoy = real < primera ? primera : fueraDeRango ? ultima : real;
+    const desfaseDias = Math.max(0, diasEntre(fechaDatos, real));
+    return { fechaDatos, hoyReal: real, hoy, esHoy: hoy === real, desfaseDias, vigente: desfaseDias <= 1, fueraDeRango };
+  }
+
   // Inserta un <script> (funciona también desde file://, donde fetch no puede leer ficheros)
   function insertarScript(src) {
     return new Promise((ok, ko) => {
@@ -267,5 +298,5 @@ window.DatosModelo = (function () {
     return promesa;
   }
 
-  return Object.freeze({ cargar, cargarInicio, validar, expandir, coherencia, FICHEROS });
+  return Object.freeze({ cargar, cargarInicio, validar, expandir, coherencia, hoyReal, referencia, diasEntre, FICHEROS });
 })();

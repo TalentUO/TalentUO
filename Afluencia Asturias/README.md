@@ -96,7 +96,7 @@ Lleva además unos extras del modelo: `incierto`, `conjunto`, `modelo`, `horizon
 
 | Función | Devuelve |
 |---|---|
-| `getInfo()` | `{ hoy, horizonteDias, diasConMeteo, umbrales:{ambar,rojo}, sintetico, demo }` |
+| `getInfo()` | `{ hoy, horizonteDias, diasConMeteo, umbrales:{ambar,rojo}, sintetico, demo, fechaDatos, esHoy, desfaseDias, datosVigentes, fueraDeRango }` |
 | `getZonas()` | `[{ id, nombre, tipos[], concejos[] (nombres), lugares[], vecinos:null, principal, sinDatos }]` |
 | `getConcejos()` | `[{ id (INE), nombre, zonaId\|null }]`; `id` es el mismo que en `geo-asturias.js` |
 | `getSitios()` | `[{ id, nombre, concejos:[INE], lat, lon, ubicacionAproximada, foto }]`: sin previsión propia, se usa la de `concejos[0]` |
@@ -223,6 +223,7 @@ node --check interfaz/app.js interfaz/mapa.js datos/api.js datos/datos.js datos/
   pestanas/gestion/*.js pestanas/sobre/*.js
 ```
 
+- **Fecha de los datos:** las salidas se calculan un día y la web puede abrirse semanas después. «Hoy» es la fecha real del navegador si hay previsión para ella, y los días ya pasados no se ofrecen. Si la previsión se calculó hace más de un día, un aviso arriba lo dice y ningún día se anuncia «con meteorología». Para probarlo con otra fecha: `index.html?hoy=2026-10-17`.
 - **Lógica de Funciones avanzadas:** abre `pestanas/gestion/pruebas.html` en el navegador (doble clic). Tiene que decir «TODO OK».
 - **Coherencia de lo que se enseña:** `node herramientas/comprobar_datos_web.js` recorre todos los días y zonas por `window.Datos` y tiene que acabar en «TODO OK»: la previsión cae dentro de su rango probable, el mejor día alternativo tiene menos gente y el acceso regulado a los Lagos solo sale como causa en su zona. También corre en la integración continua.
 - **Capa de datos de Inicio sin navegador:**

@@ -14,6 +14,11 @@
  *   futuro_corto si existe; si no, futuro_largo; si no, historico (solo en
  *   la demo), del modelo de largo plazo con 8 días de antelación.
  *
+ * «Hoy» es la fecha real si las salidas tienen previsión para ella; los días
+ * anteriores no se ofrecen. Si las salidas se calcularon hace más de un día, la
+ * previsión del tiempo ya no vale: ningún día se anuncia «con meteorología»
+ * (DatosModelo.referencia, datos/datos.js).
+ *
  * Modo demo (?demo=1): «hoy» pasa a ser el primer día del histórico de
  * agosto de 2024 (validación fuera de muestra, con el valor observado). Con los
  * datos reales, el puente de diciembre de 2024 no sale rojo en ninguna zona.
@@ -64,9 +69,16 @@
     const fechas = Array.from(new Set(Object.keys(elegida).map(k => k.split('|')[0]))).sort();
     const futuras = fechas.filter(f => f >= pred.fecha_hoy);
     const demo = fechas.filter(f => f.slice(0, 7) === DEMO_MES);
-    const rango = DEMO && demo.length ? demo : futuras;
+    // Fecha de los datos frente a la fecha real (en la demo no se aplica: es un periodo histórico)
+    const enDemo = DEMO && demo.length > 0;
+    const ref = enDemo || !futuras.length ? null : DM.referencia(pred.fecha_hoy, futuras[0], futuras[futuras.length - 1]);
+    const rango = enDemo ? demo : ref ? futuras.filter(f => f >= ref.hoy) : futuras;
     const hoy = rango[0] || pred.fecha_hoy;
     const ultimo = rango[rango.length - 1] || hoy;
+    // Días de antelación con previsión del tiempo, contados desde «hoy». Con datos de hace más de un día, ninguno
+    const hMeteo = Math.max(0, ...(pred.info_corto_plazo && pred.info_corto_plazo.horizontes_con_tiempo || [0]));
+    const meteoVigente = !ref || ref.vigente;
+    const diasConMeteo = !ref ? hMeteo : meteoVigente ? Math.max(0, hMeteo - DM.diasEntre(futuras[0], hoy)) : 0;
 
     // Zonas del modelo y sus concejos (config/mapeo_zonas*.csv vía el módulo «datos»)
     const concejosMapeo = {};
@@ -119,7 +131,7 @@
 
     M = {
       d, umbrales, elegida, hoy, ultimo, zonas, zonaPorId, concejos, concejoPorId, alternativas, calendario,
-      diasConMeteo: Math.max(0, ...(pred.info_corto_plazo && pred.info_corto_plazo.horizontes_con_tiempo || [0])),
+      ref, hMeteo, meteoVigente, diasConMeteo,
       kmCercana: (d.alternativas.parametros && d.alternativas.parametros.km_zona_cercana) || 60,
     };
     return M;
@@ -141,7 +153,7 @@
       visitantes: gris ? null : redondea(r.prediccion), min: gris ? null : redondea(r.p10), max: gris ? null : redondea(r.p90),
       normal: redondea(r.normal), ratio: gris ? null : r.cociente,
       esPrediccion: true,
-      conMeteo: r.modelo === 'corto' && r.horizonte <= M.diasConMeteo,
+      conMeteo: M.meteoVigente && r.modelo === 'corto' && r.horizonte <= M.hMeteo,
       motivo: gris ? 'Sin dato de movilidad, sin día normal o sin variables suficientes para esta zona y día.' : undefined,
       // Extras del modelo (la interfaz los usa si están)
       incierto: !!r.incierto, conjunto: r.conjunto, modelo: r.modelo, horizonte: r.horizonte, fechaEmision: r.fecha_emision || null,
@@ -202,6 +214,12 @@
         diasConMeteo: M.diasConMeteo,
         umbrales: Object.assign({}, M.umbrales),
         sintetico: M.d.sintetico, demo: DEMO,
+        // Fecha de los datos (en la demo, null: es un periodo histórico y ya se anuncia como tal)
+        fechaDatos: M.d.predicciones.fecha_hoy,
+        esHoy: M.ref ? M.ref.esHoy : true,
+        desfaseDias: M.ref ? M.ref.desfaseDias : 0,
+        datosVigentes: M.ref ? M.ref.vigente : true,
+        fueraDeRango: M.ref ? M.ref.fueraDeRango : false,
       }));
     },
     getZonas() {

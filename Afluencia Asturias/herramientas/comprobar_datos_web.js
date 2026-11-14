@@ -107,11 +107,53 @@ async function completas() {
   return d;
 }
 
+/* ---------- 5: fecha de los datos (el reloj se fija con ?hoy=YYYY-MM-DD) ---------- */
+async function fecha(d) {
+  const fechaDatos = d.predicciones.fecha_hoy;
+  const dias = d.predicciones.predicciones.filter(r => r.conjunto !== 'historico').map(r => r.fecha).sort();
+  const primera = dias[0], ultima = dias[dias.length - 1];
+  const casos = [
+    // reloj, qué se espera
+    { reloj: fechaDatos, hoy: primera, esHoy: primera === fechaDatos, vigente: true, fuera: false, que: 'el mismo día del cálculo' },
+    { reloj: sumar(fechaDatos, 1), hoy: sumar(fechaDatos, 1), esHoy: true, vigente: true, fuera: false, que: 'al día siguiente' },
+    { reloj: sumar(fechaDatos, 2), hoy: sumar(fechaDatos, 2), esHoy: true, vigente: false, fuera: false, que: 'dos días después' },
+    { reloj: sumar(fechaDatos, 29), hoy: sumar(fechaDatos, 29), esHoy: true, vigente: false, fuera: false, que: 'un mes después' },
+    { reloj: ultima, hoy: ultima, esHoy: true, vigente: false, fuera: false, que: 'el último día con previsión' },
+    { reloj: sumar(ultima, 30), hoy: ultima, esHoy: false, vigente: false, fuera: true, que: 'pasado el último día' },
+  ];
+  const malos = [];
+  for (const c of casos) {
+    const D = contexto('?hoy=' + c.reloj, INICIO).Datos;
+    const i = await D.getInfo();
+    const mal = t => malos.push(`${c.que} (${c.reloj}): ${t}`);
+    if (i.hoy !== c.hoy) mal(`abre en ${i.hoy} y debería abrir en ${c.hoy}`);
+    if (i.esHoy !== c.esHoy) mal(`esHoy = ${i.esHoy}`);
+    if (i.datosVigentes !== c.vigente) mal(`datosVigentes = ${i.datosVigentes}`);
+    if (i.fueraDeRango !== c.fuera) mal(`fueraDeRango = ${i.fueraDeRango}`);
+    if (i.fechaDatos !== fechaDatos) mal(`fechaDatos = ${i.fechaDatos}`);
+    if (sumar(i.hoy, i.horizonteDias - 1) !== ultima) mal(`el último día elegible no es ${ultima}`);
+    if (!c.vigente && i.diasConMeteo !== 0) mal(`anuncia ${i.diasConMeteo} días con meteorología con datos antiguos`);
+    if (c.vigente && !(i.diasConMeteo > 0)) mal('no anuncia meteorología con datos del día');
+    // Ningún día se anuncia «con meteorología» si la previsión del tiempo ya no vale, y sí los primeros si vale
+    const n = Math.min(i.horizonteDias, 10);
+    let conMeteo = 0;
+    for (let k = 0; k < n; k++) conMeteo += (await D.getPrevisionDia(sumar(i.hoy, k))).filter(p => p.conMeteo).length;
+    if (!c.vigente && conMeteo) mal(`${conMeteo} previsiones anunciadas con meteorología`);
+    if (c.vigente && !conMeteo) mal('ninguna previsión con meteorología');
+    // El próximo puente no puede haber pasado
+    const p = await D.getProximoPuente(i.hoy);
+    if (p && p.fin < i.hoy) mal(`próximo puente ya pasado (${p.inicio} a ${p.fin})`);
+  }
+  comprobar('Fecha de los datos: día de referencia, «hoy» y meteorología según el reloj', malos, casos.length);
+  return sumar(fechaDatos, 1);
+}
+
 (async function () {
-  await inicio('', 'Inicio');
+  await inicio('', 'Inicio (fecha real)');
   await inicio('?demo=1', 'Demo');
-  await completas();
-  if (typeof module.exports.fecha === 'function') await module.exports.fecha({ contexto, comprobar, sumar, INICIO, inicio });
+  const d = await completas();
+  const diaSiguiente = await fecha(d);
+  await inicio('?hoy=' + diaSiguiente, 'Inicio (día siguiente al cálculo, todos los días)');
   console.log(fallos.length ? `\nFALLAN ${fallos.length} comprobaciones` : '\nTODO OK');
   process.exit(fallos.length ? 1 : 0);
 })().catch(e => { console.error(e); process.exit(1); });
