@@ -298,6 +298,8 @@ Hay una fila por zona MITMA de Asturias: **46 zonas** que cubren los 78 concejos
 
 ### `data/clean/factores_B_diario.parquet` (lo genera `src/limpieza_B/unir_B.py`)
 
+> **Nota (2026-11-14): el modelo no lee este fichero.** `src/modelo/features.py` llama a `unir_B` y de su resultado solo usa el calendario, los eventos y los partidos. La previsión del tiempo la toma de `openmeteo_diario` y el interés en internet lo calcula por su cuenta, con otra definición (media del logaritmo, no media de visitas). Las columnas `om_*`, `aemet_*` y las de Wikipedia y Trends de esta tabla sirven de consulta, no son las variables del modelo; las del modelo están en `notas/modelo.md`.
+
 Hay una fila por `fecha` y `zona_mitma_id`. El rango por defecto va del 2022-01-01 al último día de Open-Meteo; se cambia con `--desde` y `--hasta`. Con el mapeo actual tiene 80 454 filas (46 zonas). La prueba con el mapeo de ejemplo se guarda en `data/clean/_prueba/factores_B_ejemplo.parquet`.
 
 | Grupo de columnas | Origen | Regla de unión |

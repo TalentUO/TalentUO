@@ -225,7 +225,7 @@ node --check interfaz/app.js interfaz/mapa.js datos/api.js datos/datos.js datos/
 
 - **Fecha de los datos:** las salidas se calculan un día y la web puede abrirse semanas después. «Hoy» es la fecha real del navegador si hay previsión para ella, y los días ya pasados no se ofrecen. Si la previsión se calculó hace más de un día, un aviso arriba lo dice y ningún día se anuncia «con meteorología». Para probarlo con otra fecha: `index.html?hoy=2026-10-17`.
 - **Lógica de Funciones avanzadas:** abre `pestanas/gestion/pruebas.html` en el navegador (doble clic). Tiene que decir «TODO OK».
-- **Coherencia de lo que se enseña:** `node herramientas/comprobar_datos_web.js` recorre todos los días y zonas por `window.Datos` y tiene que acabar en «TODO OK»: la previsión cae dentro de su rango probable, el mejor día alternativo tiene menos gente y el acceso regulado a los Lagos solo sale como causa en su zona. También corre en la integración continua.
+- **Coherencia de lo que se enseña:** `node herramientas/comprobar_datos_web.js` recorre todos los días y zonas por `window.Datos` y tiene que acabar en «TODO OK»: la previsión cae dentro de su rango probable, el mejor día alternativo tiene menos gente el acceso regulado a los Lagos solo sale como causa en su zona y «Partido», solo en las zonas de Gijón y Oviedo. También corre en la integración continua.
 - **Capa de datos de Inicio sin navegador:**
   1. En Node, con `global.window = global` y `global.location = { search: '' }`, carga en este orden: `datos/sitios.js`, `datos/modelo/salidas-inicio.js`, `datos/datos.js`, `datos/catalogo.js`, `datos/fuente-modelo.js` y `datos/api.js`.
   2. Llama a `window.Datos.*`.

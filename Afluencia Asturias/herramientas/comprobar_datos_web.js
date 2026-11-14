@@ -10,7 +10,8 @@
  *   1. La previsión está dentro de su «rango probable» (min <= visitantes <= max).
  *   2. El «mejor día alternativo» tiene menos visitantes y menos presión que el
  *      día elegido, y cae dentro de los días que se pueden elegir.
- *   3. «Acceso regulado a los Lagos» solo sale como causa en la zona principal.
+ *   3. «Acceso regulado a los Lagos» solo sale como causa en la zona principal, y
+ *      «Partido», solo en las zonas de Gijón y Oviedo, donde se juega.
  *   4. En las salidas completas (Funciones avanzadas): predicciones y calendario
  *      de alertas dentro de su rango, y los recuentos «entre X e Y días» de
  *      regulación contienen su valor central.
@@ -26,6 +27,8 @@ const vm = require('vm');
 
 const WEB = path.resolve(__dirname, '..');
 const FACTOR_LAGOS = 'Acceso regulado a los Lagos';
+const FACTOR_PARTIDO = 'Partido';
+const CONCEJOS_CON_ESTADIO = ['33024', '33044']; // Gijón y Oviedo
 
 function contexto(busqueda, scripts) {
   const w = { console, location: { search: busqueda || '' }, document: {}, setTimeout, clearTimeout, Promise };
@@ -55,7 +58,9 @@ async function inicio(busqueda, etiqueta) {
   const info = await D.getInfo();
   const zonas = await D.getZonas();
   const principal = zonas.filter(z => z.principal).map(z => z.id);
-  const rango = [], mejor = [], lagos = [];
+  const estadios = (await D.getConcejos()).filter(c => CONCEJOS_CON_ESTADIO.indexOf(c.id) !== -1).map(c => c.zonaId);
+  const rango = [], mejor = [], lagos = [], partido = [];
+  let nPartido = 0;
   let n = 0, nMejor = 0, nFactores = 0;
   for (let i = 0; i < info.horizonteDias; i++) {
     const f = sumar(info.hoy, i);
@@ -69,6 +74,7 @@ async function inicio(busqueda, etiqueta) {
       const fx = await D.getFactores(p.zonaId, f);
       nFactores++;
       if (principal.indexOf(p.zonaId) === -1 && fx.some(x => x.texto === FACTOR_LAGOS)) lagos.push(`${p.zonaId} ${f}`);
+      if (fx.some(x => x.texto === FACTOR_PARTIDO)) { nPartido++; if (estadios.indexOf(p.zonaId) === -1) partido.push(`${p.zonaId} ${f}`); }
       const md = await D.getMejorDia(p.zonaId, f);
       if (!md || !md.fecha) continue;
       nMejor++;
@@ -81,6 +87,8 @@ async function inicio(busqueda, etiqueta) {
   comprobar(`${etiqueta}: previsión dentro de su rango probable`, rango, n);
   comprobar(`${etiqueta}: mejor día alternativo con menos gente y menos presión`, mejor, nMejor);
   comprobar(`${etiqueta}: «${FACTOR_LAGOS}» solo en la zona principal`, lagos, nFactores);
+  comprobar(`${etiqueta}: «${FACTOR_PARTIDO}» solo en las zonas de Gijón y Oviedo (sale ${nPartido} veces)`,
+    estadios.length === CONCEJOS_CON_ESTADIO.length ? partido : ['no se han localizado las zonas de Gijón y Oviedo'], nFactores);
   return info;
 }
 

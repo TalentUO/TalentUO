@@ -65,8 +65,9 @@
  *                                      sin hasta: Prevision del día; con hasta: PrevisionPeriodo
  * getSerieZona(zonaId, desde, dias) -> Prevision[]   (una por día)
  * getFactores(zonaId, fecha)        -> [{ clave, texto, efecto }]   efecto en % (38 = +38 %), los que más pesan (hasta 3).
- *                                      El acceso regulado a los Lagos solo se da en la zona principal: en las demás
- *                                      el modelo lo usa como indicador de temporada y no es una causa
+ *                                      El acceso regulado a los Lagos solo se da en la zona principal y «Partido» solo
+ *                                      en las zonas donde se juega (las de la agenda): en las demás el modelo los usa
+ *                                      como indicador de temporada o de fin de semana y no son una causa
  * getMejorMomento(zonaId, desde, dias) -> { dia: Prevision } | null   el día con menos presión de la ventana
  * getMejorDia(zonaId, fecha)        -> { fecha, nivel, ratio, visitantes, diferenciaPct, margen } | { fecha:null, margen } | null
  *                                      mejor día alternativo a ±margen días: menos visitantes Y menos presión que el

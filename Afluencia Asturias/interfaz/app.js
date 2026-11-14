@@ -1283,7 +1283,7 @@
     const lista = d.eventos.filter(e => (cat === 'todas' || e.categoria === cat) && (!e.concejo || coincideTipo(E.zonasPorId[zonaDeConcejo(e.concejo)])));
     const vis = lista.slice(0, E.eventosVisibles);
     $('#eventos-sub').textContent = textoSel() + (E.tipo === 'todos' ? '' : ' · Solo ' + TIPO_NOMBRE[E.tipo].toLowerCase());
-    $('#eventos-nota').textContent = 'Festivos de Asturias y de cada concejo (BOE y BOPA), partidos del Real Oviedo y del Sporting en su estadio, y grandes fiestas, festivales, ferias y pruebas deportivas recopilados de sus webs oficiales y de prensa. Son días en los que puede venir más gente de lo normal.';
+    $('#eventos-nota').textContent = 'Festivos de Asturias y de cada concejo (BOE y BOPA), partidos del Real Oviedo y del Sporting en su estadio, y siete grandes citas al año (fiestas, festivales, ferias y pruebas deportivas) recopiladas de sus webs oficiales y de prensa; las de 2027 todavía no están recogidas. Son días en los que puede venir más gente de lo normal.';
     let vacio = '';
     if (!lista.length) {
       vacio = d.hastaDatos && E.desde > d.hastaDatos

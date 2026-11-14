@@ -7,3 +7,9 @@ ruff
 
 # Pruebas (ya va fijado en requirements-lock.txt)
 pytest
+
+# Herramientas de la web (Afluencia Asturias/herramientas/): solo para regenerar
+# interfaz/geo-asturias.js y datos/sitios.js
+topojson   # generar_geo.py
+shapely    # construir_sitios.py
+Pillow     # construir_sitios.py

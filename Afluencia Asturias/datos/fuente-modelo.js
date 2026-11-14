@@ -33,9 +33,12 @@
   const DEMO_MES = '2024-08';
   const HISTORICO = { modelo: 'largo', horizonte: 8 }; // aviso con una semana de antelación
   const PRIORIDAD = { futuro_corto: 3, futuro_largo: 2, historico: 1 };
-  // Factores que valen lo mismo en las 46 zonas pero solo significan algo en la zona principal: fuera de ella
-  // el modelo los usa como indicador de temporada alta y no se enseñan como causa (nombre de config/factores.yaml)
-  const FACTORES_SOLO_ZONA_PRINCIPAL = ['Acceso regulado a los Lagos'];
+  // Factores que valen lo mismo en las 46 zonas pero solo significan algo en algunas: fuera de ellas el modelo
+  // los usa como indicador de temporada alta o de fin de semana y no se enseñan como causa
+  // (nombres de config/factores.yaml)
+  const FACTOR_LAGOS = 'Acceso regulado a los Lagos'; // solo en la zona principal
+  const FACTOR_PARTIDO = 'Partido';                   // solo en las zonas donde se juega (las de la agenda)
+  const CATEGORIA_PARTIDO = 'Fútbol';                 // categoría de los partidos en la agenda de las salidas
 
   /* ---------- Fechas ---------- */
   function deISO(s) { const p = s.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2], 12); }
@@ -121,6 +124,13 @@
     const zonaPorId = {};
     zonas.forEach(z => { zonaPorId[z.id] = z; });
 
+    // Zonas donde se juegan los partidos de la agenda (hoy, las de Gijón y Oviedo)
+    const zonasConPartido = {};
+    ((d.agenda && d.agenda.eventos) || []).forEach(e => {
+      const c = e.categoria === CATEGORIA_PARTIDO && concejoPorId[e.concejo];
+      if (c && c.zonaId) zonasConPartido[c.zonaId] = true;
+    });
+
     // Alternativas: por fecha, zona, conjunto, modelo y horizonte
     const alternativas = {};
     d.alternativas.alternativas.forEach(a => { alternativas[[a.fecha, a.zona_mitma_id, a.conjunto, a.modelo, a.horizonte].join('|')] = a; });
@@ -130,7 +140,7 @@
     if (d.calendario && Array.isArray(d.calendario.dias)) d.calendario.dias.forEach(x => { calendario[x.fecha] = x; });
 
     M = {
-      d, umbrales, elegida, hoy, ultimo, zonas, zonaPorId, concejos, concejoPorId, alternativas, calendario,
+      d, umbrales, elegida, hoy, ultimo, zonas, zonaPorId, zonasConPartido, concejos, concejoPorId, alternativas, calendario,
       ref, hMeteo, meteoVigente, diasConMeteo,
       kmCercana: (d.alternativas.parametros && d.alternativas.parametros.km_zona_cercana) || 60,
     };
@@ -285,7 +295,9 @@
         const r = M.elegida[fecha + '|' + zonaId];
         if (!r || r.color === 'gris') return [];
         const z = M.zonaPorId[zonaId];
-        const visibles = z && z.principal ? r.factores : r.factores.filter(f => FACTORES_SOLO_ZONA_PRINCIPAL.indexOf(f.nombre) === -1);
+        const visibles = r.factores.filter(f =>
+          f.nombre === FACTOR_LAGOS ? !!(z && z.principal)
+            : f.nombre === FACTOR_PARTIDO ? !!(z && M.zonasConPartido[z.id]) : true);
         return visibles.map(f => ({ clave: f.nombre, texto: f.nombre, efecto: Math.round(f.efecto_pct) }));
       });
     },
