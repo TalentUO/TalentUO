@@ -14,6 +14,11 @@
  *   futuro_corto si existe; si no, futuro_largo; si no, historico (solo en
  *   la demo), del modelo de largo plazo con 8 días de antelación.
  *
+ * «Hoy» es la fecha real si las salidas tienen previsión para ella; los días
+ * anteriores no se ofrecen. Si las salidas se calcularon hace más de un día, la
+ * previsión del tiempo ya no vale: ningún día se anuncia «con meteorología»
+ * (DatosModelo.referencia, datos/datos.js).
+ *
  * Modo demo (?demo=1): «hoy» pasa a ser el primer día del histórico de
  * agosto de 2024 (validación fuera de muestra, con el valor observado). Con los
  * datos reales, el puente de diciembre de 2024 no sale rojo en ninguna zona.
@@ -28,6 +33,12 @@
   const DEMO_MES = '2024-08';
   const HISTORICO = { modelo: 'largo', horizonte: 8 }; // aviso con una semana de antelación
   const PRIORIDAD = { futuro_corto: 3, futuro_largo: 2, historico: 1 };
+  // Factores que valen lo mismo en las 46 zonas pero solo significan algo en algunas: fuera de ellas el modelo
+  // los usa como indicador de temporada alta o de fin de semana y no se enseñan como causa
+  // (nombres de config/factores.yaml)
+  const FACTOR_LAGOS = 'Acceso regulado a los Lagos'; // solo en la zona principal
+  const FACTOR_PARTIDO = 'Partido';                   // solo en las zonas donde se juega (las de la agenda)
+  const CATEGORIA_PARTIDO = 'Fútbol';                 // categoría de los partidos en la agenda de las salidas
 
   /* ---------- Fechas ---------- */
   function deISO(s) { const p = s.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2], 12); }
@@ -61,9 +72,16 @@
     const fechas = Array.from(new Set(Object.keys(elegida).map(k => k.split('|')[0]))).sort();
     const futuras = fechas.filter(f => f >= pred.fecha_hoy);
     const demo = fechas.filter(f => f.slice(0, 7) === DEMO_MES);
-    const rango = DEMO && demo.length ? demo : futuras;
+    // Fecha de los datos frente a la fecha real (en la demo no se aplica: es un periodo histórico)
+    const enDemo = DEMO && demo.length > 0;
+    const ref = enDemo || !futuras.length ? null : DM.referencia(pred.fecha_hoy, futuras[0], futuras[futuras.length - 1]);
+    const rango = enDemo ? demo : ref ? futuras.filter(f => f >= ref.hoy) : futuras;
     const hoy = rango[0] || pred.fecha_hoy;
     const ultimo = rango[rango.length - 1] || hoy;
+    // Días de antelación con previsión del tiempo, contados desde «hoy». Con datos de hace más de un día, ninguno
+    const hMeteo = Math.max(0, ...(pred.info_corto_plazo && pred.info_corto_plazo.horizontes_con_tiempo || [0]));
+    const meteoVigente = !ref || ref.vigente;
+    const diasConMeteo = !ref ? hMeteo : meteoVigente ? Math.max(0, hMeteo - DM.diasEntre(futuras[0], hoy)) : 0;
 
     // Zonas del modelo y sus concejos (config/mapeo_zonas*.csv vía el módulo «datos»)
     const concejosMapeo = {};
@@ -106,6 +124,13 @@
     const zonaPorId = {};
     zonas.forEach(z => { zonaPorId[z.id] = z; });
 
+    // Zonas donde se juegan los partidos de la agenda (hoy, las de Gijón y Oviedo)
+    const zonasConPartido = {};
+    ((d.agenda && d.agenda.eventos) || []).forEach(e => {
+      const c = e.categoria === CATEGORIA_PARTIDO && concejoPorId[e.concejo];
+      if (c && c.zonaId) zonasConPartido[c.zonaId] = true;
+    });
+
     // Alternativas: por fecha, zona, conjunto, modelo y horizonte
     const alternativas = {};
     d.alternativas.alternativas.forEach(a => { alternativas[[a.fecha, a.zona_mitma_id, a.conjunto, a.modelo, a.horizonte].join('|')] = a; });
@@ -115,8 +140,8 @@
     if (d.calendario && Array.isArray(d.calendario.dias)) d.calendario.dias.forEach(x => { calendario[x.fecha] = x; });
 
     M = {
-      d, umbrales, elegida, hoy, ultimo, zonas, zonaPorId, concejos, concejoPorId, alternativas, calendario,
-      diasConMeteo: Math.max(0, ...(pred.info_corto_plazo && pred.info_corto_plazo.horizontes_con_tiempo || [0])),
+      d, umbrales, elegida, hoy, ultimo, zonas, zonaPorId, zonasConPartido, concejos, concejoPorId, alternativas, calendario,
+      ref, hMeteo, meteoVigente, diasConMeteo,
       kmCercana: (d.alternativas.parametros && d.alternativas.parametros.km_zona_cercana) || 60,
     };
     return M;
@@ -138,7 +163,7 @@
       visitantes: gris ? null : redondea(r.prediccion), min: gris ? null : redondea(r.p10), max: gris ? null : redondea(r.p90),
       normal: redondea(r.normal), ratio: gris ? null : r.cociente,
       esPrediccion: true,
-      conMeteo: r.modelo === 'corto' && r.horizonte <= M.diasConMeteo,
+      conMeteo: M.meteoVigente && r.modelo === 'corto' && r.horizonte <= M.hMeteo,
       motivo: gris ? 'Sin dato de movilidad, sin día normal o sin variables suficientes para esta zona y día.' : undefined,
       // Extras del modelo (la interfaz los usa si están)
       incierto: !!r.incierto, conjunto: r.conjunto, modelo: r.modelo, horizonte: r.horizonte, fechaEmision: r.fecha_emision || null,
@@ -199,6 +224,12 @@
         diasConMeteo: M.diasConMeteo,
         umbrales: Object.assign({}, M.umbrales),
         sintetico: M.d.sintetico, demo: DEMO,
+        // Fecha de los datos (en la demo, null: es un periodo histórico y ya se anuncia como tal)
+        fechaDatos: M.d.predicciones.fecha_hoy,
+        esHoy: M.ref ? M.ref.esHoy : true,
+        desfaseDias: M.ref ? M.ref.desfaseDias : 0,
+        datosVigentes: M.ref ? M.ref.vigente : true,
+        fueraDeRango: M.ref ? M.ref.fueraDeRango : false,
       }));
     },
     getZonas() {
@@ -263,7 +294,11 @@
       return listo().then(() => {
         const r = M.elegida[fecha + '|' + zonaId];
         if (!r || r.color === 'gris') return [];
-        return r.factores.map(f => ({ clave: f.nombre, texto: f.nombre, efecto: Math.round(f.efecto_pct) }));
+        const z = M.zonaPorId[zonaId];
+        const visibles = r.factores.filter(f =>
+          f.nombre === FACTOR_LAGOS ? !!(z && z.principal)
+            : f.nombre === FACTOR_PARTIDO ? !!(z && M.zonasConPartido[z.id]) : true);
+        return visibles.map(f => ({ clave: f.nombre, texto: f.nombre, efecto: Math.round(f.efecto_pct) }));
       });
     },
     // Día con menos presión de la ventana (la interfaz lo usa si el modelo no propone un mejor día)
@@ -276,17 +311,33 @@
         return { dia };
       });
     },
-    // Mejor día alternativo de alternativas.json (solo existe si ese día está en ámbar o rojo):
-    // el de menos presión a ±dias_margen días en la misma zona, o null
+    // Mejor día alternativo (solo si ese día está en ámbar o rojo, es decir, si está en alternativas.json).
+    // «Mejor» = menos visitantes Y menos presión que el día elegido. El modelo elige solo por presión
+    // (cociente sobre el día normal, que cambia con el día de la semana) y a veces propone un día con más
+    // gente: esa propuesta se descarta y se busca, a ±dias_margen días en la misma zona, el día de menos
+    // presión que cumpla las dos cosas. Si no hay ninguno, { fecha: null }.
     getMejorDia(zonaId, fecha) {
       return listo().then(() => {
         const r = M.elegida[fecha + '|' + zonaId];
         const a = r && M.alternativas[[fecha, zonaId, r.conjunto, r.modelo, r.horizonte].join('|')];
         if (!a) return null;
         const margen = (M.d.alternativas.parametros && M.d.alternativas.parametros.dias_margen) || 3;
-        if (!a.mejor_dia) return { fecha: null, margen };
+        const mejora = c => c && c.color !== 'gris' && c.prediccion != null && c.cociente != null
+          && c.prediccion < r.prediccion && c.cociente < r.cociente;
+        let mejor = null;
         const md = a.mejor_dia;
-        return { fecha: md.fecha, nivel: md.color, ratio: md.cociente, visitantes: redondea(md.prediccion), diferenciaPct: md.diferencia_pct, margen };
+        if (md && md.fecha >= M.hoy && md.fecha <= M.ultimo && mejora(md)) mejor = md;
+        else {
+          for (let i = -margen; i <= margen; i++) {
+            const f = sumar(fecha, i);
+            if (!i || f < M.hoy || f > M.ultimo) continue;
+            const c = M.elegida[f + '|' + zonaId];
+            if (mejora(c) && (!mejor || c.cociente < mejor.cociente)) mejor = c;
+          }
+        }
+        if (!mejor) return { fecha: null, margen };
+        return { fecha: mejor.fecha, nivel: mejor.color, ratio: mejor.cociente, visitantes: redondea(mejor.prediccion),
+          diferenciaPct: (mejor.prediccion / r.prediccion - 1) * 100, margen };
       });
     },
     getAlternativas(zonaId, fecha, hasta) {

@@ -71,6 +71,8 @@ function pintarSobre(cont, datos, util) {
 
       <h2>${esc(T.mapa.titulo)}</h2>
       <p>${esc(T.mapa.texto)}</p>
+      <h2>De cuándo son los datos</h2>
+      <p>La previsión que se muestra se calculó el ${esc(util.fechaCompleta(datos.predicciones.fecha_hoy))}. No se actualiza sola: los días posteriores se enseñan con esa misma previsión, que para ellos solo tiene en cuenta el calendario y los eventos, sin el tiempo. La fecha del cálculo está siempre a la vista en Inicio: en un aviso arriba o junto al día elegido.</p>
       ${datos.sintetico ? `<h2>Sobre estas cifras</h2><p>${esc(datos.aviso || 'DATOS SINTÉTICOS')}. Las cifras de esta versión se han generado para probar la web y no dicen nada de Asturias. Se sustituirán por las reales con el mismo formato.</p>` : ''}
     </div>`;
 }

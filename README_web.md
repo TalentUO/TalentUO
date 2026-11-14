@@ -10,6 +10,11 @@ Este documento explica cómo se alimenta, se enseña y se publica la web. El có
 - **Fecha de las salidas:** generadas el **2026-10-16 a las 10:30**, con `fecha_hoy` 2026-10-16 y la previsión de Open-Meteo emitida ese día.
 - **Toda Asturias:** 46 zonas MITMA (los 78 concejos) de `config/mapeo_zonas.csv`. La ampliación y sus decisiones están en `notas/ampliacion_zonas.md`.
 - **Periodo:** predicciones del 2026-10-17 al 2027-10-16 (un año). El tiempo solo entra a 1-3 días.
+- **La web no presenta esos datos como de hoy.** Abre en la fecha real del navegador, con la previsión que se calculó para ese día el 2026-10-16, y no ofrece los días ya pasados. Mientras no se regeneren las salidas:
+  - un aviso arriba dice «Previsión calculada el 16 de octubre de 2026, hace N días»;
+  - ningún día se anuncia «con meteorología», porque la previsión del tiempo de las salidas ya no sirve: todo es calendario y eventos;
+  - pasado el 2027-10-16 se enseña ese último día, sin llamarlo «hoy».
+  - Funciones avanzadas y Sobre los datos indican la misma fecha de cálculo. Para ver la web como en otra fecha: `?hoy=AAAA-MM-DD`.
 - **Cifras del modelo:** `README.md` («Resultados»).
 - **Capturas del recorrido de la demo** (plan B si falla la conexión en la presentación): `notas/capturas_demo/`.
 
@@ -89,6 +94,7 @@ Las salidas vigentes son las de `main`. No hay que traerlas de ramas antiguas: `
 
 ```bash
 node --check "Afluencia Asturias/interfaz/app.js" "Afluencia Asturias/interfaz/mapa.js" "Afluencia Asturias/datos/"*.js
+node "Afluencia Asturias/herramientas/comprobar_datos_web.js"   # coherencia de lo que se enseña: tiene que decir «TODO OK»
 ```
 
 Las pruebas de la lógica de Funciones avanzadas están en `Afluencia Asturias/pestanas/gestion/pruebas.html`: se abre en el navegador.

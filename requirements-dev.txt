@@ -1,0 +1,15 @@
+# Herramientas de desarrollo que no hacen falta para ejecutar el modelo ni la web.
+# Se instalan además de requirements-lock.txt (o requirements.txt):
+#   pip install -r requirements-lock.txt -r requirements-dev.txt
+
+# Lint (configuración en ruff.toml)
+ruff
+
+# Pruebas (ya va fijado en requirements-lock.txt)
+pytest
+
+# Herramientas de la web (Afluencia Asturias/herramientas/): solo para regenerar
+# interfaz/geo-asturias.js y datos/sitios.js
+topojson   # generar_geo.py
+shapely    # construir_sitios.py
+Pillow     # construir_sitios.py

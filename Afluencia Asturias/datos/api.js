@@ -35,9 +35,16 @@
  *   diasPorNivel            // { verde, ambar, rojo } días de cada nivel, o null
  * }                         // conMeteo = true solo si todos los días tienen meteorología
  *
- * getInfo()                         -> { hoy, horizonteDias, diasConMeteo, umbrales:{ambar, rojo}, sintetico, demo }
+ * getInfo()                         -> { hoy, horizonteDias, diasConMeteo, umbrales:{ambar, rojo}, sintetico, demo,
+ *                                        fechaDatos, esHoy, desfaseDias, datosVigentes, fueraDeRango }
+ *                                      hoy = primer día que se puede elegir: la fecha real si hay previsión para ella;
+ *                                      si no, el día más cercano que la tenga (entonces esHoy = false y no se llama «hoy»);
  *                                      horizonteDias = días que se pueden elegir desde hoy (hasta el último día con predicción);
- *                                      diasConMeteo = días de antelación con previsión del tiempo; demo = modo ?demo=1
+ *                                      diasConMeteo = días de antelación con previsión del tiempo (0 si ya no vale);
+ *                                      demo = modo ?demo=1;
+ *                                      fechaDatos = día en que se calculó la previsión; desfaseDias = días pasados desde
+ *                                      entonces; datosVigentes = calculada hoy o ayer (su previsión del tiempo aún sirve);
+ *                                      fueraDeRango = la fecha real es posterior al último día con previsión
  * getZonas()                        -> [{ id, nombre, tipos:['costa'|'montana'|'ciudad'], concejos[], lugares[], vecinos|null, principal, sinDatos }]
  *                                      zonas del modelo (MITMA); concejos = nombres; principal = zona estrella (Picos de Europa)
  * getConcejos()                     -> [{ id, nombre, zonaId|null }]   id = código INE (5 cifras, '33xxx'),
@@ -57,10 +64,15 @@
  * getPrevisionConcejos(desde, hasta?) -> una por concejo, con { concejoId, zonaId } además de zonaId:
  *                                      sin hasta: Prevision del día; con hasta: PrevisionPeriodo
  * getSerieZona(zonaId, desde, dias) -> Prevision[]   (una por día)
- * getFactores(zonaId, fecha)        -> [{ clave, texto, efecto }]   efecto en % (38 = +38 %), los 3 que más pesan
+ * getFactores(zonaId, fecha)        -> [{ clave, texto, efecto }]   efecto en % (38 = +38 %), los que más pesan (hasta 3).
+ *                                      El acceso regulado a los Lagos solo se da en la zona principal y «Partido» solo
+ *                                      en las zonas donde se juega (las de la agenda): en las demás el modelo los usa
+ *                                      como indicador de temporada o de fin de semana y no son una causa
  * getMejorMomento(zonaId, desde, dias) -> { dia: Prevision } | null   el día con menos presión de la ventana
  * getMejorDia(zonaId, fecha)        -> { fecha, nivel, ratio, visitantes, diferenciaPct, margen } | { fecha:null, margen } | null
- *                                      mejor día alternativo del modelo (alternativas.json); null si el día no está en alerta
+ *                                      mejor día alternativo a ±margen días: menos visitantes Y menos presión que el
+ *                                      elegido (diferenciaPct < 0 siempre); fecha:null si no hay ninguno;
+ *                                      null si el día no está en alerta (no figura en alternativas.json)
  * getAlternativas(zonaId, fecha, hasta?) -> [Prevision + { nombre, minutos|null, km|null, delModelo? }]   zonas cercanas
  *                                      con hasta: PrevisionPeriodo, comparando la media del periodo
  * getPerfil(zonaId, fecha)          -> { deUnDia|null, conPernocta|null, asturias, restoEspana, mes, dias } en % | null

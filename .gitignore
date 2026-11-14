@@ -57,3 +57,6 @@ data/raw/calendario/pnpe_*
 data/raw/calendario/turismocangasdeonis_*
 data/raw/sadei_*.px
 data/raw/padron_concejos.px
+
+# Informes y plan de la revisión final: material de trabajo, no se versiona
+revision/

@@ -36,6 +36,7 @@
   const FMT_DIAMES = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short' });
   const FMT_MES = new Intl.DateTimeFormat('es-ES', { month: 'short' });
   const FMT_MES_ANIO = new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' });
+  const FMT_COMPLETA = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
   const DIA_SEM = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
   const MES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const anioHoy = () => +E.info.hoy.slice(0, 4);
@@ -156,6 +157,7 @@
       E.sitios = await D.getSitios();
       E.sitios.forEach(s => { E.sitiosPorId[s.id] = s; });
       E.puente = await D.getProximoPuente(E.info.hoy);
+      avisoFecha();
       E.maxFecha = sumar(E.info.hoy, E.info.horizonteDias - 1);
 
       construirMapa();
@@ -333,7 +335,7 @@
 
     const chips = [];
     if (E.info.demo) chips.push('<span class="etq etq-hoy">Demo · validación con datos de 2024</span>');
-    else if (E.desde === hoy) chips.push(`<span class="etq etq-hoy">${periodo ? 'Desde hoy' : 'Hoy'}</span>`);
+    else if (E.desde === hoy && E.info.esHoy) chips.push(`<span class="etq etq-hoy">${periodo ? 'Desde hoy' : 'Hoy'}</span>`);
     const especiales = [];
     E.calSel.forEach(c => {
       const t = c.puente || (c.festivo ? 'Festivo: ' + c.festivo : null);
@@ -344,8 +346,11 @@
     const conDato = E.prevDia.filter(p => p.ratio != null);
     if (!conDato.length) chips.push('<span class="etq etq-aviso">Sin predicción para estas fechas</span>');
     else if (conDato.every(p => p.conMeteo)) chips.push('<span class="etq">Previsión con meteorología</span>');
-    else if (E.desde <= lim && E.hasta > lim) chips.push(`<span class="etq etq-aviso">Meteorología solo hasta el ${esc(diaMes(lim))}</span>`);
+    else if (E.info.diasConMeteo > 0 && E.desde <= lim && E.hasta > lim) chips.push(`<span class="etq etq-aviso">Meteorología solo hasta el ${esc(diaMes(lim))}</span>`);
     else chips.push('<span class="etq etq-aviso">Solo calendario y eventos, sin meteorología</span>');
+    // De cuándo son los datos: siempre a la vista. Con datos de hace más de un día lo dice el aviso de arriba
+    // (avisoFecha); con datos del día, esta etiqueta. En la demo ya lo dice la primera etiqueta
+    if (!E.info.demo && E.info.datosVigentes && E.info.fechaDatos) chips.push(`<span class="etq">Previsión calculada el ${esc(FMT_COMPLETA.format(deISO(E.info.fechaDatos)))}</span>`);
     $('#fecha-estado').innerHTML = chips.join('');
 
     const igual = r => !!r && E.desde === r[0] && E.hasta === r[1];
@@ -469,7 +474,7 @@
   let seqCal = 0;
   async function renderCalendario(opts) {
     opts = opts || {};
-    const s = ++seqCal, mes = CAL.mes, hoy = E.info.hoy;
+    const s = ++seqCal, mes = CAL.mes, hoy = E.info.hoy, esHoy = E.info.esHoy;
     const cal = await D.getCalendario(mes, diasMes(mes));
     if (s !== seqCal) return;
 
@@ -483,7 +488,7 @@
       const f = c.fecha, dia = deISO(f).getDate(), esp = c.puente || c.festivo;
       const cls = ['cal-dia'];
       if (c.finde) cls.push('finde');
-      if (f === hoy) cls.push('hoy');
+      if (f === hoy && esHoy) cls.push('hoy');
       const punto = `<span class="m-punto${esp ? ' on' : ''}" aria-hidden="true"></span>`;
       if (f < hoy || f > E.maxFecha) {
         cls.push('fuera');
@@ -497,9 +502,9 @@
         pulsado = true;
         cls.push(E.desde === E.hasta ? 'sel ini fin' : f === E.desde ? 'sel ini' : f === E.hasta ? 'sel fin' : 'en-rango');
       }
-      const etiqueta = fechaLarga(f) + (esp ? '. ' + esp : '') + (f === hoy ? '. Hoy' : '');
+      const etiqueta = fechaLarga(f) + (esp ? '. ' + esp : '') + (f === hoy && esHoy ? '. Hoy' : '');
       celdas.push(`<td><button type="button" class="${cls.join(' ')}" data-fecha="${f}" tabindex="${f === CAL.foco ? 0 : -1}"` +
-        ` aria-pressed="${pulsado}" aria-label="${esc(etiqueta)}"${f === hoy ? ' aria-current="date"' : ''}>${dia}${punto}</button></td>`);
+        ` aria-pressed="${pulsado}" aria-label="${esc(etiqueta)}"${f === hoy && esHoy ? ' aria-current="date"' : ''}>${dia}${punto}</button></td>`);
     });
     while (celdas.length % 7) celdas.push('<td></td>');
     let filas = '';
@@ -511,7 +516,7 @@
     $('#cal-instr').textContent = CAL.modo === 'dia' ? 'Elige un día.'
       : CAL.inicio ? `Primer día: ${fechaLarga(CAL.inicio)}. Ahora elige el último.`
       : 'Elige el primer día del periodo.';
-    $('#cal-meteo').textContent = `Desde el ${diaMes(sumar(limiteMeteo(), 1))}, sin meteorología`;
+    $('#cal-meteo').textContent = E.info.diasConMeteo > 0 ? `Desde el ${diaMes(sumar(limiteMeteo(), 1))}, sin meteorología` : 'Todos los días, sin meteorología';
     if (opts.foco) enfocarDia();
   }
 
@@ -1030,7 +1035,7 @@
         ${v.recortado ? `Mostramos los primeros ${serie.length} días del periodo.` : ''}
         ${periodo ? 'Los días elegidos van recuadrados. Pulsa un día para verlo solo en el mapa.' : 'Pulsa un día para verlo también en el mapa.'}</p>
       <div class="dc-marco"><ul class="dc-lista" style="--n:${serie.length};--base:${(1 / maxR).toFixed(4)}">${cols}<li class="dc-normal" aria-hidden="true"><span>Día normal</span></li></ul></div>
-      <p class="dc-leyenda"><span><i class="ley-linea"></i>Día normal</span><span><i class="ley-rango"></i>Rango probable</span><span><i class="ley-claro"></i>Más de ${E.info.diasConMeteo} días: sin meteorología</span></p>
+      <p class="dc-leyenda"><span><i class="ley-linea"></i>Día normal</span><span><i class="ley-rango"></i>Rango probable</span><span><i class="ley-claro"></i>${E.info.diasConMeteo > 0 ? `Más de ${E.info.diasConMeteo} días: sin meteorología` : 'Sin meteorología'}</span></p>
     </section>`;
   }
 
@@ -1060,10 +1065,10 @@
       const dif = mejorDia.diferenciaPct != null ? `: ${Math.abs(Math.round(mejorDia.diferenciaPct))}${NBSP}% ${mejorDia.diferenciaPct < 0 ? 'menos' : 'más'} gente que el día elegido` : '';
       tarjeta = `<div class="mm"><p class="eyebrow">Mejor día alternativo</p><p class="mm-valor">${esc(fechaLarga(mejorDia.fecha))}</p>
         <p>${pill(mejorDia.nivel)}</p><p class="mm-nota">${esc(delta(mejorDia.ratio))}${dif}.</p>
-        <p class="mm-nota">El día con menos presión a ±${mejorDia.margen} días en la misma zona, según el modelo.</p>
+        <p class="mm-nota">El día con menos presión a ±${mejorDia.margen} días en la misma zona, entre los que tienen menos gente, según el modelo.</p>
         <button type="button" class="btn-mini" data-fecha="${mejorDia.fecha}">Ver ese día</button></div>`;
     } else if (mejorDia) {
-      tarjeta = `<div class="mm"><p class="eyebrow">Mejor día alternativo</p><p class="mm-nota">Ningún día a ±${mejorDia.margen} días tiene menos presión en esta zona.</p></div>`;
+      tarjeta = `<div class="mm"><p class="eyebrow">Mejor día alternativo</p><p class="mm-nota">Ningún día a ±${mejorDia.margen} días tiene menos gente y menos presión en esta zona.</p></div>`;
     } else if (mejor) {
       const d = mejor.dia;
       const donde = periodo ? 'Dentro de las fechas elegidas.' : `Entre el ${diaMes(v.desde)} y el ${diaMes(sumar(v.desde, v.dias - 1))}.`;
@@ -1278,7 +1283,7 @@
     const lista = d.eventos.filter(e => (cat === 'todas' || e.categoria === cat) && (!e.concejo || coincideTipo(E.zonasPorId[zonaDeConcejo(e.concejo)])));
     const vis = lista.slice(0, E.eventosVisibles);
     $('#eventos-sub').textContent = textoSel() + (E.tipo === 'todos' ? '' : ' · Solo ' + TIPO_NOMBRE[E.tipo].toLowerCase());
-    $('#eventos-nota').textContent = 'Festivos de Asturias y de cada concejo (BOE y BOPA), partidos del Real Oviedo y del Sporting en su estadio, y grandes fiestas, festivales, ferias y pruebas deportivas recopilados de sus webs oficiales y de prensa. Son días en los que puede venir más gente de lo normal.';
+    $('#eventos-nota').textContent = 'Festivos de Asturias y de cada concejo (BOE y BOPA), partidos del Real Oviedo y del Sporting en su estadio, y siete grandes citas al año (fiestas, festivales, ferias y pruebas deportivas) recopiladas de sus webs oficiales y de prensa; las de 2027 todavía no están recogidas. Son días en los que puede venir más gente de lo normal.';
     let vacio = '';
     if (!lista.length) {
       vacio = d.hastaDatos && E.desde > d.hastaDatos
@@ -1335,6 +1340,21 @@
       });
   }
 
+  /* ---------- Aviso de la fecha de los datos ----------
+   * Si la previsión se calculó hace más de un día, se dice arriba (mismo aviso que el de datos sintéticos)
+   * y el acceso rápido «Hoy» deja de llamarse así cuando el primer día que se puede elegir no es hoy. */
+  function avisoFecha() {
+    const i = E.info;
+    if (!i.esHoy) $('#btn-hoy').textContent = i.fueraDeRango ? 'Último día' : 'Primer día';
+    if (i.demo || i.datosVigentes || !i.fechaDatos) return;
+    const fecha = FMT_COMPLETA.format(deISO(i.fechaDatos));
+    $('#aviso-fecha-titulo').textContent = `Previsión calculada el ${fecha}, hace ${num(i.desfaseDias)} días.`;
+    $('#aviso-fecha-txt').textContent = i.fueraDeRango
+      ? `Solo llega hasta el ${FMT_COMPLETA.format(deISO(E.maxFecha || i.hoy))}: se muestra ese último día, que ya ha pasado.`
+      : 'No incluye la previsión del tiempo de estos días: usa solo calendario y eventos.';
+    $('#aviso-fecha').hidden = false;
+  }
+
   /* ---------- Aviso de datos sintéticos ---------- */
   function avisoSintetico() {
     window.DatosModelo.cargarInicio().then(d => {
@@ -1351,7 +1371,7 @@
   /* ---------- Utilidades para las pestañas de pestanas/ ---------- */
   window.UtilWeb = Object.freeze({
     $, $$, esc, num, pct, delta, pill, anunciar, listaNatural,
-    fechaLarga: f => fechaLarga(f), fechaCorta: f => fechaCorta(f),
+    fechaLarga: f => fechaLarga(f), fechaCorta: f => fechaCorta(f), fechaCompleta: f => FMT_COMPLETA.format(deISO(f)),
     deISO, aISO, sumar, diasEntre, NIVEL, ICONO, NBSP, MENOS,
   });
 

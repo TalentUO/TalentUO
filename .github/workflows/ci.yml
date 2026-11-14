@@ -1,0 +1,96 @@
+# Integración continua: lint, pruebas del modelo y sintaxis de la web.
+# Las pruebas rápidas corren en cada push y PR; las lentas (cadena completa por
+# algoritmo, ~4 min), a mano desde la pestaña Actions y una vez por semana.
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * 1"   # lunes, 05:00 UTC
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    name: Lint y pruebas rápidas
+    # En un PR desde una rama del propio repositorio ya corre el evento «push»: no se repite.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements-lock.txt
+            requirements-dev.txt
+
+      - name: Instalar dependencias (versiones probadas)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt -r requirements-dev.txt
+
+      - name: Ruff
+        run: python -m ruff check src scripts "Afluencia Asturias/herramientas"
+
+      - name: Pruebas del modelo (rápidas)
+        run: python -X utf8 -m pytest -q -rxX -m "not lento" src/modelo/tests
+
+      - name: Prueba de la unión de factores
+        run: python -X utf8 src/limpieza_B/test_unir_B.py
+
+  web:
+    name: Sintaxis y datos de la web
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Sintaxis de los scripts propios
+        run: |
+          for f in "Afluencia Asturias"/interfaz/*.js "Afluencia Asturias"/datos/*.js \
+                   "Afluencia Asturias"/pestanas/*/*.js; do
+            node --check "$f"
+          done
+
+      - name: Coherencia de los datos que enseña la web
+        run: node "Afluencia Asturias/herramientas/comprobar_datos_web.js"
+
+  pruebas-lentas:
+    name: Pruebas completas (lentas)
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements-lock.txt
+            requirements-dev.txt
+
+      - name: Instalar dependencias (versiones probadas)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt -r requirements-dev.txt
+
+      - name: Todas las pruebas del modelo
+        run: python -X utf8 -m pytest -q src/modelo/tests

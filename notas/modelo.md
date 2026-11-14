@@ -252,7 +252,7 @@ El detalle por cada horizonte (1, 2, … 7, 8+) está en `salidas/comparacion_al
   - limpia: `data/clean/openmeteo_prevision.parquet`.
 
   La de la demo se emitió el 2026-10-16. Para d = emisión + h, con h = 1-3, se coloca como `_prev{h}` del valle y de la montaña de cada zona; para h = 4-7 el tiempo queda vacío, como en el entrenamiento. Si el fichero no existe, se usa el ejemplo (solo `covadonga`, aplicado al valle de la zona principal).
-- **En producción:**
+- **En producción** (diseño previsto; **hoy no se puede ejecutar a diario**: la limpieza tiene fechas finales y recuentos fijos en el código, como `WIKI_FIN` en `src/limpieza_B/limpia_senales.py`, y hay que editarlos para admitir una descarga nueva; en las salidas del 2026-10-16 el paso 3 dejó las variables de Wikipedia vacías, ver «Limitaciones» del `README.md`):
   1. cada mañana, `descargar_prevision.py` (previsión de cada `zona_meteo` y `zona_meteo_montana`);
   2. la previsión para d emitida hoy se coloca en `<var>_prev{h}` con h = d − hoy (h ≤ 3);
   3. la Wikipedia se toma hasta ayer (ventana que termina en a−1, más conservadora que en el entrenamiento);
@@ -261,6 +261,8 @@ El detalle por cada horizonte (1, 2, … 7, 8+) está en `salidas/comparacion_al
 - **Regulación 2026-2027:** modelo de largo plazo, con el intervalo de días rojos `[días con p10 rojo, días con p90 rojo]`.
 
 ## Limitaciones
+
+> La lista completa y más reciente está en el `README.md` («Limitaciones»). Allí se añadieron el 2026-11-14 las de la validación (caso más fácil que el uso real, sin conjunto de prueba intacto, recall por bloque), la meteorología (6 puntos para 46 zonas), los eventos y los arreglos de coherencia que hoy se aplican en la capa web, con las salidas pendientes de regenerar.
 
 - **Sin extranjeros:** el MITMA solo cuenta residentes en España. Picos tiene un turismo internacional apreciable que no se ve.
 - **Datos diarios hasta junio de 2025:** el modelo no puede aprender cambios posteriores (la nueva regulación, el auge del turismo, etc.). En 2026-2027 asume que el comportamiento es como el de 2022-2025.

@@ -124,6 +124,16 @@ Nombres posibles de factor (`config/factores.yaml`): Vacaciones escolares · Fes
 - `fiabilidad[]`: por zona y horizonte, `{zona_mitma_id, nombre_zona, horizonte_txt, n, wape, acierto_color, rojos_obs, recall_rojo, precision_rojo, nota, q10, q90, n_errores, cobertura}`. **`nota` es el texto para la web**, p. ej. «Acierta el color en el 86 % de los días; detecta 5 de cada 10 días rojos.». `cobertura` = proporción de días reales dentro del intervalo p10-p90, medida dejando fuera cada bloque (objetivo: 0,80).
 - `experimentos[]`: resumen por experimento (`base`, `desde_corte`, `solo_eventos_verificados`, `tiempo_aproximado`) y modelo.
 
+## Lo que la web corrige al cargar (salidas del 2026-10-16)
+
+Las salidas actuales cumplen este contrato, pero tienen tres incoherencias que el contrato todavía no exige evitar. La web las corrige en su capa de datos, sin tocar los ficheros, y `Afluencia Asturias/herramientas/comprobar_datos_web.js` lo comprueba en cada cambio:
+
+- **Predicción fuera de su intervalo** (2.539 registros de `predicciones` y 4.380 de `calendario_alertas`): `datos/datos.js` acota `p10 ≤ prediccion ≤ p90` y recalcula `incierto` y, donde hace falta, los recuentos `dias_*_min/max`.
+- **`mejor_dia` con más visitantes que el día elegido** (se elige por cociente y el día normal cambia con el día de la semana): `datos/fuente-modelo.js` solo acepta un día con menos visitantes y menos cociente, y si no lo busca a ±3 días.
+- **«Acceso regulado a los Lagos» entre los `factores` de las 46 zonas**: fuera de la zona principal no se enseña.
+
+Cuando se regeneren las salidas con el origen corregido en el modelo, estas tres condiciones deben pasar a este contrato y a `validar_salidas.py` (ver `revision/pendiente.md` en la rama de trabajo, no versionado).
+
 ## Comprobación
 
 `python -X utf8 src/modelo/validar_salidas.py` comprueba:
