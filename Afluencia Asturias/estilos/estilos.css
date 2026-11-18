@@ -785,3 +785,40 @@ dialog::backdrop { background: var(--velo); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* ==================================================================
+   Variante «Mapa inmersivo»: el mapa ocupa casi toda la pantalla y los
+   controles flotan sobre él en una barra de cristal esmerilado. Sin
+   titular grande: el mapa es lo primero que se ve.
+   ================================================================== */
+@media (min-width: 721px) {
+  #panel-inicio.envoltura { max-width: none; padding: 0; position: relative; }
+  #panel-inicio .titulo-pagina { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  #panel-inicio .controles {
+    position: absolute; z-index: 1100; top: 1rem; left: 1rem; width: min(26rem, calc(100% - 2rem));
+    grid-template-columns: minmax(0, 1fr); gap: .6rem; padding: .9rem 1rem;
+    background: color-mix(in srgb, var(--superficie) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(1.3); -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    border: 1px solid color-mix(in srgb, var(--superficie) 60%, transparent); box-shadow: var(--sombra-dialogo);
+  }
+  #panel-inicio .filtros {
+    position: absolute; z-index: 1100; top: 1rem; right: 1rem; margin: 0; flex-wrap: nowrap; align-items: center;
+    padding: .5rem .6rem; border-radius: var(--radio);
+    background: color-mix(in srgb, var(--superficie) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(1.3); -webkit-backdrop-filter: blur(14px) saturate(1.3); box-shadow: var(--sombra-dialogo);
+  }
+  #panel-inicio .buscador { flex: 0 0 14rem; }
+  .fecha-grande { font-size: 1.5rem; }
+  .accesos .chip-btn { min-height: 40px; padding: .3rem .75rem; font-size: .9rem; }
+  .fecha-mandos { display: flex; flex-direction: column; gap: .5rem; }
+  #panel-inicio .inicio-grid { gap: 0; }
+  .mapa-marco { border-radius: 0; box-shadow: none; }
+  .mapa { height: calc(100vh - 4.5rem); min-height: 34rem; }
+  .mapa .leaflet-top.leaflet-right { top: auto; bottom: 1.6rem; }
+  .mapa .leaflet-top.leaflet-left { top: auto; bottom: 2.2rem; left: auto; right: 4.8rem; }
+  #panel-inicio .col-lateral { position: absolute; left: 1rem; bottom: 3.6rem; top: auto; width: min(26rem, calc(100% - 2rem)); z-index: 1000; }
+  #panel-inicio .col-lateral.con-panel { left: auto; right: 1rem; top: 6.6rem; bottom: 5rem; max-height: none; }
+  #panel-inicio .col-lateral #ranking { max-height: 40vh; overflow-y: auto; box-shadow: var(--sombra-dialogo); }
+  #panel-inicio > .desplegable { margin: 1rem 1rem 0; }
+  #panel-inicio { padding-bottom: 2rem; }
+}
