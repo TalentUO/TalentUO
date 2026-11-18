@@ -785,3 +785,37 @@ dialog::backdrop { background: var(--velo); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* ==================================================================
+   Variante «Banda de monte»: la cabecera y el titular sobre una banda
+   verde oscuro de lado a lado; la tarjeta de fecha monta sobre su borde
+   y el mapa va de borde a borde de la ventana.
+   ================================================================== */
+body { overflow-x: clip; }
+.cabecera { background: var(--banda); border-bottom: 0; color: var(--banda-tinta); }
+.cabecera .marca-nombre { color: var(--banda-tinta); }
+.cabecera .marca-sub { color: var(--banda-tinta-2); }
+.cabecera .marca-caja { fill: var(--banda-2); }
+.pestanas [role="tab"] { color: var(--banda-tinta-2); }
+.pestanas [role="tab"]:hover { color: var(--banda-tinta); background: var(--banda-2); }
+.pestanas [role="tab"][aria-selected="true"] { color: var(--banda-tinta); border-bottom-color: var(--banda-tinta); }
+.pestanas [role="tab"]:focus-visible { outline-color: var(--banda-tinta); }
+#panel-inicio { position: relative; padding-top: 1.6rem; }
+#panel-inicio::before {
+  content: ""; position: absolute; z-index: -1; top: 0; left: 50%; width: 100vw; transform: translateX(-50%);
+  height: clamp(8.5rem, 6rem + 4vw, 10.5rem); background: var(--banda);
+}
+#panel-inicio .titulo-pagina {
+  color: var(--banda-tinta); font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3.1rem); font-weight: 800;
+  letter-spacing: -.035em; line-height: 1.02; margin-bottom: 1.1rem; max-width: 18ch;
+}
+.controles { box-shadow: var(--sombra-dialogo); border: 0; }
+.fecha-grande { font-size: 1.7rem; letter-spacing: -.02em; }
+.controles { grid-template-columns: minmax(0, 21rem) minmax(0, 1fr); }
+.inicio-grid .mapa-marco { margin-inline: calc(50% - 50vw); border-radius: 0; box-shadow: none; }
+#ranking { border: 0; background: none; padding-inline: 0; }
+.lat-titulo { font-size: 1.5rem; letter-spacing: -.02em; }
+@media (max-width: 720px) {
+  #panel-inicio::before { height: 7.2rem; }
+  #panel-inicio .titulo-pagina { font-size: 1.7rem; }
+}
