@@ -785,3 +785,36 @@ dialog::backdrop { background: var(--velo); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* ==================================================================
+   Variante «Panel lateral»: como una app de mapas. En pantalla ancha,
+   una columna fija a la izquierda con la fecha, los filtros y el ranking
+   (o la ficha de la zona) y el mapa ocupando el resto de la pantalla.
+   ================================================================== */
+@media (min-width: 1061px) {
+  #panel-inicio.envoltura { max-width: none; padding-inline: 1.25rem; }
+  #panel-inicio {
+    display: grid; grid-template-columns: 25rem minmax(0, 1fr); column-gap: 1.25rem;
+    grid-template-rows: auto auto auto 1fr; align-items: start; padding-block: 1rem 2rem;
+  }
+  #panel-inicio > * { grid-column: 1; min-width: 0; }
+  #panel-inicio > .inicio-grid { display: contents; }
+  #panel-inicio .col-mapa { grid-column: 2; grid-row: 1 / span 4; position: sticky; top: 1rem; align-self: start; }
+  #panel-inicio .col-lateral { grid-column: 1; grid-row: 4; }
+  #panel-inicio > .desplegable { grid-column: 1 / -1; }
+  .titulo-pagina { font-size: 1.35rem; margin-bottom: .6rem; }
+  .controles { grid-template-columns: minmax(0, 1fr); gap: .8rem; }
+  .fecha-mandos { display: flex; flex-direction: column; gap: .6rem; }
+  .accesos .chip-btn { min-height: 40px; padding: .35rem .8rem; }
+  .filtros { flex-direction: column; align-items: stretch; gap: .6rem; }
+  .filtros-mas { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .buscador { max-width: none; flex-basis: auto; }
+  .mapa { height: calc(100vh - 7rem); min-height: 30rem; }
+  .ranking, .tranquilas { grid-template-columns: minmax(0, 1fr); }
+  /* La ficha de la zona vive en la columna, no encima del mapa */
+  .col-lateral.con-panel {
+    position: static; width: auto; max-height: none; overflow: visible; box-shadow: none; border-radius: 0;
+  }
+  .col-lateral.con-panel #panel-zona { border: 1px solid var(--linea); }
+  .mapa .leaflet-top.leaflet-right { top: 0; bottom: auto; }
+}
