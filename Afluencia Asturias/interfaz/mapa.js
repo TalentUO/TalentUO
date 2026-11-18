@@ -431,6 +431,7 @@ window.MapaAsturias = (function () {
             const et = etiquetas[tipo][id].el;
             et.querySelector('.et-dato').innerHTML = d.etiqueta;
             et.classList.toggle('atenuada', !!d.atenuada);
+            et.classList.toggle('et-normal', d.nivel === 'verde' || d.nivel === 'gris'); // sin etiqueta salvo Alta o Saturación
             et.classList.toggle('sel', tipo === 'zona' ? estado.zonaSel === id : estado.concejoSel === id);
           });
         });
