@@ -749,7 +749,7 @@ dialog::backdrop { background: var(--velo); }
   .calendario { max-width: none; padding: .7rem; }
   .ev { grid-template-columns: auto minmax(0, 1fr); }
   .ev .btn-mini { grid-column: 2; justify-self: start; }
-  .mapa { height: 24rem; }
+  .mapa { height: 19rem; }
   /* Accesos rápidos de fecha en una sola fila deslizable, para no empujar el mapa hacia abajo */
   .accesos { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -.25rem; padding: .1rem .25rem .2rem; }
   .accesos::-webkit-scrollbar { display: none; }
