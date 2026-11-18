@@ -136,12 +136,12 @@ Lleva además unos extras del modelo: `incierto`, `conjunto`, `modelo`, `horizon
   - Un selector alterna entre Mapa y Lista (una tabla alternativa al mapa).
 - **Mapa:** solo Asturias, sobre fondo liso.
   - Con poco zoom se ven las zonas; a partir de zoom 9,5, los concejos.
-  - Las etiquetas no se solapan: `colocarEtiquetas` en `mapa.js`.
+  - Las etiquetas no se solapan: `colocarEtiquetas` en `mapa.js`. Solo llevan etiqueta las zonas o concejos en Alta o Saturación y el elegido; los demás se leen por el color y el detalle al pasar el ratón.
   - Ámbar, rojo y gris llevan color y trama: patrones `#relleno-*` en `index.html`.
   - Los sitios de interés salen como puntos al acercarse. `colocarSitios` los separa entre sí y de las etiquetas.
   - Con el teclado, el mapa se mueve con las flechas y se acerca con +/−. El tabulador recorre las zonas o concejos visibles.
-- **Columna lateral:** las 5 zonas con más presión y las 3 más tranquilas.
-- **Panel de zona** (sustituye a la columna lateral al elegir una zona o un concejo):
+- **Ranking** (tira debajo del mapa, que ocupa todo el ancho): las 5 zonas con más presión y las 3 más tranquilas.
+- **Panel de zona** (sustituye al ranking al elegir una zona o un concejo; en pantalla ancha flota sobre el lado derecho del mapa):
   - tarjeta del concejo, si se ha llegado desde uno;
   - estado de la zona;
   - «Día a día» (de 14 a 31 días alrededor de la selección);
@@ -188,7 +188,7 @@ Los textos están en `pestanas/sobre/contenido.js`.
 
 ## 6. Convenciones
 
-- **Estética fija:** la paleta, las tipografías, los componentes, la maquetación y el aspecto del mapa no se cambian. El código sí puede cambiar, siempre que lo que se ve quede igual.
+- **Estética fija:** la paleta, las tipografías, los componentes, la maquetación y el aspecto del mapa no se cambian. El código sí puede cambiar, siempre que lo que se ve quede igual. (El pulido visual de noviembre de 2026, con la paleta verde, el tema claro por defecto y el mapa a todo el ancho, se hizo a propósito; desde entonces vuelve a estar fijo.)
 - **Idioma:** todo en español: la interfaz, los nombres del código y los comentarios.
 - **Textos:**
   - Frases cortas y en lenguaje llano.
@@ -196,10 +196,10 @@ Los textos están en `pestanas/sobre/contenido.js`.
   - Espacio de no separación (U+00A0, constante `NBSP` en `app.js`) antes del signo de porcentaje: `+45 %`.
   - El signo menos es el carácter real `−`.
 - **Colores:**
-  - Todos los colores son variables CSS definidas en `index.html`: la paleta clara en `:root` y la oscura repetida en `@media (prefers-color-scheme: dark)` y en `:root[data-theme="dark"]`.
+  - Todos los colores son variables CSS definidas en `index.html`: la paleta clara en `:root` y la oscura en `:root[data-theme="dark"]`. El tema claro es el de siempre: el oscuro ya no sigue al sistema y solo se activa con `data-theme="dark"` en `<html>`.
   - No se usan colores literales en los `.css` ni en el JS.
   - El semáforo usa `--verde`, `--ambar`, `--rojo` y `--gris`, con sus variantes `-suave` y `--mapa-*`.
-  - El acento azul (`--acento`) es independiente del semáforo.
+  - El acento verde bosque (`--acento`) es independiente del semáforo: es más oscuro que el verde «Normal» del mapa (`--mapa-verde`) para que no se confundan.
 - **Accesibilidad:**
   - Un nivel nunca se comunica solo con el color: van juntos el icono, la trama y la palabra (`pill(nivel)` en `app.js`).
   - Todo se maneja con teclado.
@@ -231,7 +231,7 @@ node --check interfaz/app.js interfaz/mapa.js datos/api.js datos/datos.js datos/
   2. Llama a `window.Datos.*`.
 - **En el navegador:**
   - las tres pestañas;
-  - el modo oscuro (tema del sistema);
+  - el modo oscuro (`data-theme="dark"` en `<html>`, desde la consola);
   - el ancho de móvil (390 px en las herramientas de desarrollo);
   - la navegación solo con teclado;
   - que la consola no muestre errores.
