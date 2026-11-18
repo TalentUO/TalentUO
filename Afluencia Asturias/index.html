@@ -5,35 +5,37 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>NTT Tourism · Previsión de afluencia turística en Asturias</title>
 <meta name="description" content="Previsión diaria de afluencia turística en las zonas de Asturias, con un semáforo de presión turística y las causas de cada previsión.">
-<meta name="theme-color" content="#F2F5F7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0D141A" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F6F8F4">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <!-- Base: márgenes seguros (muescas de móvil), imágenes que no desbordan y [hidden] siempre oculto -->
 <style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Schibsted+Grotesk:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
 <style>
-/* Diseño: barra de fecha arriba; debajo, el mapa como protagonista y una columna lateral de detalle.
-   Paleta "Cantábrico": azul de mar como acento y neutros fríos; el semáforo va aparte y siempre con icono, trama y palabra. */
+/* Diseño: barra de fecha arriba; debajo, el mapa a todo el ancho como protagonista. La ficha de una zona flota sobre él.
+   Paleta "Prado": verde bosque como acento y neutros cálidos; el semáforo va aparte y siempre con icono, trama y palabra.
+   Tema claro por defecto; el oscuro solo con data-theme="dark" (ya no sigue al sistema, para que la web no salga oscura sin querer). */
 :root {
-  --bg: #F2F5F7; --superficie: #FFFFFF; --superficie-2: #E8EEF2;
-  --tinta: #13202B; --tinta-2: #4B5B69; --linea: #CED8E0; --linea-fuerte: #8FA1B0;
-  --acento: #1B5C8F; --acento-tinta: #FFFFFF; --acento-suave: #D6E6F3;
-  --foco: #0B5FD0; --foco-suave: rgba(11, 95, 208, .25);
-  --pista: #D3DDE5;
+  --bg: #F6F8F4; --superficie: #FFFFFF; --superficie-2: #EEF3EC;
+  --tinta: #14231A; --tinta-2: #536358; --linea: #DFE7DF; --linea-fuerte: #A7B8AB;
+  --acento: #17603D; --acento-tinta: #FFFFFF; --acento-suave: #DCEFE3;
+  --foco: #1F6B45; --foco-suave: rgba(31, 107, 69, .25);
+  --pista: #D5E0D6;
   --verde: #2E7D4B; --verde-suave: #DCEFE2;
   --ambar: #8A5A00; --ambar-vivo: #E3A21A; --ambar-raya: #F4D27E; --ambar-suave: #FCEBC2;
   --rojo: #B3261E; --rojo-raya: #E26A5F; --rojo-suave: #F9D3CE;
   --gris: #6A747D; --gris-suave: #E4E7EA;
-  --mapa-verde: #BFE0C9; --mapa-ambar: #F6D98C; --mapa-rojo: #EFA79D; --mapa-gris: #DDE1E5;
-  --trama-ambar: #B87D05; --trama-rojo: #9E2018; --trama-gris: #7D868E;
-  --mapa-borde: #FFFFFF;
+  --mapa-verde: #86CFA0; --mapa-ambar: #FBCB4E; --mapa-rojo: #F07B6C; --mapa-gris: #E3E7E3;
+  --trama-ambar: #A86F00; --trama-rojo: #8E1C14; --trama-gris: #7D868E;
+  --mapa-borde: #FFFFFF; --mar: #DCEBE6;
+  /* Banda de cabecera: verde de monte */
+  --banda: #123F2B; --banda-2: #0B2E1F; --banda-tinta: #F1F7EE; --banda-tinta-2: #B9D3C2;
   --aviso-bg: #FFF4D6; --aviso-borde: #E3B13E; --raya-clara: rgba(255, 255, 255, .4);
-  --sombra: 0 1px 2px rgba(19, 32, 43, .06), 0 6px 18px rgba(19, 32, 43, .06);
-  --f-titulo: 'Schibsted Grotesk', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --sombra: 0 1px 2px rgba(20, 35, 26, .05), 0 8px 24px rgba(20, 35, 26, .06);
+  --f-titulo: 'Bricolage Grotesque', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --f-texto: 'Atkinson Hyperlegible', Verdana, 'Segoe UI', sans-serif;
-  --radio: 12px;
+  --radio: 16px;
   --sitio-punto: #FFFFFF; --sitio-borde: rgba(19, 32, 43, .55);
   /* Sombras de las etiquetas del mapa, los puntos de sitios y los diálogos (iguales en claro y oscuro) */
   --sombra-etiqueta: 0 1px 4px rgba(0, 0, 0, .18); --sombra-punto: 0 1px 2px rgba(0, 0, 0, .3);
@@ -43,26 +45,6 @@
 }
 /* Velo detrás de los diálogos: también en ::backdrop, que en algunos navegadores no hereda de :root */
 :root, ::backdrop { --velo: rgba(10, 18, 24, .55); }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0D141A; --superficie: #151F28; --superficie-2: #1D2934;
-    --tinta: #E6EDF2; --tinta-2: #A2B2BF; --linea: #2A3946; --linea-fuerte: #566B7C;
-    --acento: #86BDEB; --acento-tinta: #0D141A; --acento-suave: #1B3449;
-    --foco: #8EC5FF; --foco-suave: rgba(142, 197, 255, .3);
-    --pista: #2A3946;
-    --verde: #6BCB8B; --verde-suave: #173825;
-    --ambar: #F3C25C; --ambar-vivo: #E8AE34; --ambar-raya: #8C6514; --ambar-suave: #3A2D0F;
-    --rojo: #FF8B7E; --rojo-raya: #9C3A31; --rojo-suave: #43201C;
-    --gris: #97A2AC; --gris-suave: #262F37;
-    --mapa-verde: #235A3A; --mapa-ambar: #6A5014; --mapa-rojo: #6E2B24; --mapa-gris: #2B343C;
-    --trama-ambar: #E8B54C; --trama-rojo: #FF9184; --trama-gris: #6C7782;
-    --mapa-borde: #0D141A;
-    --aviso-bg: #2E2610; --aviso-borde: #8C6A1E; --raya-clara: rgba(255, 255, 255, .18);
-    --sombra: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
-    --g-real: #d95926; --g-prev: #3987e5;
-    color-scheme: dark;
-  }
-}
 :root[data-theme="dark"] {
   --bg: #0D141A; --superficie: #151F28; --superficie-2: #1D2934;
   --tinta: #E6EDF2; --tinta-2: #A2B2BF; --linea: #2A3946; --linea-fuerte: #566B7C;
@@ -75,7 +57,8 @@
   --gris: #97A2AC; --gris-suave: #262F37;
   --mapa-verde: #235A3A; --mapa-ambar: #6A5014; --mapa-rojo: #6E2B24; --mapa-gris: #2B343C;
   --trama-ambar: #E8B54C; --trama-rojo: #FF9184; --trama-gris: #6C7782;
-  --mapa-borde: #0D141A;
+  --mapa-borde: #0D141A; --mar: #1D2934;
+  --banda: #0F2A1E; --banda-2: #091C14; --banda-tinta: #E6EFE8; --banda-tinta-2: #9DB8A6;
   --aviso-bg: #2E2610; --aviso-borde: #8C6A1E; --raya-clara: rgba(255, 255, 255, .18);
   --sombra: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
   --g-real: #d95926; --g-prev: #3987e5;
